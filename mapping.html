@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toronto Local AI Radio Platform - Stakeholder Correlation Map</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            background: transparent !important;
+        }
+        body {
+            font-family: 'Helvetica', sans-serif;
+            color: white;
+            overflow: hidden;
+            letter-spacing: -0.5px;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .svg-container {
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.12s ease;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            /* Cheaper rendering hints for animated zoom */
+            shape-rendering: optimizeSpeed;
+            text-rendering: optimizeSpeed;
+            /* Promote the SVG to its own compositor layer */
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        svg > g {
+            will-change: transform;
+        }
+        /* While the zoom transition runs, suppress hit testing and heavy text
+           shaping. The class is toggled by JS. */
+        svg.is-zooming text {
+            pointer-events: none;
+            text-rendering: optimizeSpeed;
+        }
+        svg.is-zooming {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="svg-container">
+            <svg id="graph"></svg>
+        </div>
+    </div>
+
+    <script>
+        const themes = {
+            core: { color: '#ffffff', label: 'Core Platform' },
+            media: { color: '#ffffff', label: 'Radio Infrastructure' },
+            technology: { color: '#ffffff', label: 'Technology & Data' },
+            ai: { color: '#ffffff', label: 'AI Services' },
+            security: { color: '#ffffff', label: 'Data Security' },
+            robotics: { color: '#ffffff', label: 'Physical Robotics' },
+            legal: { color: '#ffffff', label: 'Legal & Regulatory' }
+        };
+
+        const data = {
+            center: {
+                id: 'platform',
+                name: 'Local AI Radio Platform',
+                tier: 0,
+                theme: 'core',
+                description: 'Toronto-based radio-mediated local AI ecosystem for robotics',
+                value: 100
+            },
+            nodes: [
+                // Tier 1: Technology & Data Infrastructure
+                { id: 't1-ibm', name: 'IBM Canada', tier: 1, theme: 'technology', value: 92, description: 'Enterprise data & cloud infrastructure' },
+                { id: 't1-oracle', name: 'Oracle Canada', tier: 1, theme: 'technology', value: 90, description: 'Database & cloud solutions' },
+                { id: 't1-sap', name: 'SAP Canada', tier: 1, theme: 'technology', value: 88, description: 'Enterprise resource planning' },
+                { id: 't1-cisco', name: 'Cisco Systems Canada', tier: 1, theme: 'technology', value: 89, description: 'Network infrastructure' },
+                { id: 't1-dell', name: 'Dell Technologies Canada', tier: 1, theme: 'technology', value: 87, description: 'Data center infrastructure' },
+                { id: 't1-hpe', name: 'HPE Canada', tier: 1, theme: 'technology', value: 86, description: 'Edge computing & servers' },
+                { id: 't1-mongodb', name: 'MongoDB', tier: 1, theme: 'technology', value: 84, description: 'Database platform' },
+                { id: 't1-snowflake', name: 'Snowflake', tier: 1, theme: 'technology', value: 85, description: 'Data cloud platform' },
+                { id: 't1-databricks', name: 'Databricks', tier: 1, theme: 'technology', value: 83, description: 'Data & AI platform' },
+                { id: 't1-elastic', name: 'Elastic', tier: 1, theme: 'technology', value: 82, description: 'Search & data analytics' },
+                { id: 't1-cbc-radio', name: 'CBC Radio One', tier: 1, theme: 'media', value: 88, description: 'National public broadcaster' },
+                { id: 't1-680news', name: '680 News Toronto', tier: 1, theme: 'media', value: 86, description: 'All-news radio station' },
+
+                // Tier 2: AI Services
+                { id: 't2-openai', name: 'OpenAI', tier: 2, theme: 'ai', value: 95, description: 'GPT models & AI services' },
+                { id: 't2-anthropic', name: 'Anthropic', tier: 2, theme: 'ai', value: 94, description: 'Claude AI assistant' },
+                { id: 't2-cohere', name: 'Cohere', tier: 2, theme: 'ai', value: 93, description: 'Toronto-based LLM provider' },
+                { id: 't2-google-ai', name: 'Google AI', tier: 2, theme: 'ai', value: 92, description: 'Gemini & AI services' },
+                { id: 't2-microsoft-ai', name: 'Microsoft AI', tier: 2, theme: 'ai', value: 91, description: 'Azure AI & Copilot' },
+                { id: 't2-meta-ai', name: 'Meta AI', tier: 2, theme: 'ai', value: 88, description: 'Llama models' },
+                { id: 't2-amazon-ai', name: 'Amazon AI', tier: 2, theme: 'ai', value: 87, description: 'AWS AI services & Bedrock' },
+                { id: 't2-mistral', name: 'Mistral AI', tier: 2, theme: 'ai', value: 85, description: 'European open models' },
+                { id: 't2-ada', name: 'Ada Support', tier: 2, theme: 'ai', value: 84, description: 'Toronto AI customer service' },
+                { id: 't2-layer6', name: 'Layer 6 AI (TD Bank)', tier: 2, theme: 'ai', value: 83, description: 'Financial AI solutions' },
+                { id: 't2-bluedot', name: 'BlueDot', tier: 2, theme: 'ai', value: 82, description: 'Toronto infectious disease AI' },
+                { id: 't2-waabi', name: 'Waabi', tier: 2, theme: 'ai', value: 86, description: 'Toronto autonomous trucking AI' },
+                { id: 't2-vector', name: 'Vector Institute', tier: 2, theme: 'ai', value: 89, description: 'Toronto AI research hub' },
+                { id: 't2-stability', name: 'Stability AI', tier: 2, theme: 'ai', value: 81, description: 'Stable Diffusion models' },
+                { id: 't2-rogers-radio', name: 'Rogers Radio Network', tier: 2, theme: 'media', value: 84, description: 'Kiss 92.5, The Edge 102.1' },
+                { id: 't2-bell-radio', name: 'Bell Media Radio', tier: 2, theme: 'media', value: 83, description: 'Virgin Radio, BNN Bloomberg' },
+
+                // Tier 3: Data Security
+                { id: 't3-crowdstrike', name: 'CrowdStrike', tier: 3, theme: 'security', value: 88, description: 'Endpoint security & threat intelligence' },
+                { id: 't3-palo-alto', name: 'Palo Alto Networks', tier: 3, theme: 'security', value: 87, description: 'Network security platform' },
+                { id: 't3-fortinet', name: 'Fortinet', tier: 3, theme: 'security', value: 86, description: 'Network security appliances' },
+                { id: 't3-checkpoint', name: 'Check Point', tier: 3, theme: 'security', value: 85, description: 'Cybersecurity solutions' },
+                { id: 't3-okta', name: 'Okta', tier: 3, theme: 'security', value: 84, description: 'Identity & access management' },
+                { id: 't3-zscaler', name: 'Zscaler', tier: 3, theme: 'security', value: 83, description: 'Cloud security platform' },
+                { id: 't3-cloudflare', name: 'Cloudflare', tier: 3, theme: 'security', value: 82, description: 'Network security & DDoS protection' },
+                { id: 't3-splunk', name: 'Splunk', tier: 3, theme: 'security', value: 81, description: 'Security information & event management' },
+                { id: 't3-sentinelone', name: 'SentinelOne', tier: 3, theme: 'security', value: 80, description: 'AI-powered endpoint security' },
+                { id: 't3-rapid7', name: 'Rapid7', tier: 3, theme: 'security', value: 79, description: 'Vulnerability management' },
+                { id: 't3-blackberry', name: 'BlackBerry Cybersecurity', tier: 3, theme: 'security', value: 85, description: 'Canadian endpoint security' },
+                { id: 't3-opentext', name: 'OpenText Security', tier: 3, theme: 'security', value: 78, description: 'Canadian enterprise security' },
+                { id: 't3-cisco-security', name: 'Cisco Security', tier: 3, theme: 'security', value: 84, description: 'Network & cloud security' },
+                { id: 't3-proofpoint', name: 'Proofpoint', tier: 3, theme: 'security', value: 77, description: 'Email & data protection' },
+                { id: 't3-corus-radio', name: 'Corus Radio', tier: 3, theme: 'media', value: 82, description: 'Q107, 102.1 The Edge' },
+
+                // Tier 4: Physical Robotics
+                { id: 't4-boston', name: 'Boston Dynamics', tier: 4, theme: 'robotics', value: 94, description: 'Spot, Atlas humanoid robots' },
+                { id: 't4-1x', name: '1X Technologies', tier: 4, theme: 'robotics', value: 92, description: 'NEO humanoid robots' },
+                { id: 't4-figure', name: 'Figure AI', tier: 4, theme: 'robotics', value: 91, description: 'Figure 01 humanoid robot' },
+                { id: 't4-agility', name: 'Agility Robotics', tier: 4, theme: 'robotics', value: 90, description: 'Digit bipedal robot' },
+                { id: 't4-unitree', name: 'Unitree Robotics', tier: 4, theme: 'robotics', value: 88, description: 'Quadruped & humanoid robots' },
+                { id: 't4-tesla', name: 'Tesla (Optimus)', tier: 4, theme: 'robotics', value: 93, description: 'Optimus humanoid & autonomous vehicles' },
+                { id: 't4-waymo', name: 'Waymo', tier: 4, theme: 'robotics', value: 89, description: 'Self-driving taxi service' },
+                { id: 't4-cruise', name: 'Cruise (GM)', tier: 4, theme: 'robotics', value: 87, description: 'Autonomous vehicle platform' },
+                { id: 't4-zoox', name: 'Zoox (Amazon)', tier: 4, theme: 'robotics', value: 86, description: 'Autonomous robotaxi' },
+                { id: 't4-clearpath', name: 'Clearpath Robotics', tier: 4, theme: 'robotics', value: 85, description: 'Canadian autonomous vehicle platforms' },
+                { id: 't4-otto', name: 'OTTO Motors', tier: 4, theme: 'robotics', value: 84, description: 'Canadian warehouse robots' },
+                { id: 't4-dji', name: 'DJI', tier: 4, theme: 'robotics', value: 89, description: 'Commercial & enterprise drones' },
+                { id: 't4-skydio', name: 'Skydio', tier: 4, theme: 'robotics', value: 87, description: 'Autonomous drones' },
+                { id: 't4-draganfly', name: 'Draganfly', tier: 4, theme: 'robotics', value: 83, description: 'Canadian commercial drones' },
+                { id: 't4-drone-delivery', name: 'Drone Delivery Canada', tier: 4, theme: 'robotics', value: 82, description: 'Cargo delivery drones' },
+                { id: 't4-zipline', name: 'Zipline', tier: 4, theme: 'robotics', value: 81, description: 'Delivery drone logistics' },
+                { id: 't4-avidbots', name: 'Avidbots', tier: 4, theme: 'robotics', value: 80, description: 'Canadian floor-cleaning robots' },
+                { id: 't4-starship', name: 'Starship Technologies', tier: 4, theme: 'robotics', value: 79, description: 'Delivery rovers' },
+                { id: 't4-nuro', name: 'Nuro', tier: 4, theme: 'robotics', value: 78, description: 'Autonomous delivery vehicles' },
+                { id: 't4-sanctuary', name: 'Sanctuary AI', tier: 4, theme: 'robotics', value: 85, description: 'Canadian humanoid robots' },
+
+                // Tier 5: Legal & Regulatory
+                { id: 't5-crtc', name: 'CRTC', tier: 5, theme: 'legal', value: 85, description: 'Canadian broadcast & telecom regulator' },
+                { id: 't5-privacy-commissioner', name: 'Privacy Commissioner of Canada', tier: 5, theme: 'legal', value: 87, description: 'Privacy law enforcement' },
+                { id: 't5-cse', name: 'Communications Security Establishment', tier: 5, theme: 'legal', value: 86, description: 'Cyber security & signals intelligence' },
+                { id: 't5-csa', name: 'Canadian Centre for Cyber Security', tier: 5, theme: 'legal', value: 84, description: 'National cybersecurity authority' },
+                { id: 't5-transport-canada', name: 'Transport Canada', tier: 5, theme: 'legal', value: 82, description: 'Drone & autonomous vehicle regulations' },
+                { id: 't5-ised', name: 'Innovation, Science & Economic Development', tier: 5, theme: 'legal', value: 81, description: 'Spectrum & innovation policy' },
+                { id: 't5-opc', name: 'Office of the Privacy Commissioner Ontario', tier: 5, theme: 'legal', value: 80, description: 'Provincial privacy oversight' },
+                { id: 't5-ipc-ontario', name: 'Information & Privacy Commissioner Ontario', tier: 5, theme: 'legal', value: 79, description: 'FIPPA & access to information' },
+                { id: 't5-csis', name: 'Canadian Security Intelligence Service', tier: 5, theme: 'legal', value: 78, description: 'National security intelligence' },
+                { id: 't5-pipeda', name: 'PIPEDA Enforcement', tier: 5, theme: 'legal', value: 77, description: 'Personal information protection' },
+                { id: 't5-standards-council', name: 'Standards Council of Canada', tier: 5, theme: 'legal', value: 76, description: 'AI & robotics standards' },
+                { id: 't5-competition-bureau', name: 'Competition Bureau Canada', tier: 5, theme: 'legal', value: 75, description: 'Data & AI competition policy' },
+            ]
+        };
+
+        let currentTheme = 'all';
+        let currentTier = 'all';
+        let currentCrossTier = null; // 6=T1-T2, 7=T2-T3, 8=T3-T4, 9=T4-T5
+        let hideLines = false;
+        let verticalMode = false;
+        let allSubsMode = false; // G key: all tiers with all sub-nodes in radial
+
+        // Cross-tier relationship map: sub-node ↔ sub-node connections
+        // Format: { from: 'parentId', fromSub: 'subName', to: 'parentId', toSub: 'subName' }
+        // These represent real business/tech relationships between partner entities
+        const crossTierRelations = {
+            // 6: T1 sub-nodes ↔ T2 sub-nodes
+            '1-2': [
+                // Shared enterprise consulting/SI connections
+                { from: 't1-ibm', fromSub: 'Accenture', to: 't2-cohere', toSub: 'McKinsey' },
+                { from: 't1-ibm', fromSub: 'Accenture', to: 't2-microsoft-ai', toSub: 'Power Platform' },
+                { from: 't1-sap', fromSub: 'Accenture', to: 't2-cohere', toSub: 'McKinsey' },
+                { from: 't1-sap', fromSub: 'Deloitte', to: 't2-cohere', toSub: 'Salesforce' },
+                { from: 't1-sap', fromSub: 'Capgemini', to: 't2-microsoft-ai', toSub: 'Azure ML' },
+                { from: 't1-sap', fromSub: 'Wipro', to: 't2-amazon-ai', toSub: 'SageMaker' },
+                { from: 't1-oracle', fromSub: 'Deloitte', to: 't2-cohere', toSub: 'Oracle' },
+                { from: 't1-oracle', fromSub: 'Capgemini', to: 't2-cohere', toSub: 'Salesforce' },
+                { from: 't1-oracle', fromSub: 'NetSuite', to: 't2-microsoft-ai', toSub: 'Bing AI' },
+                { from: 't1-oracle', fromSub: 'Cerner', to: 't2-bluedot', toSub: 'WHO' },
+                // Hardware ↔ AI compute
+                { from: 't1-dell', fromSub: 'Intel', to: 't2-openai', toSub: 'Microsoft' },
+                { from: 't1-dell', fromSub: 'AMD', to: 't2-meta-ai', toSub: 'PyTorch' },
+                { from: 't1-dell', fromSub: 'VMware', to: 't2-microsoft-ai', toSub: 'Azure ML' },
+                { from: 't1-dell', fromSub: 'Broadcom', to: 't2-google-ai', toSub: 'DeepMind' },
+                { from: 't1-dell', fromSub: 'Lenovo', to: 't2-stability', toSub: 'Hugging Face' },
+                { from: 't1-hpe', fromSub: 'Cray', to: 't2-stability', toSub: 'AWS' },
+                { from: 't1-hpe', fromSub: 'Nutanix', to: 't2-amazon-ai', toSub: 'SageMaker' },
+                { from: 't1-hpe', fromSub: 'Aruba', to: 't2-amazon-ai', toSub: 'Alexa AI' },
+                { from: 't1-hpe', fromSub: 'Pure Storage', to: 't2-anthropic', toSub: 'Google Cloud' },
+                // Data pipeline ↔ AI training
+                { from: 't1-snowflake', fromSub: 'dbt Labs', to: 't2-anthropic', toSub: 'Scale AI' },
+                { from: 't1-snowflake', fromSub: 'Fivetran', to: 't2-mistral', toSub: 'Snowflake' },
+                { from: 't1-snowflake', fromSub: 'Informatica', to: 't2-google-ai', toSub: 'Kaggle' },
+                { from: 't1-snowflake', fromSub: 'Talend', to: 't2-amazon-ai', toSub: 'Comprehend' },
+                { from: 't1-snowflake', fromSub: 'Matillion', to: 't2-cohere', toSub: 'Writer' },
+                { from: 't1-databricks', fromSub: 'MLflow', to: 't2-openai', toSub: 'Codex' },
+                { from: 't1-databricks', fromSub: 'Apache Spark', to: 't2-meta-ai', toSub: 'PyTorch' },
+                { from: 't1-databricks', fromSub: 'Mosaic ML', to: 't2-vector', toSub: 'CIFAR' },
+                { from: 't1-databricks', fromSub: 'Delta Lake', to: 't2-waabi', toSub: 'NVIDIA' },
+                { from: 't1-databricks', fromSub: 'MosaicML', to: 't2-mistral', toSub: 'SAP' },
+                // Observability ↔ AI ops
+                { from: 't1-elastic', fromSub: 'Datadog', to: 't2-anthropic', toSub: 'AWS Bedrock' },
+                { from: 't1-elastic', fromSub: 'Sumo Logic', to: 't2-amazon-ai', toSub: 'Comprehend' },
+                { from: 't1-elastic', fromSub: 'Kibana', to: 't2-google-ai', toSub: 'Kaggle' },
+                { from: 't1-elastic', fromSub: 'Logstash', to: 't2-openai', toSub: 'Whisper' },
+                { from: 't1-cisco', fromSub: 'Splunk', to: 't2-google-ai', toSub: 'DeepMind' },
+                { from: 't1-cisco', fromSub: 'Meraki', to: 't2-amazon-ai', toSub: 'Alexa AI' },
+                { from: 't1-cisco', fromSub: 'Arista', to: 't2-meta-ai', toSub: 'FAIR' },
+                { from: 't1-cisco', fromSub: 'Juniper', to: 't2-mistral', toSub: 'Cloudflare' },
+                // DB ↔ AI vector search
+                { from: 't1-mongodb', fromSub: 'Atlas', to: 't2-openai', toSub: 'Whisper' },
+                { from: 't1-mongodb', fromSub: 'Redis', to: 't2-anthropic', toSub: 'Google Cloud' },
+                { from: 't1-mongodb', fromSub: 'Couchbase', to: 't2-cohere', toSub: 'Jasper' },
+                { from: 't1-mongodb', fromSub: 'Neo4j', to: 't2-google-ai', toSub: 'Verily' },
+                { from: 't1-mongodb', fromSub: 'Realm', to: 't2-ada', toSub: 'Shopify' },
+                // Research ↔ Research
+                { from: 't1-ibm', fromSub: 'Red Hat', to: 't2-stability', toSub: 'Hugging Face' },
+                { from: 't1-ibm', fromSub: 'Infosys', to: 't2-microsoft-ai', toSub: 'Power Platform' },
+                { from: 't1-ibm', fromSub: 'Kyndryl', to: 't2-microsoft-ai', toSub: 'Azure ML' },
+                { from: 't1-ibm', fromSub: 'Atos', to: 't2-google-ai', toSub: 'Waymo' },
+                // Media ↔ Media
+                { from: 't1-cbc-radio', fromSub: 'CBC Podcasts', to: 't2-rogers-radio', toSub: 'Sportsnet' },
+                { from: 't1-cbc-radio', fromSub: 'CBC News', to: 't2-bell-radio', toSub: 'CTV' },
+                { from: 't1-cbc-radio', fromSub: 'CBC Gem', to: 't2-bell-radio', toSub: 'Crave' },
+                { from: 't1-cbc-radio', fromSub: 'Radio-Canada', to: 't2-rogers-radio', toSub: 'OMNI' },
+                { from: 't1-cbc-radio', fromSub: 'APM', to: 't2-bell-radio', toSub: 'iHeart' },
+                { from: 't1-680news', fromSub: 'CP24', to: 't2-bell-radio', toSub: 'CP24' },
+                { from: 't1-680news', fromSub: 'BNN', to: 't2-bell-radio', toSub: 'CTV' },
+                { from: 't1-680news', fromSub: 'Citytv', to: 't2-rogers-radio', toSub: 'Citytv' },
+                { from: 't1-680news', fromSub: 'Toronto Star', to: 't2-rogers-radio', toSub: 'Today Radio' },
+                { from: 't1-680news', fromSub: 'Globe & Mail', to: 't2-bell-radio', toSub: 'TSN Radio' },
+                // Cloud ecosystem
+                { from: 't1-oracle', fromSub: 'TCS', to: 't2-amazon-ai', toSub: 'SageMaker' },
+                { from: 't1-sap', fromSub: 'PwC', to: 't2-anthropic', toSub: 'Scale AI' },
+                // Canadian AI corridor
+                { from: 't1-ibm', fromSub: 'Kyndryl', to: 't2-layer6', toSub: 'TD Bank' },
+                { from: 't1-oracle', fromSub: 'TCS', to: 't2-ada', toSub: 'Air Canada' },
+                { from: 't1-sap', fromSub: 'Wipro', to: 't2-layer6', toSub: 'RBC' },
+                { from: 't1-cisco', fromSub: 'Acacia', to: 't2-waabi', toSub: 'NVIDIA' },
+            ],
+            // 7: T2 sub-nodes ↔ T3 sub-nodes
+            '2-3': [
+                // Cloud provider shared: AWS
+                { from: 't2-anthropic', fromSub: 'AWS Bedrock', to: 't3-crowdstrike', toSub: 'AWS' },
+                { from: 't2-stability', fromSub: 'AWS', to: 't3-crowdstrike', toSub: 'AWS' },
+                { from: 't2-amazon-ai', fromSub: 'SageMaker', to: 't3-crowdstrike', toSub: 'AWS' },
+                { from: 't2-amazon-ai', fromSub: 'Rekognition', to: 't3-crowdstrike', toSub: 'Bionic' },
+                { from: 't2-amazon-ai', fromSub: 'Lex', to: 't3-zscaler', toSub: 'Canonic' },
+                // Google Cloud shared
+                { from: 't2-anthropic', fromSub: 'Google Cloud', to: 't3-crowdstrike', toSub: 'Google Cloud' },
+                { from: 't2-google-ai', fromSub: 'DeepMind', to: 't3-sentinelone', toSub: 'Mandiant' },
+                { from: 't2-google-ai', fromSub: 'Waymo', to: 't3-palo-alto', toSub: 'CloudGenix' },
+                { from: 't2-google-ai', fromSub: 'Wing', to: 't3-checkpoint', toSub: 'CloudGuard' },
+                { from: 't2-google-ai', fromSub: 'Verily', to: 't3-sentinelone', toSub: 'Attivo' },
+                // Microsoft / Azure shared
+                { from: 't2-openai', fromSub: 'Microsoft', to: 't3-cisco-security', toSub: 'SecureX' },
+                { from: 't2-openai', fromSub: 'DALL-E', to: 't3-proofpoint', toSub: 'Cloudmark' },
+                { from: 't2-openai', fromSub: 'Whisper', to: 't3-splunk', toSub: 'SignalFx' },
+                { from: 't2-microsoft-ai', fromSub: 'Azure ML', to: 't3-palo-alto', toSub: 'Prisma' },
+                { from: 't2-microsoft-ai', fromSub: 'GitHub Copilot', to: 't3-cloudflare', toSub: 'Workers' },
+                { from: 't2-microsoft-ai', fromSub: 'Nuance', to: 't3-proofpoint', toSub: 'Wombat' },
+                { from: 't2-microsoft-ai', fromSub: 'Bing AI', to: 't3-checkpoint', toSub: 'Avanan' },
+                // Cloudflare shared
+                { from: 't2-mistral', fromSub: 'Cloudflare', to: 't3-cloudflare', toSub: 'R2' },
+                { from: 't2-mistral', fromSub: 'SAP', to: 't3-fortinet', toSub: 'Fabric' },
+                { from: 't2-mistral', fromSub: 'Orange', to: 't3-fortinet', toSub: 'FortiSIEM' },
+                { from: 't2-stability', fromSub: 'Hugging Face', to: 't3-cloudflare', toSub: 'Workers' },
+                { from: 't2-stability', fromSub: 'Runway', to: 't3-cloudflare', toSub: 'D1' },
+                // AI for security: ML models in detection
+                { from: 't2-meta-ai', fromSub: 'PyTorch', to: 't3-sentinelone', toSub: 'Deep Instinct' },
+                { from: 't2-meta-ai', fromSub: 'FAIR', to: 't3-rapid7', toSub: 'Minerva Labs' },
+                { from: 't2-meta-ai', fromSub: 'Horizon', to: 't3-checkpoint', toSub: 'Spectral' },
+                { from: 't2-openai', fromSub: 'Codex', to: 't3-crowdstrike', toSub: 'Humio' },
+                { from: 't2-openai', fromSub: 'Sora', to: 't3-fortinet', toSub: 'FortiEDR' },
+                // ServiceNow shared
+                { from: 't2-amazon-ai', fromSub: 'Alexa AI', to: 't3-zscaler', toSub: 'ServiceNow' },
+                { from: 't2-amazon-ai', fromSub: 'Comprehend', to: 't3-splunk', toSub: 'Phantom' },
+                { from: 't2-cohere', fromSub: 'Salesforce', to: 't3-splunk', toSub: 'ServiceNow' },
+                { from: 't2-cohere', fromSub: 'Jasper', to: 't3-proofpoint', toSub: 'Tessian' },
+                { from: 't2-cohere', fromSub: 'Writer', to: 't3-proofpoint', toSub: 'ObserveIT' },
+                // Cisco ecosystem
+                { from: 't2-cohere', fromSub: 'Oracle', to: 't3-splunk', toSub: 'Cisco' },
+                // Identity/Auth
+                { from: 't2-layer6', fromSub: 'TD Bank', to: 't3-okta', toSub: 'Auth0' },
+                { from: 't2-layer6', fromSub: 'Scotiabank', to: 't3-okta', toSub: 'SailPoint' },
+                { from: 't2-layer6', fromSub: 'RBC', to: 't3-okta', toSub: 'BeyondTrust' },
+                { from: 't2-layer6', fromSub: 'BMO', to: 't3-okta', toSub: 'Saviynt' },
+                { from: 't2-ada', fromSub: 'Shopify', to: 't3-okta', toSub: 'Yubico' },
+                { from: 't2-ada', fromSub: 'Sun Life', to: 't3-okta', toSub: 'Ping Identity' },
+                // Canadian corridor
+                { from: 't2-ada', fromSub: 'TELUS', to: 't3-blackberry', toSub: 'Cylance' },
+                { from: 't2-ada', fromSub: 'Air Canada', to: 't3-blackberry', toSub: 'AtHoc' },
+                { from: 't2-ada', fromSub: 'Meta', to: 't3-proofpoint', toSub: 'Meta Networks' },
+                { from: 't2-vector', fromSub: 'U of T', to: 't3-blackberry', toSub: 'QNX' },
+                { from: 't2-vector', fromSub: 'Amii', to: 't3-opentext', toSub: 'Fortify' },
+                { from: 't2-vector', fromSub: 'Mila', to: 't3-sentinelone', toSub: 'Intezer' },
+                { from: 't2-vector', fromSub: 'NSERC', to: 't3-opentext', toSub: 'Micro Focus' },
+                { from: 't2-waabi', fromSub: 'NVIDIA', to: 't3-palo-alto', toSub: 'Cortex' },
+                { from: 't2-waabi', fromSub: 'Uber ATG', to: 't3-zscaler', toSub: 'CrowdStrike' },
+                { from: 't2-waabi', fromSub: 'Volvo Trucks', to: 't3-fortinet', toSub: 'FortiGate' },
+                { from: 't2-bluedot', fromSub: 'Public Health Agency', to: 't3-opentext', toSub: 'EnCase' },
+                { from: 't2-bluedot', fromSub: 'WHO', to: 't3-opentext', toSub: 'Guidance' },
+                { from: 't2-bluedot', fromSub: 'CDC', to: 't3-rapid7', toSub: 'Threat Stack' },
+                // Data/analytics ↔ SIEM
+                { from: 't2-google-ai', fromSub: 'Kaggle', to: 't3-rapid7', toSub: 'Metasploit' },
+                // Media ↔ Media
+                { from: 't2-rogers-radio', fromSub: 'Sportsnet', to: 't3-corus-radio', toSub: 'Global TV' },
+                { from: 't2-rogers-radio', fromSub: 'Citytv', to: 't3-corus-radio', toSub: 'YTV' },
+                { from: 't2-rogers-radio', fromSub: 'OMNI', to: 't3-corus-radio', toSub: 'W Network' },
+                { from: 't2-rogers-radio', fromSub: 'Jack FM', to: 't3-corus-radio', toSub: 'CMT Canada' },
+                { from: 't2-bell-radio', fromSub: 'CTV', to: 't3-corus-radio', toSub: 'Showcase' },
+                { from: 't2-bell-radio', fromSub: 'Crave', to: 't3-corus-radio', toSub: 'HGTV Canada' },
+                { from: 't2-bell-radio', fromSub: 'TSN Radio', to: 't3-corus-radio', toSub: 'History' },
+                { from: 't2-bell-radio', fromSub: 'iHeart', to: 't3-corus-radio', toSub: 'Food Network' },
+            ],
+            // 8: T3 sub-nodes ↔ T4 sub-nodes
+            '3-4': [
+                // AWS shared
+                { from: 't3-crowdstrike', fromSub: 'AWS', to: 't4-zoox', toSub: 'AWS' },
+                { from: 't3-crowdstrike', fromSub: 'AWS', to: 't4-agility', toSub: 'Amazon' },
+                { from: 't3-crowdstrike', fromSub: 'Bionic', to: 't4-zoox', toSub: 'Rivian' },
+                { from: 't3-crowdstrike', fromSub: 'Reposify', to: 't4-zoox', toSub: 'Lab126' },
+                { from: 't3-crowdstrike', fromSub: 'Preempt', to: 't4-zoox', toSub: 'Prime Air' },
+                // Google/Alphabet shared
+                { from: 't3-crowdstrike', fromSub: 'Google Cloud', to: 't4-waymo', toSub: 'Alphabet' },
+                { from: 't3-crowdstrike', fromSub: 'Okta', to: 't4-waymo', toSub: 'Uber' },
+                { from: 't3-crowdstrike', fromSub: 'Mandiant', to: 't4-boston', toSub: 'Velodyne' },
+                // NVIDIA shared
+                { from: 't3-palo-alto', fromSub: 'Cortex', to: 't4-figure', toSub: 'NVIDIA' },
+                { from: 't3-palo-alto', fromSub: 'Unit 42', to: 't4-tesla', toSub: 'Dojo' },
+                { from: 't3-palo-alto', fromSub: 'Prisma', to: 't4-figure', toSub: 'Microsoft' },
+                { from: 't3-palo-alto', fromSub: 'Bridgecrew', to: 't4-1x', toSub: 'OpenAI' },
+                { from: 't3-palo-alto', fromSub: 'Demisto', to: 't4-tesla', toSub: 'xAI' },
+                { from: 't3-palo-alto', fromSub: 'Expanse', to: 't4-unitree', toSub: 'SenseTime' },
+                // Microsoft shared
+                { from: 't3-cisco-security', fromSub: 'SecureX', to: 't4-figure', toSub: 'Microsoft' },
+                { from: 't3-cisco-security', fromSub: 'SecureX', to: 't4-cruise', toSub: 'Microsoft' },
+                { from: 't3-cisco-security', fromSub: 'Thousand Eyes', to: 't4-waymo', toSub: 'Stellantis' },
+                { from: 't3-cisco-security', fromSub: 'Stealthwatch', to: 't4-dji', toSub: 'Livox' },
+                // Cisco ↔ DJI ops
+                { from: 't3-splunk', fromSub: 'Cisco', to: 't4-dji', toSub: 'FlightHub' },
+                { from: 't3-splunk', fromSub: 'PagerDuty', to: 't4-sanctuary', toSub: 'Magna' },
+                { from: 't3-splunk', fromSub: 'ServiceNow', to: 't4-nuro', toSub: 'CVS' },
+                { from: 't3-splunk', fromSub: 'SignalFx', to: 't4-starship', toSub: 'Compass' },
+                { from: 't3-cisco-security', fromSub: 'Meraki MX', to: 't4-dji', toSub: 'AirSense' },
+                { from: 't3-cisco-security', fromSub: 'Talos', to: 't4-skydio', toSub: 'Axon' },
+                { from: 't3-cisco-security', fromSub: 'Duo', to: 't4-sanctuary', toSub: 'Magna' },
+                { from: 't3-cisco-security', fromSub: 'Umbrella', to: 't4-starship', toSub: 'Grubhub' },
+                { from: 't3-cisco-security', fromSub: 'AMP', to: 't4-skydio', toSub: 'Motorola' },
+                // QNX ↔ autonomous vehicles
+                { from: 't3-blackberry', fromSub: 'QNX', to: 't4-clearpath', toSub: 'ROS' },
+                { from: 't3-blackberry', fromSub: 'IVY', to: 't4-cruise', toSub: 'GM' },
+                { from: 't3-blackberry', fromSub: 'QNX', to: 't4-waymo', toSub: 'Magna' },
+                { from: 't3-blackberry', fromSub: 'Cylance', to: 't4-tesla', toSub: 'SpaceX' },
+                { from: 't3-blackberry', fromSub: 'SecuSmart', to: 't4-skydio', toSub: 'US Army' },
+                { from: 't3-blackberry', fromSub: 'Certicom', to: 't4-clearpath', toSub: 'Ouster' },
+                { from: 't3-blackberry', fromSub: 'Guard', to: 't4-draganfly', toSub: 'PatriotOne' },
+                { from: 't3-blackberry', fromSub: 'Radar', to: 't4-boston', toSub: 'FLIR' },
+                // Okta auth ↔ platform access
+                { from: 't3-okta', fromSub: 'Auth0', to: 't4-agility', toSub: 'Amazon' },
+                { from: 't3-okta', fromSub: 'SailPoint', to: 't4-boston', toSub: 'Spot SDK' },
+                { from: 't3-okta', fromSub: 'Yubico', to: 't4-sanctuary', toSub: 'Bell Canada' },
+                { from: 't3-okta', fromSub: 'Ping Identity', to: 't4-cruise', toSub: 'Honda' },
+                { from: 't3-okta', fromSub: 'BeyondTrust', to: 't4-nuro', toSub: 'Walmart' },
+                // Industrial security
+                { from: 't3-fortinet', fromSub: 'FortiGate', to: 't4-clearpath', toSub: 'SICK' },
+                { from: 't3-fortinet', fromSub: 'Fabric', to: 't4-otto', toSub: 'Rockwell' },
+                { from: 't3-fortinet', fromSub: 'FortiNAC', to: 't4-otto', toSub: 'Honeywell' },
+                { from: 't3-fortinet', fromSub: 'FortiSIEM', to: 't4-otto', toSub: 'Zebra' },
+                { from: 't3-fortinet', fromSub: 'FortiSOAR', to: 't4-otto', toSub: 'Dematic' },
+                { from: 't3-fortinet', fromSub: 'EnSilo', to: 't4-clearpath', toSub: 'Luminar' },
+                { from: 't3-fortinet', fromSub: 'OPAQ', to: 't4-clearpath', toSub: 'Hesai' },
+                // Threat intel ↔ defense drones
+                { from: 't3-sentinelone', fromSub: 'Mandiant', to: 't4-skydio', toSub: 'Palantir' },
+                { from: 't3-sentinelone', fromSub: 'Scalyr', to: 't4-skydio', toSub: 'Qualcomm' },
+                { from: 't3-sentinelone', fromSub: 'Attivo', to: 't4-draganfly', toSub: 'BRINC' },
+                { from: 't3-sentinelone', fromSub: 'GreyNoise', to: 't4-draganfly', toSub: 'FlightOps' },
+                { from: 't3-rapid7', fromSub: 'InsightVM', to: 't4-draganfly', toSub: 'Dronelogics' },
+                { from: 't3-rapid7', fromSub: 'Metasploit', to: 't4-skydio', toSub: 'Sony' },
+                { from: 't3-rapid7', fromSub: 'DivvyCloud', to: 't4-zipline', toSub: 'Toyota' },
+                { from: 't3-rapid7', fromSub: 'Threat Stack', to: 't4-draganfly', toSub: 'Varigard' },
+                // OpenAI shared
+                { from: 't3-proofpoint', fromSub: 'Tessian', to: 't4-1x', toSub: 'OpenAI' },
+                { from: 't3-proofpoint', fromSub: 'Tessian', to: 't4-figure', toSub: 'OpenAI' },
+                { from: 't3-proofpoint', fromSub: 'Sendmail', to: 't4-nuro', toSub: 'FedEx' },
+                { from: 't3-proofpoint', fromSub: 'Illusive', to: 't4-1x', toSub: 'Tiger Global' },
+                // SoftBank shared
+                { from: 't3-opentext', fromSub: 'Micro Focus', to: 't4-avidbots', toSub: 'SoftBank' },
+                { from: 't3-opentext', fromSub: 'Carbonite', to: 't4-avidbots', toSub: 'BDC' },
+                { from: 't3-opentext', fromSub: 'Webroot', to: 't4-avidbots', toSub: 'Georgian' },
+                { from: 't3-opentext', fromSub: 'Voltage', to: 't4-sanctuary', toSub: 'Verizon' },
+                { from: 't3-opentext', fromSub: 'Bricata', to: 't4-sanctuary', toSub: 'SAIT' },
+                // Zscaler ↔ logistics
+                { from: 't3-zscaler', fromSub: 'ServiceNow', to: 't4-nuro', toSub: 'FedEx' },
+                { from: 't3-zscaler', fromSub: 'CrowdStrike', to: 't4-agility', toSub: 'GXO' },
+                { from: 't3-zscaler', fromSub: 'Okta', to: 't4-unitree', toSub: 'DJI' },
+                { from: 't3-zscaler', fromSub: 'SentinelOne', to: 't4-unitree', toSub: 'Alibaba' },
+                // Samsung shared
+                { from: 't3-checkpoint', fromSub: 'Harmony', to: 't4-1x', toSub: 'Samsung' },
+                { from: 't3-checkpoint', fromSub: 'CloudGuard', to: 't4-boston', toSub: 'Spot SDK' },
+                { from: 't3-checkpoint', fromSub: 'Dome9', to: 't4-zoox', toSub: 'Amazon' },
+                { from: 't3-checkpoint', fromSub: 'Avanan', to: 't4-nuro', toSub: 'Kroger' },
+                { from: 't3-checkpoint', fromSub: 'Perimeter 81', to: 't4-starship', toSub: 'Uber Eats' },
+                // Media ↔ delivery
+                { from: 't3-corus-radio', fromSub: 'Global TV', to: 't4-drone-delivery', toSub: 'Air Canada' },
+                { from: 't3-corus-radio', fromSub: 'Food Network', to: 't4-starship', toSub: 'Grubhub' },
+                { from: 't3-corus-radio', fromSub: 'HGTV Canada', to: 't4-nuro', toSub: 'Dominos' },
+                // Cloudflare CDN ↔ delivery platforms
+                { from: 't3-cloudflare', fromSub: 'Workers', to: 't4-starship', toSub: 'Uber Eats' },
+                { from: 't3-cloudflare', fromSub: 'Workers', to: 't4-starship', toSub: 'Instacart' },
+                { from: 't3-cloudflare', fromSub: 'R2', to: 't4-nuro', toSub: 'Chipotle' },
+                { from: 't3-cloudflare', fromSub: 'Turnstile', to: 't4-nuro', toSub: '7-Eleven' },
+                { from: 't3-cloudflare', fromSub: 'Area 1', to: 't4-drone-delivery', toSub: 'Volatus' },
+                { from: 't3-cloudflare', fromSub: 'BastionZero', to: 't4-boston', toSub: 'RealSense' },
+            ],
+            // 9: T4 sub-nodes ↔ T5 sub-nodes
+            '4-5': [
+                // Standards bodies ↔ robotics industry
+                { from: 't4-boston', fromSub: 'Hyundai', to: 't5-standards-council', toSub: 'ISO' },
+                { from: 't4-boston', fromSub: 'Sarcos', to: 't5-standards-council', toSub: 'ANSI' },
+                { from: 't4-boston', fromSub: 'Trimble', to: 't5-standards-council', toSub: 'IEC' },
+                { from: 't4-boston', fromSub: 'FLIR', to: 't5-cse', toSub: 'DND' },
+                { from: 't4-boston', fromSub: 'RealSense', to: 't5-standards-council', toSub: 'IEEE' },
+                { from: 't4-clearpath', fromSub: 'ROS', to: 't5-standards-council', toSub: 'IEEE' },
+                { from: 't4-clearpath', fromSub: 'OTTO Motors', to: 't5-standards-council', toSub: 'CSA Group' },
+                { from: 't4-clearpath', fromSub: 'Velodyne', to: 't5-ised', toSub: 'IRAP' },
+                { from: 't4-clearpath', fromSub: 'MathWorks', to: 't5-ised', toSub: 'Mitacs' },
+                { from: 't4-clearpath', fromSub: 'Ouster', to: 't5-ised', toSub: 'NRC' },
+                { from: 't4-clearpath', fromSub: 'Luminar', to: 't5-transport-canada', toSub: 'SAE International' },
+                { from: 't4-clearpath', fromSub: 'SICK', to: 't5-standards-council', toSub: 'DIN Germany' },
+                { from: 't4-otto', fromSub: 'Rockwell', to: 't5-standards-council', toSub: 'CSA Group' },
+                { from: 't4-otto', fromSub: 'Honeywell', to: 't5-standards-council', toSub: 'ULC' },
+                { from: 't4-otto', fromSub: 'Zebra', to: 't5-standards-council', toSub: 'ETSI' },
+                { from: 't4-otto', fromSub: 'Dematic', to: 't5-standards-council', toSub: 'CEN' },
+                { from: 't4-figure', fromSub: 'NVIDIA', to: 't5-standards-council', toSub: 'NIST' },
+                { from: 't4-figure', fromSub: 'BMW', to: 't5-standards-council', toSub: 'DIN Germany' },
+                { from: 't4-figure', fromSub: 'Intel Capital', to: 't5-ised', toSub: 'CFI' },
+                { from: 't4-figure', fromSub: 'ARK Invest', to: 't5-competition-bureau', toSub: 'FTC' },
+                // Transport regulation ↔ autonomous vehicles/drones
+                { from: 't4-tesla', fromSub: 'SpaceX', to: 't5-transport-canada', toSub: 'FAA' },
+                { from: 't4-tesla', fromSub: 'Panasonic', to: 't5-transport-canada', toSub: 'JARI' },
+                { from: 't4-tesla', fromSub: 'CATL', to: 't5-transport-canada', toSub: 'CAAC China' },
+                { from: 't4-tesla', fromSub: 'Samsung SDI', to: 't5-standards-council', toSub: 'KS Korea' },
+                { from: 't4-tesla', fromSub: 'Baidu', to: 't5-pipeda', toSub: 'PIPL China' },
+                { from: 't4-tesla', fromSub: 'xAI', to: 't5-privacy-commissioner', toSub: 'IAPP' },
+                { from: 't4-waymo', fromSub: 'Uber', to: 't5-transport-canada', toSub: 'NHTSA' },
+                { from: 't4-waymo', fromSub: 'Alphabet', to: 't5-competition-bureau', toSub: 'FTC' },
+                { from: 't4-waymo', fromSub: 'Volvo', to: 't5-transport-canada', toSub: 'UNECE WP.29' },
+                { from: 't4-waymo', fromSub: 'Stellantis', to: 't5-competition-bureau', toSub: 'EU DG Comp' },
+                { from: 't4-waymo', fromSub: 'Geely', to: 't5-transport-canada', toSub: 'CAAC China' },
+                { from: 't4-waymo', fromSub: 'AutoNation', to: 't5-competition-bureau', toSub: 'ACCC' },
+                { from: 't4-waymo', fromSub: 'Magna', to: 't5-ised', toSub: 'NRC' },
+                { from: 't4-cruise', fromSub: 'GM', to: 't5-transport-canada', toSub: 'NAV Canada' },
+                { from: 't4-cruise', fromSub: 'Honda', to: 't5-transport-canada', toSub: 'JARI' },
+                { from: 't4-cruise', fromSub: 'SoftBank Vision', to: 't5-competition-bureau', toSub: 'JFTC' },
+                { from: 't4-cruise', fromSub: 'BrightDrop', to: 't5-transport-canada', toSub: 'AASHTO' },
+                { from: 't4-dji', fromSub: 'FlightHub', to: 't5-transport-canada', toSub: 'ICAO' },
+                { from: 't4-dji', fromSub: 'AirSense', to: 't5-crtc', toSub: 'FCC' },
+                { from: 't4-dji', fromSub: 'Livox', to: 't5-crtc', toSub: 'ISED' },
+                { from: 't4-dji', fromSub: 'Hasselblad', to: 't5-standards-council', toSub: 'ISO' },
+                { from: 't4-dji', fromSub: 'Terra', to: 't5-transport-canada', toSub: 'EASA' },
+                { from: 't4-drone-delivery', fromSub: 'Air Canada', to: 't5-transport-canada', toSub: 'NAV Canada' },
+                { from: 't4-drone-delivery', fromSub: 'EDC', to: 't5-ised', toSub: 'EDC' },
+                { from: 't4-drone-delivery', fromSub: 'Volatus', to: 't5-transport-canada', toSub: 'FAA' },
+                { from: 't4-drone-delivery', fromSub: 'Condor', to: 't5-crtc', toSub: 'ACMA' },
+                { from: 't4-zipline', fromSub: 'Gates Foundation', to: 't5-transport-canada', toSub: 'EASA' },
+                { from: 't4-zipline', fromSub: 'Rwanda MOH', to: 't5-transport-canada', toSub: 'CASA' },
+                { from: 't4-zipline', fromSub: 'Pfizer', to: 't5-pipeda', toSub: 'GDPR EU' },
+                { from: 't4-zipline', fromSub: 'Novartis', to: 't5-competition-bureau', toSub: 'Bundeskartellamt' },
+                // Competition/antitrust ↔ tech giants
+                { from: 't4-zoox', fromSub: 'Amazon', to: 't5-competition-bureau', toSub: 'EU DG Comp' },
+                { from: 't4-zoox', fromSub: 'Whole Foods', to: 't5-competition-bureau', toSub: 'FTC' },
+                { from: 't4-starship', fromSub: 'Uber Eats', to: 't5-competition-bureau', toSub: 'CMA UK' },
+                { from: 't4-starship', fromSub: 'Grubhub', to: 't5-competition-bureau', toSub: 'AGCM Italy' },
+                { from: 't4-starship', fromSub: 'Instacart', to: 't5-competition-bureau', toSub: 'OECD' },
+                { from: 't4-nuro', fromSub: 'FedEx', to: 't5-competition-bureau', toSub: 'OECD' },
+                { from: 't4-nuro', fromSub: 'Walmart', to: 't5-competition-bureau', toSub: 'ACCC' },
+                { from: 't4-nuro', fromSub: 'Kroger', to: 't5-competition-bureau', toSub: 'FTC' },
+                { from: 't4-nuro', fromSub: 'Woven Capital', to: 't5-competition-bureau', toSub: 'JFTC' },
+                // Privacy ↔ data-collecting robots
+                { from: 't4-zoox', fromSub: 'AWS', to: 't5-privacy-commissioner', toSub: 'OneTrust' },
+                { from: 't4-zoox', fromSub: 'Ring', to: 't5-privacy-commissioner', toSub: 'BigID' },
+                { from: 't4-zoox', fromSub: 'Kuiper', to: 't5-crtc', toSub: 'FCC' },
+                { from: 't4-1x', fromSub: 'OpenAI', to: 't5-privacy-commissioner', toSub: 'IAPP' },
+                { from: 't4-1x', fromSub: 'Tiger Global', to: 't5-competition-bureau', toSub: 'CCCS Singapore' },
+                { from: 't4-agility', fromSub: 'Amazon', to: 't5-pipeda', toSub: 'CCPA' },
+                { from: 't4-agility', fromSub: 'Ford', to: 't5-transport-canada', toSub: 'NHTSA' },
+                { from: 't4-agility', fromSub: 'GXO', to: 't5-competition-bureau', toSub: 'CMA UK' },
+                { from: 't4-unitree', fromSub: 'Alibaba', to: 't5-pipeda', toSub: 'PIPL China' },
+                { from: 't4-unitree', fromSub: 'SenseTime', to: 't5-pipeda', toSub: 'PDPA Singapore' },
+                { from: 't4-unitree', fromSub: 'KAIST', to: 't5-standards-council', toSub: 'KS Korea' },
+                { from: 't4-unitree', fromSub: 'DJI', to: 't5-crtc', toSub: 'MCMC Malaysia' },
+                { from: 't4-starship', fromSub: 'Grubhub', to: 't5-pipeda', toSub: 'GDPR EU' },
+                { from: 't4-figure', fromSub: 'BMW', to: 't5-pipeda', toSub: 'DPDP India' },
+                // Innovation funding ↔ Canadian robotics
+                { from: 't4-tesla', fromSub: 'Dojo', to: 't5-ised', toSub: 'NRC' },
+                { from: 't4-sanctuary', fromSub: 'Magna', to: 't5-ised', toSub: 'NRC' },
+                { from: 't4-sanctuary', fromSub: 'BDC', to: 't5-ised', toSub: 'BDC' },
+                { from: 't4-sanctuary', fromSub: 'SE Health', to: 't5-ipc-ontario', toSub: 'Ontario Health' },
+                { from: 't4-sanctuary', fromSub: 'Bell Canada', to: 't5-crtc', toSub: 'ISED' },
+                { from: 't4-sanctuary', fromSub: 'SAIT', to: 't5-ised', toSub: 'Mitacs' },
+                { from: 't4-avidbots', fromSub: 'BDC', to: 't5-ised', toSub: 'BDC' },
+                { from: 't4-avidbots', fromSub: 'RBC', to: 't5-ised', toSub: 'EDC' },
+                { from: 't4-avidbots', fromSub: 'Neo', to: 't5-standards-council', toSub: 'CSA Group' },
+                { from: 't4-avidbots', fromSub: 'Georgian', to: 't5-ised', toSub: 'MaRS' },
+                { from: 't4-draganfly', fromSub: 'Coldchain', to: 't5-ised', toSub: 'SDTC' },
+                { from: 't4-draganfly', fromSub: 'MFC', to: 't5-ised', toSub: 'IRAP' },
+                // Intelligence ↔ defense drones
+                { from: 't4-skydio', fromSub: 'US Army', to: 't5-cse', toSub: 'Five Eyes' },
+                { from: 't4-skydio', fromSub: 'Axon', to: 't5-csis', toSub: 'RCMP' },
+                { from: 't4-skydio', fromSub: 'Palantir', to: 't5-cse', toSub: 'NSA' },
+                { from: 't4-skydio', fromSub: 'Motorola', to: 't5-csis', toSub: 'CBSA' },
+                { from: 't4-skydio', fromSub: 'Toyota', to: 't5-competition-bureau', toSub: 'JFTC' },
+                { from: 't4-draganfly', fromSub: 'Vital Intel', to: 't5-csa', toSub: 'CCCS' },
+                { from: 't4-draganfly', fromSub: 'PatriotOne', to: 't5-csis', toSub: 'CBSA' },
+                { from: 't4-draganfly', fromSub: 'BRINC', to: 't5-csis', toSub: 'Public Safety' },
+                // OPC/IPC ↔ data collection
+                { from: 't4-nuro', fromSub: 'CVS', to: 't5-opc', toSub: 'CNIL France' },
+                { from: 't4-starship', fromSub: 'Sodexo', to: 't5-opc', toSub: 'ICO UK' },
+                { from: 't4-boston', fromSub: 'Orbit', to: 't5-ipc-ontario', toSub: 'FIPPA' },
+                // CSA cyber ↔ robotics cyber
+                { from: 't4-clearpath', fromSub: 'Hesai', to: 't5-csa', toSub: 'CIRA' },
+                { from: 't4-sanctuary', fromSub: 'InDro', to: 't5-csa', toSub: 'CyberNB' },
+            ]
+        };
+
+        document.addEventListener('keydown', (event) => {
+            if (['1', '2', '3', '4', '5'].includes(event.key)) {
+                verticalMode = false;
+                allSubsMode = false;
+                currentCrossTier = null;
+                const tier = parseInt(event.key);
+                currentTier = (currentTier === tier) ? 'all' : tier;
+                renderGraph();
+            } else if (['6', '7', '8', '9'].includes(event.key)) {
+                verticalMode = false;
+                allSubsMode = false;
+                currentTier = 'all';
+                const crossMap = { '6': '1-2', '7': '2-3', '8': '3-4', '9': '4-5' };
+                const mode = crossMap[event.key];
+                currentCrossTier = (currentCrossTier === mode) ? null : mode;
+                renderGraph();
+            } else if (event.key === 'Escape') {
+                verticalMode = false;
+                allSubsMode = false;
+                currentTier = 'all';
+                currentCrossTier = null;
+                renderGraph();
+            } else if (event.key === '0') {
+                exportHighResPNG();
+            } else if (event.key === 'q' || event.key === 'Q') {
+                hideLines = !hideLines;
+                renderGraph();
+            } else if (event.key === 'v' || event.key === 'V') {
+                verticalMode = !verticalMode;
+                allSubsMode = false;
+                if (verticalMode) {
+                    currentTier = 'all';
+                    currentCrossTier = null;
+                }
+                renderGraph();
+            } else if (event.key === 'g' || event.key === 'G') {
+                allSubsMode = !allSubsMode;
+                verticalMode = false;
+                if (allSubsMode) {
+                    currentTier = 'all';
+                    currentCrossTier = null;
+                }
+                renderGraph();
+            }
+        });
+
+        const partnersData = {
+            // Technology partners - enterprise tech ecosystem
+            'technology': {
+                't1-ibm': ['Red Hat', 'Kyndryl', 'Atos', 'Infosys', 'Accenture'],
+                't1-oracle': ['NetSuite', 'Cerner', 'Deloitte', 'Capgemini', 'TCS'],
+                't1-sap': ['Deloitte', 'Accenture', 'PwC', 'Capgemini', 'Wipro'],
+                't1-cisco': ['Meraki', 'Splunk', 'Acacia', 'Arista', 'Juniper'],
+                't1-dell': ['VMware', 'Intel', 'AMD', 'Broadcom', 'Lenovo'],
+                't1-hpe': ['Aruba', 'Nimble', 'Cray', 'Nutanix', 'Pure Storage'],
+                't1-mongodb': ['Atlas', 'Realm', 'Redis', 'Couchbase', 'Neo4j'],
+                't1-snowflake': ['dbt Labs', 'Fivetran', 'Matillion', 'Talend', 'Informatica'],
+                't1-databricks': ['Apache Spark', 'MLflow', 'Delta Lake', 'Mosaic ML', 'MosaicML'],
+                't1-elastic': ['Kibana', 'Logstash', 'Beats', 'Sumo Logic', 'Datadog']
+            },
+            // Media partners - broadcast & streaming
+            'media': {
+                't1-cbc-radio': ['CBC Gem', 'Radio-Canada', 'CBC News', 'CBC Podcasts', 'APM'],
+                't1-680news': ['Citytv', 'CP24', 'BNN', 'Toronto Star', 'Globe & Mail'],
+                't2-rogers-radio': ['Sportsnet', 'Citytv', 'OMNI', 'Today Radio', 'Jack FM'],
+                't2-bell-radio': ['CTV', 'CP24', 'iHeart', 'Crave', 'TSN Radio'],
+                't3-corus-radio': ['Global TV', 'Showcase', 'HGTV Canada', 'Food Network', 'History', 'W Network', 'Teletoon', 'YTV', 'Treehouse', 'CMT Canada']
+            },
+            // AI partners - research & tooling
+            'ai': {
+                't2-openai': ['Microsoft', 'DALL-E', 'Whisper', 'Codex', 'Sora'],
+                't2-anthropic': ['Google Cloud', 'Scale AI', 'AWS Bedrock', 'Notion AI', 'DuckDuckGo'],
+                't2-cohere': ['Oracle', 'Salesforce', 'McKinsey', 'Jasper', 'Writer'],
+                't2-google-ai': ['DeepMind', 'Waymo', 'Verily', 'Wing', 'Kaggle'],
+                't2-microsoft-ai': ['GitHub Copilot', 'Bing AI', 'Azure ML', 'Nuance', 'Power Platform'],
+                't2-meta-ai': ['PyTorch', 'FAIR', 'Instagram AI', 'WhatsApp AI', 'Horizon'],
+                't2-amazon-ai': ['Alexa AI', 'SageMaker', 'Rekognition', 'Comprehend', 'Lex'],
+                't2-mistral': ['Snowflake', 'Cloudflare', 'SAP', 'Orange', 'BNP Paribas'],
+                't2-ada': ['Air Canada', 'TELUS', 'Meta', 'Shopify', 'Sun Life'],
+                't2-layer6': ['TD Bank', 'CIFAR', 'Scotiabank', 'RBC', 'BMO'],
+                't2-bluedot': ['WHO', 'CDC', 'Public Health Agency', 'Metabiota', 'ICES'],
+                't2-waabi': ['Uber ATG', 'NVIDIA', 'Volvo Trucks', 'Loblaws', 'Gatik'],
+                't2-vector': ['U of T', 'Amii', 'Mila', 'CIFAR', 'NSERC'],
+                't2-stability': ['Hugging Face', 'AWS', 'Runway', 'Midjourney', 'Stability']
+            },
+            // Security partners - cyber defense alliances (10 each)
+            'security': {
+                't3-crowdstrike': ['AWS', 'Zscaler', 'Okta', 'Cloudflare', 'Google Cloud', 'Mandiant', 'Humio', 'Preempt', 'Reposify', 'Bionic'],
+                't3-palo-alto': ['Demisto', 'Prisma', 'Cortex', 'Unit 42', 'Bridgecrew', 'Cider Security', 'Expanse', 'Dig Security', 'Talon', 'CloudGenix'],
+                't3-fortinet': ['FortiGate', 'FortiSIEM', 'Fabric', 'Lacework', 'Linksys', 'FortiEDR', 'FortiNAC', 'EnSilo', 'OPAQ', 'FortiSOAR'],
+                't3-checkpoint': ['CloudGuard', 'Harmony', 'Avanan', 'Perimeter 81', 'Odo', 'Dome9', 'ForceNock', 'Protego', 'Spectral', 'Atmosec'],
+                't3-okta': ['Auth0', 'Ping Identity', 'SailPoint', 'BeyondTrust', 'Saviynt', 'Spera Security', 'a]OT', 'Atko', 'ClearDATA', 'Yubico'],
+                't3-zscaler': ['CrowdStrike', 'Splunk', 'SentinelOne', 'Okta', 'ServiceNow', 'Canonic', 'ShiftRight', 'Smokescreen', 'TrustPath', 'Avalor'],
+                't3-cloudflare': ['Workers', 'R2', 'D1', 'Turnstile', 'Zaraz', 'Area 1', 'Vectrix', 'S2 Systems', 'Niche Networks', 'BastionZero'],
+                't3-splunk': ['Cisco', 'PagerDuty', 'ServiceNow', 'Phantom', 'VictorOps', 'SignalFx', 'Omnition', 'Rigor', 'Plumbr', 'TwinWave'],
+                't3-sentinelone': ['Attivo', 'Scalyr', 'Mandiant', 'Intezer', 'Deep Instinct', 'Remediant', 'Watchtower', 'Stride', 'PureSignal', 'GreyNoise'],
+                't3-rapid7': ['Metasploit', 'InsightVM', 'Velociraptor', 'IntSights', 'Tines', 'DivvyCloud', 'Minerva Labs', 'Alcide', 'NetFort', 'Threat Stack'],
+                't3-blackberry': ['Cylance', 'QNX', 'IVY', 'SecuSmart', 'Certicom', 'AtHoc', 'Secusuite', 'Jarvis', 'Guard', 'Radar'],
+                't3-opentext': ['Micro Focus', 'Carbonite', 'Webroot', 'Voltage', 'EnCase', 'Bricata', 'Guidance', 'Tableau', 'iDefense', 'Fortify'],
+                't3-cisco-security': ['Talos', 'Duo', 'Umbrella', 'SecureX', 'Kenna', 'Thousand Eyes', 'Viptela', 'Meraki MX', 'Stealthwatch', 'AMP'],
+                't3-proofpoint': ['Tessian', 'Illusive', 'IntelSecurity', 'Normalyze', 'Dathena', 'ObserveIT', 'Meta Networks', 'Cloudmark', 'Wombat', 'Sendmail']
+            },
+            // Robotics partners - manufacturing & tech (8 each)
+            'robotics': {
+                't4-boston': ['Hyundai', 'FLIR', 'Trimble', 'Spot SDK', 'Orbit', 'Velodyne', 'RealSense', 'Sarcos'],
+                't4-1x': ['OpenAI', 'Tiger Global', 'Samsung', 'EQT', 'Balderton', 'Lux Capital', 'Skagerak', 'Paua'],
+                't4-figure': ['BMW', 'OpenAI', 'Microsoft', 'NVIDIA', 'Jeff Bezos', 'Intel Capital', 'Parkway', 'ARK Invest'],
+                't4-agility': ['Amazon', 'Ford', 'GXO', 'Spanx', 'IHMC', 'Playground Global', 'DCVC', 'Safran'],
+                't4-unitree': ['MIT', 'ETH Zurich', 'KAIST', 'DJI', 'Alibaba', 'Hillhouse', 'Shunwei', 'SenseTime'],
+                't4-tesla': ['SpaceX', 'Panasonic', 'Samsung SDI', 'CATL', 'Dojo', 'LG Energy', 'Baidu', 'xAI'],
+                't4-waymo': ['Alphabet', 'Stellantis', 'Volvo', 'Geely', 'Uber', 'AutoNation', 'Avis', 'Magna'],
+                't4-cruise': ['GM', 'Honda', 'Microsoft', 'Walmart', 'T. Rowe Price', 'SoftBank Vision', 'Origin', 'BrightDrop'],
+                't4-zoox': ['Amazon', 'AWS', 'Whole Foods', 'Ring', 'Lab126', 'Rivian', 'Prime Air', 'Kuiper'],
+                't4-clearpath': ['OTTO Motors', 'ROS', 'MathWorks', 'Velodyne', 'SICK', 'Ouster', 'Hesai', 'Luminar'],
+                't4-otto': ['Clearpath', 'Rockwell', 'SAP', 'Fetch', 'Locus', 'Zebra', 'Honeywell', 'Dematic'],
+                't4-dji': ['Hasselblad', 'Rylo', 'AirSense', 'FlightHub', 'Terra', 'Livox', 'Ronin', 'WayPoint'],
+                't4-skydio': ['Axon', 'US Army', 'Toyota', 'Sony', 'Qualcomm', 'Motorola', 'Palantir', 'Precision Hawk'],
+                't4-draganfly': ['Dronelogics', 'Vital Intel', 'PatriotOne', 'Coldchain', 'MFC', 'Varigard', 'FlightOps', 'BRINC'],
+                't4-drone-delivery': ['Air Canada', 'Mooney Aviation', 'DSV', 'EDC', 'Volatus', 'Condor', 'Sparrow', 'Robin'],
+                't4-zipline': ['Toyota', 'Amgen', 'Pfizer', 'Jumia', 'Rwanda MOH', 'Gates Foundation', 'Bayer', 'Novartis'],
+                't4-avidbots': ['Neo', 'SoftBank', 'BDC', 'Menlo', 'RBC', 'FITT', 'Sustainable', 'Georgian'],
+                't4-starship': ['Co-op', 'Sodexo', 'Aramark', 'Grubhub', 'Uber Eats', 'Compass', 'Chartwells', 'Instacart'],
+                't4-nuro': ['FedEx', 'Kroger', 'Dominos', '7-Eleven', 'Walmart', 'CVS', 'Chipotle', 'Woven Capital'],
+                't4-sanctuary': ['Magna', 'BDC', 'SE Health', 'InDro', 'ACCEL', 'Verizon', 'Bell Canada', 'SAIT']
+            },
+            // Legal partners - law firms & advisory (20 each)
+            'legal': {
+                't5-crtc': ['ISED', 'Heritage Canada', 'CAB', 'CMPA', 'CIPPIC', 'CCSA', 'Ofcom', 'FCC', 'ACMA', 'Anatel', 'BEREC', 'ITU', 'TRAI', 'Roskomnadzor', 'NCC Nigeria', 'MCMC Malaysia', 'IMDA Singapore', 'ANFR France', 'BNetzA Germany', 'ARCEP'],
+                't5-privacy-commissioner': ['PIPEDA', 'Treasury Board', 'IAPP', 'Nymity', 'OneTrust', 'TrustArc', 'BigID', 'Informatica', 'Collibra', 'WireWheel', 'Securiti', 'DataGrail', 'Ethyca', 'Transcend', 'Osano', 'Ketch', 'Mine', 'Skyflow', 'Very Good Security', 'Privitar'],
+                't5-cse': ['Five Eyes', 'NSA', 'GCHQ', 'DND', 'CCCS', 'ASIS', 'DGSE', 'BND', 'Mossad', 'CSIS', 'NATO CCDCOE', 'Europol EC3', 'ENISA', 'CERT-EU', 'ASD Australia', 'NCSC UK', 'ANSSI France', 'BSI Germany', 'NIS2', 'Quad Cyber'],
+                't5-csa': ['CCCS', 'RCMP', 'CIRA', 'CanCERT', 'CyberNB', 'IN-SEC-M', 'CyberEco', 'SERENE-RISC', 'GlobalSign', 'Entrust', 'Thales', 'Gemalto', 'DigiCert', 'Sectigo', 'Fortanix', 'Venafi', 'CyberArk', 'HashiCorp', 'Keyfactor', 'AppViewX'],
+                't5-transport-canada': ['NAV Canada', 'ICAO', 'FAA', 'EASA', 'CASA', 'SAE International', 'ISO TC204', 'UNECE WP.29', 'NHTSA', 'CAA UK', 'JARI', 'C-ITS', 'AASHTO', 'ATC Australia', 'ENAC Italy', 'DGAC France', 'LBA Germany', 'ANAC Brazil', 'CAAC China', 'DGCA India'],
+                't5-ised': ['NRC', 'NSERC', 'SSHRC', 'BDC', 'EDC', 'Mitacs', 'CFI', 'Genome Canada', 'IRAP', 'SDTC', 'MaRS', 'Communitech', 'Invest Ottawa', 'DMZ Toronto', 'Creative Destruction Lab', 'Next Canada', 'Velocity', 'Techstars Toronto', 'Plug and Play', 'C100'],
+                't5-opc': ['IPC Ontario', 'OIPC BC', 'OIPC AB', 'CAI Quebec', 'Access Pro', 'OIPC NS', 'OIPC NB', 'OIPC NL', 'OIPC SK', 'OIPC MB', 'OIPC PEI', 'OIPC YT', 'CNIL France', 'ICO UK', 'DPC Ireland', 'AEPD Spain', 'Garante Italy', 'BfDI Germany', 'AP Netherlands', 'EDPB EU'],
+                't5-ipc-ontario': ['OPC', 'AMO', 'AMCTO', 'FIPPA', 'PHIPA', 'MFIPPA', 'Ontario Health', 'eHealth Ontario', 'CPSO', 'OBA Privacy', 'CDO', 'ORCGA', 'Ontario Digital', 'OAHI', 'OPS', 'Treasury Board ON', 'MAG Ontario', 'MGCS', 'Ombudsman Ontario', 'Auditor General ON'],
+                't5-csis': ['RCMP', 'CBSA', 'CSE', 'DND', 'PCO', 'FINTRAC', 'IRCC', 'GAC', 'Public Safety', 'NSIRA', 'NSICOP', 'SITE', 'ITAC', 'CCRIC', 'CCIRC', 'JTAC UK', 'NCTC US', 'DGSI France', 'BfV Germany', 'ASIO Australia'],
+                't5-pipeda': ['OPC', 'CASL', 'GDPR EU', 'CCPA', 'Privacy Shield', 'LGPD Brazil', 'POPIA SA', 'PDPA Singapore', 'PIPL China', 'APP Australia', 'APPI Japan', 'DPDP India', 'KVKK Turkey', 'NDPC Nigeria', 'PDPL Saudi', 'DIFC UAE', 'PDPO Hong Kong', 'PDP Kenya', 'DPA Philippines', 'LPDP Indonesia'],
+                't5-standards-council': ['ISO', 'IEEE', 'CSA Group', 'ULC', 'ANSI', 'CEN', 'CENELEC', 'IEC', 'ETSI', 'ITU-T', 'NIST', 'BSI', 'DIN Germany', 'AFNOR France', 'JIS Japan', 'SAC China', 'BIS India', 'ABNT Brazil', 'GOST Russia', 'KS Korea'],
+                't5-competition-bureau': ['OECD', 'FTC', 'CMA UK', 'EU DG Comp', 'ACCC', 'JFTC', 'Bundeskartellamt', 'Autorite Concurrence', 'CADE', 'KFTC', 'CCI India', 'COMESA', 'COFECE Mexico', 'CCCS Singapore', 'SAHK Hong Kong', 'TDLC Chile', 'NMa Netherlands', 'AGCM Italy', 'AdC Portugal', 'GVH Hungary']
+            }
+        };
+
+        function getPartners(node) {
+            const themeData = partnersData[node.theme];
+            if (!themeData) return [];
+            
+            // Try node-specific partners first, then fallback
+            const specific = themeData[node.id];
+            if (specific) {
+                return specific.map((name, i) => ({
+                    id: `${node.id}-p${i}`,
+                    name: name,
+                    tier: node.tier,
+                    isPartner: true,
+                    parentNode: node,
+                    theme: node.theme
+                }));
+            }
+            
+            // Fallback: generic from first available in theme
+            const fallbackKey = Object.keys(themeData)[0];
+            const fallback = themeData[fallbackKey] || ['Partner 1', 'Partner 2', 'Partner 3', 'Partner 4', 'Partner 5'];
+            return fallback.map((name, i) => ({
+                id: `${node.id}-p${i}`,
+                name: name,
+                tier: node.tier,
+                isPartner: true,
+                parentNode: node,
+                theme: node.theme
+            }));
+        }
+
+        function exportHighResPNG() {
+            const svgEl = document.getElementById('graph');
+            const svgClone = svgEl.cloneNode(true);
+            
+            const vb = svgEl.viewBox.baseVal;
+            const w = vb.width || 1400;
+            const h = vb.height || 1400;
+            
+            // Scale factor for high-res (4x)
+            const scale = 4;
+            
+            // Reset any zoom transform on the cloned <g> so content fits viewBox
+            const gEl = svgClone.querySelector('g');
+            if (gEl) gEl.removeAttribute('transform');
+            
+            svgClone.setAttribute('width', w * scale);
+            svgClone.setAttribute('height', h * scale);
+            svgClone.setAttribute('viewBox', `0 0 ${w} ${h}`);
+            svgClone.style.width = (w * scale) + 'px';
+            svgClone.style.height = (h * scale) + 'px';
+            svgClone.style.overflow = 'visible';
+            
+            // Inline all computed styles for font rendering
+            const allElements = svgClone.querySelectorAll('*');
+            const origElements = svgEl.querySelectorAll('*');
+            allElements.forEach((el, i) => {
+                if (origElements[i]) {
+                    const computed = window.getComputedStyle(origElements[i]);
+                    el.style.fontFamily = computed.fontFamily;
+                    el.style.fontSize = computed.fontSize;
+                    el.style.fontWeight = computed.fontWeight;
+                    el.style.letterSpacing = computed.letterSpacing;
+                    el.style.fill = computed.fill;
+                    el.style.stroke = computed.stroke;
+                    el.style.strokeWidth = computed.strokeWidth;
+                    el.style.opacity = computed.opacity;
+                }
+            });
+            
+            const serializer = new XMLSerializer();
+            let svgString = serializer.serializeToString(svgClone);
+            
+            if (!svgString.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
+                svgString = svgString.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+            }
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = w * scale;
+            canvas.height = h * scale;
+            const ctx = canvas.getContext('2d');
+            
+            // Black background
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            const img = new Image();
+            const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            img.onload = function () {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                URL.revokeObjectURL(url);
+                
+                // Download as PNG
+                const a = document.createElement('a');
+                const tierLabel = allSubsMode ? 'all-subs' : (verticalMode ? 'vertical-all' : (currentCrossTier ? `cross${currentCrossTier}` : (currentTier === 'all' ? 'all' : `tier${currentTier}`)));
+                a.download = `stakeholder-map-${tierLabel}-${Date.now()}.png`;
+                a.href = canvas.toDataURL('image/png');
+                a.click();
+            };
+            
+            img.src = url;
+        }
+
+        function renderGraph() {
+            // US Letter ratio: 8.5 x 11 inches → vertical mode uses letter proportions
+            const width = verticalMode ? 1100 : 1400;
+            const height = verticalMode ? 1300 : 1400;
+            const centerX = width / 2;
+            const centerY = height / 2;
+
+            const svg = d3.select('#graph');
+            // Preserve current zoom transform across re-renders so tier→tier
+            // transitions chain smoothly instead of snapping back to identity.
+            let prevTransform = d3.zoomIdentity;
+            const svgNode = svg.node();
+            if (svgNode) {
+                try { prevTransform = d3.zoomTransform(svgNode); } catch (e) {}
+            }
+            svg.selectAll('*').remove();
+
+            svg.attr('viewBox', [0, 0, width, height]);
+
+            const g = svg.append('g');
+
+            const zoom = d3.zoom()
+                .scaleExtent([0.5, 3])
+                // Disable user-driven wheel/touch/dblclick zoom so parent page
+                // can scroll freely. Programmatic transitions (auto-zoom on
+                // tier change) still work because they bypass this filter.
+                .filter(() => false)
+                .on('zoom', (event) => {
+                    g.attr('transform', event.transform);
+                });
+
+            svg.call(zoom);
+            svg.on('wheel.zoom', null)
+               .on('mousedown.zoom', null)
+               .on('dblclick.zoom', null)
+               .on('touchstart.zoom', null)
+               .on('touchmove.zoom', null)
+               .on('touchend.zoom', null);
+
+            // Seed the new zoom behavior with the previous transform so the
+            // upcoming transition starts where the last one left off.
+            svg.call(zoom.transform, prevTransform);
+
+            const themeOrder = ['media', 'technology', 'ai', 'security', 'robotics', 'legal'];
+
+            // ============================================================
+            // STEP 1: Build a stable position map for ALL main nodes ONCE.
+            // ============================================================
+            const posMap = {};
+            
+            // Group nodes by tier, sort once
+            const tierGroups = {};
+            data.nodes.forEach(n => {
+                if (!tierGroups[n.tier]) tierGroups[n.tier] = [];
+                tierGroups[n.tier].push(n);
+            });
+
+            Object.keys(tierGroups).forEach(tier => {
+                tierGroups[tier].sort((a, b) => {
+                    const ai = themeOrder.indexOf(a.theme);
+                    const bi = themeOrder.indexOf(b.theme);
+                    if (ai !== bi) return ai - bi;
+                    return a.id.localeCompare(b.id);
+                });
+            });
+
+            // Tier radii (used for radial mode)
+            const tierRadius = { 1: 100, 2: 200, 3: 330, 4: 400, 5: 550 };
+
+            if (verticalMode) {
+                // VERTICAL STACKED RINGS — small ring at top, larger rings below
+                const ringRadii = { 1: 60, 2: 90, 3: 120, 4: 150, 5: 170 };
+                const marginTop = 60;
+                const gap = 8;
+                const ringCenters = {};
+                let cumY = marginTop + ringRadii[1];
+                for (let t = 1; t <= 5; t++) {
+                    const r = ringRadii[t];
+                    if (t > 1) cumY += ringRadii[t - 1] + gap + r;
+                    ringCenters[t] = { x: width / 2, y: cumY };
+                }
+
+                // Hide center node
+                posMap[data.center.id] = { x: -999, y: -999, angle: 0 };
+                data.center.x = -999;
+                data.center.y = -999;
+
+                [1, 2, 3, 4, 5].forEach(tier => {
+                    const nodes = tierGroups[tier] || [];
+                    const count = nodes.length;
+                    const cx = ringCenters[tier].x;
+                    const cy = ringCenters[tier].y;
+                    const r = ringRadii[tier];
+
+                    nodes.forEach((node, i) => {
+                        const angle = (i / count) * 2 * Math.PI - Math.PI / 2;
+                        const x = cx + r * Math.cos(angle);
+                        const y = cy + r * Math.sin(angle);
+                        posMap[node.id] = { x, y, angle };
+                        node.x = x;
+                        node.y = y;
+                        node._ringCx = cx;
+                        node._ringCy = cy;
+                    });
+                });
+            } else {
+                // RADIAL LAYOUT (original)
+                posMap[data.center.id] = { x: centerX, y: centerY, angle: 0 };
+                data.center.x = centerX;
+                data.center.y = centerY;
+
+                Object.keys(tierGroups).forEach(tier => {
+                    const nodes = tierGroups[tier];
+                    const r = tierRadius[tier] || (100 * tier);
+                    const count = nodes.length;
+
+                    nodes.forEach((node, i) => {
+                        const angle = (i / count) * 2 * Math.PI - Math.PI / 2;
+                        const x = centerX + r * Math.cos(angle);
+                        const y = centerY + r * Math.sin(angle);
+                        posMap[node.id] = { x, y, angle };
+                        node.x = x;
+                        node.y = y;
+                    });
+                });
+            }
+
+            // ============================================================
+            // STEP 2: Generate partners for active tier OR cross-tier
+            // ============================================================
+            let activePartners = [];
+            const partnerPosMap = {};
+            const tierSubRadius = {};
+            
+            function generatePartnersForTier(tierNum) {
+                const tierNodes = tierGroups[tierNum] || [];
+                const tierR = tierRadius[tierNum] || (100 * tierNum);
+                let maxSubR = tierR;
+                
+                tierNodes.forEach(parentNode => {
+                    const partners = getPartners(parentNode);
+                    const parentPos = posMap[parentNode.id];
+                    const partnerCount = partners.length;
+
+                    if (verticalMode) {
+                        // Radial fan around ring center, outside the ring
+                        const ringRadii = { 1: 60, 2: 90, 3: 120, 4: 150, 5: 170 };
+                        const ringR = ringRadii[tierNum] || 100;
+                        const parentAngle = parentPos.angle;
+                        const offsetR = partnerCount <= 5 ? 18 : (partnerCount <= 10 ? 22 : (partnerCount <= 12 ? 25 : 30));
+                        const subRadius = ringR + offsetR;
+                        const cx = parentNode._ringCx;
+                        const cy = parentNode._ringCy;
+                        
+                        const nodeCount = tierNodes.length;
+                        const nodeGap = (2 * Math.PI) / nodeCount;
+                        const spreadAngle = nodeGap * 0.7;
+                        
+                        partners.forEach((p, pi) => {
+                            const t = partnerCount === 1 ? 0 : (pi / (partnerCount - 1)) - 0.5;
+                            const angle = parentAngle + t * spreadAngle;
+                            p.x = cx + subRadius * Math.cos(angle);
+                            p.y = cy + subRadius * Math.sin(angle);
+                            p._ringCx = cx;
+                            p._ringCy = cy;
+                            partnerPosMap[`${parentNode.id}-${p.name}`] = { x: p.x, y: p.y };
+                        });
+                    } else {
+                        // Radial fan
+                        const parentAngle = parentPos.angle;
+                        let offsetR;
+                        if (allSubsMode) {
+                            // Tighter offsets to fit all tiers
+                            offsetR = partnerCount <= 5 ? 20 : (partnerCount <= 10 ? 28 : (partnerCount <= 12 ? 32 : 38));
+                        } else {
+                            offsetR = partnerCount <= 5 ? 30 : (partnerCount <= 10 ? 40 : (partnerCount <= 12 ? 45 : 55));
+                        }
+                        const subRadius = tierR + offsetR;
+                        if (subRadius > maxSubR) maxSubR = subRadius;
+                        
+                        const nodeCount = tierNodes.length;
+                        const nodeGap = (2 * Math.PI) / nodeCount;
+                        const spreadAngle = nodeGap * 0.7;
+                        
+                        partners.forEach((p, pi) => {
+                            const t = partnerCount === 1 ? 0 : (pi / (partnerCount - 1)) - 0.5;
+                            const angle = parentAngle + t * spreadAngle;
+                            p.x = centerX + subRadius * Math.cos(angle);
+                            p.y = centerY + subRadius * Math.sin(angle);
+                            partnerPosMap[`${parentNode.id}-${p.name}`] = { x: p.x, y: p.y };
+                        });
+                    }
+
+                    activePartners = activePartners.concat(partners);
+                });
+                tierSubRadius[tierNum] = maxSubR;
+            }
+
+            if (verticalMode || allSubsMode) {
+                [1, 2, 3, 4, 5].forEach(t => generatePartnersForTier(t));
+            } else if (currentCrossTier) {
+                const [tierA, tierB] = currentCrossTier.split('-').map(Number);
+                generatePartnersForTier(tierA);
+                generatePartnersForTier(tierB);
+            } else if (currentTier !== 'all') {
+                generatePartnersForTier(currentTier);
+            }
+
+            // ============================================================
+            // STEP 3: Build display list
+            // ============================================================
+            const allNodes = verticalMode 
+                ? [...data.nodes]
+                : [data.center, ...data.nodes];
+            const displayNodes = [...allNodes, ...activePartners];
+            // Progressive reveal: when a numeric tier is focused, hide every
+            // node from tiers AFTER it. Tiers <= currentTier remain visible.
+            const maxVisibleTier = (typeof currentTier === 'number') ? currentTier : 5;
+            const tierVisible = (n) => {
+                if (n.tier === 0 || n.tier == null) return true; // center
+                return n.tier <= maxVisibleTier;
+            };
+            const filteredNodes = (currentTheme === 'all'
+                ? displayNodes
+                : displayNodes.filter(n => n.tier === 0 || n.theme === currentTheme || (n.isPartner && n.theme === currentTheme))
+            ).filter(tierVisible);
+
+            // ============================================================
+            // STEP 4: Auto-zoom
+            // ============================================================
+            const ZOOM_DURATION = 280;
+            const ZOOM_EASE = d3.easeCubicInOut;
+            // Mark SVG as zooming so CSS can disable text hit-testing /
+            // shaping and the browser can composite faster.
+            svg.classed('is-zooming', true);
+            function runZoom(t){
+                return svg.transition()
+                   .duration(ZOOM_DURATION)
+                   .ease(ZOOM_EASE)
+                   .call(zoom.transform, t)
+                   .on('end.zoomflag interrupt.zoomflag', function(){
+                       svg.classed('is-zooming', false);
+                   });
+            }
+            if (verticalMode || allSubsMode) {
+                runZoom(d3.zoomIdentity);
+            } else if (currentCrossTier) {
+                const [tierA, tierB] = currentCrossTier.split('-').map(Number);
+                const rB = tierSubRadius[tierB] || tierRadius[tierB] || (100 * tierB);
+                const divisor = tierB <= 2 ? 2.3 : (tierB <= 3 ? 2.35 : (tierB <= 4 ? 2.3 : 2.35));
+                const scale = Math.min(width / (rB * divisor), height / (rB * divisor));
+                const finalScale = Math.min(scale, 2.2);
+                const transform = d3.zoomIdentity
+                    .translate(width / 2, height / 2)
+                    .scale(finalScale)
+                    .translate(-width / 2, -height / 2);
+                runZoom(transform);
+            } else if (currentTier !== 'all' && currentTier !== 0) {
+                const r = tierSubRadius[currentTier] || tierRadius[currentTier] || (100 * currentTier);
+                const divisor = currentTier <= 2 ? 2.3 : (currentTier <= 3 ? 2.3 : (currentTier <= 4 ? 2.25 : 2.25));
+                const scale = Math.min(width / (r * divisor), height / (r * divisor));
+                const finalScale = Math.min(scale, 2.2);
+                const transform = d3.zoomIdentity
+                    .translate(width / 2, height / 2)
+                    .scale(finalScale)
+                    .translate(-width / 2, -height / 2);
+                runZoom(transform);
+            } else {
+                runZoom(d3.zoomIdentity);
+            }
+
+            // ============================================================
+            // STEP 5: Create links
+            // ============================================================
+            const links = [];
+            filteredNodes.forEach(node => {
+                if (node.isPartner) {
+                    links.push({ source: node.parentNode, target: node, isPartnerLink: true });
+                } else if (verticalMode && node.tier > 1) {
+                    // Connect to same-theme node in tier above
+                    const prevTier = tierGroups[node.tier - 1];
+                    if (prevTier) {
+                        const relatedNode = prevTier.find(n => n.theme === node.theme);
+                        if (relatedNode) {
+                            links.push({ source: relatedNode, target: node, strength: 0.4 });
+                        }
+                    }
+                } else if (node.tier === 1 && !verticalMode) {
+                    links.push({ source: data.center, target: node, strength: 1 });
+                } else if (node.tier > 1 && !verticalMode) {
+                    const prevTier = tierGroups[node.tier - 1];
+                    if (prevTier) {
+                        const relatedNode = prevTier.find(n => n.theme === node.theme) || prevTier[0];
+                        if (relatedNode) {
+                            links.push({ source: relatedNode, target: node, strength: 0.6 });
+                        }
+                    }
+                }
+            });
+
+            // Build cross-tier curved links
+            let crossLinks = [];
+            if (currentCrossTier) {
+                const relations = crossTierRelations[currentCrossTier] || [];
+                relations.forEach(rel => {
+                    const fromKey = `${rel.from}-${rel.fromSub}`;
+                    const toKey = `${rel.to}-${rel.toSub}`;
+                    const fromPos = partnerPosMap[fromKey];
+                    const toPos = partnerPosMap[toKey];
+                    if (fromPos && toPos) {
+                        crossLinks.push({
+                            sx: fromPos.x, sy: fromPos.y,
+                            tx: toPos.x, ty: toPos.y,
+                            fromLabel: rel.fromSub,
+                            toLabel: rel.toSub
+                        });
+                    }
+                });
+            }
+
+            // Determine active tiers for opacity
+            let activeTiers = [];
+            if (currentCrossTier) {
+                activeTiers = currentCrossTier.split('-').map(Number);
+            } else if (currentTier !== 'all') {
+                activeTiers = [currentTier];
+            }
+
+            // ============================================================
+            // STEP 6: Draw
+            // ============================================================
+            
+            // Draw links
+            if (!hideLines) {
+            g.append('g')
+                .selectAll('line')
+                .data(links)
+                .join('line')
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y)
+                .attr('stroke', '#ffffff')
+                .attr('stroke-width', d => d.isPartnerLink ? 0.3 : 0.5)
+                .attr('stroke-opacity', d => {
+                     if (d.isPartnerLink) return 0.6;
+                     if (activeTiers.length === 0) return 0.2;
+                     const active = activeTiers.includes(d.target.tier) || activeTiers.includes(d.source.tier);
+                     return active ? 0.4 : 0.05;
+                });
+            }
+
+            // Draw cross-tier links using Hierarchical Edge Bundling
+            // Curves stay WITHIN the annular band — never crossing tier circle boundaries
+            if (!hideLines && crossLinks.length > 0) {
+                const beta = 0.85;
+                const bundleLine = d3.line().curve(d3.curveBundle.beta(beta));
+                
+                const [tA, tB] = currentCrossTier.split('-').map(Number);
+                const rA = tierSubRadius[tA] || tierRadius[tA] || (100 * tA);
+                const rB = tierSubRadius[tB] || tierRadius[tB] || (100 * tB);
+                // Band boundaries: inner edge of inner tier subs, outer edge of outer tier subs
+                const rMin = Math.min(rA, rB);
+                const rMax = Math.max(rA, rB);
+                
+                g.append('g')
+                    .selectAll('path')
+                    .data(crossLinks)
+                    .join('path')
+                    .attr('d', (d, i) => {
+                        const angleS = Math.atan2(d.sy - centerY, d.sx - centerX);
+                        const angleT = Math.atan2(d.ty - centerY, d.tx - centerX);
+                        
+                        let angleDiff = angleT - angleS;
+                        if (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+                        if (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+                        
+                        // Distribute control points across the band to reduce overlap
+                        // Use index to slightly vary the radius of intermediate points
+                        const bandWidth = rMax - rMin;
+                        const jitter = ((i * 7) % 11) / 11; // pseudo-random 0-1 per link
+                        
+                        // 5 intermediate angles for smoother curves
+                        const a1 = angleS + angleDiff * 0.2;
+                        const a2 = angleS + angleDiff * 0.4;
+                        const a3 = angleS + angleDiff * 0.5;
+                        const a4 = angleS + angleDiff * 0.6;
+                        const a5 = angleS + angleDiff * 0.8;
+                        
+                        // Radii: stay within band, vary per link to spread curves
+                        const r1 = rMin + bandWidth * (0.3 + jitter * 0.15);
+                        const r2 = rMin + bandWidth * (0.2 + jitter * 0.2);
+                        const r3 = rMin + bandWidth * (0.15 + jitter * 0.25);
+                        const r4 = rMin + bandWidth * (0.2 + jitter * 0.2);
+                        const r5 = rMin + bandWidth * (0.3 + jitter * 0.15);
+                        
+                        const points = [
+                            [d.sx, d.sy],
+                            [centerX + r1 * Math.cos(a1), centerY + r1 * Math.sin(a1)],
+                            [centerX + r2 * Math.cos(a2), centerY + r2 * Math.sin(a2)],
+                            [centerX + r3 * Math.cos(a3), centerY + r3 * Math.sin(a3)],
+                            [centerX + r4 * Math.cos(a4), centerY + r4 * Math.sin(a4)],
+                            [centerX + r5 * Math.cos(a5), centerY + r5 * Math.sin(a5)],
+                            [d.tx, d.ty]
+                        ];
+                        
+                        return bundleLine(points);
+                    })
+                    .attr('fill', 'none')
+                    .attr('stroke', '#ffffff')
+                    .attr('stroke-width', 0.5)
+                    .attr('stroke-opacity', 1.0);
+            }
+
+            // Draw tier guides
+            if (verticalMode) {
+                const ringRadii = { 1: 60, 2: 90, 3: 120, 4: 150, 5: 170 };
+                const tierLabels = { 1: 'Tier 1 — Technology & Data', 2: 'Tier 2 — AI Services', 3: 'Tier 3 — Data Security', 4: 'Tier 4 — Physical Robotics', 5: 'Tier 5 — Legal & Regulatory' };
+                // Recalculate ring centers
+                const gap = 8;
+                const mTop = 60;
+                const rc = {};
+                let cY = mTop + ringRadii[1];
+                for (let t = 1; t <= 5; t++) {
+                    if (t > 1) cY += ringRadii[t - 1] + gap + ringRadii[t];
+                    rc[t] = cY;
+                }
+                [1, 2, 3, 4, 5].forEach(tier => {
+                    g.append('circle')
+                        .attr('cx', width / 2).attr('cy', rc[tier]).attr('r', ringRadii[tier])
+                        .attr('fill', 'none').attr('stroke', '#333')
+                        .attr('stroke-width', 0.5).attr('opacity', 0.4);
+                    // Tier label above ring
+                    g.append('text')
+                        .attr('x', width / 2).attr('y', rc[tier] - ringRadii[tier] - 8)
+                        .attr('text-anchor', 'middle')
+                        .style('font-family', 'Helvetica, sans-serif')
+                        .style('font-size', '7px').style('fill', '#555')
+                        .style('letter-spacing', '-0.3px')
+                        .text(tierLabels[tier]);
+                });
+            } else {
+                [1, 2, 3, 4, 5].forEach(tier => {
+                    if (tier > maxVisibleTier) return; // hide future-tier rings
+                    const r = tierRadius[tier] || (100 * tier);
+                    g.append('circle')
+                        .attr('cx', centerX).attr('cy', centerY).attr('r', r)
+                        .attr('fill', 'none').attr('stroke', '#333')
+                        .attr('stroke-width', 0.5)
+                        .attr('opacity', activeTiers.length === 0 || activeTiers.includes(tier) ? 0.5 : 0.25);
+                });
+            }
+
+            // Draw nodes
+            const node = g.append('g')
+                .selectAll('g')
+                .data(filteredNodes)
+                .join('g')
+                .attr('transform', d => `translate(${d.x},${d.y})`)
+                .attr('opacity', d => {
+                    if (verticalMode) return d.isPartner ? 0.7 : 1;
+                    if (d.isPartner) return 0.8;
+                    if (d.tier === 0) return 1;
+                    if (activeTiers.length === 0) return 1;
+                    if (activeTiers.includes(d.tier)) return 1;
+                    return 0.3; 
+                });
+
+            node.append('circle')
+                .attr('r', d => {
+                    if (verticalMode) return d.isPartner ? 1.5 : 3;
+                    if (allSubsMode) return d.isPartner ? 1.5 : 3;
+                    return d.isPartner ? 2 : 4;
+                })
+                .attr('fill', '#ffffff');
+
+            node.append('text')
+                .attr('text-anchor', d => {
+                    if (!d.isPartner) return 'middle';
+                    const rcx = verticalMode ? (d._ringCx || d.parentNode._ringCx) : centerX;
+                    const rcy = verticalMode ? (d._ringCy || d.parentNode._ringCy) : centerY;
+                    const angle = Math.atan2(d.y - rcy, d.x - rcx);
+                    const deg = angle * 180 / Math.PI;
+                    return (deg > 90 || deg < -90) ? 'end' : 'start';
+                })
+                .attr('dx', d => {
+                    if (!d.isPartner) return 0;
+                    const rcx = verticalMode ? (d._ringCx || d.parentNode._ringCx) : centerX;
+                    const rcy = verticalMode ? (d._ringCy || d.parentNode._ringCy) : centerY;
+                    const angle = Math.atan2(d.y - rcy, d.x - rcx);
+                    const deg = angle * 180 / Math.PI;
+                    return (deg > 90 || deg < -90) ? (allSubsMode ? -4 : -6) : (allSubsMode ? 4 : 6);
+                })
+                .attr('dy', d => d.isPartner ? 3 : (verticalMode ? -6 : -12))
+                .attr('transform', d => {
+                    if (!d.isPartner) return null;
+                    const rcx = verticalMode ? (d._ringCx || d.parentNode._ringCx) : centerX;
+                    const rcy = verticalMode ? (d._ringCy || d.parentNode._ringCy) : centerY;
+                    const angle = Math.atan2(d.y - rcy, d.x - rcx);
+                    let deg = angle * 180 / Math.PI;
+                    if (deg > 90 || deg < -90) {
+                        deg += 180;
+                    }
+                    return `rotate(${deg})`;
+                })
+                .style('font-family', 'Helvetica, sans-serif')
+                .style('font-size', d => {
+                    if (verticalMode) return d.isPartner ? '3.5px' : '5px';
+                    if (allSubsMode) return d.isPartner ? '6px' : '9.5px';
+                    return d.isPartner ? '6px' : '10px';
+                })
+                .style('font-weight', '400')
+                .style('fill', '#fff')
+                .style('letter-spacing', '-0.5px')
+                .style('display', d => (d.isPartner && hideLines && !verticalMode) ? 'none' : null)
+                .text(d => d.name);
+
+            // Apply word wrap only to non-partner (main) node labels
+            node.selectAll('text')
+                .filter(d => !d.isPartner)
+                .call(wrap, verticalMode ? 50 : (allSubsMode ? 60 : 100));
+
+            function wrap(text, width) {
+                text.each(function () {
+                    const text = d3.select(this);
+                    const words = text.text().split(/\s+/).reverse();
+                    let word;
+                    let line = [];
+                    let lineNumber = 0;
+                    const lineHeight = 1.1;
+                    const y = text.attr('y');
+                    const dy = parseFloat(text.attr('dy'));
+                    let tspan = text.text(null).append('tspan').attr('x', 0).attr('y', y).attr('dy', dy + 'px');
+
+                    while (word = words.pop()) {
+                        line.push(word);
+                        tspan.text(line.join(' '));
+                        if (tspan.node().getComputedTextLength() > width) {
+                            line.pop();
+                            tspan.text(line.join(' '));
+                            line = [word];
+                            tspan = text.append('tspan').attr('x', 0).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'px').text(word);
+                        }
+                    }
+                });
+            }
+        }
+
+        // postMessage API for parent (scrollytelling host) to drive tier state.
+        // Accepts: { type:'setTier', tier: 0|1|2|3|4|5 }  (0 or 'all' resets)
+        // Sends back { type:'tierDone', tier } when the zoom transition settles.
+        let _renderInFlight = false;
+        let _queuedTier = null;
+        const _svgContainer = document.querySelector('.svg-container');
+        function _runRender(){
+            _renderInFlight = true;
+            // Fade out to hide DOM rebuild flash
+            if (_svgContainer) _svgContainer.style.opacity = '0';
+            // Two rAFs: first lets the fade paint, second does the rebuild
+            requestAnimationFrame(function(){
+                requestAnimationFrame(function(){
+                    renderGraph();
+                    // Fade back in immediately after rebuild
+                    if (_svgContainer) _svgContainer.style.opacity = '1';
+                    setTimeout(function(){
+                        _renderInFlight = false;
+                        try { parent.postMessage({ type:'tierDone', tier: currentTier }, '*'); } catch(e){}
+                        if (_queuedTier !== null){
+                            var next = _queuedTier; _queuedTier = null;
+                            if (next !== currentTier){
+                                currentTier = next;
+                                _runRender();
+                            }
+                        }
+                    }, 360);
+                });
+            });
+        }
+        window.addEventListener('message', (e) => {
+            var d = e.data || {};
+            if (d && d.type === 'setTier'){
+                verticalMode = false;
+                allSubsMode = false;
+                currentCrossTier = null;
+                var t = d.tier;
+                var nextTier = (t === 0 || t === 'all' || t == null) ? 'all' : parseInt(t);
+                if (_renderInFlight){
+                    _queuedTier = nextTier;
+                    return;
+                }
+                if (nextTier === currentTier) return;
+                currentTier = nextTier;
+                _runRender();
+            } else if (d && d.type === 'setCross'){
+                verticalMode = false;
+                allSubsMode = false;
+                currentTier = 'all';
+                currentCrossTier = d.cross || null;
+                if (_renderInFlight){ _queuedTier = null; return; }
+                _runRender();
+            }
+        });
+
+        // Initial render
+        renderGraph();
+    </script>
+</body>
+</html>

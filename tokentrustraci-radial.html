@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenTrust — RACI Radial Map</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Times New Roman', Times, serif;
+  }
+  .wrap { width: 100%; max-width: 800px; padding: 20px; }
+  
+  /* Adding some slight visual polish */
+  text { pointer-events: none; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <svg id="raciMap" width="100%" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+    <!-- The SVG is logically drawn below via JS to ensure perfect Bezier Tidy-Tree geometry! -->
+  </svg>
+</div>
+
+<script>
+  // 1) Define our clustered data for the RACI Radial Map
+  const data = [
+    { 
+      group: 'Accountable', 
+      angle: -45, // Top Right
+      items: [
+        'CEO • PIPEDA Framework (OPC)', 
+        'CEO • FINTRAC MSB Reg. (FINTRAC)', 
+        'CEO • OPC Sandbox (OPC)', 
+        'CEO • PACC Engagement (ISED)', 
+        'CTO • ISO/IEC 42001 (SSI Inc.)', 
+        'CEO • Global CBPR (GPAI)',
+        'Legal Officer • CIPP/C Cert. (PACC)'
+      ]
+    },
+    { 
+      group: 'Responsible', 
+      angle: 45, // Bottom Right
+      items: [
+        'Legal Officer • PIPEDA (OPC)', 
+        'Legal Officer • FINTRAC MSB', 
+        'Legal Officer • OPC Sandbox', 
+        'Legal Officer • PACC Engagement', 
+        'Legal Officer • Global CBPR', 
+        'CTO • ISO/IEC 42001 (SSI Inc.)', 
+        'DPO Candidate • CIPP/C Cert.'
+      ]
+    },
+    { 
+      group: 'Consulted', 
+      angle: 135, // Bottom Left
+      items: [
+        'CTO • PIPEDA Framework', 
+        'CTO • OPC Sandbox', 
+        'DPO Candidate • PIPEDA', 
+        'Legal Officer • ISO/IEC 42001', 
+        'CTO • Global CBPR (GPAI)'
+      ]
+    },
+    { 
+      group: 'Informed', 
+      angle: 225, // Top Left (-135 or 225 degrees)
+      items: [
+        'CTO • FINTRAC MSB Reg.', 
+        'DPO Candidate • FINTRAC MSB', 
+        'CEO • CIPP/C Cert.', 
+        'CTO • PACC Engagement', 
+        'DPO Candidate • ISO/IEC 42001'
+      ]
+    }
+  ];
+
+  const svg = document.getElementById('raciMap');
+  const cx = 400, cy = 400; // Center map
+  const rIn = 100; // Inner orbit (RACI groups)
+  const rTextOut = 205; // New node outside the RACI group text
+  const rOut = 270; // Outer orbit (gently spaced back out slightly to fit bezier fan smoothly)
+
+  let html = '';
+  
+  // 2) Draw Center & Background Orbits
+  html += `<circle cx="${cx}" cy="${cy}" r="3" fill="#000" opacity="0.2"/>`;
+  
+  // Outer Orbit
+  html += `<circle cx="${cx}" cy="${cy}" r="${rOut}" fill="none" stroke="#000" stroke-width="0.4" opacity="0.5"/>`;
+  // New Ring passing through RACI text center
+  html += `<circle cx="${cx}" cy="${cy}" r="155" fill="none" stroke="#000" stroke-width="0.4" opacity="0.5" stroke-dasharray="40, 20"/>`;
+
+  // 3) Iterate and Map
+  data.forEach(grp => {
+    // 3A. Draw Inner Nodes (RACI Categories)
+    const inRad = grp.angle * Math.PI / 180;
+    const inX = cx + rIn * Math.cos(inRad);
+    const inY = cy + rIn * Math.sin(inRad);
+
+    html += `<circle cx="${inX}" cy="${inY}" r="5" fill="none"/>`;
+    
+    // Position inner text in a radial format (pointing outward), without bold, reduced letter spacing
+    let normGrpA = grp.angle % 360;
+    if (normGrpA > 180) normGrpA -= 360;
+    if (normGrpA < -180) normGrpA += 360;
+    const isLeftGrp = Math.abs(normGrpA) > 90;
+
+    html += `<g transform="translate(${cx},${cy}) rotate(${grp.angle})">`;
+    if (isLeftGrp) {
+       html += `<text transform="translate(155,0) rotate(180)" dominant-baseline="central" text-anchor="middle" font-size="16" fill="#000" letter-spacing="-0.03em">${grp.group}</text>`;
+    } else {
+       html += `<text transform="translate(155,0)" dominant-baseline="central" text-anchor="middle" font-size="16" fill="#000" letter-spacing="-0.03em">${grp.group}</text>`;
+    }
+    html += `</g>`;
+
+    // Add a new node at the outer part of the RACI text
+    const textOutX = cx + rTextOut * Math.cos(inRad);
+    const textOutY = cy + rTextOut * Math.sin(inRad);
+    html += `<circle cx="${textOutX}" cy="${textOutY}" r="4" fill="none" />`;
+
+    // 3B. Calculate Outer Nodes Spread
+    const count = grp.items.length;
+    const spread = 62; // Increased from 50 to 62 to slightly reduce the gaps between the 4 groups
+    const startAngle = grp.angle - spread/2;
+    const step = spread / (count > 1 ? count - 1 : 1);
+
+    grp.items.forEach((item, i) => {
+      const outA = startAngle + i * step;
+      const outRad = outA * Math.PI / 180;
+      
+      const outX = cx + rOut * Math.cos(outRad);
+      const outY = cy + rOut * Math.sin(outRad);
+
+      // 3C. Tidy Tree Bezier Curves
+      // Lines now originate from the *outer* node of the RACI text instead of the inner ring
+      const cp1X = cx + (rTextOut + 20) * Math.cos(inRad);
+      const cp1Y = cy + (rTextOut + 20) * Math.sin(inRad);
+      const cp2X = cx + (rOut - 20) * Math.cos(outRad);
+      const cp2Y = cy + (rOut - 20) * Math.sin(outRad);
+
+      html += `<path d="M ${outX} ${outY} C ${cp2X} ${cp2Y}, ${cp1X} ${cp1Y}, ${textOutX} ${textOutY}" fill="none" stroke="#000" stroke-width="0.6" opacity="0.3"/>`;
+
+      // 3D. Draw Outer Nodes & Typography
+      html += `<g transform="translate(${cx},${cy}) rotate(${outA})">
+                 <circle cx="${rOut}" cy="0" r="3.5" fill="#000"/>`;
+      
+      // Determine upside-down text flipping (left hemisphere)
+      let normA = outA % 360;
+      if (normA > 180) normA -= 360;
+      if (normA < -180) normA += 360;
+      const isLeft = Math.abs(normA) > 90;
+
+      const parts = item.split(' • ');
+      const line1 = parts[0];
+      const line2 = parts[1] || '';
+
+      if (isLeft) {
+         // Text pointing outward
+         html += `<text transform="translate(${rOut+12},0) rotate(180)" text-anchor="end" font-size="12" fill="#000" letter-spacing="-0.02em">
+                    <tspan x="0" y="-0.6em" font-weight="bold">${line1}</tspan>
+                    <tspan x="0" y="0.6em">${line2}</tspan>
+                  </text>`;
+      } else {
+         // Text pointing outward
+         html += `<text transform="translate(${rOut+12},0)" text-anchor="start" font-size="12" fill="#000" letter-spacing="-0.02em">
+                    <tspan x="0" y="-0.6em" font-weight="bold">${line1}</tspan>
+                    <tspan x="0" y="0.6em">${line2}</tspan>
+                  </text>`;
+      }
+      
+      html += `</g>`;
+    });
+  });
+
+  // Inject generated SVG DOM
+  svg.innerHTML = html;
+</script>
+
+</body>
+</html>

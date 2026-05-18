@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Gate 1 — Thesis — Michael Joongmin Park</title>
+<link rel="icon" type="image/svg+xml" href="./mkpk.svg" />
+<style>
+  :root{
+    --bg:#ffffff; --ink:#0a0a0a; --muted:#8a8a8a; --line:#e6e6e6;
+    --max:1320px; --pad:clamp(20px,4vw,56px);
+    --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ background:var(--bg); color:var(--ink); }
+  body{
+    font-family:var(--font); font-size:14px; line-height:1.5; font-weight:400;
+    letter-spacing:-0.05em; -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility; overflow-x:hidden;
+  }
+  a{ color:inherit; text-decoration:none; }
+  img{ display:block; max-width:100%; }
+  ::selection{ background:var(--ink); color:var(--bg); }
+  .wrap{ max-width:var(--max); margin:0 auto; padding-left:var(--pad); padding-right:var(--pad); }
+
+  nav.top{
+    position:sticky; top:0; z-index:50;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px var(--pad); max-width:var(--max); margin:0 auto; font-size:13px;
+  }
+  .nav-mark{ font-weight:500; }
+  .nav-links{ display:flex; gap:28px; }
+  .nav-links a{ color:var(--muted); transition:color .2s; }
+  .nav-links a:hover{ color:var(--ink); }
+
+  header.hero{
+    padding:64px var(--pad) 64px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-back{ font-size:13px; color:var(--muted); margin-bottom:32px; }
+  .hero-back a:hover{ color:var(--ink); }
+  .hero-greeting{ font-size:17px; color:var(--muted); margin-bottom:6px; }
+  .hero-name{
+    font-weight:500; font-size:clamp(28px,4.5vw,64px);
+    line-height:1.05; letter-spacing:-0.05em;
+  }
+  .hero-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }
+  .hero-row{ margin-top:36px; padding-top:24px; border-top:1px solid var(--line); }
+  .hero-side{
+    display:flex; flex-direction:row; justify-content:space-between;
+    flex-wrap:wrap; font-size:13px; gap:16px;
+  }
+  .hero-side .pair{ display:flex; flex-direction:column; gap:2px; }
+  .hero-side dt{ color:var(--muted); }
+  .view-link{ border-bottom:1px solid var(--ink); transition:opacity .2s; }
+  .view-link:hover{ opacity:0.6; }
+  .status-live{ display:inline-flex; align-items:center; gap:7px; }
+  .status-dot{ width:7px; height:7px; border-radius:50%; background:#22c55e; flex-shrink:0; }
+
+  .project-section{ padding-top:48px; padding-bottom:48px; }
+  .project-stage{
+    width:100%; aspect-ratio:16/9;
+    background:#f4f4f4; border-radius:20px; overflow:hidden;
+  }
+
+  .kpi-section{ padding-bottom:64px; }
+  .kpi-row{
+    display:grid; grid-template-columns:1fr 1fr 1fr;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:32px 0;
+  }
+  .kpi{ display:flex; flex-direction:column; gap:6px; padding:0 40px; }
+  .kpi:first-child{ padding-left:0; }
+  .kpi:last-child{ padding-right:0; }
+  .kpi + .kpi{ border-left:1px solid var(--line); }
+  .kpi-num{
+    font-size:clamp(28px,3.5vw,48px); font-weight:500;
+    letter-spacing:-0.05em; line-height:1;
+  }
+  .kpi-label{ font-size:13px; color:var(--muted); }
+
+  @media(max-width:880px){
+    .hero-name{ font-size:clamp(24px,7vw,48px); }
+    .kpi-row{ padding:24px 0; }
+    .kpi{ padding:0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="nav-inner">
+    <a href="./index.html" class="nav-mark">Michael J. Park</a>
+    <div class="nav-links">
+      <a href="./index.html#work">Work</a>
+      <a href="./index.html#about">About</a>
+      <a href="./index.html#contact">Contact</a>
+      <a href="./2026%20Michael%20Joongmin%20Park.pdf" target="_blank" rel="noopener">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <div class="hero-back"><a href="./index.html">← Back to Work</a></div>
+  <div class="hero-greeting">Thesis · Phase 1</div>
+  <h1 class="hero-name">Gate 1 — Thesis</h1>
+  <p class="hero-tagline">Thesis, Phase 1</p>
+  <div class="hero-row">
+    <dl class="hero-side">
+      <div class="pair"><dt>Year</dt><dd>2025 / Sep</dd></div>
+      <div class="pair"><dt>Type</dt><dd>Thesis, Phase 1</dd></div>
+      <div class="pair"><dt>Duration</dt><dd>5 Weeks</dd></div>
+      <div class="pair"><dt>Status</dt><dd class="status-live"><span class="status-dot"></span>Online · Published via GitHub</dd></div>
+    </dl>
+  </div>
+</header>
+
+<section class="project-section wrap">
+  <div class="project-stage"></div>
+</section>
+
+<section class="kpi-section wrap">
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-num">—</div>
+      <div class="kpi-label">—</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-num">—</div>
+      <div class="kpi-label">—</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-num">—</div>
+      <div class="kpi-label">—</div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

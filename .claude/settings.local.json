@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:michaeljpark.github.io)",
+      "Bash(ls -1 /c/Users/joong/Desktop/Github/porrtfolio2026/*.png)",
+      "Bash(xargs -I {} basename {})"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "append_css",
+			"type": "shell",
+			"command": "echo \"/* Blank Section for Logo Reveal */\n.blank-section {\n    min-height: 90vh;\n    width: 100%;\n}\" >> c:\\Users\\joong\\Desktop\\Github\\porrtfolio2026\\css\\style.css",
+			"args": [],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "append_css_demo",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"echo \"\n/* View Demo Button Styles */\n.portfolio-card-wrapper {\n    display: block;\n    text-decoration: none;\n    color: inherit;\n    position: relative;\n    transition: transform 0.3s ease;\n}\n\n.portfolio-card-wrapper:hover {\n    transform: translateY(-8px);\n}\n\n/* Ensure image link behaves like block */\n.portfolio-image-link {\n    display: block;\n    text-decoration: none;\n    color: inherit;\n}\n\n.view-demo-btn {\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    background-color: var(--text-primary);\n    color: var(--bg-color);\n    padding: 12px 24px;\n    border-radius: 30px;\n    text-decoration: none;\n    font-weight: 600;\n    font-size: 0.9rem;\n    opacity: 0;\n    transition: opacity 0.3s ease, transform 0.3s ease;\n    pointer-events: none;\n    white-space: nowrap;\n    z-index: 10;\n    box-shadow: 0 4px 12px rgba(0,0,0,0.15);\n}\n\n.portfolio-info {\n    position: relative;\n    transition: opacity 0.3s ease;\n}\n\n@media (min-width: 769px) {\n    .portfolio-card-wrapper:hover .view-demo-btn {\n        opacity: 1;\n        pointer-events: auto;\n        transform: translate(-50%, -50%) scale(1.05);\n    }\n    \n    .portfolio-card-wrapper:hover .portfolio-details {\n        opacity: 0.2;\n        filter: blur(1px);\n    }\n}\n\" >> c:\\Users\\joong\\Desktop\\Github\\porrtfolio2026\\css\\style.css"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "append_css_colors",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"echo \"\n/* Project Specific Button Colors */\n.btn-ixec {\n    background-color: #3275F1 !important;\n    color: #FFFFFF !important;\n}\n\n.btn-chefi {\n    background-color: #000000 !important;\n    color: #FFFFFF !important;\n}\n\n.btn-mysub {\n    background-color: #FFFFFF !important;\n    color: #000000 !important;\n}\n\n.btn-ult {\n    background-color: #0A0A10 !important;\n    color: #FFFFFF !important;\n}\n\n.btn-eedu {\n    background-color: #EAEAEA !important;\n    color: #000000 !important;\n}\n\n.btn-valu {\n    background-color: #F6F6F6 !important;\n    color: #000000 !important;\n}\n\" >> c:\\Users\\joong\\Desktop\\Github\\porrtfolio2026\\css\\style.css"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "append_css_flip",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"echo \"\n/* Mobile 3D Flip Effect */\n@media (max-width: 768px) {\n    .portfolio-image-link,\n    .portfolio-card-wrapper {\n        perspective: 1000px;\n    }\n\n    .portfolio-image {\n        position: relative;\n        transition: transform 0.8s;\n        transform-style: preserve-3d;\n        /* Need to manage overflow for border-radius with preserve-3d */\n        overflow: visible !important;\n    }\n\n    .portfolio-image.is-flipped {\n        transform: rotateY(180deg);\n    }\n\n    /* Standardize images for flip */\n    .portfolio-image img {\n        position: absolute;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        border-radius: 8px; /* Move border radius to images */\n        backface-visibility: hidden;\n        -webkit-backface-visibility: hidden;\n        transition: none !important; /* Disable opacity transition on mobile */\n    }\n\n    /* Face 1: Default Image */\n    .portfolio-image .thumb-default {\n        z-index: 2;\n        transform: rotateY(0deg);\n        opacity: 1 !important;\n    }\n\n    /* Face 2: Hover (Back) Image */\n    .portfolio-image .thumb-hover {\n        transform: rotateY(180deg);\n        z-index: 1;\n        opacity: 1 !important; /* Always visible, just rotated */\n    }\n}\n\" >> c:\\Users\\joong\\Desktop\\Github\\porrtfolio2026\\css\\style.css"
+			],
+			"isBackground": false,
+			"group": "build"
+		}
+	]
+}

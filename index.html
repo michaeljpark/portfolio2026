@@ -1,0 +1,1255 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Michael Joongmin Park — Designer</title>
+<meta name="description" content="Michael Joongmin Park — Digital product designer working at the intersection of human–AI experience, industrial design, and rapid prototyping. Toronto, ON." />
+
+<link rel="icon" type="image/svg+xml" href="./mkpk.svg" />
+
+<meta property="og:title" content="Michael Joongmin Park — Designer" />
+<meta property="og:description" content="Digital product designer. HAX · Product · Industrial. Toronto, ON. Portfolio 2026." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://michaeljpark.github.io/portfolio2026/" />
+<meta property="og:image" content="https://michaeljpark.github.io/portfolio2026/bwpfp.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1024" />
+<meta property="og:image:height" content="1024" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://michaeljpark.github.io/portfolio2026/bwpfp.png" />
+
+
+<style>
+  :root{
+    --bg:    #ffffff;
+    --ink:   #0a0a0a;
+    --muted: #8a8a8a;
+    --line:  #e6e6e6;
+    --max:   1320px;
+    --pad:   clamp(20px, 4vw, 56px);
+    --font:  "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ background:var(--bg); color:var(--ink); }
+  body{
+    font-family:var(--font);
+    font-size:14px;
+    line-height:1.5;
+    font-weight:400;
+    letter-spacing:-0.05em;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  a{ color:inherit; text-decoration:none; }
+  img{ display:block; max-width:100%; }
+  ::selection{ background:var(--ink); color:var(--bg); }
+
+  .wrap{ max-width:var(--max); margin:0 auto; padding-left:var(--pad); padding-right:var(--pad); }
+
+  /* NAV */
+  nav.top{
+    position:sticky; top:0; z-index:50;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px var(--pad); max-width:var(--max); margin:0 auto;
+    font-size:13px;
+  }
+  .nav-mark{ font-weight:500; }
+  .nav-links{ display:flex; gap:28px; }
+  .nav-links a{ color:var(--muted); transition:color .2s; }
+  .nav-links a:hover{ color:var(--ink); }
+
+  /* HERO */
+  header.hero{
+    padding:64px var(--pad) 64px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-greeting{
+    font-size:17px; color:var(--muted); margin-bottom:6px;
+  }
+  .hero-name{
+    font-weight:500;
+    font-size: clamp(36px, 6vw, 88px);
+    line-height:1;
+    letter-spacing:-0.05em;
+  }
+  .hero-tagline{
+    font-size:16px; color:var(--muted); margin-top:14px;
+    line-height:1.5; white-space:nowrap;
+  }
+  .hero-row{
+    margin-top:36px; padding-top:24px; border-top:1px solid var(--line);
+  }
+  .hero-side{
+    display:flex; flex-direction:row; justify-content:space-between;
+    flex-wrap:wrap; font-size:13px;
+  }
+  .hero-side .pair{ display:flex; flex-direction:column; gap:2px; }
+  .hero-side dt{ color:var(--muted); }
+  .hero-info-mobile{ display:none; }
+
+  /* SECTION */
+  section{ padding:48px 0; border-bottom:1px solid var(--line); }
+  .sec-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:56px; gap:32px; flex-wrap:wrap;
+  }
+  .sec-head h2{
+    font-weight:500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    letter-spacing:-0.05em;
+    line-height:1;
+  }
+  .sec-head .label{
+    font-size:13px; color:var(--muted); margin-bottom:14px;
+  }
+  .sec-head .desc{
+    font-size:14px; color:var(--muted); max-width:38ch; line-height:1.5;
+  }
+
+  /* SELECTED */
+  .selected{
+    display:grid; grid-template-columns:repeat(12,1fr); gap:48px 24px;
+  }
+  .work{
+    position:relative; overflow:hidden;
+    background:#f4f4f4;
+    aspect-ratio: 4/3;
+    display:block;
+    border-radius: 30px;
+  }
+  .work img{
+    width:100%; height:100%; object-fit:cover;
+    transition: transform .6s cubic-bezier(.7,0,.2,1);
+  }
+  a:hover .work img{ transform:scale(1.03); }
+
+  .w-info{ margin-top:16px; }
+  .w-info .t{
+    font-size:18px; font-weight:500; line-height:1.2;
+    display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+  }
+  .w-info .t .arrow{ color:var(--muted); font-weight:400; transition:color .2s, transform .35s; }
+  a:hover .w-info .t .arrow{ color:var(--ink); transform:translateX(4px); }
+  .w-info .m{
+    font-size:13px; color:var(--muted); margin-top:6px;
+    display:flex; gap:12px; flex-wrap:wrap;
+  }
+
+  .work-block{ grid-column: span 6; }
+  .work-block.wide{ grid-column: span 12; }
+  .work-block.wide .work{ aspect-ratio: 16/9; }
+  .work-block.third{ grid-column: span 4; }
+  .work-block.third .work{ aspect-ratio: 1/1; }
+
+  /* More button (bottom-left of every .work card) */
+  .more-btn{
+    position:absolute;
+    left:18px; bottom:18px;
+    z-index:5;
+    height:48px;
+    display:inline-flex; align-items:center;
+    background:rgba(255,255,255,0.92);
+    color:#0a0a0a;
+    border-radius:999px;
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    box-shadow:0 4px 18px rgba(0,0,0,0.18);
+    pointer-events:none;
+    overflow:hidden;
+    padding-right:0;
+    transition:padding-right .35s cubic-bezier(.7,0,.2,1),
+               background-color .25s ease;
+  }
+  .more-btn .more-icon{
+    width:48px; height:48px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    transform:rotate(45deg);
+    transition:transform .35s cubic-bezier(.7,0,.2,1);
+  }
+  .more-btn .more-icon svg{ width:20px; height:20px; display:block; }
+  .more-btn .more-label{
+    font-size:14px; font-weight:500; letter-spacing:-0.01em;
+    white-space:nowrap;
+    max-width:0;
+    opacity:0;
+    overflow:hidden;
+    transition:max-width .35s cubic-bezier(.7,0,.2,1),
+               opacity .25s ease .05s;
+  }
+  .work-block:hover .more-btn{
+    background:#fff;
+    padding-right:18px;
+  }
+  .work-block:hover .more-btn .more-icon{
+    transform:rotate(0deg);
+  }
+  .work-block:hover .more-btn .more-label{
+    max-width:120px;
+    opacity:1;
+  }
+  @media(max-width:880px){
+    .more-btn{ left:14px; bottom:14px; height:42px; }
+    .more-btn .more-icon{ width:42px; height:42px; }
+    .more-btn .more-icon svg{ width:18px; height:18px; }
+  }
+
+  /* INDEX */
+  .filters{
+    display:flex; gap:24px; flex-wrap:wrap;
+    margin-bottom:24px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:18px;
+  }
+  .filter{
+    font-family:inherit; font-size:13px; letter-spacing:-0.05em;
+    background:none; border:none; padding:0; cursor:pointer;
+    color:var(--muted); transition:color .2s;
+  }
+  .filter:hover{ color:var(--ink); }
+  .filter.on{ color:var(--ink); }
+  .filter .c{ color:var(--muted); margin-left:4px; }
+
+  .row{
+    display:grid;
+    grid-template-columns: 80px 1fr 1.2fr 100px 40px;
+    gap:24px;
+    padding:20px 0;
+    border-bottom:1px solid var(--line);
+    align-items:baseline;
+    cursor:pointer;
+    transition: padding .35s cubic-bezier(.7,0,.2,1);
+  }
+  .row:hover{ padding-left:16px; padding-right:16px; }
+  .row .yr{ font-size:13px; color:var(--muted); }
+  .row .ti{
+    font-size:22px; font-weight:500; line-height:1.15;
+    letter-spacing:-0.05em;
+  }
+  .row .ty{ font-size:13px; color:var(--muted); }
+  .row .du{ font-size:13px; color:var(--muted); }
+  .row .ar{
+    text-align:right; font-size:18px; color:var(--muted);
+    transition: transform .35s, color .25s;
+  }
+  .row:hover .ar{ color:var(--ink); transform:translateX(4px); }
+
+  /* floating thumbnail */
+  .thumb-follow{
+    position:fixed; pointer-events:none; z-index:60;
+    width:260px; height:180px; background:#f4f4f4;
+    overflow:hidden;
+    opacity:0; transform:translate(-50%,-50%) scale(.95);
+    transition: opacity .2s, transform .3s cubic-bezier(.7,0,.2,1);
+    border:1px solid var(--line);
+  }
+  .thumb-follow img{ width:100%; height:100%; object-fit:cover; }
+  .thumb-follow.show{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+
+  /* ABOUT */
+  .about-grid{
+    display:grid; grid-template-columns: 1fr 1.4fr; gap:80px;
+  }
+  .about-col h3{
+    font-size:13px; color:var(--muted); margin-bottom:20px; font-weight:400;
+  }
+  .about-col p.lead{
+    font-size:22px; line-height:1.4; color:var(--ink);
+    margin-bottom:18px; font-weight:400; letter-spacing:-0.05em;
+    max-width:30ch;
+  }
+  .about-col .small{
+    font-size:14px; color:var(--muted); line-height:1.55;
+    max-width:42ch;
+  }
+  .about-col .small + .small{ margin-top:12px; }
+
+  .xp-list{ display:flex; flex-direction:column; }
+  .xp{
+    display:grid; grid-template-columns: 100px 1fr 120px;
+    gap:24px; padding:18px 0;
+    border-top:1px solid var(--line);
+    align-items:baseline;
+  }
+  .xp:last-child{ border-bottom:1px solid var(--line); }
+  .xp .yr{ font-size:13px; color:var(--muted); }
+  .xp .role{ font-size:16px; font-weight:500; line-height:1.25; }
+  .xp .role span{
+    display:block; font-weight:400; font-size:13px;
+    color:var(--muted); margin-top:3px;
+  }
+  .xp .role span a{
+    color:inherit; text-decoration:underline; text-underline-offset:2px;
+    text-decoration-color:currentColor;
+  }
+  .xp .role span a:hover{ color:var(--fg); }
+  .xp .place{ font-size:13px; color:var(--muted); text-align:right; }
+
+  /* TOOLKIT */
+  .tools{
+    display:grid; grid-template-columns: repeat(3,1fr); gap:48px;
+  }
+  .tool-grp h4{
+    font-size:13px; color:var(--muted); margin-bottom:18px;
+    padding-bottom:12px; border-bottom:1px solid var(--line);
+    font-weight:400;
+  }
+  .tool-grp ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .tool-grp li{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-size:14px;
+  }
+  .tool-grp li span{ font-size:12px; color:var(--muted); }
+
+  /* CONTACT */
+  .contact{ padding:140px var(--pad) 120px; }
+  .contact-inner{
+    display:grid; grid-template-columns: 1fr 1fr; gap:80px;
+    align-items:end;
+  }
+  .contact .label{
+    font-size:13px; color:var(--muted); margin-bottom:24px;
+  }
+  .contact h2{
+    font-weight:500;
+    font-size:clamp(48px, 8vw, 120px); line-height:.95; letter-spacing:-0.05em;
+  }
+  .contact .links{
+    display:flex; flex-direction:column; gap:0;
+    font-size:18px;
+  }
+  .contact .links a{
+    display:flex; justify-content:space-between; align-items:baseline;
+    border-bottom:1px solid var(--line); padding:14px 0;
+    transition: padding .25s;
+  }
+  .contact .links a:hover{ padding-left:8px; padding-right:8px; }
+  .contact .links a span{ color:var(--muted); font-size:13px; }
+
+  footer{
+    padding:28px var(--pad); display:flex; justify-content:space-between;
+    font-size:12px; color:var(--muted);
+    border-top:1px solid var(--line);
+    max-width:var(--max); margin:0 auto;
+  }
+
+  /* AMELIA-RUFUS */
+  .ar-work{ background:#E6E6E6 !important; }
+  .ar-stage{
+    position:absolute; inset:0; z-index:0;
+    display:flex; align-items:center;
+    justify-content:center;
+  }
+  /* Bubble shape via CSS mask (iOS-safe) */
+  .ar-bubble-shape{
+    position:relative;
+    width:65%;
+    aspect-ratio: 740 / 770;
+    --ar-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -50 740 770'><circle cx='275.5' cy='196.5' r='196.5' fill='black'/><circle cx='223.5' cy='347.5' r='196.5' fill='black'/><circle cx='347.5' cy='471.5' r='196.5' fill='black'/><circle cx='505.5' cy='371.5' r='196.5' fill='black'/><circle cx='436.5' cy='205.5' r='196.5' fill='black'/></svg>");
+    -webkit-mask-image: var(--ar-mask);
+            mask-image: var(--ar-mask);
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+            mask-position: center;
+    -webkit-mask-size: 100% 100%;
+            mask-size: 100% 100%;
+    animation: ar-bubble-rot 28s linear infinite;
+    animation-play-state: paused;
+    will-change: transform;
+  }
+  @keyframes ar-bubble-rot{
+    from{ transform: rotate(0deg);   }
+    to  { transform: rotate(360deg); }
+  }
+
+  /* Bubble content (inside masked shape) */
+  .ar-bubble-content{
+    position:absolute; inset:0;
+    background:#ffffff;
+    overflow:hidden;
+    /* Counter-rotate so the marquee/logo stay upright */
+    animation: ar-bubble-counter 28s linear infinite;
+    animation-play-state: paused;
+    will-change: transform;
+  }
+  @keyframes ar-bubble-counter{
+    from{ transform: rotate(0deg);   }
+    to  { transform: rotate(-360deg); }
+  }
+
+  /* Product marquee inside bubble mask */
+  .ar-marquee{
+    position:absolute; inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:24px;
+    overflow:hidden;
+    z-index:0;
+  }
+  .ar-marquee-row{
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+    height:38%;
+  }
+  .ar-marquee-track{
+    display:flex;
+    align-items:center;
+    gap:24px;
+    height:100%;
+    padding-right:24px;
+    animation: ar-marquee-scroll 22s linear infinite;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+  .ar-marquee-row.reverse .ar-marquee-track{
+    animation-name: ar-marquee-scroll-rev;
+    animation-duration: 26s;
+  }
+  .ar-marquee-track img{
+    height:100%;
+    width:auto;
+    flex:none;
+    object-fit:contain;
+    user-select:none;
+    -webkit-user-drag:none;
+  }
+  @keyframes ar-marquee-scroll{
+    0%  { transform: translate3d(0,0,0); }
+    100%{ transform: translate3d(calc(var(--ar-half, 50%) * -1),0,0); }
+  }
+  @keyframes ar-marquee-scroll-rev{
+    0%  { transform: translate3d(calc(var(--ar-half, 50%) * -1),0,0); }
+    100%{ transform: translate3d(0,0,0); }
+  }
+  .ar-img-wrap{
+    position:absolute; z-index:2;
+    inset:0;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .ar-morph {
+    position: absolute;
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+    z-index: 1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transform: translateY(-110%);
+    animation: ar-morph-slot 15s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    animation-play-state: paused;
+    will-change: transform;
+  }
+  .ar-morph-1 { animation-delay: 0s; }
+  .ar-morph-2 { animation-delay: 5s; }
+  .ar-morph-3 { animation-delay: 10s; }
+  
+  @keyframes ar-morph-slot {
+    0%     { transform: translateY(-110%); }
+    8%     { transform: translateY(8%);    }
+    13%    { transform: translateY(-3%);   }
+    18%    { transform: translateY(0);     }
+    28%    { transform: translateY(0);     }
+    33.33% { transform: translateY(110%);  }
+    100%   { transform: translateY(110%);  }
+  }
+
+  .ar-fixed-center {
+    width: 60%;
+    height: auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-top: 8%;
+  }
+  .ar-work .ar-img{
+    width: 55%;
+    height: 55%;
+    object-fit: contain;
+    animation: ar-img-tilt 7s ease-in-out infinite;
+    animation-play-state: paused;
+    will-change: transform;
+  }
+  .ar-work .ar-amelia-svg{
+    width: 75%;
+    height: 75%;
+  }
+  .ar-work .ar-fixed-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    animation: ar-img-tilt 7s ease-in-out infinite;
+    animation-play-state: paused;
+    will-change: transform;
+  }
+  .ar-work .ar-amazon-logo{
+    background: transparent;
+  }
+  #b-rot{
+    transform-box:view-box; transform-origin:350px 320px;
+    animation: b-rotate 28s linear infinite;
+    animation-play-state: paused;
+    will-change: transform;
+  }
+  #bs-rot{
+    transform-box:fill-box; transform-origin:center;
+    animation: b-rotate 28s linear infinite;
+    animation-play-state: paused;
+    will-change: transform;
+  }
+  #b-breath{
+    transform-box:view-box; transform-origin:350px 320px;
+    animation: b-gather 3.5s ease-in-out infinite;
+  }
+  #bc1,#bc2,#bc3,#bc4,#bc5,#bs1,#bs2,#bs3{
+    transform-box:fill-box; transform-origin:center;
+  }
+  #bc1{ animation: b-wave 5s ease-in-out infinite -2.5s; }
+  #bc2{ animation: b-wave 5s ease-in-out infinite -1.5s; }
+  #bc3{ animation: b-wave 5s ease-in-out infinite -0.5s; }
+  #bc4{ animation: b-wave 5s ease-in-out infinite  0.5s; }
+  #bc5{ animation: b-wave 5s ease-in-out infinite  1.5s; }
+  #bs1{ animation: b-pulse 3.5s ease-in-out infinite 2.1s;   }
+  #bs2{ animation: b-pulse 3.5s ease-in-out infinite 2.3s;   }
+  #bs3{ animation: b-pulse 3.5s ease-in-out infinite 2.5s;   }
+  @keyframes ar-img-breath{
+    0%,100%{ transform:scale(0.60); }
+    50%    { transform:scale(0.64); }
+  }
+  @keyframes ar-img-tilt{
+    0%  { rotate:-10deg; }
+    50% { rotate: 10deg; }
+    100%{ rotate:-10deg; }
+  }
+  @keyframes ar-stage-breath{
+    0%,100%{ opacity:1.0; }
+    50%    { opacity:1.0; }
+  }
+  @keyframes b-rotate{
+    from{ transform:rotate(0deg);   }
+    to  { transform:rotate(360deg); }
+  }
+  @keyframes b-gather{
+    0%,100%{ transform:scale(1);    }
+    50%    { transform:scale(0.91); }
+  }
+  @keyframes b-wave{
+    0%,100%{ transform:scale(1);    }
+    50%    { transform:scale(1.12); }
+  }
+  @keyframes b-pulse{
+    0%,100%{ transform:scale(1);    }
+    50%    { transform:scale(1.06); }
+  }
+
+  /* TOKEN TRUST */
+  .tt-work{ background:transparent !important; }
+  #tt-grid-wrap{
+    position:absolute; inset:0;
+    overflow:hidden;
+  }
+  .tt-face{
+    position:absolute; inset:0;
+    background-size:cover;
+    background-position:center;
+    filter:none !important;
+    transition:opacity 1.2s ease;
+  }
+  .tt-face video{
+    width:100%; height:100%;
+    object-fit:cover; display:block;
+  }
+  .tt-face-back{ opacity:0; }
+  .tt-swapped .tt-face-front{ opacity:0; }
+  .tt-swapped .tt-face-back{ opacity:1; }
+  @keyframes tt-breath{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.06); }
+  }
+  .tt-svg-wrap{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2;
+    pointer-events:none;
+  }
+  .tt-svg-wrap svg{
+    width:min(62%, 440px);
+    height:auto;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.45));
+  }
+  #tt-star{
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation: tt-star-spin 9s linear infinite;
+    animation-play-state: paused;
+    will-change: transform;
+  }
+  @keyframes tt-star-spin{
+    from{ transform: rotate(0deg); }
+    to  { transform: rotate(360deg); }
+  }
+  @media(max-width:880px){
+    .tt-svg-wrap svg{ width:70%; }
+  }
+
+  /* ONGEN RADIO */
+  .ongen-work{ background:#000 !important; }
+  .ongen-img{
+    display:block; width:100%; height:100%;
+  }
+  .ongen-img img,
+  .ongen-img video{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  /* Resume animations when work-block enters viewport */
+  .work-block.in-view .ar-bubble-shape,
+  .work-block.in-view .ar-bubble-content,
+  .work-block.in-view .ar-morph,
+  .work-block.in-view .ar-img,
+  .work-block.in-view .ar-fixed-img,
+  .work-block.in-view #b-rot,
+  .work-block.in-view #bs-rot,
+  .work-block.in-view #tt-grid-wrap,
+  .work-block.in-view #tt-star { animation-play-state: running; }
+
+  /* REVEAL */
+  .reveal{ opacity:0; transform:translateY(16px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width:880px){
+    header.hero{ padding-top:36px; padding-bottom:24px; }
+    section{ padding-top:24px; padding-bottom:24px; }
+    .hero-tagline{ white-space:normal; }
+    .hero-row{ display:none; }
+    .sec-head{ margin-bottom:24px; }
+    .hero-info-mobile{ display:flex; flex-direction:column; gap:14px; font-size:13px; margin-top:24px; }
+    .hero-info-mobile .pair{ display:flex; flex-direction:column; gap:2px; }
+    .hero-info-mobile dt{ color:var(--muted); }
+    .selected{ gap:36px 16px; }
+    .work-block, .work-block.wide, .work-block.third{ grid-column: span 12; }
+    .work-block.wide .work, .work-block.third .work{ aspect-ratio: 4/3; }
+    .row{ grid-template-columns: 60px 1fr 30px; gap:12px; padding:16px 0; }
+    .row .ty, .row .du{ display:none; }
+    .row .ti{ font-size:18px; }
+    .about-grid, .contact-inner{ grid-template-columns:1fr; gap:48px; }
+    .tools{ grid-template-columns:1fr; gap:32px; }
+    .xp{ grid-template-columns: 80px 1fr; }
+    .xp .place{ display:none; }
+    .nav-links a:not(:last-child){ display:none; }
+    .thumb-follow{ display:none; }
+    .contact{ padding-top:72px; padding-bottom:64px; }
+    .contact .links{ font-size:15px; }
+    .contact .links a{ flex-direction:column; align-items:flex-start; gap:3px; }
+  }
+  video{ -webkit-appearance:none; appearance:none; }
+  video::-webkit-media-controls,
+  video::-webkit-media-controls-enclosure,
+  video::-webkit-media-controls-panel,
+  video::-webkit-media-controls-overlay-play-button,
+  video::-webkit-media-controls-play-button,
+  video::-webkit-media-controls-start-playback-button{ display:none !important; opacity:0 !important; }
+</style>
+</head>
+<body>
+
+<div class="thumb-follow" id="thumb"><img src="" alt="" id="thumbImg" /></div>
+
+
+<nav class="top">
+  <div class="nav-inner">
+    <div class="nav-mark">Michael J. Park</div>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="./2026%20Michael%20Joongmin%20Park.pdf" target="_blank" rel="noopener">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <div class="hero-greeting reveal">Hi! I'm</div>
+  <h1 class="hero-name reveal">Michael Joongmin Park</h1>
+  <p class="hero-tagline reveal">My priority is defining design strategies, solutions, and possibility through data-driven research.</p>
+
+  <div class="hero-row reveal">
+    <dl class="hero-side">
+      <div class="pair"><dt>Currently</dt><dd>BDes, OCAD University, 2026</dd></div>
+      <div class="pair"><dt>Focus</dt><dd>Information System, Human-centred, Human-AI Experience</dd></div>
+      <div class="pair"><dt>Status</dt><dd>Open to 2026 roles</dd></div>
+    </dl>
+  </div>
+</header>
+
+<section id="work" class="wrap">
+  <div class="sec-head reveal">
+    <div>
+      <div class="label">Selected Work</div>
+      <h2>Recent highlights</h2>
+    </div>
+    <p class="desc">A small slice of the past year — service strategy, design management, and a four-phase thesis on emerging-tech experiences.</p>
+  </div>
+
+  <div class="selected">
+    <div class="work-block wide reveal">
+      <a href="./ongenradio.html">
+        <div class="work ongen-work">
+          <div class="ongen-img">
+            <video src="./OnGen2026Showcase.mp4" autoplay muted loop playsinline preload="metadata"></video>
+          </div>
+        </div>
+        <div class="w-info">
+          <div class="t"><span>OnGen Radio 2026 : Reimagined Radio in Augmented Reality</span><span class="arrow">→</span></div>
+          <div class="m"><span>2026</span><span>Thesis Project</span><span>6 Months</span></div>
+        </div>
+      </a>
+    </div>
+
+    <div class="work-block reveal">
+      <a href="./tokentrust.html">
+        <div class="work tt-work">
+            <div id="tt-grid-wrap"></div>
+            <!-- SVG and overlay removed -->
+        </div>
+        <div class="w-info">
+          <div class="t"><span>Token Trust</span><span class="arrow">→</span></div>
+          <div class="m"><span>2026</span><span>Service Design</span><span>3 Weeks</span></div>
+        </div>
+      </a>
+    </div>
+
+    <div class="work-block reveal">
+      <a href="./proposal-audit.html">
+        <div class="work ar-work">
+          <video id="promo-vid"
+            src="./amazonproposalthumb.mp4"
+            loop muted playsinline webkit-playsinline preload="none"
+            style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.9);"></video>
+        </div>
+        <div class="w-info">
+          <div class="t"><span>Amelia-Rufus 2.0 Amazon Service Audit-Proposal</span><span class="arrow">→</span></div>
+          <div class="m"><span>2026</span><span>Design Management</span><span>2 Weeks</span></div>
+        </div>
+      </a>
+    </div>
+
+    <div class="work-block third reveal">
+      <a href="./knowmedi.html">
+        <div class="work"><video src="./knowmediprev.mp4" autoplay muted loop playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
+        <div class="w-info">
+          <div class="t"><span>KnowMedi</span><span class="arrow">→</span></div>
+          <div class="m"><span>2026</span><span>Digital Prescription</span></div>
+        </div>
+      </a>
+    </div>
+
+    <div class="work-block third reveal">
+      <a href="./Trax.html">
+        <div class="work"><video src="./Traxprev.mp4" autoplay muted loop playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
+        <div class="w-info">
+          <div class="t"><span>Trax</span><span class="arrow">→</span></div>
+          <div class="m"><span>2026</span><span>Subscription Platform</span></div>
+        </div>
+      </a>
+    </div>
+
+    <div class="work-block third reveal">
+      <a href="./ult.html">
+        <div class="work"><video src="./ultprev.mp4" autoplay muted loop playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
+        <div class="w-info">
+          <div class="t"><span>ULT</span><span class="arrow">→</span></div>
+          <div class="m"><span>2025</span><span>Urban Logistics</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="sec-head reveal">
+    <div>
+      <div class="label">Project Index</div>
+      <h2>Everything, archived</h2>
+    </div>
+    <p class="desc">Hover any title to preview. All projects are open — feel free to browse case studies and live demos.</p>
+  </div>
+
+  <div class="filters reveal">
+    <button class="filter on" data-cat="all">All<span class="c">15</span></button>
+    <button class="filter" data-cat="thesis">Thesis<span class="c">5</span></button>
+    <button class="filter" data-cat="service">Service<span class="c">1</span></button>
+    <button class="filter" data-cat="product">Product<span class="c">7</span></button>
+    <button class="filter" data-cat="collab">Collaborative<span class="c">3</span></button>
+  </div>
+
+  <div class="index" id="indexList">
+
+    <a class="row" data-cat="thesis" href="./ongenradio.html"
+       data-thumb="./ongenradio2026.png">
+      <div class="yr">2026 / Apr</div>
+      <div class="ti">OnGen Radio 2026</div>
+      <div class="ty">Thesis, Augmented Reality</div>
+      <div class="du">6 Months</div>
+      <div class="ar">→</div>
+    </a>
+
+    <a class="row" data-cat="service collab" href="./tokentrust.html"
+       data-thumb="./1tokentrustthumb1.png">
+      <div class="yr">2026 / Mar</div>
+      <div class="ti">Token Trust</div>
+      <div class="ty">Service Design, Strategic Research</div>
+      <div class="du">3 Weeks</div>
+      <div class="ar">→</div>
+    </a>
+
+    <a class="row" data-cat="collab" href="./proposal-audit.html"
+       data-thumb="./azathumb1.png">
+      <div class="yr">2026 / Feb</div>
+      <div class="ti">Amelia-Rufus 2.0 Amazon Service Proposal</div>
+      <div class="ty">Design Management</div>
+      <div class="du">2 Weeks</div>
+      <div class="ar">→</div>
+    </a>
+
+    <a class="row" data-cat="collab" href="./proposal-audit.html"
+       data-thumb="./aza1thumb1.png">
+      <div class="yr">2026 / Jan</div>
+      <div class="ti">Amelia-Rufus 2.0 Amazon Service Audit</div>
+      <div class="ty">Design Management, Audit</div>
+      <div class="du">2 Weeks</div>
+      <div class="ar">→</div>
+    </a>
+
+    <a class="row" data-cat="thesis" href="https://michaeljpark.github.io/thesis.gate4.showcase/" target="_blank" rel="noopener"
+       data-thumb="./gate4thumb1.png">
+      <div class="yr">2026 / Jan</div>
+      <div class="ti">Gate 4 — Thesis</div>
+      <div class="ty">Thesis, Phase 4</div>
+      <div class="du">3 Weeks</div>
+      <div class="ar">→</div>
+    </a>
+
+    <a class="row" data-cat="product" href="./knowmedi.html"
+       data-thumb="./knowmedi%20thumb1.png">
+      <div class="yr">2026 / Jan</div>
+      <div class="ti">KnowMedi</div>
+      <div class="ty">Patient-Centric Service</div>
+      <div class="du">1 Week</div>
+      <div class="ar">→</div>
+    </a>
+
+    <a class="row" data-cat="product" href="./Trax.html"
+       data-thumb="./Traxthumb1.png">
+      <div class="yr">2026 / Jan</div>
+      <div class="ti">Trax</div>
+      <div class="ty">Subscription Management</div>
+      <div class="du">2 Weeks</div>
+      <div class="ar">→</div>
+    </a>
+
+    <a class="row" data-cat="product" href="./ult.html"
+       data-thumb="./ult%20thumb1.png">
+      <div class="yr">2025 / Dec</div>
+      <div class="ti">ULT</div>
+      <div class="ty">Urban Logistics, Physical UX</div>
+      <div class="du">2 Weeks</div>
+      <div class="ar">→</div>
+    </a>
+
+    <a class="row" data-cat="thesis" href="https://michaeljpark.github.io/gate3.showcase/" target="_blank" rel="noopener"
+       data-thumb="./gate3thumb1.png">
+      <div class="yr">2025 / Nov</div>
+      <div class="ti">Gate 3 — Thesis</div>
+      <div class="ty">Thesis, Phase 3</div>
+      <div class="du">4 Weeks</div>
+      <div class="ar">→</div>
+    </a>
+
+    <a class="row" data-cat="thesis" href="https://michaeljpark.github.io/gate2.showcase/" target="_blank" rel="noopener"
+       data-thumb="./gate2thumb1.png">
+      <div class="yr">2025 / Oct</div>
+      <div class="ti">Gate 2 — Thesis</div>
+      <div class="ty">Thesis, Phase 2</div>
+      <div class="du">3 Weeks</div>
+      <div class="ar">→</div>
+    </a>
+
+    <a class="row" data-cat="thesis" href="https://michaeljpark.github.io/gate1.showcase/" target="_blank" rel="noopener"
+       data-thumb="./gate1thumb1.png">
+      <div class="yr">2025 / Sep</div>
+      <div class="ti">Gate 1 — Thesis</div>
+      <div class="ty">Thesis, Phase 1</div>
+      <div class="du">5 Weeks</div>
+      <div class="ar">→</div>
+    </a>
+
+    <a class="row" data-cat="product" href="https://michaeljpark.github.io/eedu/" target="_blank" rel="noopener"
+       data-thumb="./eedu%20thumb1.png">
+      <div class="yr">2025 / Dec</div>
+      <div class="ti">eedu</div>
+      <div class="ty">Future Educational System</div>
+      <div class="du">1 Week</div>
+      <div class="ar">→</div>
+    </a>
+
+    <a class="row" data-cat="product" href="https://michaeljpark.github.io/ixec/" target="_blank" rel="noopener"
+       data-thumb="./ixec%20thumb1.png">
+      <div class="yr">2025 / Dec</div>
+      <div class="ti">ixec</div>
+      <div class="ty">Hybrid Data Management</div>
+      <div class="du">1 Week</div>
+      <div class="ar">→</div>
+    </a>
+
+    <a class="row" data-cat="product" href="https://michaeljpark.github.io/chefi/" target="_blank" rel="noopener"
+       data-thumb="./Chefi%20thumb1.png">
+      <div class="yr">2025 / Dec</div>
+      <div class="ti">Chefi</div>
+      <div class="ty">Recipe Sharing Platform</div>
+      <div class="du">2 Weeks</div>
+      <div class="ar">→</div>
+    </a>
+
+    <a class="row" data-cat="product" href="https://michaeljpark.github.io/valu/" target="_blank" rel="noopener"
+       data-thumb="./valu%20thumb1.png">
+      <div class="yr">2025 / Nov</div>
+      <div class="ti">valu</div>
+      <div class="ty">Value Assessment Platform</div>
+      <div class="du">2 Weeks</div>
+      <div class="ar">→</div>
+    </a>
+
+  </div>
+</section>
+
+<section id="about" class="wrap">
+  <div class="sec-head reveal">
+    <div>
+      <div class="label">About</div>
+      <h2>A short introduction</h2>
+    </div>
+  </div>
+
+  <dl class="hero-info-mobile reveal">
+    <div class="pair"><dt>Currently</dt><dd>BDes, OCAD University, 2026</dd></div>
+    <div class="pair"><dt>Focus</dt><dd>Information System, Human-centred, Human-AI Experience</dd></div>
+    <div class="pair"><dt>Status</dt><dd>Open to 2026 roles</dd></div>
+  </dl>
+
+  <div class="about-grid">
+    <div class="about-col reveal">
+      <h3>Approach</h3>
+      <p class="lead">I design fast, with intent.</p>
+      <p class="small">My process runs on speed and intent. I adopt emerging tools first, using them as leverage to move fast and think clearly. Research and documentation are how I communicate with stakeholders: data-driven artifacts that surface what matters, align perspectives, and keep the project pointed in the right direction.</p>
+      <p class="small">At the core is design strategy: structuring qualitative and quantitative research, establishing clear KPIs, and translating findings into visualizations that make decisions easier and faster to reach.</p>
+    </div>
+
+    <div class="about-col reveal">
+      <h3>Experience</h3>
+      <div class="xp-list">
+        <div class="xp">
+          <div class="yr">2025 / Oct–Nov</div>
+          <div class="role">Junior Industrial Designer<span><a href="https://www.swavestudios.com/" target="_blank" rel="noopener">Swave Studios</a> — Internship</span></div>
+          <div class="place">Toronto, Ontario</div>
+        </div>
+        <div class="xp">
+          <div class="yr">2024 / Oct–Dec</div>
+          <div class="role">Student Designer<span><a href="https://www.cadillacfairview.com/" target="_blank" rel="noopener">Cadillac Fairview</a> — Co-op</span></div>
+          <div class="place">Toronto, Ontario</div>
+        </div>
+        <div class="xp">
+          <div class="yr">2023–24</div>
+          <div class="role">Student Monitor, Production<span><a href="https://www.ocadu.ca/student-services/copy-and-print" target="_blank" rel="noopener">OCAD U Copy &amp; Print</a></span></div>
+          <div class="place">Toronto, Ontario</div>
+        </div>
+        <div class="xp">
+          <div class="yr">2022–23</div>
+          <div class="role">Graphic / Proposal Designer<span><a href="https://www.ieumgil.com/Main" target="_blank" rel="noopener">Ieumgil</a> — HR Consulting</span></div>
+          <div class="place">Gangnam, Seoul</div>
+        </div>
+        <div class="xp">
+          <div class="yr">2021–22</div>
+          <div class="role">Sergeant, Squad Leader<span><a href="https://www.mnd.go.kr" target="_blank" rel="noopener">ROK Army, Military Police</a></span></div>
+          <div class="place">(Confidential), Korea</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="sec-head reveal">
+    <div>
+      <div class="label">Toolkit</div>
+      <h2>Tools of the trade</h2>
+    </div>
+  </div>
+
+  <div class="tools reveal">
+    <div class="tool-grp">
+      <h4>Design &amp; Web</h4>
+      <ul>
+        <li>Figma <span>Professional</span></li>
+        <li>Framer <span>Pre-int.</span></li>
+        <li>HTML / CSS / JS <span>Tool-assisted/Intermediate</span></li>
+        <li>React <span>Tool-assisted</span></li>
+        <li>SQL Analysis <span>Tool-assisted/Pre-int.</span></li>
+      </ul>
+    </div>
+    <div class="tool-grp">
+      <h4>3D &amp; Prototyping</h4>
+      <ul>
+        <li>Fusion 360 <span>Professional</span></li>
+        <li>KeyShot <span>Professional</span></li>
+        <li>Onshape <span>Advanced</span></li>
+        <li>Blender <span>Advanced</span></li>
+        <li>Rhino 3D <span>Upper-int.</span></li>
+        <li>SolidWorks <span>Intermediate</span></li>
+        <li>Cinema 4D <span>Pre-int.</span></li>
+      </ul>
+    </div>
+    <div class="tool-grp">
+      <h4>Documentation</h4>
+      <ul>
+        <li>Adobe Photoshop <span>Advanced</span></li>
+        <li>Adobe Premiere <span>Upper-int.</span></li>
+        <li>Adobe Illustrator <span>Intermediate</span></li>
+        <li>Microsoft PPT <span>Professional</span></li>
+        <li>Microsoft Excel <span>Intermediate</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact wrap">
+  <div class="contact-inner">
+    <div class="reveal">
+      <div class="label">Contact</div>
+      <h2>Have a project in mind?</h2>
+    </div>
+    <div class="links reveal">
+      <a href="mailto:michaelparkerdesignstudio@gmail.com"><span>Email</span>michaelparkerdesignstudio@gmail.com →</a>
+      <a href="https://www.linkedin.com/in/michael-park-design/" target="_blank" rel="noopener"><span>LinkedIn</span>michael-park-design →</a>
+      <a href="https://github.com/michaeljpark" target="_blank" rel="noopener"><span>GitHub</span>michaeljpark →</a>
+      <a href="./2026%20Michael%20Joongmin%20Park.pdf" target="_blank" rel="noopener"><span>Résumé</span>Download PDF →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Michael Joongmin Park</span>
+  <span>Toronto</span>
+</footer>
+
+<script>
+  /* reveal on scroll */
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .1, rootMargin: '0px 0px 300px 0px' });
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  /* filters */
+  const filters = document.querySelectorAll('.filter');
+  const rows    = document.querySelectorAll('#indexList .row');
+  filters.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      filters.forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      const cat = b.dataset.cat;
+      rows.forEach(r=>{
+        const cats = r.dataset.cat.split(' ');
+        const show = cat==='all' || cats.includes(cat);
+        r.style.display = show ? '' : 'none';
+      });
+    });
+  });
+
+  /* cursor-following thumbnail */
+  const thumb = document.getElementById('thumb');
+  const thumbImg = document.getElementById('thumbImg');
+  let raf=null, tx=0, ty=0, cx=0, cy=0;
+
+  function loop(){
+    cx += (tx-cx)*.18;
+    cy += (ty-cy)*.18;
+    thumb.style.left = cx+'px';
+    thumb.style.top  = cy+'px';
+    raf = requestAnimationFrame(loop);
+  }
+
+  rows.forEach(r=>{
+    r.addEventListener('mouseenter', ()=>{
+      const src = r.dataset.thumb;
+      if(!src) return;
+      thumbImg.src = src;
+      thumb.classList.add('show');
+      if(!raf) loop();
+    });
+    r.addEventListener('mouseleave', ()=>{
+      thumb.classList.remove('show');
+    });
+    r.addEventListener('mousemove', (e)=>{
+      tx = e.clientX + 80;
+      ty = e.clientY;
+    });
+  });
+
+
+  /* smooth anchor scroll */
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',(e)=>{
+      const t = document.querySelector(a.getAttribute('href'));
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+  });
+
+  /* Amelia-Rufus marquee: pixel-exact seamless loop */
+  (function(){
+    const tracks = document.querySelectorAll('.ar-marquee-track');
+    if(!tracks.length) return;
+
+    function setHalf(track){
+      const imgs = track.querySelectorAll('img');
+      if(!imgs.length) return;
+      const half = imgs.length / 2;
+      const styles = getComputedStyle(track);
+      const gap = parseFloat(styles.columnGap || styles.gap) || 0;
+      let w = 0;
+      // Use offsetWidth (local coordinate space) — getBoundingClientRect
+      // returns scaled pixels because the marquee lives inside an SVG
+      // <foreignObject> with a viewBox, which would mismatch the CSS
+      // translate space and cause the loop to drift each cycle.
+      for(let i=0;i<half;i++){
+        w += imgs[i].offsetWidth + gap;
+      }
+      track.style.setProperty('--ar-half', w.toFixed(3) + 'px');
+    }
+
+    function setupAll(){
+      tracks.forEach(setHalf);
+    }
+
+    // Wait for all images to load, then measure
+    const allImgs = document.querySelectorAll('.ar-marquee-track img');
+    let pending = allImgs.length;
+    if(pending === 0){ setupAll(); }
+    else{
+      allImgs.forEach(img=>{
+        if(img.complete && img.naturalWidth){
+          if(--pending === 0) setupAll();
+        }else{
+          img.addEventListener('load', ()=>{ if(--pending === 0) setupAll(); }, {once:true});
+          img.addEventListener('error',()=>{ if(--pending === 0) setupAll(); }, {once:true});
+        }
+      });
+    }
+
+    // Recalculate on resize
+    let rt;
+    window.addEventListener('resize', ()=>{
+      clearTimeout(rt);
+      rt = setTimeout(setupAll, 120);
+    });
+  })();
+
+  /* 영상 자동재생 — iOS 포함 */
+  (function(){
+    function playAll(){
+      document.querySelectorAll('video').forEach(function(v){
+        if(v.id==='promo-vid') return;
+        v.muted=true;
+        v.setAttribute('playsinline','');
+        v.setAttribute('webkit-playsinline','');
+        v.play().catch(function(){});
+      });
+    }
+    playAll();
+    ['touchstart','touchend','pointerdown','click'].forEach(function(ev){
+      document.addEventListener(ev,function unlock(){
+        playAll();
+        document.removeEventListener(ev,unlock);
+      },{once:true,passive:true});
+    });
+    document.querySelectorAll('video').forEach(function(v){
+      if(v.id==='promo-vid') return;
+      v.addEventListener('pause',function(){ if(!v.ended) v.play().catch(function(){}); });
+      v.addEventListener('ended',function(){ v.currentTime=0; v.play().catch(function(){}); });
+    });
+    document.addEventListener('visibilitychange',function(){
+      if(!document.hidden) playAll();
+    });
+
+    /* Pause/resume work-card animations based on viewport */
+    document.querySelectorAll('.work-block').forEach(function(block){
+      new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          block.classList.toggle('in-view', e.isIntersecting);
+        });
+      },{threshold:0.1}).observe(block);
+    });
+  })();
+
+  /* Promo video — lazy load + play on viewport enter */
+  (function(){
+    var vid=document.getElementById('promo-vid');
+    if(!vid) return;
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting) vid.play(); else vid.pause();
+      });
+    },{threshold:0.1}).observe(vid);
+  })();
+
+  /* Token Trust — looping preview video */
+    (function(){
+      var wrap = document.getElementById('tt-grid-wrap');
+      if(!wrap) return;
+      var face=document.createElement('div');
+      face.className='tt-face tt-face-front';
+      var vid=document.createElement('video');
+      vid.src='./tokentrustprev.mp4';
+      vid.autoplay=true; vid.muted=true; vid.loop=true;
+      vid.playsInline=true; vid.setAttribute('playsinline','');
+      vid.preload='metadata';
+      vid.style.opacity = '1';
+      vid.style.animation = 'none';
+      face.appendChild(vid);
+      wrap.appendChild(face);
+    })();
+
+  /* Inject "More" button into every .work card */
+  (function(){
+    var ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>';
+    document.querySelectorAll('.work').forEach(function(card){
+      if(card.querySelector('.more-btn')) return;
+      var btn = document.createElement('div');
+      btn.className = 'more-btn';
+      btn.setAttribute('aria-hidden','true');
+      btn.innerHTML = '<span class="more-icon">'+ICON+'</span><span class="more-label">More</span>';
+      card.appendChild(btn);
+    });
+  })();
+</script>
+
+
+</body>
+</html>
+    });
+  })();
+</script>
+
+</body>
+</html>

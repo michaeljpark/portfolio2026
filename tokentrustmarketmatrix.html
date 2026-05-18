@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Competitive market matrix</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: #f4f4f4;
+  font-family: 'Times New Roman', Times, serif;
+  min-height: 100vh;
+  padding: 36px 20px 60px;
+  color: #000;
+}
+
+.hdr { text-align:center; max-width:1400px; margin:0 auto 24px; }
+.hdr h1 { font-size:18px; font-weight:400; color:#000; margin-bottom:4px; }
+.hdr p { font-size:11px; color:#000; font-weight:400; }
+
+.tabs { display:flex; justify-content:center; gap:5px; margin-bottom:22px; flex-wrap:wrap; }
+.tb {
+  font-family:'Times New Roman',Times,serif;
+  font-size:10.5px; font-weight:400;
+  padding:6px 15px; border:1px solid #ccc;
+  background:transparent; color:#000;
+  cursor:pointer; border-radius:2px; transition:all .2s;
+}
+.tb:hover { border-color:#999; }
+.tb.on { background:#111; color:#fff; border-color:#111; }
+
+.wrap { max-width:1400px; margin:0 auto; }
+
+.mh { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; padding:0 1px; }
+.mh h2 { font-size:13px; font-weight:400; color:#000; }
+
+.card {
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:3px;
+  padding: 28px 36px 48px 56px;
+  position:relative;
+}
+
+/* TAM inside card */
+.tam {
+  position:absolute;
+  top:10px; right:14px;
+  font-size:11px; color:#000;
+  letter-spacing:.2px;
+}
+
+.cv { position:relative; width:100%; padding-bottom:28.125%; }
+.ci { position:absolute; inset:0; overflow:visible; }
+
+.ci svg.gs { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+
+.ql {
+  position:absolute; font-size:12px; color:#000;
+  font-weight:400; pointer-events:none; letter-spacing:.2px;
+  white-space:pre-line; line-height:1.35;
+}
+.ql.tl { top:6px; left:8px; }
+.ql.tr { top:6px; right:8px; text-align:right; }
+.ql.bl { bottom:6px; left:8px; }
+.ql.br { bottom:6px; right:8px; text-align:right; }
+
+.ax {
+  position:absolute; font-size:11px; color:#000;
+  font-weight:400; pointer-events:none; letter-spacing:.15px;
+}
+.ax.xl { bottom:-22px; left:50%; transform:translateX(-50%); }
+.ax.xlo { bottom:-22px; left:0; font-size:10px; }
+.ax.xhi { bottom:-22px; right:0; font-size:10px; }
+.ax.yl { position:absolute; top:50%; left:-40px; transform:translateY(-50%) rotate(-90deg); white-space:nowrap; }
+
+/* Node — uniform 10px, thin stroke */
+.nd {
+  position:absolute; transform:translate(-50%,-50%);
+  cursor:default; z-index:2; transition:opacity .2s;
+}
+.nd .dot {
+  width:10px; height:10px; border-radius:50%;
+  border:1px solid #000;
+  background:transparent;
+}
+.nd.you .dot {
+  background:rgba(0,0,0,0.08);
+}
+.nd .lb {
+  position:absolute; top:14px; left:50%; transform:translateX(-50%);
+  font-size:10px; color:#000;
+  white-space:nowrap; pointer-events:none; font-weight:400;
+}
+.nd:hover .lb { text-decoration:underline; }
+
+/* Tooltip */
+.tip {
+  display:none; position:fixed;
+  background:#fff; border:1px solid #ddd; border-radius:2px;
+  padding:9px 13px; font-size:10.5px; line-height:1.5;
+  max-width:230px; z-index:300;
+  box-shadow:0 3px 12px rgba(0,0,0,0.06);
+  pointer-events:none;
+}
+.tip.on { display:block; }
+.tip .tt { font-size:8.5px; color:#666; margin-bottom:2px; }
+.tip .tn { font-size:11px; color:#000; margin-bottom:3px; }
+.tip .td { color:#444; font-size:10px; }
+
+.ir { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px; }
+.ib { border:1px solid #eee; border-radius:2px; padding:12px; }
+.ib h4 { font-size:8.5px; font-weight:400; color:#000; text-transform:uppercase; letter-spacing:.4px; margin-bottom:5px; }
+.ib p { font-size:10.5px; color:#000; line-height:1.55; font-weight:400; }
+
+.foot { text-align:center; margin-top:18px; font-size:9px; color:#999; }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>Competitive market matrix</h1>
+  <p>Ai token refund & inter-platform conversion platform — 4-market competitive positioning</p>
+</div>
+<div class="tabs" id="tabs"></div>
+<div class="wrap" id="root"></div>
+<p class="foot">Press 0 to export current matrix as 4× png (your platform hidden)</p>
+<div class="tip" id="tip"><div class="tt"></div><div class="tn"></div><div class="td"></div></div>
+
+<script>
+const D=[
+{
+  t:'Ai token market', tg:'Tam ~$30b+ (2026)',
+  xa:'Token utility & fungibility', ya:'User-centric value return',
+  xlo:'Single-use', xhi:'Cross-platform', ylo:'Platform-centric', yhi:'User-centric',
+  q:['Closed ecosystems','User-empowered\nopen systems','Legacy token\nsilos','Platform-first\nmarketplaces'],
+  n:[
+    {n:'Your platform',x:84,y:88,u:1,tp:'Token refund & conversion',d:'인터플랫폼 토큰 환급 + 전환. 유저 데이터 주권 기반 순환 경제 모델.'},
+    {n:'Ocean Protocol',x:58,y:68,tp:'Data token',d:'데이터 토큰화 마켓플레이스. 인터플랫폼 토큰 전환 미지원.'},
+    {n:'Fetch.ai',x:44,y:52,tp:'Ai agent token',d:'AI 에이전트 자동화 토큰. 자체 생태계 중심.'},
+    {n:'Bittensor',x:30,y:62,tp:'Decentralized ai',d:'분산형 ML 마켓플레이스. 모델 기여 보상 중심.'},
+    {n:'SingularityNET',x:42,y:40,tp:'Ai marketplace',d:'AI 서비스 마켓플레이스. 자체 생태계 내 가치 순환.'},
+    {n:'Render',x:22,y:28,tp:'Gpu compute',d:'GPU 컴퓨팅 토큰. 단일 유틸리티 특화.'},
+    {n:'NEAR Protocol',x:64,y:42,tp:'L1 blockchain',d:'고성능 L1. 토큰 환급 메커니즘 없음.'},
+    {n:'iExec',x:18,y:44,tp:'Cloud compute',d:'분산 클라우드. 리소스 대여 중심.'},
+    {n:'MWX Token',x:36,y:22,tp:'Sme ai token',d:'SME 대상 AI 마켓플레이스 토큰.'},
+  ],
+  i:{a:'기존 AI 토큰은 자체 생태계 내 유틸리티에 집중. 인터플랫폼 토큰 환급/전환은 완전한 블루오션.',b:'토큰 범용성(x)과 유저 가치 환원(y) 동시 최상위. 유일한 "환급" 메커니즘 보유.',c:'경쟁사 "사용→소멸" 모델 vs "사용→환급→재순환" 순환 구조.'}
+},
+{
+  t:'Cross-platform interoperability market', tg:'Tam ~$15b+ (2026)',
+  xa:'Ai-native integration depth', ya:'Token / value portability',
+  xlo:'Basic api', xhi:'Ai-native', ylo:'Data only', yhi:'Value + token',
+  q:['Legacy\nintegration','Ai-first value\nportability','Static api\nconnectors','Smart data\nbridges'],
+  n:[
+    {n:'Your platform',x:82,y:90,u:1,tp:'Token interoperability',d:'AI 토큰 크로스플랫폼 전환. 데이터 + 토큰 가치 동시 이동.'},
+    {n:'MuleSoft',x:20,y:22,tp:'Enterprise iPaaS',d:'API 관리 도구. 토큰/가치 전환 개념 없음.'},
+    {n:'Workato',x:32,y:30,tp:'Workflow automation',d:'워크플로우 자동화. 토큰 이식성 미지원.'},
+    {n:'Merge',x:56,y:38,tp:'Unified api',d:'AI 에이전트 통합 API. 가치/토큰 전환 범위 밖.'},
+    {n:'Nango',x:64,y:28,tp:'Ai integration',d:'AI 제품용 통합 인프라. 토큰 경제 미지원.'},
+    {n:'Composio',x:48,y:24,tp:'Agent integration',d:'AI 에이전트 통합 도구. 가치 이전 기능 없음.'},
+    {n:'Zapier',x:14,y:14,tp:'No-code automation',d:'범용 자동화. AI 네이티브 깊이 낮고 토큰 부재.'},
+    {n:'Exalate',x:38,y:44,tp:'Cross-company sync',d:'크로스 플랫폼 동기화. 가치 전환 미적용.'},
+    {n:'Paragon',x:44,y:16,tp:'Embedded integration',d:'SaaS 임베디드 통합. 토큰 이식성 없음.'},
+  ],
+  i:{a:'기존 통합 플랫폼은 "데이터 이동"에만 집중. "가치(토큰) 이동"은 공백 상태.',b:'토큰/가치 이식성(y) 압도적 우위. AI 네이티브 + 토큰 전환 결합 유일.',c:'iPaaS "데이터 파이프" → "가치 파이프" 진화 시점에 정확히 포지셔닝.'}
+},
+{
+  t:'Data-as-a-service market', tg:'Tam ~$12b+ (2026)',
+  xa:'Data sovereignty & user control', ya:'Fair value redistribution',
+  xlo:'Platform-owned', xhi:'User-sovereign', ylo:'No return', yhi:'Full return',
+  q:['Extractive\nplatforms','User-sovereign\ndata economy','Data silos\n(closed)','Partial\nmonetization'],
+  n:[
+    {n:'Your platform',x:86,y:86,u:1,tp:'Data sovereignty + token',d:'유저 데이터 주권 + 토큰 환급. Consent → 활용 → 보상 완전 순환.'},
+    {n:'Snowflake',x:18,y:16,tp:'Data marketplace',d:'기업 간 데이터 거래. 유저 주권/보상 없음.'},
+    {n:'Databricks',x:26,y:24,tp:'Data lakehouse',d:'Delta Sharing. 유저 가치 환원 없음.'},
+    {n:'Ocean Protocol',x:62,y:58,tp:'Decentralized data',d:'분산형 데이터 마켓플레이스. 토큰 환급 미비.'},
+    {n:'Itheum',x:72,y:48,tp:'Personal data',d:'크로스체인 개인 데이터 중개. AI 토큰 통합 부재.'},
+    {n:'Monda',x:32,y:34,tp:'Data monetization',d:'올인원 수익화. 개인 데이터 주권 약함.'},
+    {n:'Revelate',x:40,y:22,tp:'Data commerce',d:'데이터 발견/수익화. 기업 내부 거버넌스 중심.'},
+    {n:'AWS Data Exchange',x:12,y:10,tp:'Cloud marketplace',d:'AWS 종속. 유저 데이터 주권 전무.'},
+    {n:'Datarade',x:24,y:42,tp:'B2b data',d:'B2B 데이터 마켓플레이스. 기업 간 거래 특화.'},
+  ],
+  i:{a:'기존 DaaS는 "기업이 데이터를 사고파는" 모델. 유저 가치 환원 모델 부재.',b:'데이터 주권(x)과 가치 재분배(y) 동시 최상위. Consent 기반 보상이 핵심.',c:'EU AI Act, GDPR 규제 강화로 유저 데이터 주권 요구 급증 타이밍과 맞물림.'}
+},
+{
+  t:'Ai regulatory compliance market', tg:'Tam ~$5b+ (2026)',
+  xa:'User data rights integration', ya:'Proactive incentive mechanism',
+  xlo:'Audit-only', xhi:'Rights-embedded', ylo:'Penalty avoidance', yhi:'Incentive-driven',
+  q:['Reactive\naudit tools','Incentivized\ncompliance','Documentation\nonly','Governance\nframeworks'],
+  n:[
+    {n:'Your platform',x:86,y:88,u:1,tp:'Incentive compliance',d:'규제 준수를 인센티브로 전환. 토큰 환급 = 투명한 데이터 활용 증명.'},
+    {n:'Credo AI',x:46,y:42,tp:'Ai governance',d:'AI 거버넌스 플랫폼. 유저 보상 메커니즘 없음.'},
+    {n:'Vanta',x:28,y:30,tp:'Compliance automation',d:'컴플라이언스 자동화. 유저 데이터 권리 통합 약함.'},
+    {n:'Okta',x:52,y:22,tp:'Iam platform',d:'AI 에이전트 IAM. 보상 체계 범위 밖.'},
+    {n:'Norm AI',x:38,y:52,tp:'Legal ai',d:'법률/규제 AI 에이전트. 유저 인센티브 없음.'},
+    {n:'Sprinto',x:22,y:40,tp:'Trust platform',d:'자율 신뢰 플랫폼. 유저 권리 통합 미약.'},
+    {n:'AuditBoard',x:16,y:18,tp:'Grc platform',d:'종합 리스크 관리. 유저 대면 인센티브 없음.'},
+    {n:'Regology',x:34,y:34,tp:'Regulatory intel',d:'실시간 규제 추적. 인센티브 설계 미지원.'},
+    {n:'Compliance.ai',x:64,y:28,tp:'Fintech compliance',d:'금융 특화 컴플라이언스. 유저 보상 체계 없음.'},
+  ],
+  i:{a:'모든 경쟁사 "규제 위반 방지" 관점. "규제 준수 = 유저 보상" 프레임은 유일.',b:'Consent 준수율, reward 이행률, 가치평가 공정성 등 자체 벤치마크가 규제 증빙으로 직결.',c:'Corporate credibility index를 통해 data sovereignty와 규제 준수 동시 해결.'}
+}
+];
+
+let cur=0;
+const tabs=document.getElementById('tabs');
+D.forEach((m,i)=>{
+  const b=document.createElement('button');
+  b.className='tb'+(i===0?' on':'');
+  b.textContent=m.t;
+  b.onclick=()=>sw(i);
+  tabs.appendChild(b);
+});
+
+function sw(i){
+  cur=i;
+  document.querySelectorAll('.tb').forEach((t,j)=>t.classList.toggle('on',j===i));
+  ren(i);
+}
+
+function ren(i){
+  const m=D[i], root=document.getElementById('root');
+  root.innerHTML=`
+    <div class="mh"><h2>${m.t}</h2></div>
+    <div class="card" id="exp">
+      <div class="tam">${m.tg}</div>
+      <div class="cv"><div class="ci" id="ci">
+        <svg class="gs" id="gs" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"></svg>
+        <div class="ql tl">${m.q[0]}</div>
+        <div class="ql tr">${m.q[1]}</div>
+        <div class="ql bl">${m.q[2]}</div>
+        <div class="ql br">${m.q[3]}</div>
+        <div class="ax xl">${m.xa}</div>
+        <div class="ax xlo">${m.xlo}</div>
+        <div class="ax xhi">${m.xhi}</div>
+        <div class="ax yl">${m.ya}</div>
+      </div></div>
+    </div>
+    <div class="ir">
+      <div class="ib"><h4>Positioning</h4><p>${m.i.a}</p></div>
+      <div class="ib"><h4>Advantage</h4><p>${m.i.b}</p></div>
+      <div class="ib"><h4>Market gap</h4><p>${m.i.c}</p></div>
+    </div>`;
+
+  const ci=document.getElementById('ci'),gs=document.getElementById('gs');
+  gs.setAttribute('viewBox','0 0 1000 1000');
+  let L='';
+  for(let p=10;p<=90;p+=10){
+    if(p===50)continue;
+    const v=p*10;
+    L+=`<line x1="${v}" y1="0" x2="${v}" y2="1000" stroke="#ddd" stroke-width="0.8"/>`;
+    L+=`<line x1="0" y1="${v}" x2="1000" y2="${v}" stroke="#ddd" stroke-width="0.8"/>`;
+  }
+  L+=`<line x1="500" y1="0" x2="500" y2="1000" stroke="#000" stroke-width="1.2"/>`;
+  L+=`<line x1="80" y1="500" x2="920" y2="500" stroke="#000" stroke-width="1.2"/>`;
+  gs.innerHTML=L;
+
+  m.n.forEach((nd,ni)=>{
+    const el=document.createElement('div');
+    el.className='nd'+(nd.u?' you':'');
+    el.style.left=nd.x+'%';
+    el.style.top=(100-nd.y)+'%';
+    el.innerHTML=`<div class="dot"></div><div class="lb">${nd.n}</div>`;
+    el.onmouseenter=e=>sT(e,nd);
+    el.onmousemove=e=>mT(e);
+    el.onmouseleave=hT;
+    el.style.opacity='0';
+    el.style.transition='opacity .35s ease';
+    setTimeout(()=>{el.style.opacity='1';},50+ni*35);
+    ci.appendChild(el);
+  });
+}
+
+const tip=document.getElementById('tip');
+function sT(e,nd){
+  tip.querySelector('.tt').textContent=nd.tp;
+  tip.querySelector('.tn').textContent=nd.n;
+  tip.querySelector('.td').textContent=nd.d;
+  tip.classList.add('on'); mT(e);
+}
+function mT(e){
+  let x=e.clientX+12,y=e.clientY-8;
+  if(x+240>window.innerWidth)x=e.clientX-250;
+  if(y<10)y=e.clientY+16;
+  tip.style.left=x+'px'; tip.style.top=y+'px';
+}
+function hT(){tip.classList.remove('on');}
+
+document.addEventListener('keydown',e=>{
+  if(e.key!=='0')return;
+  doExport();
+});
+
+async function doExport(){
+  const el=document.getElementById('exp');
+  if(!el)return;
+  el.querySelectorAll('.you').forEach(n=>n.style.display='none');
+  el.style.border='none';
+  el.style.borderRadius='0';
+  await new Promise(r=>setTimeout(r,80));
+  try{
+    const canvas=await html2canvas(el,{
+      scale:4,
+      backgroundColor:'#ffffff',
+      useCORS:true,
+      logging:false,
+    });
+    const a=document.createElement('a');
+    a.href=canvas.toDataURL('image/png');
+    a.download=`market-matrix-${D[cur].t.replace(/\s+/g,'-')}-4x.png`;
+    a.click();
+  }catch(err){ console.error(err); }
+  el.querySelectorAll('.you').forEach(n=>n.style.display='');
+  el.style.border='';
+  el.style.borderRadius='';
+}
+
+ren(0);
+</script>
+</body>
+</html>

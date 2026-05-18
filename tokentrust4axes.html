@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenTrust — Radial Strategy Map</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Times New Roman', Times, serif;
+  }
+  .wrap { width: 100%; max-width: 1100px; padding: 20px; }
+
+  text { pointer-events: none; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <svg id="radialMap" width="100%" viewBox="0 0 1100 1100" xmlns="http://www.w3.org/2000/svg">
+  </svg>
+</div>
+
+<script>
+  const data = [
+    {
+      group: 'Data Traceability',
+      angle: -45, // Top Right
+      items: [
+        'Data Origin Logging',
+        'Usage Path Tracking',
+        'Storage Location Disclosure',
+        'Third-Party Transfer Audit',
+        'Retention Period Visibility',
+        'DQI Scoring Timestamp',
+        'Consent Scope Tagging',
+        'Deletion Verification'
+      ]
+    },
+    {
+      group: 'Data Refund & Compensation',
+      angle: 45, // Bottom Right
+      items: [
+        'DQI-Based Valuation',
+        'Reward Token Issuance',
+        'Data Credit Conversion',
+        'Refund Trigger Mechanism',
+        'Usage-Proportional Return',
+        'Real-Time Dashboard', // Shortened slightly "Real-Time Compensation Dashboard"
+        'Micro-Payment Settlement',
+        'Dispute & Reclaim Process'
+      ]
+    },
+    {
+      group: 'Interplatform Value Management',
+      angle: 135, // Bottom Left
+      items: [
+        'Cross-Platform Token Portability',
+        'Unified Exchange Rate Engine',
+        'Multi-Model Usage Aggregation',
+        'Demand-Weighted Token Pricing',
+        'Platform-Agnostic Wallet',
+        'Service Switching Optimization',
+        'Inter-Provider Settlement', // Shortened "Inter-Provider Settlement Protocol"
+        'Token Liquidity Management'      
+      ]
+    },
+    {
+      group: 'Holistic Regulatory Alternative',
+      angle: -135, // Top Left
+      items: [
+        'PIPEDA Compliance Framework',
+        'FINTRAC MSB Registration',
+        'Consent Rate Scoring', // Shortened "Consent Compliance Rate Scoring"
+        'Audit Transparency Index',
+        'Cross-Border Transfer (CBPR)', // Shortened "Cross-Border Data Transfer Protocol (CBPR)"
+        'ISO/IEC 42001 Certification', // Shortened
+        'Regulatory Sandbox Engagement',
+        'Corporate Credibility Benchmarking'   
+      ]
+    }
+  ];
+
+  const svg = document.getElementById('radialMap');
+  const cx = 550, cy = 550; // Center map
+  const rIn = 280; // Inner orbit (Leaf Items)
+  const rOut = 420; // Outer orbit (Categories)
+
+  let html = '';
+
+  // Outer Orbit (Categories)
+  html += `<circle cx="${cx}" cy="${cy}" r="${rOut}" fill="none" stroke="#000" stroke-width="0.4" opacity="0.5" stroke-dasharray="100, 40"/>`;
+  
+  // Inner Orbit (Leaf Items)
+  html += `<circle cx="${cx}" cy="${cy}" r="${rIn}" fill="none" stroke="#000" stroke-width="0.4" opacity="0.5"/>`;
+
+  data.forEach(grp => {
+    
+    // 1. Calculate Category Node (Outer)
+    const outA = grp.angle;
+    const outRad = outA * Math.PI / 180;
+    const outX = cx + rOut * Math.cos(outRad);
+    const outY = cy + rOut * Math.sin(outRad);
+
+    html += `<circle cx="${outX}" cy="${outY}" r="5" fill="#000"/>`;
+
+    // Category Text (Curved along Outer Orbit)
+    const tr = rOut + 20; // Slightly larger orbit radius for text
+    const spanA = 40; // Arc span
+    let startA, endA, sweep;
+    
+    // Top half draws clockwise, Bottom half draws counter-clockwise to keep text upright
+    if (grp.angle < 0) {
+      startA = grp.angle - spanA;
+      endA = grp.angle + spanA;
+      sweep = 1;
+    } else {
+      startA = grp.angle + spanA;
+      endA = grp.angle - spanA;
+      sweep = 0;
+    }
+
+    const sx = cx + tr * Math.cos(startA * Math.PI / 180);
+    const sy = cy + tr * Math.sin(startA * Math.PI / 180);
+    const ex = cx + tr * Math.cos(endA * Math.PI / 180);
+    const ey = cy + tr * Math.sin(endA * Math.PI / 180);
+
+    const pathId = `catPath_${Math.round(grp.angle)}`;
+    
+    // Create the invisible arc path for the text to follow
+    html += `<defs>
+       <path id="${pathId}" d="M ${sx} ${sy} A ${tr} ${tr} 0 0 ${sweep} ${ex} ${ey}" fill="none" />
+    </defs>`;
+
+    // Remove bold, add slightly tracked text on the path
+    html += `<text font-size="18.5" fill="#000" letter-spacing="-0.01em">
+       <textPath href="#${pathId}" startOffset="50%" text-anchor="middle" dominant-baseline="central">${grp.group}</textPath>
+    </text>`;
+
+    // 2. Leaf Items (Inner Orbit)
+    const count = grp.items.length;
+    const spread = 72; // Arc spread
+    const startAngle = grp.angle - spread/2;
+    const step = spread / (count > 1 ? count - 1 : 1);
+
+    grp.items.forEach((item, i) => {
+      const inA = startAngle + i * step;
+      const inRad = inA * Math.PI / 180;
+
+      const inX = cx + rIn * Math.cos(inRad);
+      const inY = cy + rIn * Math.sin(inRad);
+
+      // Bezier Curve from Item (Inner) to Category (Outer)
+      const cp1X = cx + (rIn + 50) * Math.cos(inRad);
+      const cp1Y = cy + (rIn + 50) * Math.sin(inRad);
+      const cp2X = cx + (rOut - 80) * Math.cos(outRad);
+      const cp2Y = cy + (rOut - 80) * Math.sin(outRad);
+
+      html += `<path d="M ${inX} ${inY} C ${cp1X} ${cp1Y}, ${cp2X} ${cp2Y}, ${outX} ${outY}" fill="none" stroke="#000" stroke-width="0.6" opacity="0.3"/>`;
+
+      // Item Node & Text
+      html += `<g transform="translate(${cx},${cy}) rotate(${inA})">
+                 <circle cx="${rIn}" cy="0" r="3.5" fill="#000"/>`;
+
+      let normA = inA % 360;
+      if (normA > 180) normA -= 360;
+      if (normA < -180) normA += 360;
+      const isLeft = Math.abs(normA) > 90;
+
+      // Text pointing inward to center
+      if (isLeft) {
+         html += `<text transform="translate(${rIn - 12},0) rotate(180)" dominant-baseline="central" text-anchor="start" font-size="11.5" fill="#000" letter-spacing="-0.03em">${item}</text>`;
+      } else {
+         html += `<text transform="translate(${rIn - 12},0)" dominant-baseline="central" text-anchor="end" font-size="11.5" fill="#000" letter-spacing="-0.03em">${item}</text>`;
+      }
+
+      html += `</g>`;
+    });
+  });
+
+  svg.innerHTML = html;
+</script>
+
+</body>
+</html>

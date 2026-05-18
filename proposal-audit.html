@@ -1,0 +1,1317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Amelia-Rufus 2.0 Amazon Service Proposal — Michael Joongmin Park</title>
+<link rel="icon" type="image/svg+xml" href="./mkpk.svg" />
+<style>
+  :root{
+    --bg:#E6E6E6; --ink:#000000; --muted:#444444; --line:#9a9a9a;
+    --max:1320px; --pad:clamp(20px,4vw,56px);
+    --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ background:var(--bg); color:var(--ink); scroll-behavior:smooth; }
+  body{
+    font-family:var(--font); font-size:14px; line-height:1.5; font-weight:400;
+    letter-spacing:-0.05em; -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility; overflow-x:hidden;
+  }
+  a{ color:inherit; text-decoration:none; }
+  img{ display:block; max-width:100%; }
+  ::selection{ background:var(--ink); color:var(--bg); }
+  .wrap{ max-width:var(--max); margin:0 auto; padding-left:var(--pad); padding-right:var(--pad); }
+
+  nav.top{
+    position:sticky; top:0; z-index:50;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px var(--pad); max-width:var(--max); margin:0 auto; font-size:13px;
+  }
+  .nav-mark{ font-weight:500; }
+  .nav-links{ display:flex; gap:28px; }
+  .nav-links a{ color:var(--muted); transition:color .2s; }
+  .nav-links a:hover{ color:var(--ink); }
+
+  header.hero{
+    padding:64px var(--pad) 64px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-back{ font-size:13px; color:var(--muted); margin-bottom:32px; display:flex; align-items:center; justify-content:space-between; }
+  .hero-back a:hover{ color:var(--ink); }
+  .tagline-row{ display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-top:32px; }
+  .tagline-row > p{ margin:0; }
+  .hero-team-inline{ margin:0; padding:0; border:0; font-size:10px; line-height:1.4; display:flex; align-items:baseline; gap:10px; flex-wrap:nowrap; min-width:0; }
+  dl.hero-team.hero-team-inline{ margin:0; padding:0; border-top:0; }
+  .hero-team-inline > dt{ margin:0; color:var(--muted); flex-shrink:0; }
+  .hero-team-inline .hero-team-list{ display:flex; flex-direction:row; flex-wrap:nowrap; gap:12px; grid-template-columns:none; min-width:0; }
+  .hero-team-inline .hero-team-member,
+  .hero-team-inline .hero-team-member:nth-child(2),
+  .hero-team-inline .hero-team-member:nth-child(3){ justify-content:flex-start; text-align:left; gap:4px; flex-wrap:nowrap; white-space:nowrap; }
+  @media (max-width: 640px){ .hero-team-inline{ display:none !important; } }
+  .hero-greeting{ font-size:17px; color:var(--muted); margin-bottom:6px; }
+  .hero-name{ font-weight:500; font-size:clamp(28px,4.5vw,64px); line-height:1.05; letter-spacing:-0.05em; }
+  .hero-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }
+  .scroll-link{ color:var(--ink); border-bottom:1px solid var(--ink); transition:opacity .2s; }
+  .scroll-link:hover{ opacity:0.6; }
+  .pt-nav-link{ display:inline-flex; align-items:center; gap:8px; font-size:13px; letter-spacing:-0.02em; color:var(--ink); border-bottom:1px solid currentColor; padding-bottom:2px; transition:opacity .2s; }
+  .pt-nav-link:hover{ opacity:.45; }
+  .hero-row{ margin-top:36px; padding-top:24px; border-top:1px solid var(--line); }
+  .hero-side{ display:flex; flex-direction:row; justify-content:space-between; flex-wrap:wrap; font-size:13px; gap:16px; }
+  .hero-side .pair{ display:flex; flex-direction:column; gap:2px; }
+  .hero-side dt{ color:var(--muted); }
+  .status-live{ display:inline-flex; align-items:center; gap:7px; }
+  .status-dot{ width:7px; height:7px; border-radius:50%; background:#22c55e; flex-shrink:0; }
+
+  .project-section{ padding-top:48px; padding-bottom:48px; }
+  .project-stage{ width:100%; aspect-ratio:16/9; background:#ffffff; border-radius:20px; overflow:hidden; }
+  .project-stage video{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .kpi-section{ padding-bottom:64px; }
+  .kpi-row{ display:grid; grid-template-columns:1fr 1fr 1fr; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:32px 0; }
+  .kpi{ display:flex; flex-direction:column; gap:6px; padding:0 40px; }
+  .kpi:first-child{ padding-left:0; }
+  .kpi:last-child{ padding-right:0; }
+  .kpi + .kpi{ border-left:1px solid var(--line); }
+  .kpi-num{ font-size:clamp(28px,3.5vw,48px); font-weight:500; letter-spacing:-0.05em; line-height:1; }
+  .kpi-label{ font-size:13px; color:var(--muted); }
+
+  /* REPORT 1 SECONDARY HEADER */
+  .report-section{ border-top:1px solid var(--line); }
+  .report-header{ padding:64px var(--pad) 64px; border-bottom:1px solid var(--line); }
+  .report-label{ font-size:17px; color:var(--muted); margin-bottom:6px; }
+  .report-name{ font-weight:500; font-size:clamp(24px,3.5vw,52px); line-height:1.05; letter-spacing:-0.05em; }
+  .report-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }
+  .report-meta{ margin-top:36px; padding-top:24px; border-top:1px solid var(--line); display:flex; flex-direction:row; justify-content:space-between; flex-wrap:wrap; font-size:13px; gap:16px; }
+  .report-meta .pair{ display:flex; flex-direction:column; gap:2px; }
+  .report-meta dt{ color:var(--muted); }
+
+  /* CONTENT SECTIONS */
+  .pt-section{ padding-top:clamp(72px,9vw,140px); padding-bottom:clamp(72px,9vw,140px); border-top:1px solid var(--line); }
+  .section-label{ font-size:12px; color:var(--muted); margin-bottom:10px; letter-spacing:0.02em; }
+  .section-title{ font-size:clamp(28px,3.5vw,52px); font-weight:500; letter-spacing:-0.05em; line-height:1.05; margin-bottom:clamp(14px,1.5vw,22px); }
+  .section-sub{ font-size:clamp(14px,1vw,16px); color:var(--muted); line-height:1.6; letter-spacing:-0.02em; max-width:680px; }
+  .section-head{ margin-bottom:clamp(40px,5vw,80px); }
+
+  /* INTRO QUESTIONS */
+  .intro-questions{ display:flex; flex-direction:column; }
+  .intro-q{ padding:clamp(28px,3vw,48px) 0; border-top:1px solid var(--line); display:grid; grid-template-columns:120px 1fr; gap:40px; align-items:start; }
+  .intro-q:last-child{ border-bottom:1px solid var(--line); }
+  .intro-q-num{ font-size:11px; color:var(--muted); padding-top:5px; letter-spacing:0.02em; }
+  .intro-q-text{ font-size:clamp(18px,2vw,28px); font-weight:400; line-height:1.3; letter-spacing:-0.04em; }
+  .intro-q-body{ font-size:14px; color:var(--muted); line-height:1.6; margin-top:12px; letter-spacing:-0.02em; }
+  @media(max-width:640px){ .intro-q{ grid-template-columns:1fr; gap:10px; } }
+
+  /* 3-COL GRID */
+  .three-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:clamp(40px,5vw,80px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
+  .three-cell{ padding:clamp(24px,3vw,40px); background:var(--bg); display:flex; flex-direction:column; gap:14px; }
+  .three-cell-tag{ font-size:10px; letter-spacing:0.06em; color:var(--muted); }
+  .three-cell-title{ font-size:clamp(18px,2vw,26px); font-weight:500; letter-spacing:-0.04em; line-height:1.1; }
+  .three-cell-sub{ font-size:13px; color:var(--muted); letter-spacing:-0.02em; }
+  .three-cell-body{ font-size:13px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; }
+  .three-cell-stat{ font-size:clamp(28px,3vw,42px); font-weight:500; letter-spacing:-0.05em; line-height:1; }
+  .three-cell-items{ display:flex; flex-direction:column; gap:0; margin-top:auto; }
+  .three-cell-item{ padding:10px 0; border-bottom:1px solid var(--line); font-size:12px; color:var(--muted); line-height:1.5; letter-spacing:-0.01em; position:relative; padding-left:14px; }
+  .three-cell-item::before{ content:'—'; position:absolute; left:0; color:var(--line); font-size:10px; top:12px; }
+  .three-cell-item:last-child{ border-bottom:0; }
+  @media(max-width:880px){ .three-grid{ grid-template-columns:1fr; } }
+
+  /* 2-COL GRID */
+  .two-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:clamp(40px,5vw,80px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
+  .two-cell{ padding:clamp(24px,3vw,40px); background:var(--bg); display:flex; flex-direction:column; gap:14px; }
+  .two-cell-tag{ font-size:11px; color:var(--muted); letter-spacing:0.02em; display:inline-flex; align-items:center; gap:8px; }
+  .two-cell-badge{ display:inline-block; padding:2px 8px; border-radius:100px; font-size:10px; letter-spacing:0.02em; font-weight:500; }
+  .badge-pos{ background:var(--ink); color:var(--bg); }
+  .badge-neg{ background:var(--line); color:var(--muted); }
+  .two-cell-title{ font-size:clamp(15px,1.4vw,20px); font-weight:500; letter-spacing:-0.04em; line-height:1.2; }
+  .two-cell-body{ font-size:13px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; }
+  @media(max-width:640px){ .two-grid{ grid-template-columns:1fr; } }
+
+  /* STAT ROW */
+  .trend-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(24px,3vw,48px); margin-top:clamp(40px,5vw,80px); }
+  .trend-stat{ display:flex; flex-direction:column; gap:10px; }
+  .trend-num{ font-size:clamp(48px,7vw,96px); font-weight:500; letter-spacing:-0.05em; line-height:1; }
+  .trend-desc{ font-size:14px; color:var(--muted); line-height:1.55; letter-spacing:-0.02em; }
+  .trend-source{ font-size:11px; color:var(--muted); opacity:0.5; margin-top:4px; letter-spacing:-0.01em; }
+  @media(max-width:768px){ .trend-stats{ grid-template-columns:1fr 1fr; gap:24px; } }
+  @media(max-width:480px){ .trend-stats{ grid-template-columns:1fr; } }
+
+  /* DARK CALLOUT */
+  .hmw-block{ margin-top:clamp(40px,5vw,80px); padding:clamp(32px,4vw,64px); background:var(--ink); color:#ffffff; border-radius:16px; }
+  .hmw-label{ font-size:11px; color:rgba(255,255,255,.4); letter-spacing:0.06em; margin-bottom:16px; }
+  .hmw-text{ font-size:clamp(20px,2.5vw,36px); font-weight:400; letter-spacing:-0.04em; line-height:1.3; }
+  .opp-dims{ display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:clamp(24px,3vw,40px); border-top:1px solid rgba(255,255,255,.12); padding-top:clamp(24px,3vw,40px); }
+  .opp-dim{ padding:0 24px; }
+  .opp-dim:first-child{ padding-left:0; }
+  .opp-dim:last-child{ padding-right:0; }
+  .opp-dim + .opp-dim{ border-left:1px solid rgba(255,255,255,.12); }
+  .opp-dim-title{ font-size:13px; font-weight:500; color:rgba(255,255,255,.9); margin-bottom:8px; }
+  .opp-dim-body{ font-size:12px; color:rgba(255,255,255,.45); line-height:1.6; letter-spacing:-0.01em; }
+  @media(max-width:640px){
+    .opp-dims{ grid-template-columns:1fr; }
+    .opp-dim{ padding:0; }
+    .opp-dim + .opp-dim{ border-left:0; border-top:1px solid rgba(255,255,255,.12); padding-top:16px; margin-top:16px; }
+  }
+
+  /* ROADMAP */
+  .roadmap-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:clamp(40px,5vw,80px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
+  .horizon{ padding:clamp(24px,3vw,40px); background:var(--bg); display:flex; flex-direction:column; gap:0; }
+  .horizon:last-child{ background:var(--ink); color:#fff; }
+  .horizon-tag{ font-size:10px; letter-spacing:0.06em; color:var(--muted); margin-bottom:12px; }
+  .horizon:last-child .horizon-tag{ color:rgba(255,255,255,.4); }
+  .horizon-title{ font-size:clamp(15px,1.3vw,20px); font-weight:500; letter-spacing:-0.03em; margin-bottom:6px; }
+  .horizon-range{ font-size:12px; color:var(--muted); letter-spacing:-0.01em; margin-bottom:24px; padding-bottom:24px; border-bottom:1px solid var(--line); }
+  .horizon:last-child .horizon-range{ color:rgba(255,255,255,.4); border-bottom-color:rgba(255,255,255,.12); }
+  .horizon-items{ display:flex; flex-direction:column; gap:10px; }
+  .horizon-item{ font-size:12px; color:var(--muted); line-height:1.5; letter-spacing:-0.02em; padding-left:14px; position:relative; }
+  .horizon-item::before{ content:'—'; position:absolute; left:0; color:var(--line); font-size:10px; top:3px; }
+  .horizon:last-child .horizon-item{ color:rgba(255,255,255,.55); }
+  .horizon:last-child .horizon-item::before{ color:rgba(255,255,255,.2); }
+  @media(max-width:768px){ .roadmap-grid{ grid-template-columns:1fr; } }
+
+  /* VALUE SHIFT TABLE */
+  .shift-block{ margin-top:clamp(40px,5vw,80px); }
+  .shift-label{ font-size:12px; font-weight:500; color:var(--muted); margin-bottom:16px; letter-spacing:0.02em; }
+  .shift-table{ width:100%; border-collapse:collapse; margin-bottom:clamp(32px,4vw,64px); }
+  .shift-table th{ text-align:left; font-size:11px; font-weight:500; color:var(--muted); letter-spacing:0.04em; padding:0 0 12px 0; border-bottom:1px solid var(--line); }
+  .shift-table th:not(:first-child){ padding-left:24px; }
+  .shift-table td{ font-size:clamp(13px,1vw,15px); padding:14px 0; border-bottom:1px solid var(--line); vertical-align:top; line-height:1.4; letter-spacing:-0.02em; }
+  .shift-table td:not(:first-child){ padding-left:24px; }
+  .shift-table td:nth-child(2){ color:var(--muted); }
+  .shift-table tr:last-child td{ border-bottom:0; }
+  @media(max-width:640px){
+    .shift-table th:nth-child(3), .shift-table td:nth-child(3){ display:none; }
+  }
+
+  /* FLOW DIAGRAM */
+  .flow-row{ display:grid; grid-template-columns:repeat(6,1fr); gap:1px; margin-top:clamp(40px,5vw,80px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
+  .flow-cell{ padding:clamp(20px,2.5vw,32px); background:var(--bg); display:flex; flex-direction:column; gap:8px; }
+  .flow-cell:last-child{ background:var(--ink); color:#fff; }
+  .flow-num{ font-size:10px; color:var(--muted); letter-spacing:0.04em; }
+  .flow-cell:last-child .flow-num{ color:rgba(255,255,255,.4); }
+  .flow-title{ font-size:clamp(12px,1.1vw,15px); font-weight:500; letter-spacing:-0.03em; line-height:1.2; }
+  .flow-body{ font-size:11px; color:var(--muted); line-height:1.5; letter-spacing:-0.01em; }
+  .flow-cell:last-child .flow-body{ color:rgba(255,255,255,.5); }
+  @media(max-width:880px){ .flow-row{ grid-template-columns:repeat(3,1fr); } }
+  @media(max-width:480px){ .flow-row{ grid-template-columns:1fr 1fr; } }
+
+  /* CONCLUSION */
+  .conclusion-block{ margin-top:clamp(40px,5vw,80px); padding:clamp(40px,5vw,80px); border:1px solid var(--line); border-radius:16px; }
+  .conclusion-quote{ font-size:clamp(20px,2.5vw,36px); font-weight:400; letter-spacing:-0.04em; line-height:1.35; max-width:900px; }
+  .conclusion-attr{ margin-top:24px; font-size:13px; color:var(--muted); letter-spacing:-0.02em; }
+
+  /* BRANCH DETAILS */
+  .branch-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; margin-top:clamp(40px,5vw,80px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
+  .branch-cell{ padding:clamp(24px,3vw,40px); background:var(--bg); display:flex; flex-direction:column; gap:0; }
+  .branch-label{ font-size:10px; letter-spacing:0.06em; color:var(--muted); margin-bottom:16px; }
+  .branch-name{ font-size:clamp(16px,1.5vw,22px); font-weight:500; letter-spacing:-0.04em; margin-bottom:6px; }
+  .branch-sub{ font-size:12px; color:var(--muted); letter-spacing:-0.02em; margin-bottom:24px; padding-bottom:24px; border-bottom:1px solid var(--line); }
+  .branch-steps{ display:flex; flex-direction:column; gap:0; }
+  .branch-step{ padding:10px 0; border-bottom:1px solid var(--line); display:grid; grid-template-columns:20px 1fr; gap:10px; align-items:start; }
+  .branch-step:last-child{ border-bottom:0; }
+  .branch-step-num{ font-size:10px; color:var(--muted); padding-top:2px; }
+  .branch-step-title{ font-size:13px; font-weight:500; letter-spacing:-0.03em; }
+  .branch-step-text{ font-size:12px; color:var(--muted); line-height:1.5; letter-spacing:-0.01em; }
+  .branch-outcome{ font-size:12px; color:var(--muted); line-height:1.5; border-left:2px solid var(--line); padding-left:12px; margin-top:16px; letter-spacing:-0.01em; }
+  @media(max-width:880px){ .branch-grid{ grid-template-columns:1fr; } }
+
+  /* IMPACT SCENARIOS */
+  .scenario-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:clamp(40px,5vw,80px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
+  .scenario{ padding:clamp(24px,3vw,40px); background:var(--bg); display:flex; flex-direction:column; gap:14px; }
+  .scenario:nth-child(2){ background:var(--ink); color:#fff; }
+  .scenario-tag{ font-size:11px; letter-spacing:0.04em; color:var(--muted); }
+  .scenario:nth-child(2) .scenario-tag{ color:rgba(255,255,255,.4); }
+  .scenario-title{ font-size:clamp(16px,1.5vw,22px); font-weight:500; letter-spacing:-0.04em; }
+  .scenario-body{ font-size:13px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; }
+  .scenario:nth-child(2) .scenario-body{ color:rgba(255,255,255,.55); }
+  @media(max-width:768px){ .scenario-grid{ grid-template-columns:1fr; } }
+
+  video{ -webkit-appearance:none; appearance:none; }
+  video::-webkit-media-controls,
+  video::-webkit-media-controls-enclosure,
+  video::-webkit-media-controls-panel,
+  video::-webkit-media-controls-overlay-play-button,
+  video::-webkit-media-controls-play-button,
+  video::-webkit-media-controls-start-playback-button{ display:none !important; opacity:0 !important; }
+
+  @media(max-width:880px){
+    .hero-name{ font-size:clamp(24px,7vw,48px); }
+    .report-name{ font-size:clamp(20px,6vw,40px); }
+    .kpi-row{ padding:24px 0; }
+    .kpi{ padding:0 20px; }
+  }
+  @media(max-width:640px){
+    .kpi-row{ grid-template-columns:1fr; padding:0; }
+    .kpi{ padding:20px 0; }
+    .kpi + .kpi{ border-left:none; border-top:1px solid var(--line); }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="nav-inner">
+    <a href="./index.html" class="nav-mark">Michael J. Park</a>
+    <div class="nav-links">
+      <a href="./index.html#work">Work</a>
+      <a href="./index.html#about">About</a>
+      <a href="./index.html#contact">Contact</a>
+      <a href="./2026%20Michael%20Joongmin%20Park.pdf" target="_blank" rel="noopener">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     PART 2 — Design Audit Report 2 (FIRST)
+     Rufus-Amelia 2.0: Demand-Pull Intelligence Hub
+     ═══════════════════════════════════════════ -->
+<header id="report2" class="hero wrap">
+  <div class="hero-back">
+    <a href="./index.html">← Back to Work</a>
+    <a href="#report1" class="pt-nav-link">View Report 1 ↓</a>
+  </div>
+  <div class="hero-greeting">Design Management · Report 2</div>
+  <h1 class="hero-name">Rufus-Amelia 2.0:<br>Demand-Pull Intelligence Hub</h1>
+  <div class="tagline-row">
+    <p class="hero-tagline">From Reactive Search to Proactive Commerce &nbsp;·&nbsp; <a href="#report1" class="scroll-link">Report 1 →</a></p>
+    <dl class="hero-team hero-team-inline">
+      <dt>Team</dt>
+      <div class="hero-team-list">
+        <div class="hero-team-member"><span>Michael Joongmin Park</span><span class="hero-team-role">Team Lead, Data Analyst</span></div>
+        <div class="hero-team-member"><span>Jaehong Hwang</span><span class="hero-team-role">Data Analyst, Research</span></div>
+        <div class="hero-team-member"><span>Elsie Jang</span><span class="hero-team-role">Research</span></div>
+      </div>
+    </dl>
+  </div>
+  <div class="hero-row">
+    <dl class="hero-side">
+      <div class="pair"><dt>Year</dt><dd>2026 / Mar</dd></div>
+      <div class="pair"><dt>Type</dt><dd>Design Management, Audit II</dd></div>
+      <div class="pair"><dt>Duration</dt><dd>2 Weeks</dd></div>
+      <div class="pair"><dt>Course</dt><dd>GDES-3081-501</dd></div>
+      <div class="pair"><dt>Status</dt><dd class="status-live"><span class="status-dot"></span>Online · Published via GitHub</dd></div>
+    </dl>
+  </div>
+</header>
+
+<section class="project-section wrap">
+  <div class="project-stage">
+    <video src="./amazon20prev.mp4" autoplay loop muted playsinline webkit-playsinline preload="auto"
+      style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+  </div>
+</section>
+
+<section class="kpi-section wrap">
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-num">19.5%</div>
+      <div class="kpi-label">Verified Fulfillment Rate — converting speculative production into pre-sold assets by eliminating the Stakeholder Gamble</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-num">85.4%</div>
+      <div class="kpi-label">Intelligence Yield — establishing Amazon as primary Intelligence Hub monetizing behavioral signals into high-margin B2B PaaS assets</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-num">Zero</div>
+      <div class="kpi-label">Waste Supply-Chain Target — synchronizing manufacturing start points with confirmed demand, not forecasted probability</div>
+    </div>
+  </div>
+</section>
+
+<section class="project-section wrap">
+  <div class="project-stage">
+    <video src="./Amazonproposal.mp4" autoplay loop muted playsinline webkit-playsinline preload="auto"
+      style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+  </div>
+</section>
+
+<!-- A1 AUDIT FINDINGS -->
+<section class="pt-section wrap">
+  <div class="section-head">
+    <div class="section-label">A1 — Audit 1 Findings</div>
+    <h2 class="section-title">From reactive to<br>proactive intelligence.</h2>
+    <p class="section-sub">Audit 1 identified three structural failures in Amazon's convenience model. Audit 2 reframes them as the design opportunity: an intelligence-driven production system built on verified demand.</p>
+  </div>
+  <div class="three-grid">
+    <div class="three-cell">
+      <div class="three-cell-tag">AUDIT 1 PROBLEM 01</div>
+      <div class="three-cell-title">"1-Click" Overconsumption</div>
+      <div class="three-cell-body">"1-Click" convenience triggers impulsive overconsumption. The frictionless purchase loop is also an unverified demand loop — products are manufactured speculatively, shipped, and returned at scale with no demand validation upstream.</div>
+    </div>
+    <div class="three-cell">
+      <div class="three-cell-tag">AUDIT 1 PROBLEM 02</div>
+      <div class="three-cell-title">Packaging Waste &amp; Carbon</div>
+      <div class="three-cell-body">Hyper-fast delivery equals excessive packaging waste and carbon footprints. The existing model fails to manage the inherent risks of physical goods production without verified demand — creating supply chain waste before any purchase occurs.</div>
+    </div>
+    <div class="three-cell">
+      <div class="three-cell-tag">AUDIT 2 DIRECTION</div>
+      <div class="three-cell-title">Intelligence-Driven Production</div>
+      <div class="three-cell-body">Rufus-Amelia 2.0 shifts Amazon from Reactive to Proactive. The Verified Demand Model captures consumer intent as a primary asset — transforming speculative manufacturing into a Demand-Pull Intelligence Hub before a single unit is produced.</div>
+    </div>
+  </div>
+</section>
+
+<!-- A2 RUFUS B2C -->
+<section class="pt-section wrap">
+  <div class="section-head">
+    <div class="section-label">A2 — Service Scope I · B2C</div>
+    <h2 class="section-title">Rufus: Amazon's generative<br>AI shopping assistant.</h2>
+    <p class="section-sub">Launched in beta February 2024, Rufus is Amazon's B2C AI layer — operating across three behavioral branches to convert vague shopping intent into a ranked product list, a confident decision, and a resolved post-purchase experience.</p>
+  </div>
+  <div class="hmw-block">
+    <div class="hmw-label">RUFUS — AMAZON'S DEFINITION OF VALUE</div>
+    <div class="hmw-text">Search → Prediction [2026] → [2030]</div>
+    <div class="opp-dims">
+      <div class="opp-dim">
+        <div class="opp-dim-title">Get Details</div>
+        <div class="opp-dim-body">Ask about product features, compatibility, ingredients, and customer reviews — without leaving the shopping experience.</div>
+      </div>
+      <div class="opp-dim">
+        <div class="opp-dim-title">Get Inspiration</div>
+        <div class="opp-dim-body">Ask about a new hobby or upcoming adventure and receive expert-level product advice tailored to your context.</div>
+      </div>
+      <div class="opp-dim">
+        <div class="opp-dim-title">Get Help</div>
+        <div class="opp-dim-body">Ask about existing orders, connect with customer service, and resolve post-purchase issues without navigating menus.</div>
+      </div>
+    </div>
+  </div>
+  <div class="branch-grid">
+    <div class="branch-cell">
+      <div class="branch-label">BRANCH 01</div>
+      <div class="branch-name">Discovery</div>
+      <div class="branch-sub">Converting vague intent into a ranked product list. Reduces browse-stage drop-off and improves category entry CVR.</div>
+      <div class="branch-steps">
+        <div class="branch-step">
+          <div class="branch-step-num">01</div>
+          <div><div class="branch-step-title">Category Recommend</div><div class="branch-step-text">Parses intent, classifies categories, detects trends → Aggregate → Classify → Rank → Validate → Emit</div></div>
+        </div>
+        <div class="branch-step">
+          <div class="branch-step-num">02</div>
+          <div><div class="branch-step-title">Refine / Filter</div><div class="branch-step-text">Generates clarifying questions, applies budget/brand/rating filters → Collect → Filter → Weight → Normalize → Emit</div></div>
+        </div>
+        <div class="branch-step">
+          <div class="branch-step-num">03</div>
+          <div><div class="branch-step-title">Product List</div><div class="branch-step-text">Aggregates scores, deduplicates, sorts, renders → Merge → Deduplicate → Sort → Format → Render</div></div>
+        </div>
+      </div>
+      <div class="branch-outcome">Reduces browse-stage drop-off · Improves category entry conversion rate</div>
+    </div>
+    <div class="branch-cell">
+      <div class="branch-label">BRANCH 02</div>
+      <div class="branch-name">Decision</div>
+      <div class="branch-sub">Shortening comparison time. Increases PDP dwell time and conversion rate through AI-generated review synthesis.</div>
+      <div class="branch-steps">
+        <div class="branch-step">
+          <div class="branch-step-num">01</div>
+          <div><div class="branch-step-title">Product Compare</div><div class="branch-step-text">Extracts specs, summarizes reviews, aligns features → Extract → Align → Score → Rank → Emit</div></div>
+        </div>
+        <div class="branch-step">
+          <div class="branch-step-num">02</div>
+          <div><div class="branch-step-title">Product Detail</div><div class="branch-step-text">Retrieves specs, matches Q&amp;A, generates answers → Parse → Lookup → Match → Generate → Route</div></div>
+        </div>
+        <div class="branch-step">
+          <div class="branch-step-num">03</div>
+          <div><div class="branch-step-title">Review Summary</div><div class="branch-step-text">Runs sentiment analysis, extracts highlights → Collect → Analyze → Summarize → Score → Emit</div></div>
+        </div>
+      </div>
+      <div class="branch-outcome">Shortens comparison time · Increases PDP dwell time and conversion rate</div>
+    </div>
+    <div class="branch-cell">
+      <div class="branch-label">BRANCH 03</div>
+      <div class="branch-name">Post-Purchase</div>
+      <div class="branch-sub">Reduces CS ticket volume and return rate. Improves lifetime value through proactive resolution.</div>
+      <div class="branch-steps">
+        <div class="branch-step">
+          <div class="branch-step-num">01</div>
+          <div><div class="branch-step-title">Delivery Status</div><div class="branch-step-text">Looks up orders, resolves carriers, estimates ETA → Fetch → Resolve → Estimate → Format → Notify</div></div>
+        </div>
+        <div class="branch-step">
+          <div class="branch-step-num">02</div>
+          <div><div class="branch-step-title">Return / Exchange</div><div class="branch-step-text">Classifies requests, checks eligibility, calculates refunds → Classify → Validate → Calculate → Route → Resolve</div></div>
+        </div>
+        <div class="branch-step">
+          <div class="branch-step-num">03</div>
+          <div><div class="branch-step-title">Product Usage</div><div class="branch-step-text">Extracts manuals, scans review tips, links videos → Parse → Identify → Extract → Build → Render</div></div>
+        </div>
+      </div>
+      <div class="branch-outcome">Reduces CS ticket volume · Lowers return rate · Improves LTV</div>
+    </div>
+  </div>
+  <div class="two-grid" style="margin-top:clamp(40px,5vw,80px);">
+    <div class="two-cell">
+      <div class="two-cell-tag">ECOSYSTEM CONNECTIONS</div>
+      <div class="two-cell-title">Rufus connects buyer and seller ecosystems</div>
+      <div class="two-cell-body">Rufus interfaces with Amazon's product catalog, customer reviews, Sponsored Ads, Alexa+, and Amazon Lens — creating a closed-loop system where buyer intent data is captured but not yet circulated back to sellers.</div>
+    </div>
+    <div class="two-cell">
+      <div class="two-cell-tag">STRUCTURAL LIMIT</div>
+      <div class="two-cell-title">B2B touchpoint is effectively absent</div>
+      <div class="two-cell-body">"Rufus was designed from the ground up as a B2C shopping assistant, trained on shopping-specific data. Its B2B touchpoint is limited to providing sellers with advertising placement and exposure opportunities." — the demand signal does not reach sellers.</div>
+    </div>
+  </div>
+</section>
+
+<!-- A3 AMELIA B2B -->
+<section class="pt-section wrap">
+  <div class="section-head">
+    <div class="section-label">A3 — Service Scope II · B2B</div>
+    <h2 class="section-title">Amelia: Seller AI embedded<br>in Seller Central.</h2>
+    <p class="section-sub">Amelia is a persistent intelligence layer that supports commercial decision-making across every page of Seller Central — without disrupting workflow. Built on Amazon Bedrock via RAG, it pulls seller-specific data in real time.</p>
+  </div>
+  <div class="hmw-block">
+    <div class="hmw-label">AMELIA — AMAZON'S DEFINITION OF VALUE</div>
+    <div class="hmw-text">Action Autonomy [2026] → [2030]</div>
+    <div class="opp-dims">
+      <div class="opp-dim">
+        <div class="opp-dim-title">Rapid Intelligence</div>
+        <div class="opp-dim-body">Accurate answers on policy compliance and seasonal prep without navigating multiple resources — reducing seller decision latency.</div>
+      </div>
+      <div class="opp-dim">
+        <div class="opp-dim-title">Metric Visibility</div>
+        <div class="opp-dim-body">Sales figures, units sold, website traffic, year-over-year comparisons at individual product level — real-time operational clarity.</div>
+      </div>
+      <div class="opp-dim">
+        <div class="opp-dim-title">Continuous Accessibility</div>
+        <div class="opp-dim-body">Available across all pages of Seller Central at any time — a persistent assistant, not a tool you navigate to.</div>
+      </div>
+    </div>
+  </div>
+  <div class="branch-grid">
+    <div class="branch-cell">
+      <div class="branch-label">BRANCH 01</div>
+      <div class="branch-name">Analytics</div>
+      <div class="branch-sub">Accelerates data-driven decisions and enables early anomaly detection. Improves operational efficiency across all seller tiers.</div>
+      <div class="branch-steps">
+        <div class="branch-step">
+          <div class="branch-step-num">01</div>
+          <div><div class="branch-step-title">Sales Analytics</div><div class="branch-step-text">Ingests revenue and orders, detects trends → Ingest → Aggregate → Detect → Correlate → Emit</div></div>
+        </div>
+        <div class="branch-step">
+          <div class="branch-step-num">02</div>
+          <div><div class="branch-step-title">Performance Metrics</div><div class="branch-step-text">Calculates KPIs, benchmarks against industry → Collect → Calculate → Benchmark → Project → Emit</div></div>
+        </div>
+        <div class="branch-step">
+          <div class="branch-step-num">03</div>
+          <div><div class="branch-step-title">Business Intelligence</div><div class="branch-step-text">Generates insights, detects anomalies, forecasts demand → Analyze → Predict → Segment → Visualize → Render</div></div>
+        </div>
+      </div>
+      <div class="branch-outcome">Early anomaly detection · Demand forecasting · Operational efficiency</div>
+    </div>
+    <div class="branch-cell">
+      <div class="branch-label">BRANCH 02</div>
+      <div class="branch-name">Optimization</div>
+      <div class="branch-sub">Boosts listing search rank, strengthens price competitiveness, and improves advertising ROAS across all product categories.</div>
+      <div class="branch-steps">
+        <div class="branch-step">
+          <div class="branch-step-num">01</div>
+          <div><div class="branch-step-title">Listing Optimizer</div><div class="branch-step-text">Analyzes titles/keywords/images, generates descriptions → Parse → Score → Generate → Optimize → Publish</div></div>
+        </div>
+        <div class="branch-step">
+          <div class="branch-step-num">02</div>
+          <div><div class="branch-step-title">Pricing Engine</div><div class="branch-step-text">Scans competitors, models elasticity → Scan → Model → Calculate → Reprice → Emit</div></div>
+        </div>
+        <div class="branch-step">
+          <div class="branch-step-num">03</div>
+          <div><div class="branch-step-title">Ad Campaign</div><div class="branch-step-text">Builds campaigns, targets audiences, optimizes bids → Target → Bid → Place → Test → Report</div></div>
+        </div>
+      </div>
+      <div class="branch-outcome">Search rank boost · Price competitiveness · Advertising ROAS improvement</div>
+    </div>
+    <div class="branch-cell">
+      <div class="branch-label">BRANCH 03</div>
+      <div class="branch-name">Operations</div>
+      <div class="branch-sub">Prevents stock-outs and overstock. Reduces CS response time and eliminates account suspension risk through proactive compliance monitoring.</div>
+      <div class="branch-steps">
+        <div class="branch-step">
+          <div class="branch-step-num">01</div>
+          <div><div class="branch-step-title">Inventory Management</div><div class="branch-step-text">Monitors stock, forecasts demand, triggers reorders → Track → Forecast → Trigger → Route → Emit</div></div>
+        </div>
+        <div class="branch-step">
+          <div class="branch-step-num">02</div>
+          <div><div class="branch-step-title">Customer Service</div><div class="branch-step-text">Classifies tickets, drafts responses, processes refunds → Classify → Draft → Resolve → Escalate → Emit</div></div>
+        </div>
+        <div class="branch-step">
+          <div class="branch-step-num">03</div>
+          <div><div class="branch-step-title">Compliance Monitor</div><div class="branch-step-text">Scans policies, detects violations, drafts appeals → Scan → Detect → Score → Appeal → Report</div></div>
+        </div>
+      </div>
+      <div class="branch-outcome">No stock-outs · Faster CS response · Zero suspension risk</div>
+    </div>
+  </div>
+  <div class="two-grid" style="margin-top:clamp(40px,5vw,80px);">
+    <div class="two-cell">
+      <div class="two-cell-tag">ECOSYSTEM CONNECTIONS</div>
+      <div class="two-cell-title">Designed to eventually act autonomously</div>
+      <div class="two-cell-body">Amelia connects with FBA, Seller Central, Rufus, and Q — designed to eventually act autonomously on inventory, pricing, and account-level operations. Autonomous Management via Data Exchange Circulation is the stated 2030 direction.</div>
+    </div>
+    <div class="two-cell">
+      <div class="two-cell-tag">STRUCTURAL LIMIT</div>
+      <div class="two-cell-title">No confirmed data integration with Rufus</div>
+      <div class="two-cell-body">"Amelia and Rufus were launched as separate tools, and no direct data integration between the two has been confirmed. This suggests that buyer demand signals may not be circulated back to sellers." — the core gap that Rufus-Amelia 2.0 addresses.</div>
+    </div>
+  </div>
+</section>
+
+<!-- A4 STRATEGIC FORESIGHT -->
+<section class="pt-section wrap">
+  <div class="section-head">
+    <div class="section-label">A4 — Strategic Foresight</div>
+    <h2 class="section-title">The intelligence gap between<br>Rufus and Amelia.</h2>
+    <p class="section-sub">Rufus and Amelia both embed AI assistance inside a system where Amazon is simultaneously the platform, the competitor, and the beneficiary. The data from each circulates independently — not in a shared loop.</p>
+  </div>
+  <div class="two-grid">
+    <div class="two-cell">
+      <div class="two-cell-tag"><span class="two-cell-badge badge-pos">STRONG SIGNAL</span></div>
+      <div class="two-cell-title">Service Connectivity — Rufus ↔ Amelia</div>
+      <div class="two-cell-body">"Bridging the intelligence gap between Rufus AI and Amelia AI presents a compelling business case and a clear strategic imperative for Amazon's next phase of growth. Bridging these two systems should be a near-term strategic goal."</div>
+    </div>
+    <div class="two-cell">
+      <div class="two-cell-tag"><span class="two-cell-badge badge-neg">WEAK SIGNAL</span></div>
+      <div class="two-cell-title">Value Mapping Risk — Structural Undermining</div>
+      <div class="two-cell-body">"Rufus structurally undermines Amazon's own revenue model: by optimizing for purchase intent, it systematically erodes the browse-and-discover behavior responsible for approximately 20% of e-commerce sales — the unplanned purchases."</div>
+    </div>
+  </div>
+  <div class="hmw-block">
+    <div class="hmw-label">VALUE DEFINITION — THE CORE TENSION</div>
+    <div class="hmw-text">"Amazon is using AI to capture the value that third parties once created on its platform. But in doing so, it is undermining the network effects and participant incentives that gave the platform its value to begin with."</div>
+    <div class="opp-dims">
+      <div class="opp-dim">
+        <div class="opp-dim-title">Rufus Risk</div>
+        <div class="opp-dim-body">By optimizing for purchase intent, Rufus erodes unplanned purchase behavior responsible for ~20% of e-commerce sales. Optimizing for conversion may cannibalize discovery.</div>
+      </div>
+      <div class="opp-dim">
+        <div class="opp-dim-title">Amelia Risk</div>
+        <div class="opp-dim-body">"Amelia risks becoming not a tool that empowers sellers, but a tool that enables Amazon to replace them." Once sellers recognize this dynamic, platform migration accelerates.</div>
+      </div>
+      <div class="opp-dim">
+        <div class="opp-dim-title">The Opportunity</div>
+        <div class="opp-dim-body">AI Layer Connectivity → Proactive Decision Making. A structure where sellers achieve growth outcomes only attainable through Amazon's platform — not despite it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- A5 MISSION -->
+<section class="pt-section wrap">
+  <div class="section-head">
+    <div class="section-label">A5 — Mission</div>
+    <h2 class="section-title">Synchronizing Consumer Intent<br>with Operational Intelligence.</h2>
+    <p class="section-sub">A real-time feedback loop between Rufus (B2C) and Amelia (B2B) — eliminating information silos and maximizing fulfillment efficiency before a single unit is manufactured.</p>
+  </div>
+  <div class="hmw-block">
+    <div class="hmw-label">MISSION STATEMENT — RUFUS-AMELIA 2.0</div>
+    <div class="hmw-text">"How can we convert strong demand signals into commercial opportunities — before the product even exists?"</div>
+  </div>
+  <div class="shift-block">
+    <div class="shift-label">PARADIGM SHIFT</div>
+    <table class="shift-table">
+      <thead><tr><th>Era</th><th>Model</th><th>Logic</th></tr></thead>
+      <tbody>
+        <tr><td>Past</td><td>Shopping Search Platform</td><td>Users search for products that already exist. Supply precedes demand.</td></tr>
+        <tr><td>Present</td><td>AI-Powered Shopping</td><td>AI personalizes and predicts from existing catalog. Demand is validated retroactively.</td></tr>
+        <tr><td>Preferred Future</td><td>Prospective Commerce</td><td>AI captures intent before purchase. Demand is validated before production begins. Prediction → Manifestation.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="three-grid">
+    <div class="three-cell">
+      <div class="three-cell-tag">PILLAR 01</div>
+      <div class="three-cell-title">Intent Aggregation</div>
+      <div class="three-cell-body">Synthesizing fragmented "Future Concepts" from Rufus interactions into unified "Demand Nodes" for manufacturers. Unstructured behavioral signals become structured commercial intelligence.</div>
+    </div>
+    <div class="three-cell">
+      <div class="three-cell-tag">PILLAR 02</div>
+      <div class="three-cell-title">Privacy-First Data Silo</div>
+      <div class="three-cell-body">Protecting user identity while providing high-fidelity intent signals to suppliers via Amelia B2B. Users consent to demand aggregation without exposing individual identity to external manufacturers.</div>
+    </div>
+    <div class="three-cell">
+      <div class="three-cell-tag">PILLAR 03</div>
+      <div class="three-cell-title">Real-time Predictive Loop</div>
+      <div class="three-cell-body">Direct feedback where user "Reservations" immediately update production dashboards. Amelia converts Rufus intent signals into seller inventory and pricing decisions in real time.</div>
+    </div>
+  </div>
+</section>
+
+<!-- A6 SOLUTION -->
+<section class="pt-section wrap">
+  <div class="section-head">
+    <div class="section-label">A6 — Solution Proposal</div>
+    <h2 class="section-title">Future Fulfillment:<br>Validating demand for suppliers.</h2>
+    <p class="section-sub">Rufus generates virtual product thumbnails based on user Intent Signals. Users reserve future concepts. Amelia converts those reservations into verified demand data for suppliers — before any production begins.</p>
+  </div>
+  <div class="flow-row">
+    <div class="flow-cell">
+      <div class="flow-num">01</div>
+      <div class="flow-title">Amelia Generates Virtual Product</div>
+      <div class="flow-body">AI generates virtual thumbnails of potential products based on user intent signals captured by Rufus</div>
+    </div>
+    <div class="flow-cell">
+      <div class="flow-num">02</div>
+      <div class="flow-title">User Places Reservation</div>
+      <div class="flow-body">Users "Reserve" or "Queue" for future concepts — gaining priority purchase rights when physical product launches</div>
+    </div>
+    <div class="flow-cell">
+      <div class="flow-num">03</div>
+      <div class="flow-title">Amazon Aggregates Demand Data</div>
+      <div class="flow-body">Rufus reservation data funnels into Amelia — converting fragmented intent into verified, quantified demand nodes</div>
+    </div>
+    <div class="flow-cell">
+      <div class="flow-num">04</div>
+      <div class="flow-title">Seller Receives Data &amp; Decides</div>
+      <div class="flow-body">Suppliers verify what users actually want before starting production — risk-free demand validation through the Amelia B2B layer</div>
+    </div>
+    <div class="flow-cell">
+      <div class="flow-num">05</div>
+      <div class="flow-title">Production Manufactures</div>
+      <div class="flow-body">Suppliers produce only verified "Future Products" — zero speculative manufacturing, zero inventory waste at origin</div>
+    </div>
+    <div class="flow-cell">
+      <div class="flow-num">06</div>
+      <div class="flow-title">Fulfillment Delivers &amp; Settles</div>
+      <div class="flow-body">Rufus directs pre-interested users to final checkout — conversion is guaranteed, not hoped for</div>
+    </div>
+  </div>
+  <div class="shift-block" style="margin-top:clamp(48px,6vw,96px);">
+    <div class="shift-label">COMPARATIVE VALUE ANALYSIS — PROJECTED VALUE SHIFT</div>
+    <table class="shift-table">
+      <thead><tr><th>Dimension</th><th>Current Model</th><th>Future Fulfillment</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue Model</td><td>Commission / Advertising</td><td>Data PaaS / Reservation Fees</td></tr>
+        <tr><td>Risk Profile</td><td>Reactive — High Inventory Risk</td><td>Predictive / Validation — Zero Risk</td></tr>
+        <tr><td>Consumer Action</td><td>Search &amp; Buy</td><td>Reserve &amp; Co-create</td></tr>
+        <tr><td>Amazon's Role</td><td>Retailer / Marketplace</td><td>Predictive Intelligence Node</td></tr>
+        <tr><td>Manufacturer Relationship</td><td>Receives purchase orders post-production</td><td>Receives verified demand data pre-production</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- A7 KPIs -->
+<section class="pt-section wrap">
+  <div class="section-head">
+    <div class="section-label">A7 — KPI Framework</div>
+    <h2 class="section-title">Measuring the<br>Verified Demand Engine.</h2>
+    <p class="section-sub">Three measurement tiers govern the Rufus-Amelia 2.0 system — from upstream AI recommendation quality through fulfillment performance to the integrity of demand data supplied to manufacturers.</p>
+  </div>
+  <div class="three-grid">
+    <div class="three-cell">
+      <div class="three-cell-tag">KPI LAYER I — UPSTREAM</div>
+      <div class="three-cell-title">Intent Signal</div>
+      <div class="three-cell-sub">AI Recommendation Quality</div>
+      <div class="three-cell-body">"Measures the feasibility and accuracy of virtual products suggested by Amelia. This is the upstream layer that determines the validity of all downstream KPIs."</div>
+      <div class="three-cell-items">
+        <div class="three-cell-item">Reservation Conversion Rate (RCR)</div>
+        <div class="three-cell-item">Conversion Velocity (CV) — time from intent to purchase</div>
+        <div class="three-cell-item">Proactive Relevance Score (PRS)</div>
+        <div class="three-cell-item">Hyper-Personalization Depth (cross-category accuracy)</div>
+      </div>
+    </div>
+    <div class="three-cell">
+      <div class="three-cell-tag">KPI LAYER II — MID-STREAM</div>
+      <div class="three-cell-title">Efficiency Signal</div>
+      <div class="three-cell-sub">Reservation to Fulfillment</div>
+      <div class="three-cell-body">"Tracks fulfillment performance from the moment a seller accepts a reservation through actual production and delivery. This layer has the most direct impact on user experience."</div>
+      <div class="three-cell-items">
+        <div class="three-cell-item">Inventory Waste Reduction Rate</div>
+        <div class="three-cell-item">Order Fulfillment Rate (OFR)</div>
+        <div class="three-cell-item">74.2% Engagement Velocity (Interaction)</div>
+        <div class="three-cell-item">Seller commitment to verified demand nodes</div>
+      </div>
+    </div>
+    <div class="three-cell">
+      <div class="three-cell-tag">KPI LAYER III — DOWNSTREAM</div>
+      <div class="three-cell-title">Value Signal</div>
+      <div class="three-cell-sub">Demand Data Accuracy</div>
+      <div class="three-cell-body">"Governs the quality of demand data Amazon supplies to sellers and manufacturers. Because this data is provided as a paid B2B product, SLA-based accountability applies."</div>
+      <div class="three-cell-items">
+        <div class="three-cell-item">Data-as-a-Service (PaaS) Yield</div>
+        <div class="three-cell-item">85.4% Data Utilization Rate</div>
+        <div class="three-cell-item">Zero-Waste Supply-Chain Target</div>
+        <div class="three-cell-item">External manufacturer R&amp;D cost reduction</div>
+      </div>
+    </div>
+  </div>
+  <div class="hmw-block">
+    <div class="hmw-label">SYSTEM LOGIC</div>
+    <div class="hmw-text">"Rufus-Amelia 2.0 breaks the foundational assumption of traditional e-commerce: that a product already exists. In this model, AI generates demand first — then production follows."</div>
+    <div class="opp-dims">
+      <div class="opp-dim">
+        <div class="opp-dim-title">1,250K Raw Intent Signals</div>
+        <div class="opp-dim-body">Discovery — capturing unstructured behavioral signals across Amazon's entire ecosystem</div>
+      </div>
+      <div class="opp-dim">
+        <div class="opp-dim-title">74.2% Engagement Velocity</div>
+        <div class="opp-dim-body">Interaction — Rufus 2.0 validates intent via virtual prototyping, moving users from "want" to "verify"</div>
+      </div>
+      <div class="opp-dim">
+        <div class="opp-dim-title">19.5% Verified Fulfillment</div>
+        <div class="opp-dim-body">Conversion — locking in market demand through future queue commitments, then executing zero-waste production</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- A8 IMPACT -->
+<section class="pt-section wrap">
+  <div class="section-head">
+    <div class="section-label">A8 — Impact</div>
+    <h2 class="section-title">Who benefits when the<br>model is applied.</h2>
+    <p class="section-sub">Rufus-Amelia 2.0 redistributes value across three stakeholder groups — shifting benefit from reactive retail intermediaries to users who co-create, sellers who validate, and logistics partners who plan with certainty.</p>
+  </div>
+  <div class="three-grid">
+    <div class="three-cell">
+      <div class="three-cell-tag">GROUP I — B2C</div>
+      <div class="three-cell-title">Customer</div>
+      <div class="three-cell-items">
+        <div class="three-cell-item">Elimination of Search Fatigue — dynamic comparison charts replace hundreds of reviews</div>
+        <div class="three-cell-item">Direct Future Co-creation — users become active "Future Concept" reservists with priority purchase rights</div>
+        <div class="three-cell-item">Anticipatory Fulfillment — Rufus predicts re-orders from Prime Video, Kindle, and purchase history before users search</div>
+      </div>
+    </div>
+    <div class="three-cell">
+      <div class="three-cell-tag">GROUP II — B2B</div>
+      <div class="three-cell-title">Corporation &amp; Platform</div>
+      <div class="three-cell-items">
+        <div class="three-cell-item">Inventory Risk Neutralization — "Demand-Pull" model eliminates speculative manufacturing at source</div>
+        <div class="three-cell-item">New Revenue via Data-as-a-Service — Amazon monetizes "Verified Intent Data" as industry benchmark</div>
+        <div class="three-cell-item">Global Supply Chain Sync — real-time feedback loops between Rufus (B2C) and Amelia (B2B) maximize efficiency</div>
+      </div>
+    </div>
+    <div class="three-cell">
+      <div class="three-cell-tag">GROUP III — POTENTIAL</div>
+      <div class="three-cell-title">External Stakeholders</div>
+      <div class="three-cell-items">
+        <div class="three-cell-item">Logistics Partners — pre-emptive resource allocation through 100% visibility of future demand signals</div>
+        <div class="three-cell-item">Investors — enterprise valuation redefined by structural removal of inventory liabilities</div>
+        <div class="three-cell-item">Global Manufacturers — R&amp;D sunk costs reduced by validating virtual prototypes before physical production</div>
+      </div>
+    </div>
+  </div>
+  <div class="scenario-grid">
+    <div class="scenario">
+      <div class="scenario-tag">SCENARIO A — OPTIMISTIC</div>
+      <div class="scenario-title">Best Case: Demand-Driven Ecosystem</div>
+      <div class="scenario-body">Consumers signal intent through reservation. Sellers reduce inventory risk through real demand confirmation. Amazon evolves into a co-designed, demand-driven ecosystem where production is a response to certainty — not a bet on probability.</div>
+    </div>
+    <div class="scenario">
+      <div class="scenario-tag">SCENARIO B — REALISTIC</div>
+      <div class="scenario-title">Base Case: Selective Adoption</div>
+      <div class="scenario-body">Reservation operates within specific verticals. SMEs adopt faster than large brands. Gradual expansion of AI-based demand validation across categories — the model proves itself in niche markets before scaling to the core catalog.</div>
+    </div>
+    <div class="scenario">
+      <div class="scenario-tag">SCENARIO C — CRITICAL</div>
+      <div class="scenario-title">Worst Case: Signal Distortion</div>
+      <div class="scenario-body">Reservations may not convert to purchases. Urgency-driven substitutions affect data accuracy. Speculative behaviors distort demand signals — the same behavioral biases that create overstock in current models may contaminate intent data in the new one.</div>
+    </div>
+  </div>
+</section>
+
+<!-- A9 CONCLUSION -->
+<section class="pt-section wrap">
+  <div class="section-head">
+    <div class="section-label">A9 — Conclusion</div>
+    <h2 class="section-title">Beyond prediction:<br>Prospective commerce.</h2>
+  </div>
+  <div class="conclusion-block">
+    <div class="conclusion-quote">"By validating absolute demand through Rufus 2.0 before a single unit is manufactured, Amazon will lead the global market into a new era of proactive commerce — we no longer merely move inventory; we synchronize human intent with manufacturing to eliminate the structural risk of physical products."</div>
+    <div class="conclusion-attr">Audit Report 2 Conclusion · Group 14 · GDES-3081-501 · March 2, 2026</div>
+  </div>
+  <div class="three-grid" style="margin-top:clamp(40px,5vw,80px);">
+    <div class="three-cell">
+      <div class="three-cell-tag">CRITICAL LIMITATION 01</div>
+      <div class="three-cell-title">Absence of Empirical Validation</div>
+      <div class="three-cell-body">The current project is based on high-level strategic estimation — limited by the absence of diverse, real-world use case validations. The model assumes behavioral intent signals translate reliably into purchase commitments.</div>
+    </div>
+    <div class="three-cell">
+      <div class="three-cell-tag">CRITICAL LIMITATION 02</div>
+      <div class="three-cell-title">AI Autonomy Governance</div>
+      <div class="three-cell-body">Clear ethical and operational boundaries for AI autonomy remain a challenge. The gap between "Predicted Intent" and "Actual Purchase Commitment" must be governed by transparent frameworks — not closed by assumption.</div>
+    </div>
+    <div class="three-cell">
+      <div class="three-cell-tag">CRITICAL LIMITATION 03</div>
+      <div class="three-cell-title">Post-Fulfillment Transparency</div>
+      <div class="three-cell-body">For highly customized or niche products, designing standardized post-purchase maintenance (A/S) guidelines is complex. The model must account for what happens when demand-validated products fail to meet user expectations.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     PART 1 — Design Audit Report 1 (SECOND)
+     Redesigning Convenience: A Social Responsibility
+     ═══════════════════════════════════════════ -->
+<section id="report1" class="report-section">
+  <header class="report-header wrap">
+    <div class="report-label">Design Management · Report 1</div>
+    <h2 class="report-name">Redesigning Convenience:<br>A Social Responsibility</h2>
+    <div class="tagline-row">
+      <p class="report-tagline">Amazon Design Audit &nbsp;·&nbsp; <a href="#report2" class="scroll-link">← Report 2</a></p>
+      <dl class="hero-team hero-team-inline">
+        <dt>Team</dt>
+        <div class="hero-team-list">
+          <div class="hero-team-member"><span>Michael Joongmin Park</span><span class="hero-team-role">Team Lead, Data Analyst</span></div>
+          <div class="hero-team-member"><span>Jaehong Hwang</span><span class="hero-team-role">Research</span></div>
+          <div class="hero-team-member"><span>Elsie Jang</span><span class="hero-team-role">Research</span></div>
+        </div>
+      </dl>
+    </div>
+    <dl class="report-meta">
+      <div class="pair"><dt>Year</dt><dd>2026 / Feb</dd></div>
+      <div class="pair"><dt>Type</dt><dd>Design Management, Audit</dd></div>
+      <div class="pair"><dt>Duration</dt><dd>2 Weeks</dd></div>
+      <div class="pair"><dt>Course</dt><dd>GDES-3081-501</dd></div>
+      <div class="pair"><dt>Status</dt><dd class="status-live"><span class="status-dot"></span>Online · Published via GitHub</dd></div>
+    </dl>
+  </header>
+
+  <section class="project-section wrap">
+    <div class="project-stage">
+      <video src="./amazonrufusamelia2.mp4" autoplay loop muted playsinline webkit-playsinline preload="auto"
+        style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+    </div>
+  </section>
+
+  <section class="kpi-section wrap">
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-num">37.6%</div>
+        <div class="kpi-label">US e-commerce market share — $576.6B brand value (2025)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-num">30%</div>
+        <div class="kpi-label">Global cloud infrastructure market share — AWS leads Azure (20%) &amp; Google (13%)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-num">399M</div>
+        <div class="kpi-label">OTT video users worldwide — 53%+ global penetration rate (2025)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 INTRODUCTION -->
+  <section class="pt-section wrap">
+    <div class="section-head">
+      <div class="section-label">01 — Introduction</div>
+      <h2 class="section-title">Amazon is not simply<br>an online retailer.</h2>
+      <p class="section-sub">Four everyday questions reveal the depth and reach of Amazon's infrastructure — shaping how products are found, delivered, stored, and watched.</p>
+    </div>
+    <div class="intro-questions">
+      <div class="intro-q">
+        <div class="intro-q-num">Question I</div>
+        <div>
+          <div class="intro-q-text">When you need something in your daily life, where do you go first?</div>
+          <p class="intro-q-body">Amazon's e-commerce platform has become the default starting point for product discovery — not a search engine, not a store, but a demand-shaping system that anticipates what you need before you know you need it.</p>
+        </div>
+      </div>
+      <div class="intro-q">
+        <div class="intro-q-num">Question II</div>
+        <div>
+          <div class="intro-q-text">Which company delivered the package to your home?</div>
+          <p class="intro-q-body">From fulfillment centers to MK30 drones, Amazon's logistics network is rapidly becoming an autonomous last-mile infrastructure — with 500M drone packages projected annually by 2030.</p>
+        </div>
+      </div>
+      <div class="intro-q">
+        <div class="intro-q-num">Question III</div>
+        <div>
+          <div class="intro-q-text">Where can you watch the TV shows you want to see?</div>
+          <p class="intro-q-body">Prime Video is not merely a streaming platform. It is the content layer of Amazon's loyalty ecosystem — bundled with membership, powered by original IP, and now anchored by live sports and shoppable advertising.</p>
+        </div>
+      </div>
+      <div class="intro-q">
+        <div class="intro-q-num">Question IV</div>
+        <div>
+          <div class="intro-q-text">What powers the streaming behind your favorite shows?</div>
+          <p class="intro-q-body">AWS holds 30% of global cloud infrastructure — the invisible backbone beneath Netflix, Airbnb, and thousands of startups. Amazon decides not just how products reach customers, but how the entire digital economy is built and run.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 SERVICE OVERVIEW -->
+  <section class="pt-section wrap">
+    <div class="section-head">
+      <div class="section-label">02 — Core Services</div>
+      <h2 class="section-title">Three layers.<br>One ecosystem.</h2>
+      <p class="section-sub">Amazon's total service architecture spans commerce, cloud, and content — each reinforcing the others, each shaping behavior at a systemic level.</p>
+    </div>
+    <div class="three-grid">
+      <div class="three-cell">
+        <div class="three-cell-tag">SERVICE COMPONENT I</div>
+        <div class="three-cell-stat">82%</div>
+        <div class="three-cell-title">E-Commerce</div>
+        <div class="three-cell-sub">of total Amazon revenue</div>
+        <div class="three-cell-body">B2C marketplace, third-party seller services, fulfillment logistics, and advertising. 62% of unit sales from third-party sellers.</div>
+        <div class="three-cell-items">
+          <div class="three-cell-item">Online + Physical Stores ~40%</div>
+          <div class="three-cell-item">Third-Party Seller Services ~23%</div>
+          <div class="three-cell-item">Advertising Services ~9%</div>
+        </div>
+      </div>
+      <div class="three-cell">
+        <div class="three-cell-tag">SERVICE COMPONENT II</div>
+        <div class="three-cell-stat">18%</div>
+        <div class="three-cell-title">AWS Cloud Computing</div>
+        <div class="three-cell-sub">of total Amazon revenue</div>
+        <div class="three-cell-body">200+ fully managed cloud services. Launched in 2006, AWS holds a 4–5 year head start over Azure and Google. 90%+ of Fortune 100 companies use AWS Partner solutions.</div>
+        <div class="three-cell-items">
+          <div class="three-cell-item">Compute ~40%</div>
+          <div class="three-cell-item">Storage ~25%</div>
+          <div class="three-cell-item">Database &amp; AI ~20%</div>
+        </div>
+      </div>
+      <div class="three-cell">
+        <div class="three-cell-tag">SERVICE COMPONENT III</div>
+        <div class="three-cell-stat">6%</div>
+        <div class="three-cell-title">Prime Video Streaming</div>
+        <div class="three-cell-sub">of total Amazon revenue</div>
+        <div class="three-cell-body">Global OTT platform competing with Netflix and Disney+. 315M global users (2025). Differentiated by Prime bundle, Amazon devices, and e-commerce data integration.</div>
+        <div class="three-cell-items">
+          <div class="three-cell-item">Prime Membership Subscription ~30%</div>
+          <div class="three-cell-item">Prime Video Advertisement ~5%</div>
+          <div class="three-cell-item">Licensing &amp; Content ~1%</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 E-COMMERCE -->
+  <section class="pt-section wrap">
+    <div class="section-head">
+      <div class="section-label">03 — Service Component I</div>
+      <h2 class="section-title">E-Commerce:<br>Convenience as infrastructure.</h2>
+      <p class="section-sub">Amazon's core value in e-commerce is not speed — it is the elimination of friction. Every design decision, from one-click checkout to predictive restocking, is built to make convenience feel inevitable.</p>
+    </div>
+    <div class="trend-stats">
+      <div class="trend-stat">
+        <div class="trend-num">37.6%</div>
+        <div class="trend-desc">US e-commerce market share — an unmatched lead built on fulfillment capability and digital ecosystem lock-in</div>
+        <div class="trend-source">S&amp;P Global / Statista 2025</div>
+      </div>
+      <div class="trend-stat">
+        <div class="trend-num">62%</div>
+        <div class="trend-desc">of Amazon's unit sales come from third-party sellers — a marketplace model that externalizes inventory risk while capturing advertising revenue</div>
+        <div class="trend-source">Amazon Annual Report 2024</div>
+      </div>
+      <div class="trend-stat">
+        <div class="trend-num">$30.4B</div>
+        <div class="trend-desc">Net income in 2024 — driven by fulfillment scale, Prime loyalty, and AI-powered demand shaping</div>
+        <div class="trend-source">Amazon Annual Report 2024</div>
+      </div>
+    </div>
+    <div class="three-grid" style="margin-top:clamp(40px,5vw,80px);">
+      <div class="three-cell">
+        <div class="three-cell-tag">CORE VALUE</div>
+        <div class="three-cell-title">Convenience</div>
+        <div class="three-cell-body">One-click flows, unified account and payment systems, predictable delivery windows. The e-commerce ecosystem is a frictionless machine connecting sellers, fulfillment, and data — reinforced by Prime loyalty.</div>
+      </div>
+      <div class="three-cell">
+        <div class="three-cell-tag">CORE VALUE</div>
+        <div class="three-cell-title">Personalization</div>
+        <div class="three-cell-body">Recommendation and ranking systems shift the shopping experience from search to guided discovery. Rufus AI learns from Kindle, Prime Video, and Audible to build predictive intent profiles.</div>
+      </div>
+      <div class="three-cell">
+        <div class="three-cell-tag">CORE VALUE</div>
+        <div class="three-cell-title">Trust &amp; Reliability</div>
+        <div class="three-cell-body">Fulfillment standards and returns infrastructure lower perceived risk. Amazon's delivery network — including MK30 drones with 12km range and 60-minute delivery windows — redefines the reliability benchmark.</div>
+      </div>
+    </div>
+    <div class="roadmap-grid">
+      <div class="horizon">
+        <div class="horizon-tag">2026</div>
+        <div class="horizon-title">Global Expansion &amp; AI</div>
+        <div class="horizon-range">Near-term horizon</div>
+        <div class="horizon-items">
+          <div class="horizon-item">UK Launch Darlington + 20+ Leo satellite launches</div>
+          <div class="horizon-item">MK30 Drone — 12km range, Prime Air expansion</div>
+          <div class="horizon-item">Rufus AI: Account Memory, AutoBuy Launch</div>
+          <div class="horizon-item">Kindle/Audible integration with shopping data</div>
+        </div>
+      </div>
+      <div class="horizon">
+        <div class="horizon-tag">2027–2028</div>
+        <div class="horizon-title">Scale &amp; Revenue Impact</div>
+        <div class="horizon-range">Mid-term horizon</div>
+        <div class="horizon-items">
+          <div class="horizon-item">Rufus AI — $2B operating income projected</div>
+          <div class="horizon-item">4.44% GMV increase from AI-driven discovery</div>
+          <div class="horizon-item">30+ satellite launches, expanded Ad revenue</div>
+          <div class="horizon-item">60-minute delivery in major metro areas</div>
+        </div>
+      </div>
+      <div class="horizon">
+        <div class="horizon-tag">2030</div>
+        <div class="horizon-title">Autonomous Logistics</div>
+        <div class="horizon-range">Long-term horizon</div>
+        <div class="horizon-items">
+          <div class="horizon-item">500M drone packages per year</div>
+          <div class="horizon-item">100K electric delivery vans deployed</div>
+          <div class="horizon-item">50% food waste reduction via circular systems</div>
+          <div class="horizon-item">CapEx +60% infrastructure investment</div>
+        </div>
+      </div>
+    </div>
+    <div class="two-grid">
+      <div class="two-cell">
+        <div class="two-cell-tag"><span class="two-cell-badge badge-pos">SDG POSITIVE</span></div>
+        <div class="two-cell-title">SDG 8 · Decent Work and Economic Growth</div>
+        <div class="two-cell-body">Creates income opportunities across a broad ecosystem of third-party sellers, fulfillment workers, and last-mile delivery partners. Amazon's marketplace provides global market access for small businesses that previously lacked reach.</div>
+      </div>
+      <div class="two-cell">
+        <div class="two-cell-tag"><span class="two-cell-badge badge-neg">SDG NEGATIVE</span></div>
+        <div class="two-cell-title">SDG 12 · Responsible Consumption</div>
+        <div class="two-cell-body">Convenience-driven design — "Buy Now," default recommendations, low-friction returns — structurally incentivizes overconsumption. Easy returns increase packaging waste and create non-circular logistics outcomes at scale.</div>
+      </div>
+      <div class="two-cell">
+        <div class="two-cell-tag"><span class="two-cell-badge badge-pos">SDG POSITIVE</span></div>
+        <div class="two-cell-title">SDG 9 · Industry, Innovation &amp; Infrastructure</div>
+        <div class="two-cell-body">Strengthens digital commerce and logistics infrastructure globally. Prime Air drone delivery and autonomous fulfillment represent genuine infrastructure innovation that reduces last-mile costs across the sector.</div>
+      </div>
+      <div class="two-cell">
+        <div class="two-cell-tag"><span class="two-cell-badge badge-neg">SDG NEGATIVE</span></div>
+        <div class="two-cell-title">SDG 13 · Climate Action</div>
+        <div class="two-cell-body">Speed-driven shipping and high delivery frequency generate significant transport emissions. The demand-shaping machine that drives purchase frequency is also a machine that drives carbon output per customer per year.</div>
+      </div>
+    </div>
+    <div class="conclusion-block">
+      <div class="conclusion-quote">"E-commerce turns convenience into a system — shaping what we buy, how we buy, and the hidden costs behind each click."</div>
+      <div class="conclusion-attr">Service Component I Conclusion · Design Audit Report 1</div>
+    </div>
+  </section>
+
+  <!-- 04 AWS -->
+  <section class="pt-section wrap">
+    <div class="section-head">
+      <div class="section-label">04 — Service Component II</div>
+      <h2 class="section-title">AWS: From cloud provider<br>to agent builder.</h2>
+      <p class="section-sub">AWS's core value is not storage or compute — it is stability. 200+ managed services, enterprise-grade SLAs, and a 4–5 year ecosystem head start that competitors have yet to close.</p>
+    </div>
+    <div class="trend-stats">
+      <div class="trend-stat">
+        <div class="trend-num">30%</div>
+        <div class="trend-desc">Global cloud infrastructure market share in Q3 2025 — leading Azure at 20% and Google at 13%</div>
+        <div class="trend-source">Synergy Research Group 2025</div>
+      </div>
+      <div class="trend-stat">
+        <div class="trend-num">90%+</div>
+        <div class="trend-desc">of Fortune 100 companies utilize AWS Partner solutions — the deepest enterprise penetration in cloud</div>
+        <div class="trend-source">Amazon Web Services 2025</div>
+      </div>
+      <div class="trend-stat">
+        <div class="trend-num">$200B</div>
+        <div class="trend-desc">CapEx investment planned for 2026 — a +60% increase — powering AI Factories, European Sovereign Cloud, and SMR nuclear energy</div>
+        <div class="trend-source">Amazon Annual Report 2025</div>
+      </div>
+    </div>
+    <div class="roadmap-grid">
+      <div class="horizon">
+        <div class="horizon-tag">2025–2026</div>
+        <div class="horizon-title">AI Chips &amp; Agents</div>
+        <div class="horizon-range">Near-term horizon</div>
+        <div class="horizon-items">
+          <div class="horizon-item">Graviton5, Trainium3 UltraServers, Trainium2</div>
+          <div class="horizon-item">Nova 2 Family, Nova Forge &amp; Nova Act</div>
+          <div class="horizon-item">Bedrock AgentCore &amp; Kiro AI IDE</div>
+          <div class="horizon-item">European Sovereign Cloud launch (Germany)</div>
+        </div>
+      </div>
+      <div class="horizon">
+        <div class="horizon-tag">2027–2029</div>
+        <div class="horizon-title">AI Factories at Scale</div>
+        <div class="horizon-range">Mid-term horizon</div>
+        <div class="horizon-items">
+          <div class="horizon-item">AWS AI Factories in customer data centers</div>
+          <div class="horizon-item">Nova Act, Security Agent, DevOps Agent</div>
+          <div class="horizon-item">90% of workflows automated by AI agents</div>
+          <div class="horizon-item">OpenAI / Infosys Gen AI partnerships</div>
+        </div>
+      </div>
+      <div class="horizon">
+        <div class="horizon-tag">2030–2039</div>
+        <div class="horizon-title">Sustainable Infrastructure</div>
+        <div class="horizon-range">Long-term horizon</div>
+        <div class="horizon-items">
+          <div class="horizon-item">Water Positive Goal — 621 Renewable Projects (34GW+)</div>
+          <div class="horizon-item">Small Modular Reactor (SMR) operations</div>
+          <div class="horizon-item">Powering 3.8M homes annually via X-energy</div>
+          <div class="horizon-item">Trainium4, AWS Interconnect at scale</div>
+        </div>
+      </div>
+    </div>
+    <div class="two-grid">
+      <div class="two-cell">
+        <div class="two-cell-tag"><span class="two-cell-badge badge-pos">SDG POSITIVE</span></div>
+        <div class="two-cell-title">SDG 9 · Industry, Innovation &amp; Infrastructure</div>
+        <div class="two-cell-body">Builds a sustainable global cloud ecosystem by expanding scalable infrastructure to governments, enterprises, and startups — enabling organizations to build, store, and run digital services without owning physical servers.</div>
+      </div>
+      <div class="two-cell">
+        <div class="two-cell-tag"><span class="two-cell-badge badge-neg">SDG NEGATIVE</span></div>
+        <div class="two-cell-title">SDG 10 · Reduced Inequalities</div>
+        <div class="two-cell-body">AWS dominance and complex pricing can limit access for startups and smaller organizations in developing markets. Near-monopoly dynamics create structural barriers that reinforce digital inequality rather than reducing it.</div>
+      </div>
+      <div class="two-cell">
+        <div class="two-cell-tag"><span class="two-cell-badge badge-pos">SDG POSITIVE</span></div>
+        <div class="two-cell-title">SDG 17 · Partnerships for the Goals</div>
+        <div class="two-cell-body">Builds a global digital ecosystem through government and enterprise partnerships, positioning AWS as a shared infrastructure layer for international development, research, and public-sector digitization.</div>
+      </div>
+      <div class="two-cell">
+        <div class="two-cell-tag"><span class="two-cell-badge badge-neg">SDG NEGATIVE</span></div>
+        <div class="two-cell-title">SDG 12 · Responsible Consumption</div>
+        <div class="two-cell-body">Data centers consume massive electricity and water for cooling. AWS's aggressive growth trajectory requires energy-intensive infrastructure expansion — the sustainability commitments are real but lag the consumption curve.</div>
+      </div>
+    </div>
+    <div class="conclusion-block">
+      <div class="conclusion-quote">"AWS's core value is scalable, on-demand cloud infrastructure — letting organizations build, store, and run digital services quickly without owning physical servers."</div>
+      <div class="conclusion-attr">Service Component II Conclusion · Design Audit Report 1</div>
+    </div>
+  </section>
+
+  <!-- 05 PRIME VIDEO -->
+  <section class="pt-section wrap">
+    <div class="section-head">
+      <div class="section-label">05 — Service Component III</div>
+      <h2 class="section-title">Prime Video: Sports-driven<br>commerce streaming.</h2>
+      <p class="section-sub">Prime Video is not competing for attention — it is capturing loyalty. Bundled with Prime membership, anchored by live sports, and powered by shoppable advertising, it is a commerce engine wearing a content hat.</p>
+    </div>
+    <div class="trend-stats">
+      <div class="trend-stat">
+        <div class="trend-num">315M</div>
+        <div class="trend-desc">Global Prime Video users in 2025 — projected to reach 269M global subscribers by 2029 on a paid basis</div>
+        <div class="trend-source">Amazon / Statista 2025</div>
+      </div>
+      <div class="trend-stat">
+        <div class="trend-num">$3.8B</div>
+        <div class="trend-desc">Sports investment in 2026 alone — NBA ($1.8B/yr), UFC, UEFA Champions League, NFL, and NASCAR rights</div>
+        <div class="trend-source">Variety / Nielsen 2025</div>
+      </div>
+      <div class="trend-stat">
+        <div class="trend-num">+86%</div>
+        <div class="trend-desc">Ad revenue growth — $806M in 2025, driven by AI-powered shoppable ads that leverage Amazon's first-party commerce data</div>
+        <div class="trend-source">Amazon Annual Report 2025</div>
+      </div>
+    </div>
+    <div class="two-grid">
+      <div class="two-cell">
+        <div class="two-cell-tag"><span class="two-cell-badge badge-pos">SDG POSITIVE</span></div>
+        <div class="two-cell-title">SDG 8 · Decent Work and Economic Growth</div>
+        <div class="two-cell-body">Supports monetization opportunities for studios, creators, independent filmmakers, and media partners globally. Live sports rights deals create significant economic flow through broadcast and talent ecosystems.</div>
+      </div>
+      <div class="two-cell">
+        <div class="two-cell-tag"><span class="two-cell-badge badge-neg">SDG NEGATIVE</span></div>
+        <div class="two-cell-title">SDG 3 · Good Health and Well-being</div>
+        <div class="two-cell-body">Engagement-driven design optimizes for watch time, not well-being. Prolonged viewing patterns — especially among young users — may affect attention spans, sleep quality, and digital-physical balance.</div>
+      </div>
+      <div class="two-cell">
+        <div class="two-cell-tag"><span class="two-cell-badge badge-pos">SDG POSITIVE</span></div>
+        <div class="two-cell-title">SDG 9 · Industry, Innovation &amp; Infrastructure</div>
+        <div class="two-cell-body">Expands scalable digital infrastructure for global content distribution. Prime Video's shoppable ad technology and Amazon Marketing Cloud represent genuine innovation in the convergence of content and commerce.</div>
+      </div>
+      <div class="two-cell">
+        <div class="two-cell-tag"><span class="two-cell-badge badge-neg">SDG NEGATIVE</span></div>
+        <div class="two-cell-title">SDG 12 · Responsible Consumption</div>
+        <div class="two-cell-body">Engagement-driven content algorithms can encourage excessive digital consumption. Confusion around paid add-ons and channel subscriptions creates friction that disadvantages smaller, independent content creators.</div>
+      </div>
+    </div>
+    <div class="conclusion-block">
+      <div class="conclusion-quote">"Prime Video's core value is bundled convenience — frictionless, personalized streaming inside Prime that increases loyalty and keeps users in Amazon's ecosystem."</div>
+      <div class="conclusion-attr">Service Component III Conclusion · Design Audit Report 1</div>
+    </div>
+  </section>
+
+  <!-- 06 SOLUTIONS -->
+  <section class="pt-section wrap">
+    <div class="section-head">
+      <div class="section-label">06 — Possible Solutions</div>
+      <h2 class="section-title">Where Amazon's<br>ecosystem fails.</h2>
+      <p class="section-sub">Three structural gaps remain unaddressed by growth incentives — speed, scale, and always-on engagement. Our speculative models propose how each gap could be closed.</p>
+    </div>
+    <div class="three-grid">
+      <div class="three-cell">
+        <div class="three-cell-tag">SPECULATIVE MODEL 01</div>
+        <div class="three-cell-title">Streamlined Delivery Automation</div>
+        <div class="three-cell-sub">AI-Powered Robotics for Circular Logistics and Labor Hazard Prevention</div>
+        <div class="three-cell-body">Robotics and AI transform workers from manual laborers to on-site system managers. A circular logistics model via automated packaging collection closes the waste loop at the fulfillment level.</div>
+        <div class="three-cell-items">
+          <div class="three-cell-item">AI/Logistics Operations Center (LOC)</div>
+          <div class="three-cell-item">Autonomous Fleet Operations (AFO)</div>
+          <div class="three-cell-item">Customer Delivery Experience Team (CDX)</div>
+          <div class="three-cell-item">Robotics-Driven · AI-Powered · Human-Managed</div>
+        </div>
+      </div>
+      <div class="three-cell">
+        <div class="three-cell-tag">SPECULATIVE MODEL 02</div>
+        <div class="three-cell-title">Agentic Database / Server</div>
+        <div class="three-cell-sub">An autonomous data platform that continuously adapts and optimizes for the digital business</div>
+        <div class="three-cell-body">Amazon ForesightDB — a self-tuning, self-repairing, self-evolving autonomous database that reduces human intervention while maintaining SLA accountability. Human-in-the-loop transitioning to fully AI-powered.</div>
+        <div class="three-cell-items">
+          <div class="three-cell-item">Amazon ForesightDB — Selftuning</div>
+          <div class="three-cell-item">Amazon GovernAI DB — Policy Layer</div>
+          <div class="three-cell-item">Adaptive Intelligence · Autonomous Evolution</div>
+        </div>
+      </div>
+      <div class="three-cell">
+        <div class="three-cell-tag">SPECULATIVE MODEL 03</div>
+        <div class="three-cell-title">Adaptive Streaming Subscriptions</div>
+        <div class="three-cell-sub">Agentic AI for Accessible and Adaptive Streaming</div>
+        <div class="three-cell-body">A flexible subscription model that uses AI to match subscription tiers to actual viewing behavior — reducing subscription fatigue and expanding access for underserved audiences through collective and inter-platform pooling.</div>
+        <div class="three-cell-items">
+          <div class="three-cell-item">Flexible Subscription &amp; Universal Streaming Pass</div>
+          <div class="three-cell-item">Collective Subscription &amp; Inter-platform Partnership</div>
+          <div class="three-cell-item">Community-Pooled Subscription Model</div>
+        </div>
+      </div>
+    </div>
+    <div class="hmw-block">
+      <div class="hmw-label">TRANSFORMATION DIRECTION</div>
+      <div class="hmw-text">"The brand shifts from 'fastest and cheapest' toward trusted infrastructure for responsible convenience — where convenience is delivered with accountability."</div>
+      <div class="opp-dims">
+        <div class="opp-dim">
+          <div class="opp-dim-title">Decarbonize Operations</div>
+          <div class="opp-dim-body">Clean energy, lower-carbon logistics, water sustainability commitments backed by SMR nuclear investment and 34GW+ renewable projects.</div>
+        </div>
+        <div class="opp-dim">
+          <div class="opp-dim-title">Design for Circularity</div>
+          <div class="opp-dim-body">Packaging innovation, automated returns processing, reuse infrastructure, and a closed-loop model that treats waste as a system input — not an output.</div>
+        </div>
+        <div class="opp-dim">
+          <div class="opp-dim-title">Strengthen Social Responsibility</div>
+          <div class="opp-dim-body">Labor safeguards, supplier transparency, and auditability — transitioning Amazon from platform to accountable infrastructure with measurable social outcomes.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</section>
+
+<script>
+  (function(){
+    function playAll(){
+      document.querySelectorAll('video').forEach(function(v){
+        v.muted = true;
+        v.setAttribute('playsinline','');
+        v.setAttribute('webkit-playsinline','');
+        v.play().catch(function(){});
+      });
+    }
+    playAll();
+    ['touchstart','touchend','pointerdown','click'].forEach(function(ev){
+      document.addEventListener(ev, function unlock(){
+        playAll();
+        document.removeEventListener(ev, unlock);
+      }, {once:true, passive:true});
+    });
+    document.querySelectorAll('video').forEach(function(v){
+      v.addEventListener('pause', function(){ if(!v.ended) v.play().catch(function(){}); });
+      v.addEventListener('ended', function(){ v.currentTime=0; v.play().catch(function(){}); });
+    });
+    document.addEventListener('visibilitychange', function(){
+      if(!document.hidden) playAll();
+    });
+  })();
+</script>
+</body>
+</html>
