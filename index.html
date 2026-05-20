@@ -606,12 +606,22 @@
   }
 
   /* ONGEN RADIO */
-  .ongen-work{ background:#000 !important; }
+  .ongen-work{
+    background:#000 !important;
+    -webkit-mask-image:-webkit-radial-gradient(white,black);
+    mask-image:radial-gradient(white,black);
+    transform:translateZ(0);
+  }
   .ongen-img{
     display:block; width:100%; height:100%;
+    position:relative;
   }
   .ongen-img img,
-  .ongen-img video{ width:100%; height:100%; object-fit:cover; display:block; }
+  .ongen-img video{
+    position:absolute; top:-1px; left:-1px;
+    width:calc(100% + 2px); height:calc(100% + 2px);
+    object-fit:cover; display:block;
+  }
 
   /* Resume animations when work-block enters viewport */
   .work-block.in-view .ar-bubble-shape,
@@ -708,7 +718,7 @@
       <a href="./ongenradio.html">
         <div class="work ongen-work">
           <div class="ongen-img">
-            <video src="./OnGen2026Showcase.mp4" autoplay muted loop playsinline preload="metadata"></video>
+            <video src="./ongenthumb.mp4" autoplay muted loop playsinline preload="metadata"></video>
           </div>
         </div>
         <div class="w-info">
