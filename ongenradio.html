@@ -78,9 +78,9 @@
     object-fit:cover; display:block;
     transform:scale(1.002); transform-origin:center center;
   }
-  #stage{ border-radius:200px; }
-  @media(max-width:640px){ #stage{ border-radius:50px; } }
-  #stage video{
+  .stage-pill{ border-radius:200px; clip-path:inset(0 round 200px); }
+  @media(max-width:640px){ .stage-pill{ border-radius:50px; clip-path:inset(0 round 50px); } }
+  .stage-pill video{
     top:0; left:0;
     width:100%; height:100%;
     transform:translateZ(0);
@@ -1662,7 +1662,7 @@
 </section>
 
 <section class="project-section wrap" style="padding-top:16px; padding-bottom:0;">
-  <div class="project-stage" id="stage">
+  <div class="project-stage stage-pill">
     <video src="./ongenprev4.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"></video>
   </div>
 </section>
@@ -1672,7 +1672,7 @@
 </section>
 
 <section class="project-section wrap" style="padding-top:24px; padding-bottom:0;">
-  <div class="project-stage">
+  <div class="project-stage stage-pill">
     <video src="./ongenprev5.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"></video>
   </div>
 </section>
