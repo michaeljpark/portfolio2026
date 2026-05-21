@@ -67,16 +67,16 @@
   .project-section{ padding-top:48px; padding-bottom:48px; }
   .project-stage{
     position:relative; width:100%; aspect-ratio:16/9;
-    background:#ffffff; border-radius:20px; overflow:hidden;
-    -webkit-mask-image:-webkit-radial-gradient(white,black);
-    mask-image:radial-gradient(white,black);
+    background:transparent; border-radius:20px; overflow:hidden;
+    clip-path:inset(0 round 20px);
     transform:translateZ(0);
+    isolation:isolate;
   }
   .project-stage video{
-    position:absolute; top:-1px; left:-1px;
-    width:calc(100% + 2px); height:calc(100% + 2px);
+    position:absolute; top:0; left:0;
+    width:100%; height:100%;
     object-fit:cover; display:block;
-    transform:scale(1.05); transform-origin:center center;
+    transform:scale(1.002); transform-origin:center center;
   }
   #stage{ border-radius:200px; }
   @media(max-width:640px){ #stage{ border-radius:50px; } }
