@@ -2922,46 +2922,65 @@
 <script>
 (function(){
   var frame = document.querySelector('.app-embed-frame');
-  if(!frame) return;
+  var iframe = frame && frame.querySelector('iframe[data-src]');
+  if(!frame || !iframe) return;
+
+  iframe.setAttribute('loading', 'lazy');
+  iframe.setAttribute('tabindex', '-1');
   frame.addEventListener('touchmove', function(e){ e.preventDefault(); }, { passive: false });
-})();
 
-// iframe focus → scrollIntoView 차단
-(function(){
-  var iframe = document.querySelector('.app-embed-frame iframe');
-  if(!iframe) return;
-  function lockScroll(){
-    var y = window.scrollY;
-    document.documentElement.style.overflow = 'hidden';
-    requestAnimationFrame(function(){
-      requestAnimationFrame(function(){
-        document.documentElement.style.overflow = '';
-        window.scrollTo(0, y);
-      });
-    });
+  var lastUserInput = 0;
+  function markUserInput(){ lastUserInput = performance.now(); }
+  ['wheel','touchstart','touchmove','keydown','pointerdown'].forEach(function(type){
+    window.addEventListener(type, markUserInput, { passive:true });
+  });
+
+  function preserveScrollFor(ms){
+    var x = window.pageXOffset;
+    var y = window.pageYOffset;
+    var until = performance.now() + ms;
+
+    function restoreIfNeeded(){
+      if(performance.now() - lastUserInput <= 180){
+        x = window.pageXOffset;
+        y = window.pageYOffset;
+      } else if(
+         (Math.abs(window.pageYOffset - y) > 1 || Math.abs(window.pageXOffset - x) > 1)){
+        window.scrollTo(x, y);
+      }
+      if(document.activeElement === iframe) iframe.blur();
+      if(performance.now() < until) requestAnimationFrame(restoreIfNeeded);
+    }
+
+    requestAnimationFrame(restoreIfNeeded);
   }
-  iframe.addEventListener('mousedown', lockScroll);
-  iframe.addEventListener('touchstart', lockScroll, {passive:true});
+
+  function loadEmbed(){
+    if(iframe.src) return;
+    preserveScrollFor(2200);
+    iframe.src = iframe.dataset.src;
+  }
+
+  iframe.addEventListener('load', function(){ preserveScrollFor(1200); });
+  iframe.addEventListener('mousedown', function(){ preserveScrollFor(700); });
+  iframe.addEventListener('touchstart', function(){ preserveScrollFor(700); }, { passive:true });
+
+  if('IntersectionObserver' in window){
+    var embedObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          loadEmbed();
+          embedObserver.disconnect();
+        }
+      });
+    }, { rootMargin:'600px 0px', threshold:0 });
+    embedObserver.observe(frame);
+  } else {
+    window.addEventListener('load', loadEmbed, { once:true });
+  }
 })();
 
-// iframe 내부 autofocus로 인한 자동 스크롤 방지
-// 사용자가 직접 스크롤하기 전까지 3초간 맨 위 고정
 window.addEventListener('load', function(){
-  window.scrollTo(0, 0);
-
-  var userScrolled = false;
-  function markUserScroll(){ userScrolled = true; }
-  window.addEventListener('wheel',      markUserScroll, {once:true, passive:true});
-  window.addEventListener('touchstart', markUserScroll, {once:true, passive:true});
-  window.addEventListener('keydown',    markUserScroll, {once:true});
-
-  var iframe = document.querySelector('.app-embed-frame iframe[data-src]');
-  if(iframe) iframe.src = iframe.dataset.src;
-
-  var guard = setInterval(function(){
-    if(!userScrolled && window.scrollY > 0) window.scrollTo(0, 0);
-  }, 50);
-  setTimeout(function(){ clearInterval(guard); }, 3000);
 
   // Mobile autoplay fallback (iOS Safari, Android Chrome)
   var v = document.getElementById('ongen-showcase-video');
