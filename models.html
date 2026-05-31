@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Models</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --card: #ffffff;
+    --border: #ececec;
+    --text: #1a1a1a;
+    --muted: #6b6b6b;
+    --faint: #9a9a9a;
+    --accent: #c96442;
+    --warn: #d68a2e;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 22px rgba(0,0,0,0.05);
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.45;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .stage { display: flex; flex-direction: column; gap: 11px; width: 100%; }
+  .stage, .stage * { font-weight: 400 !important; }
+
+  /* ===== marquee ===== */
+  .marquee {
+    position: relative; overflow: hidden; padding: 6px 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+  }
+  .marquee-track { display: flex; gap: 16px; width: max-content; align-items: stretch; }
+  .track-left  { animation: scroll-left 90s linear infinite; }
+  .track-right { animation: scroll-right 65s linear infinite; }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  @keyframes scroll-left  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
+  @keyframes scroll-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+  @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
+
+  /* ===== model card (2:1) ===== */
+  .card {
+    flex: none; width: 300px; aspect-ratio: 2 / 1;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 15px 17px;
+    box-shadow: var(--shadow); display: flex; flex-direction: column; overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgba(0,0,0,0.05), 0 14px 32px rgba(0,0,0,0.08); border-color: #ddd; }
+  .c-head { display: flex; align-items: center; gap: 10px; }
+  .logo { width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex: none; }
+  .logo svg { width: 20px; height: 20px; }
+  .logo img { width: 21px; height: 21px; object-fit: contain; }
+  .logo.claude { background: #fbf3f0; }
+  .logo.openai { background: #e7f8f1; }
+  .logo.gemini { background: #eef3fe; }
+  .c-title { flex: 1; min-width: 0; }
+  .c-title h2 { font-size: 15.5px; font-weight: 700; letter-spacing: -0.01em; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .c-title .tier { font-size: 11px; color: var(--faint); font-weight: 500; }
+  .badge { font-size: 9.5px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; color: var(--faint); border: 1px solid var(--border); border-radius: 999px; padding: 3px 7px; flex: none; }
+  .badge.latest { color: var(--accent); border-color: #f0d9d1; background: #fbf3f0; }
+  .desc { font-size: 11.5px; color: var(--muted); margin: 9px 0 0; }
+  .c-body { display: flex; gap: 16px; margin-top: auto; padding-top: 11px; border-top: 1px solid var(--border); }
+  .price { display: flex; gap: 14px; flex: none; }
+  .price .v { font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
+  .price .v small { font-size: 9.5px; font-weight: 600; color: var(--muted); }
+  .price .l { font-size: 9.5px; color: var(--faint); margin-top: 1px; }
+  .specs { list-style: none; margin: 0; padding: 0; flex: 1; display: grid; gap: 4px; align-content: center; }
+  .specs li { display: flex; justify-content: space-between; font-size: 11px; gap: 10px; }
+  .specs .k { color: var(--faint); }
+  .specs .val { font-weight: 600; }
+
+  /* ===== data-usage card (single icon row) ===== */
+  .u-card {
+    flex: none; width: 300px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 11px 15px;
+    box-shadow: var(--shadow); display: flex; align-items: center; gap: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .u-card:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgba(0,0,0,0.05), 0 14px 32px rgba(0,0,0,0.08); border-color: #ddd; }
+  .u-icon { width: 38px; height: 38px; border-radius: 11px; flex: none; background: #f2f2f1; color: #8a8a8a; display: flex; align-items: center; justify-content: center; }
+  .u-icon svg { width: 19px; height: 19px; }
+  .u-icon.warn { background: #fbeede; color: var(--warn); }
+  .u-main { flex: 1; min-width: 0; }
+  .u-main h3 { font-size: 13.5px; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .u-meta { display: flex; align-items: center; gap: 7px; font-size: 11px; color: var(--faint); }
+  .u-flag { font-size: 8px; font-weight: 600; color: var(--warn); background: #fbeede; border-radius: 999px; padding: 2px 6px; }
+  .u-tk { font-size: 12.5px; font-weight: 700; white-space: nowrap; flex: none; }
+  .u-tk.zero { color: var(--faint); font-weight: 600; }
+</style>
+</head>
+<body>
+  <div class="stage" id="stage"></div>
+
+<script>
+const LOGO = {
+  claude: `<img src="path147.png" alt="Claude">`,
+  openai: `<svg viewBox="0 0 24 24" fill="#10a37f"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.1419.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg>`,
+  gemini: `<img src="Google_Gemini_icon_2025.svg.webp" alt="Gemini">`
+};
+
+const ICON = {
+  check:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L19 5.5 V11 C19 15.5 15.8 18.7 12 20 C8.2 18.7 5 15.5 5 11 V5.5 Z"/><path d="M9 11.5 L11.2 13.7 L15 9.8"/></svg>`,
+  person: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L19 5.5 V11 C19 15.5 15.8 18.7 12 20 C8.2 18.7 5 15.5 5 11 V5.5 Z"/><circle cx="12" cy="10" r="2"/><path d="M8.5 15.6 C8.7 13.8 10.1 13 12 13 C13.9 13 15.3 13.8 15.5 15.6"/></svg>`,
+  minus:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L19 5.5 V11 C19 15.5 15.8 18.7 12 20 C8.2 18.7 5 15.5 5 11 V5.5 Z"/><path d="M9 11.5 H15"/></svg>`
+};
+
+const models = [
+  { brand:'claude', tier:'Opus',   name:'Claude Opus 4.8',  latest:true,  desc:"Anthropic's most capable model for reasoning and agentic coding.", in:'$5',    out:'$25',  ctx:'1M',   max:'128k', cut:'Jan 2026' },
+  { brand:'openai', tier:'GPT',    name:'GPT-5.5',          latest:true,  desc:"OpenAI's flagship model for reasoning and agentic tasks.",       in:'$5',    out:'$30',  ctx:'1M',   max:'128k', cut:'2025' },
+  { brand:'gemini', tier:'Gemini', name:'Gemini 3 Pro',     latest:true,  desc:"Google's most capable multimodal model.",                      in:'$2',    out:'$12',  ctx:'1M',   max:'64k',  cut:'2025' },
+  { brand:'claude', tier:'Sonnet', name:'Claude Sonnet 4.6',latest:true,  desc:'The best combination of speed and intelligence.',               in:'$3',    out:'$15',  ctx:'1M',   max:'64k',  cut:'Aug 2025' },
+  { brand:'openai', tier:'GPT',    name:'GPT-5.1',          latest:false, desc:'Prior flagship with strong reasoning.',                        in:'$1.25', out:'$10',  ctx:'400k', max:'128k', cut:'2025' },
+  { brand:'gemini', tier:'Gemini', name:'Gemini 3 Flash',   latest:true,  desc:'Fast, low-cost multimodal model.',                             in:'$0.50', out:'$3',   ctx:'1M',   max:'64k',  cut:'2025' },
+  { brand:'claude', tier:'Haiku',  name:'Claude Haiku 4.5', latest:true,  desc:'The fastest model with near-frontier intelligence.',           in:'$1',    out:'$5',   ctx:'200k', max:'64k',  cut:'Feb 2025' },
+  { brand:'openai', tier:'GPT',    name:'GPT-4o',           latest:false, desc:'Multimodal previous-generation model.',                        in:'$2.50', out:'$10',  ctx:'128k', max:'16k',  cut:'Oct 2023' },
+  { brand:'gemini', tier:'Gemini', name:'Gemini 2.5 Pro',   latest:false, desc:'Prior-generation long-context Pro model.',                     in:'$1.25', out:'$10',  ctx:'1M',   max:'64k',  cut:'2025' },
+  { brand:'claude', tier:'Opus',   name:'Claude Opus 4.1',  latest:false, desc:'Previous-generation top-tier reasoning model.',                in:'$15',   out:'$75',  ctx:'200k', max:'32k',  cut:'Mar 2025' },
+  { brand:'claude', tier:'Sonnet', name:'Claude Sonnet 4.5',latest:false, desc:'Prior balanced model, strong at agentic tasks.',               in:'$3',    out:'$15',  ctx:'1M',   max:'64k',  cut:'Jul 2025' },
+  { brand:'claude', tier:'Sonnet', name:'Claude 3.7 Sonnet',latest:false, desc:'The first hybrid reasoning model.',                            in:'$3',    out:'$15',  ctx:'200k', max:'64k',  cut:'Nov 2024' },
+  { brand:'claude', tier:'Haiku',  name:'Claude 3.5 Haiku', latest:false, desc:'Fast, cost-effective previous-generation Haiku.',              in:'$0.80', out:'$4',   ctx:'200k', max:'8k',   cut:'Jul 2024' },
+  { brand:'claude', tier:'Opus',   name:'Claude 3 Opus',    latest:false, desc:'Top model of the Claude 3 generation.',                        in:'$15',   out:'$75',  ctx:'200k', max:'4k',   cut:'Aug 2023' }
+];
+
+// ---- random data-usage history generator ----
+const TITLES = [
+  'Database schema migration plan', 'Healthcare compliance audit', 'Research semiconductor exports',
+  'Summarize board meeting notes', 'Generate unit test suite', 'Employee onboarding workflow',
+  'Quarterly revenue forecast', 'Customer churn analysis', 'Legal contract review',
+  'Marketing campaign brief', 'Incident postmortem report', 'Translate product docs',
+  'Refactor payment service', 'Patient triage assistant', 'Supply chain optimization',
+  'Fraud detection pipeline', 'Sentiment analysis batch', 'API rate-limit redesign',
+  'Tax filing automation', 'Insurance claim triage', 'Resume screening workflow',
+  'Code security scan', 'Clinical trial summary', 'Sales call transcription',
+  'Inventory reorder model', 'Personalized email draft', 'Knowledge base cleanup'
+];
+const REWARDS = ['+25K TK', '+50K TK', '+75K TK', '+100K TK', '+250K TK', '+500K TK', '+1M TK'];
+const hex = n => Array.from({ length: n }, () => '0123456789ABCDEF'[Math.floor(Math.random() * 16)]).join('');
+const pick = a => a[Math.floor(Math.random() * a.length)];
+
+function randomUsage() {
+  const r = Math.random();
+  const privacy = r < 0.18;            // ~18% flagged as a privacy issue (0 TK)
+  const zeroPaid = !privacy && r < 0.30; // a few more with 0 TK
+  const h = Math.floor(Math.random() * 12) + 1;
+  const m = String(Math.floor(Math.random() * 60)).padStart(2, '0');
+  const ampm = Math.random() < 0.5 ? 'AM' : 'PM';
+  return {
+    icon: privacy ? 'person' : (zeroPaid ? 'minus' : 'check'),
+    title: pick(TITLES),
+    id: hex(4) + '-' + hex(4),
+    time: `${h}:${m} ${ampm}`,
+    flag: privacy ? 'Privacy Issue' : null,
+    tk: (privacy || zeroPaid) ? '0 TK' : pick(REWARDS),
+    zero: privacy || zeroPaid
+  };
+}
+const randomUsages = n => Array.from({ length: n }, randomUsage);
+
+const modelCard = m => `
+  <div class="card">
+    <div class="c-head">
+      <span class="logo ${m.brand}">${LOGO[m.brand]}</span>
+      <div class="c-title"><h2>${m.name}</h2><span class="tier">${m.tier}</span></div>
+      <span class="badge ${m.latest ? 'latest' : ''}">${m.latest ? 'Latest' : 'Legacy'}</span>
+    </div>
+    <div class="c-body">
+      <div class="price">
+        <div><div class="v">${m.in} <small>/MTok</small></div><div class="l">Input</div></div>
+        <div><div class="v">${m.out} <small>/MTok</small></div><div class="l">Output</div></div>
+      </div>
+      <ul class="specs">
+        <li><span class="k">Context</span><span class="val">${m.ctx}</span></li>
+        <li><span class="k">Output</span><span class="val">${m.max}</span></li>
+      </ul>
+    </div>
+  </div>`;
+
+const usageCard = u => `
+  <div class="u-card">
+    <span class="u-icon ${u.icon === 'person' ? 'warn' : ''}">${ICON[u.icon]}</span>
+    <div class="u-main">
+      <h3>${u.title}</h3>
+      <div class="u-meta"><span class="id">${u.id}</span><span>${u.time}</span>${u.flag ? `<span class="u-flag">${u.flag}</span>` : ''}</div>
+    </div>
+    <span class="u-tk ${u.zero ? 'zero' : ''}">${u.tk}</span>
+  </div>`;
+
+const claude = models.filter(m => m.brand === 'claude');
+const gpt    = models.filter(m => m.brand === 'openai');
+const gemini = models.filter(m => m.brand === 'gemini');
+
+const stage = document.getElementById('stage');
+
+// build one marquee row: items rendered enough times to fill the width, then
+// duplicated once more so the -50% loop is seamless
+function addRow(items, renderFn, dir) {
+  const copies = Math.max(1, Math.ceil(6 / items.length));
+  let base = '';
+  for (let i = 0; i < copies; i++) base += items.map(renderFn).join('');
+  const m = document.createElement('div');
+  m.className = 'marquee';
+  m.innerHTML = `<div class="marquee-track ${dir === 'left' ? 'track-left' : 'track-right'}">${base + base}</div>`;
+  stage.appendChild(m);
+}
+
+// gpt → data → claude (center) → data → gemini → data
+// each data row gets its own freshly randomized history
+addRow(gpt,             modelCard, 'left');
+addRow(randomUsages(8), usageCard, 'right');
+addRow(claude,          modelCard, 'left');
+addRow(randomUsages(8), usageCard, 'right');
+addRow(gemini,          modelCard, 'left');
+addRow(randomUsages(8), usageCard, 'right');
+</script>
+</body>
+</html>

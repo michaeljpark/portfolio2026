@@ -75,6 +75,9 @@
   .tt-embed-wrap{ position:relative; width:100%; border-radius:12px; overflow:hidden; background:#e8e8e8; aspect-ratio:4/3; margin:clamp(40px,5vw,72px) 0; }
   .tt-embed-wrap iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
   @media(max-width:768px){ .tt-embed-wrap{ aspect-ratio:3/4; } }
+  .models-embed-wrap{ position:relative; width:100%; border-radius:20px; overflow:hidden; background:#ffffff; aspect-ratio:16/9; }
+  .models-embed-wrap iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  @media(max-width:640px){ .models-embed-wrap{ aspect-ratio:3/4; } }
 
   /* KPI */
   .kpi-section{ padding-bottom:64px; }
@@ -428,9 +431,8 @@
 </section>
 
 <section class="project-section wrap">
-  <div class="project-stage">
-    <video src="./tokentrustprev2.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"
-      style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+  <div class="models-embed-wrap">
+    <iframe src="./models.html" loading="lazy" title="AI Model Pricing Overview"></iframe>
   </div>
 </section>
 
