@@ -52,7 +52,14 @@
   .hero-team-inline .hero-team-member,
   .hero-team-inline .hero-team-member:nth-child(2),
   .hero-team-inline .hero-team-member:nth-child(3){ justify-content:flex-start; text-align:left; gap:4px; flex-wrap:nowrap; white-space:nowrap; }
-  @media (max-width: 640px){ .hero-team-inline{ display:none !important; } }
+  @media(max-width:640px){
+    .tagline-row{ flex-direction:column; gap:12px; align-items:flex-start; }
+    .hero-team-inline{ flex-direction:column; gap:6px; align-items:flex-start; }
+    .hero-team-inline .hero-team-list{ flex-wrap:wrap; gap:6px 14px; }
+    .hero-team-inline .hero-team-member,
+    .hero-team-inline .hero-team-member:nth-child(2),
+    .hero-team-inline .hero-team-member:nth-child(3){ white-space:normal; }
+  }
   .hero-greeting{ font-size:17px; color:var(--muted); margin-bottom:6px; }
   .hero-name{ font-weight:500; font-size:clamp(28px,4.5vw,64px); line-height:1.05; letter-spacing:-0.05em; }
   .hero-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }

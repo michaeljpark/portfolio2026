@@ -49,7 +49,12 @@
   .hero-team-inline .hero-team-list{ display:flex; flex-direction:row; flex-wrap:nowrap; gap:12px; }
   .hero-team-inline .hero-team-member{ display:flex; gap:4px; flex-wrap:nowrap; white-space:nowrap; }
   .hero-team-role{ opacity:0.5; }
-  @media(max-width:640px){ .hero-team-inline{ display:none !important; } }
+  @media(max-width:640px){
+    .tagline-row{ flex-direction:column; gap:12px; align-items:flex-start; }
+    .hero-team-inline{ flex-direction:column; gap:6px; align-items:flex-start; }
+    .hero-team-inline .hero-team-list{ flex-wrap:wrap; gap:6px 14px; }
+    .hero-team-inline .hero-team-member{ white-space:normal; }
+  }
   .hero-greeting{ font-size:17px; color:var(--muted); margin-bottom:6px; }
   .hero-name{ font-weight:500; font-size:clamp(28px,4.5vw,64px); line-height:1.05; letter-spacing:-0.05em; }
   .hero-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }
@@ -395,6 +400,23 @@
       src="https://michaeljpark.github.io/tokentrust/"
       loading="lazy"
       title="TokenTrust Live"></iframe>
+  </div>
+</section>
+
+<section class="kpi-section wrap">
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-num">86%</div>
+      <div class="kpi-label">Idea acceptance rate — ICE framework (Impact, Confidence, Ease) + feedback, internal<br><span style="opacity:0.5;">5 teammates · Alexander Manu / Mahnoor Hasan (Project Advisors)</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-num">74%</div>
+      <div class="kpi-label">of survey respondents agreed with the AI pricing problem (score ≥4, n=28)<br><span style="opacity:0.5;">Feb 21, 2026</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-num">X</div>
+      <div class="kpi-label">—</div>
+    </div>
   </div>
 </section>
 
