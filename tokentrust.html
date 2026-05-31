@@ -317,6 +317,12 @@
     .mm-nd{ transform:translate(-50%,-50%) scale(0.9); }
   }
   @media(max-width:640px){ .mm-tab{ font-size:10px; padding:5px 10px; } }
+  .ai-chart-desktop{ display:block; }
+  .ai-chart-mobile{ display:none; }
+  @media(max-width:640px){
+    .ai-chart-desktop{ display:none; }
+    .ai-chart-mobile{ display:block; }
+  }
 </style>
 </head>
 <body>
@@ -508,6 +514,171 @@
       <div class="trend-num">24%</div>
       <p class="trend-desc">CAGR — Global Sovereign Cloud Market growing from $129B in 2025 to $572.3B by 2032.</p>
       <p class="trend-source">MarkNtel Advisors via PR Newswire, March 2026</p>
+    </div>
+  </div>
+
+  <!-- AI Spending Chart -->
+  <div class="ai-chart-desktop" style="margin-top:clamp(48px,6vw,96px); position:relative; width:100%; aspect-ratio:16/9; border-radius:20px; overflow:hidden;">
+    <svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+      <rect width="1600" height="900" fill="#e2e2e0"/>
+      <!-- Title -->
+      <text x="100" y="76" font-size="20" font-weight="500" fill="#0a0a0a" letter-spacing="-0.8">Global AI Market Spending</text>
+      <text x="100" y="104" font-size="13" fill="#666" letter-spacing="-0.3">Total worldwide AI spending ($B) · 2022–2026 · *2022–2024 estimated</text>
+      <!-- Baseline -->
+      <line x1="100" y1="750" x2="1540" y2="750" stroke="#c8c8c6" stroke-width="1.5"/>
+      <!-- Grid lines -->
+      <line x1="100" y1="630" x2="1540" y2="630" stroke="#c8c8c6" stroke-width="0.8" stroke-dasharray="6,5"/>
+      <line x1="100" y1="508" x2="1540" y2="508" stroke="#c8c8c6" stroke-width="0.8" stroke-dasharray="6,5"/>
+      <line x1="100" y1="384" x2="1540" y2="384" stroke="#c8c8c6" stroke-width="0.8" stroke-dasharray="6,5"/>
+      <line x1="100" y1="262" x2="1540" y2="262" stroke="#c8c8c6" stroke-width="0.8" stroke-dasharray="6,5"/>
+      <line x1="100" y1="140" x2="1540" y2="140" stroke="#c8c8c6" stroke-width="0.8" stroke-dasharray="6,5"/>
+      <!-- Y-axis labels -->
+      <text x="72" y="754" font-size="11" fill="#999" text-anchor="end">$0</text>
+      <text x="72" y="634" font-size="11" fill="#999" text-anchor="end">$500B</text>
+      <text x="72" y="512" font-size="11" fill="#999" text-anchor="end">$1T</text>
+      <text x="72" y="388" font-size="11" fill="#999" text-anchor="end">$1.5T</text>
+      <text x="72" y="266" font-size="11" fill="#999" text-anchor="end">$2T</text>
+      <text x="72" y="144" font-size="11" fill="#999" text-anchor="end">$2.5T</text>
+
+      <!-- Bars: section width=288, bar width=140, offset=74, from x=100 -->
+      <!-- 2022: $200B → h=49, top=701 -->
+      <rect x="174" y="701" width="140" height="49" fill="#0a0a0a" opacity="0.18" rx="3"/>
+      <text x="244" y="692" font-size="12" fill="#999" text-anchor="middle">$200B</text>
+      <text x="244" y="776" font-size="13" fill="#666" text-anchor="middle" letter-spacing="-0.3">2022*</text>
+
+      <!-- 2023: $400B → h=98, top=652 -->
+      <rect x="462" y="652" width="140" height="98" fill="#0a0a0a" opacity="0.3" rx="3"/>
+      <text x="532" y="643" font-size="12" fill="#999" text-anchor="middle">$400B</text>
+      <text x="532" y="776" font-size="13" fill="#666" text-anchor="middle" letter-spacing="-0.3">2023*</text>
+      <!-- +100% arrow -->
+      <text x="388" y="670" font-size="11" fill="#999" text-anchor="middle">+100%</text>
+      <line x1="358" y1="675" x2="418" y2="675" stroke="#c8c8c6" stroke-width="1"/>
+
+      <!-- 2024: $900B → h=220, top=530 -->
+      <rect x="750" y="530" width="140" height="220" fill="#0a0a0a" opacity="0.45" rx="3"/>
+      <text x="820" y="521" font-size="12" fill="#666" text-anchor="middle">$900B</text>
+      <text x="820" y="776" font-size="13" fill="#666" text-anchor="middle" letter-spacing="-0.3">2024*</text>
+      <!-- +125% arrow -->
+      <text x="676" y="630" font-size="11" fill="#999" text-anchor="middle">+125%</text>
+      <line x1="646" y1="635" x2="706" y2="635" stroke="#c8c8c6" stroke-width="1"/>
+
+      <!-- 2025: $1,500B → h=366, top=384 — Gartner confirmed -->
+      <rect x="1038" y="384" width="140" height="366" fill="#0a0a0a" opacity="0.68" rx="3"/>
+      <text x="1108" y="372" font-size="13" font-weight="500" fill="#0a0a0a" text-anchor="middle">$1.5T</text>
+      <text x="1108" y="776" font-size="13" fill="#0a0a0a" text-anchor="middle" font-weight="500" letter-spacing="-0.3">2025</text>
+      <text x="1108" y="791" font-size="10" fill="#999" text-anchor="middle">Gartner</text>
+      <!-- +67% arrow -->
+      <text x="964" y="490" font-size="11" fill="#666" text-anchor="middle">+67%</text>
+      <line x1="934" y1="495" x2="994" y2="495" stroke="#b0b0ae" stroke-width="1"/>
+
+      <!-- 2026: $2,500B → h=610, top=140 — Gartner projected -->
+      <rect x="1326" y="140" width="140" height="610" fill="#0a0a0a" opacity="0.88" rx="3"/>
+      <text x="1396" y="128" font-size="13" font-weight="500" fill="#0a0a0a" text-anchor="middle">$2.5T</text>
+      <text x="1396" y="776" font-size="13" fill="#0a0a0a" text-anchor="middle" font-weight="500" letter-spacing="-0.3">2026</text>
+      <text x="1396" y="791" font-size="10" fill="#999" text-anchor="middle">Gartner proj.</text>
+      <!-- +67% arrow -->
+      <text x="1252" y="270" font-size="11" fill="#666" text-anchor="middle">+67%</text>
+      <line x1="1222" y1="275" x2="1282" y2="275" stroke="#b0b0ae" stroke-width="1"/>
+
+      <!-- Source note -->
+      <text x="100" y="860" font-size="11" fill="#aaa" letter-spacing="-0.2">Sources: Gartner (Jan 2026) · CloudZero State of AI Costs 2025 · *2022–2024 market estimates</text>
+    </svg>
+  </div>
+
+  <!-- Mobile chart: portrait 9:16, 2026 top -->
+  <div class="ai-chart-mobile" style="margin-top:clamp(48px,6vw,96px); position:relative; width:100%; aspect-ratio:9/16; border-radius:20px; overflow:hidden;">
+    <svg viewBox="0 0 450 800" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+      <rect width="450" height="800" fill="#e2e2e0"/>
+
+      <!-- Title -->
+      <text x="24" y="46" font-size="20" font-weight="500" fill="#0a0a0a" letter-spacing="-0.6">Global AI Market</text>
+      <text x="24" y="70" font-size="20" font-weight="500" fill="#0a0a0a" letter-spacing="-0.6">Spending</text>
+      <text x="24" y="92" font-size="11" fill="#888" letter-spacing="-0.2">Total worldwide AI spending · 2022–2026</text>
+
+      <!-- Baseline (left) -->
+      <line x1="90" y1="110" x2="90" y2="712" stroke="#c8c8c6" stroke-width="1.5"/>
+      <!-- Grid lines (vertical) -->
+      <line x1="158" y1="110" x2="158" y2="712" stroke="#c8c8c6" stroke-width="0.7" stroke-dasharray="4,4"/>
+      <line x1="226" y1="110" x2="226" y2="712" stroke="#c8c8c6" stroke-width="0.7" stroke-dasharray="4,4"/>
+      <line x1="294" y1="110" x2="294" y2="712" stroke="#c8c8c6" stroke-width="0.7" stroke-dasharray="4,4"/>
+      <line x1="362" y1="110" x2="362" y2="712" stroke="#c8c8c6" stroke-width="0.7" stroke-dasharray="4,4"/>
+      <line x1="430" y1="110" x2="430" y2="712" stroke="#c8c8c6" stroke-width="0.7" stroke-dasharray="4,4"/>
+      <!-- Grid labels -->
+      <text x="158" y="106" font-size="10" fill="#bbb" text-anchor="middle">$500B</text>
+      <text x="226" y="106" font-size="10" fill="#bbb" text-anchor="middle">$1T</text>
+      <text x="294" y="106" font-size="10" fill="#bbb" text-anchor="middle">$1.5T</text>
+      <text x="362" y="106" font-size="10" fill="#bbb" text-anchor="middle">$2T</text>
+      <text x="430" y="106" font-size="10" fill="#bbb" text-anchor="middle">$2.5T</text>
+
+      <!-- 2026: bar w=340, top=150, h=54 → center y=177 -->
+      <rect x="90" y="150" width="340" height="54" fill="#0a0a0a" opacity="0.88" rx="3"/>
+      <text x="82" y="175" font-size="13" font-weight="500" fill="#0a0a0a" text-anchor="end">2026</text>
+      <text x="82" y="190" font-size="9" fill="#aaa" text-anchor="end">proj.</text>
+      <text x="422" y="175" font-size="13" font-weight="500" fill="#f0f0f0" text-anchor="end">$2.5T</text>
+
+      <!-- ↑ +67% -->
+      <text x="430" y="228" font-size="11" fill="#555" text-anchor="end">↑ +67%</text>
+
+      <!-- 2025: bar w=204, top=246, h=54 → center y=273 -->
+      <rect x="90" y="246" width="204" height="54" fill="#0a0a0a" opacity="0.68" rx="3"/>
+      <text x="82" y="271" font-size="13" font-weight="500" fill="#0a0a0a" text-anchor="end">2025</text>
+      <text x="82" y="286" font-size="9" fill="#aaa" text-anchor="end">Gartner</text>
+      <text x="286" y="271" font-size="13" font-weight="500" fill="#f0f0f0" text-anchor="end">$1.5T</text>
+
+      <!-- ↑ +67% -->
+      <text x="430" y="324" font-size="11" fill="#555" text-anchor="end">↑ +67%</text>
+
+      <!-- 2024: bar w=122, top=342, h=54 → center y=369 -->
+      <rect x="90" y="342" width="122" height="54" fill="#0a0a0a" opacity="0.45" rx="3"/>
+      <text x="82" y="367" font-size="13" fill="#666" text-anchor="end">2024</text>
+      <text x="82" y="382" font-size="9" fill="#bbb" text-anchor="end">est.</text>
+      <text x="220" y="369" font-size="12" fill="#555" text-anchor="start">$900B</text>
+
+      <!-- ↑ +125% -->
+      <text x="430" y="420" font-size="11" fill="#888" text-anchor="end">↑ +125%</text>
+
+      <!-- 2023: bar w=54, top=438, h=54 → center y=465 -->
+      <rect x="90" y="438" width="54" height="54" fill="#0a0a0a" opacity="0.30" rx="3"/>
+      <text x="82" y="463" font-size="13" fill="#888" text-anchor="end">2023</text>
+      <text x="82" y="478" font-size="9" fill="#bbb" text-anchor="end">est.</text>
+      <text x="152" y="465" font-size="12" fill="#888" text-anchor="start">$400B</text>
+
+      <!-- ↑ +100% -->
+      <text x="430" y="516" font-size="11" fill="#aaa" text-anchor="end">↑ +100%</text>
+
+      <!-- 2022: bar w=27, top=534, h=54 → center y=561 -->
+      <rect x="90" y="534" width="27" height="54" fill="#0a0a0a" opacity="0.18" rx="3"/>
+      <text x="82" y="559" font-size="13" fill="#aaa" text-anchor="end">2022</text>
+      <text x="82" y="574" font-size="9" fill="#bbb" text-anchor="end">est.</text>
+      <text x="125" y="561" font-size="12" fill="#aaa" text-anchor="start">$200B</text>
+
+      <!-- Bottom baseline -->
+      <line x1="90" y1="712" x2="430" y2="712" stroke="#c8c8c6" stroke-width="1"/>
+
+      <!-- Source note -->
+      <text x="24" y="744" font-size="10" fill="#bbb">Gartner, Jan 2026 · CloudZero, 2025</text>
+      <text x="24" y="760" font-size="10" fill="#bbb">2022–2024 market estimates</text>
+    </svg>
+  </div>
+
+  <!-- AI Cost Stats -->
+  <div class="kpi-section" style="padding-bottom:0;">
+    <div class="kpi-row" style="border-top:none;border-bottom:none;">
+      <div class="kpi">
+        <div class="kpi-num">+36%</div>
+        <div class="kpi-label">YoY increase in average enterprise monthly AI spend — from $63K (2024) to $85.5K (2025).</div>
+        <div style="font-size:11px;color:var(--muted);opacity:0.6;margin-top:6px;">Source: <a href="https://www.cloudzero.com/blog/llm-api-pricing-comparison/" target="_blank" rel="noopener" style="color:inherit;border-bottom:1px solid currentColor;">CloudZero State of AI Costs, 2025</a></div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-num">+67%</div>
+        <div class="kpi-label">Global AI market growth — $1.5 trillion (2025) to $2.5 trillion (2026). Cost pressure on end-users accelerates in parallel.</div>
+        <div style="font-size:11px;color:var(--muted);opacity:0.6;margin-top:6px;">Source: <a href="https://www.gartner.com/en/newsroom/press-releases/2026-1-15-gartner-says-worldwide-ai-spending-will-total-2-point-5-trillion-dollars-in-2026" target="_blank" rel="noopener" style="color:inherit;border-bottom:1px solid currentColor;">Gartner, Jan 2026</a></div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-num">2×</div>
+        <div class="kpi-label">Organizations spending over $100K/month on AI doubled year-over-year — AI cost governance is no longer optional.</div>
+        <div style="font-size:11px;color:var(--muted);opacity:0.6;margin-top:6px;">Source: <a href="https://www.cloudzero.com/blog/llm-api-pricing-comparison/" target="_blank" rel="noopener" style="color:inherit;border-bottom:1px solid currentColor;">CloudZero State of AI Costs, 2025</a></div>
+      </div>
     </div>
   </div>
 </section>
