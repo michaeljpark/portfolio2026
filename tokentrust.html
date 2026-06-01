@@ -79,24 +79,6 @@
   .models-embed-wrap iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
   @media(max-width:640px){ .models-embed-wrap{ aspect-ratio:3/4; } }
 
-  /* map + floating tt elements */
-  .map-stage{ position:relative; width:100%; border-radius:20px; overflow:hidden; }
-  .map-stage .map-base{ width:100%; display:block; border-radius:20px; }
-  .map-tt{ position:absolute; width:16%; aspect-ratio:3/4; border-radius:14px; overflow:hidden; }
-  .map-tt img{ width:100%; height:100%; object-fit:contain; display:block; }
-  .map-tt-1{ top:10%; left:6%; animation:tt-breathe 2.8s ease-in-out infinite; }
-  .map-tt-2{ top:14%; right:8%; animation:tt-breathe 4.5s ease-in-out infinite; }
-  .map-tt-3{ bottom:8%; left:38%; animation:tt-breathe 6.2s ease-in-out infinite; }
-  @keyframes tt-breathe{
-    0%,100%{ transform:scale(1) translateY(0); }
-    50%{ transform:scale(1.05) translateY(-5px); }
-  }
-  @media(max-width:640px){
-    .map-tt{ width:26%; }
-    .map-tt-1{ top:8%; left:3%; }
-    .map-tt-2{ top:12%; right:3%; }
-    .map-tt-3{ bottom:6%; left:32%; }
-  }
 
   /* KPI */
   .kpi-section{ padding-bottom:64px; }
@@ -452,15 +434,6 @@
 <section class="project-section wrap">
   <div class="models-embed-wrap">
     <iframe src="./models.html" loading="lazy" title="AI Model Pricing Overview"></iframe>
-  </div>
-</section>
-
-<section class="project-section wrap">
-  <div class="map-stage">
-    <img class="map-base" src="./mapimg.png" alt="TokenTrust Market Map">
-    <div class="map-tt map-tt-1"><img src="./tt1.png" alt=""></div>
-    <div class="map-tt map-tt-2"><img src="./tt2.png" alt=""></div>
-    <div class="map-tt map-tt-3"><img src="./tt3.png" alt=""></div>
   </div>
 </section>
 
