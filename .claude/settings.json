@@ -5,7 +5,16 @@
       "Bash(xargs du -ch)",
       "Bash(git update-ref *)",
       "Bash(git tag *)",
-      "PowerShell($env:PATH = [System.Environment]::GetEnvironmentVariable\\(\"PATH\", \"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"PATH\", \"User\"\\); gh run list --repo michaeljpark/portfolio2026 --limit 3 2>&1)"
+      "PowerShell($env:PATH = [System.Environment]::GetEnvironmentVariable\\(\"PATH\", \"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"PATH\", \"User\"\\); gh run list --repo michaeljpark/portfolio2026 --limit 3 2>&1)",
+      "WebFetch(domain:www.pbo-dpb.ca)",
+      "WebFetch(domain:www.securitepublique.gc.ca)",
+      "WebFetch(domain:www.ibc.ca)",
+      "WebFetch(domain:www.publicsafety.gc.ca)",
+      "WebFetch(domain:www.iisd.org)",
+      "WebFetch(domain:www.canada.ca)",
+      "WebFetch(domain:www.theglobeandmail.com)",
+      "WebFetch(domain:search.open.canada.ca)",
+      "WebFetch(domain:en.wikipedia.org)"
     ]
   }
 }

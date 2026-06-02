@@ -115,7 +115,7 @@
   }
   @media(max-width:760px){ .feat-grid{ grid-template-columns:1fr; } }
   .feat-item{
-    padding:32px 28px; background:#ebebea;
+    padding:32px 28px; background:#ECC4CB;
     display:flex; flex-direction:column; gap:12px;
   }
   .feat-item:first-child{ border-radius:20px 0 0 20px; }
@@ -205,6 +205,17 @@
     .kpi-item:nth-child(4){ align-items:flex-end; text-align:right; }
     .divider-section{ padding-top:64px; padding-bottom:64px; }
   }
+  .ca-stats-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
+  .gov-compare-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; border:1px solid var(--line); border-radius:16px; overflow:hidden; }
+  .gov-compare-grid .gcell{ padding:clamp(14px,2vw,22px) clamp(16px,2vw,28px); border-bottom:1px solid var(--line); }
+  .gov-compare-grid .gcell:last-child,.gov-compare-grid .gcell:nth-last-child(2),.gov-compare-grid .gcell:nth-last-child(3){ border-bottom:none; }
+  @media(max-width:760px){ .ca-stats-grid{ grid-template-columns:1fr; } .gov-compare-grid{ grid-template-columns:1fr; } .gov-compare-grid .gcell:nth-last-child(-n+1){ border-bottom:none; } }
+  .chart-desktop{ display:block; width:100%; height:auto; }
+  .chart-mobile{ display:none; width:100%; height:auto; }
+  @media(max-width:760px){
+    .chart-desktop{ display:none; }
+    .chart-mobile{ display:block; }
+  }
 </style>
 </head>
 <body>
@@ -223,14 +234,14 @@
 
 <header class="hero wrap">
   <div class="hero-back"><a href="./index.html">← Back to Work</a></div>
-  <div class="hero-greeting">Product Design</div>
+  <div class="hero-greeting">Product Design · Intact Insurance</div>
   <h1 class="hero-name">intact lifolio</h1>
-  <p class="hero-tagline">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+  <p class="hero-tagline">From reactive protection to proactive guidance —<br>an AI layer that sees what customers need before they ask.</p>
   <div class="hero-row">
     <dl class="hero-side">
       <div class="pair"><dt>Year</dt><dd>2026</dd></div>
-      <div class="pair"><dt>Type</dt><dd>Product Design</dd></div>
-      <div class="pair"><dt>Duration</dt><dd>Lorem Duration</dd></div>
+      <div class="pair"><dt>Type</dt><dd>AI Product Design</dd></div>
+      <div class="pair"><dt>Partner</dt><dd>Intact Financial Corporation</dd></div>
       <div class="pair"><dt>Status</dt><dd>In Progress</dd></div>
     </dl>
   </div>
@@ -248,8 +259,9 @@
   <div class="two-col align-center">
     <div class="ph-text-block">
       <div class="ph-label">Overview</div>
-      <h2 class="ph-heading">Lorem ipsum dolor sit amet consectetur adipiscing elit</h2>
-      <p class="ph-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+      <h2 class="ph-heading">Insurance built around decisions, not disasters</h2>
+      <p class="ph-body">The insurance industry was built to respond to what went wrong. Lifolio reframes the relationship — using Intact's existing policy data as a signal layer to detect life events in real time, map legal and financial obligations, and connect customers with the right guidance before they know they need it.</p>
+      <p class="ph-body" style="margin-top:16px;">The result is a living portfolio of a customer's life — obligations tracked, professionals on-demand, and uncertainty reduced at the moment it matters most.</p>
     </div>
     <div class="ph-img" style="min-height:480px;">Image Placeholder</div>
   </div>
@@ -288,41 +300,294 @@
 </section>
 
 <!-- Divider quote -->
-<section class="divider-section wrap">
+<section class="divider-section wrap" style="display:flex; flex-direction:column; gap:clamp(28px,4vw,56px);">
   <p class="divider-text">
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor <em>incididunt ut labore et dolore magna aliqua</em> ut enim ad minim veniam."
+    Insurance, as the world knows it, is reactive, transactional, and invisible until disaster strikes.
+  </p>
+  <p class="divider-text" style="text-align:right; color:#D01F3D; max-width:100%; width:100%;">
+    But where is the insurance for the decisions that shape what comes next?
   </p>
 </section>
 
-<!-- Mobile screens -->
-<section class="project-section wrap">
-  <div class="ph-label" style="margin-bottom:32px; text-align:center;">App Screens</div>
-  <div class="mobile-row">
-    <div class="mobile-frame">Screen A</div>
-    <div class="mobile-frame tall">Screen B</div>
-    <div class="mobile-frame">Screen C</div>
+<!-- Research Background -->
+<section class="project-section wrap" style="padding-bottom:0;">
+  <div style="max-width:680px;">
+    <div class="ph-label">Background Research</div>
+    <h2 class="ph-heading">Where government sets the framework, private enterprise delivers the outcome.</h2>
+    <p class="ph-body">Canada's regulatory architecture — OSFI, FCAC, provincial superintendents — defines the standards and the direction. When volatility strikes, private insurers consistently outperform public relief mechanisms on speed, scope, and recovery depth. In 2024 alone, Canadian insurers processed 250,000+ claims in two months — 50% more than the entire annual average — resolving the majority within weeks. Lifolio doesn't operate against this direction. It extends the private sector's reach within it.</p>
   </div>
 </section>
 
-<!-- Feature grid -->
-<section class="project-section wrap">
-  <div class="ph-label" style="margin-bottom:32px;">Key Features</div>
-  <div class="feat-grid">
-    <div class="feat-item">
-      <div class="feat-num">01</div>
-      <div class="feat-title">Lorem Feature</div>
-      <div class="feat-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.</div>
+<section class="project-section wrap" style="padding-top:24px; padding-bottom:0;">
+  <div style="background:#d6d6d4; border-radius:20px; overflow:hidden;">
+    <svg viewBox="0 0 960 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+      <!-- ocean bg -->
+      <rect width="960" height="500" fill="#d6d6d4"/>
+
+      <!-- TERRITORIES -->
+      <polygon points="0,192 16,0 166,0 162,192" fill="#e0e0de" stroke="#d6d6d4" stroke-width="1.5"/>
+      <text x="83" y="115" fill="#aaa" font-size="9.5" text-anchor="middle" letter-spacing="0.07em">YT</text>
+
+      <polygon points="162,192 166,0 476,0 476,192" fill="#e0e0de" stroke="#d6d6d4" stroke-width="1.5"/>
+      <text x="318" y="108" fill="#aaa" font-size="9.5" text-anchor="middle" letter-spacing="0.07em">NT</text>
+
+      <polygon points="476,0 960,0 960,195 800,215 668,305 590,292 554,200 476,192" fill="#e0e0de" stroke="#d6d6d4" stroke-width="1.5"/>
+      <text x="730" y="90" fill="#aaa" font-size="9.5" text-anchor="middle" letter-spacing="0.07em">NU</text>
+
+      <!-- PROVINCES -->
+      <polygon points="0,192 162,192 153,338 122,498 0,498" fill="#eaeae8" stroke="#d6d6d4" stroke-width="1.5"/>
+      <text x="68" y="368" fill="#aaa" font-size="9.5" text-anchor="middle" letter-spacing="0.07em">BC</text>
+
+      <polygon points="162,192 274,192 274,498 122,498 153,338" fill="#eaeae8" stroke="#d6d6d4" stroke-width="1.5"/>
+      <text x="208" y="368" fill="#aaa" font-size="9.5" text-anchor="middle" letter-spacing="0.07em">AB</text>
+
+      <polygon points="274,192 378,192 378,498 274,498" fill="#e6e6e4" stroke="#d6d6d4" stroke-width="1.5"/>
+      <text x="326" y="368" fill="#aaa" font-size="9.5" text-anchor="middle" letter-spacing="0.07em">SK</text>
+
+      <polygon points="378,192 476,192 476,285 500,344 490,390 458,420 446,498 378,498" fill="#e6e6e4" stroke="#d6d6d4" stroke-width="1.5"/>
+      <text x="426" y="358" fill="#aaa" font-size="9.5" text-anchor="middle" letter-spacing="0.07em">MB</text>
+
+      <polygon points="476,192 554,200 590,292 668,305 682,346 700,382 660,426 634,480 446,498 458,420 490,390 500,344 476,285" fill="#eaeae8" stroke="#d6d6d4" stroke-width="1.5"/>
+      <text x="562" y="408" fill="#aaa" font-size="9.5" text-anchor="middle" letter-spacing="0.07em">ON</text>
+
+      <polygon points="554,200 800,215 960,195 960,340 848,382 818,400 772,456 716,472 660,480 660,426 700,382 682,346 668,305 590,292" fill="#eaeae8" stroke="#d6d6d4" stroke-width="1.5"/>
+      <text x="730" y="356" fill="#aaa" font-size="9.5" text-anchor="middle" letter-spacing="0.07em">QC</text>
+
+      <polygon points="818,400 848,382 858,414 832,448 804,444" fill="#e6e6e4" stroke="#d6d6d4" stroke-width="1.5"/>
+      <polygon points="832,448 858,414 890,432 872,464 836,470" fill="#e6e6e4" stroke="#d6d6d4" stroke-width="1.5"/>
+      <polygon points="892,415 924,400 944,428 920,452 892,448" fill="#e6e6e4" stroke="#d6d6d4" stroke-width="1.5"/>
+      <polygon points="856,396 870,390 876,406 860,412" fill="#e6e6e4" stroke="#d6d6d4" stroke-width="1.5"/>
+      <text x="832" y="434" fill="#bbb" font-size="8.5" text-anchor="middle" letter-spacing="0.05em">NB</text>
+      <text x="862" y="456" fill="#bbb" font-size="8.5" text-anchor="middle" letter-spacing="0.05em">NS</text>
+      <text x="918" y="436" fill="#bbb" font-size="8.5" text-anchor="middle" letter-spacing="0.05em">NL</text>
+
+      <!-- GOVERNMENT REGULATORY BODIES (gray) -->
+      <circle cx="76" cy="444" r="4" fill="#aaaaaa"/>
+      <text x="84" y="448" fill="#777" font-size="8.5" letter-spacing="-0.01em">BCFSA</text>
+
+      <circle cx="216" cy="444" r="4" fill="#aaaaaa"/>
+      <text x="224" y="448" fill="#777" font-size="8.5" letter-spacing="-0.01em">ABFSA</text>
+
+      <circle cx="522" cy="362" r="4" fill="#aaaaaa"/>
+      <text x="530" y="366" fill="#777" font-size="8.5" letter-spacing="-0.01em">FSRA (ON)</text>
+
+      <circle cx="636" cy="394" r="4.5" fill="#aaaaaa"/>
+      <text x="644" y="392" fill="#777" font-size="8.5" letter-spacing="-0.01em">OSFI · FCAC</text>
+      <text x="644" y="402" fill="#999" font-size="7.5" letter-spacing="-0.01em">Ottawa · Federal</text>
+
+      <circle cx="722" cy="308" r="4" fill="#aaaaaa"/>
+      <text x="730" y="312" fill="#777" font-size="8.5" letter-spacing="-0.01em">AMF (QC)</text>
+
+      <!-- PRIVATE INSURANCE -->
+      <circle cx="578" cy="446" r="4" fill="#444"/>
+      <text x="570" y="450" fill="#555" font-size="8.5" letter-spacing="-0.02em" text-anchor="end">Aviva Canada</text>
+
+      <circle cx="608" cy="462" r="7" fill="#D01F3D"/>
+      <text x="620" y="458" fill="#D01F3D" font-size="9.5" font-weight="500" letter-spacing="-0.02em">Intact Financial</text>
+      <text x="620" y="468" fill="#c06070" font-size="8" letter-spacing="-0.01em">HQ Toronto · National</text>
+
+      <circle cx="800" cy="366" r="5" fill="#1a1a1a"/>
+      <text x="792" y="370" fill="#1a1a1a" font-size="8.5" letter-spacing="-0.02em" text-anchor="end">Desjardins</text>
+    </svg>
+  </div>
+
+  <div style="display:flex; gap:24px; flex-wrap:wrap; margin-top:14px; font-size:12px; color:var(--muted); letter-spacing:-0.02em;">
+    <span style="display:inline-flex; align-items:center; gap:8px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#aaa;flex-shrink:0;display:inline-block;"></span>Government Regulatory Bodies
+    </span>
+    <span style="display:inline-flex; align-items:center; gap:8px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#D01F3D;flex-shrink:0;display:inline-block;"></span>Private Insurance Industry
+    </span>
+  </div>
+</section>
+
+<!-- Insured Losses Chart -->
+<section class="project-section wrap" style="padding-top:48px; padding-bottom:48px;">
+  <svg viewBox="0 0 820 405" xmlns="http://www.w3.org/2000/svg" class="chart-desktop" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+    <text x="70" y="28" fill="#999" font-size="9.5" letter-spacing="0.07em">PRIVATE INSURED LOSSES VS GOV DFAA — CANADA (CAD)</text>
+    <!-- Legend: inline below title -->
+    <rect x="70" y="38" width="9" height="9" fill="#e0c8cc" rx="2"/>
+    <text x="83" y="47" fill="#aaa" font-size="8.5" letter-spacing="-0.01em">Private insured (IBC)</text>
+    <rect x="200" y="38" width="9" height="9" fill="#c4c4c2" rx="2"/>
+    <text x="213" y="47" fill="#aaa" font-size="8.5" letter-spacing="-0.01em">Gov DFAA (fiscal yr, lagged)</text>
+    <!-- Grid lines -->
+    <line x1="70" y1="300" x2="780" y2="300" stroke="#e0e0de" stroke-width="1"/>
+    <line x1="70" y1="246" x2="780" y2="246" stroke="#e8e8e6" stroke-width="0.5"/>
+    <line x1="70" y1="192" x2="780" y2="192" stroke="#e8e8e6" stroke-width="0.5"/>
+    <line x1="70" y1="138" x2="780" y2="138" stroke="#e8e8e6" stroke-width="0.5"/>
+    <line x1="70" y1="84" x2="780" y2="84" stroke="#e8e8e6" stroke-width="0.5"/>
+    <line x1="70" y1="30" x2="780" y2="30" stroke="#e8e8e6" stroke-width="0.5"/>
+    <!-- Y labels -->
+    <text x="60" y="303" fill="#ccc" font-size="9" text-anchor="end">$0</text>
+    <text x="60" y="249" fill="#ccc" font-size="9" text-anchor="end">$2B</text>
+    <text x="60" y="195" fill="#ccc" font-size="9" text-anchor="end">$4B</text>
+    <text x="60" y="141" fill="#ccc" font-size="9" text-anchor="end">$6B</text>
+    <text x="60" y="87" fill="#ccc" font-size="9" text-anchor="end">$8B</text>
+    <text x="60" y="33" fill="#ccc" font-size="9" text-anchor="end">$10B</text>
+    <!-- 2020 group (c=129) Priv $2.4B | DFAA $220M -->
+    <rect x="89" y="235" width="36" height="65" fill="#e0c8cc" rx="3"/>
+    <text x="107" y="230" fill="#bbb" font-size="9" text-anchor="middle">$2.4B</text>
+    <rect x="133" y="294" width="36" height="6" fill="#c4c4c2" rx="2"/>
+    <!-- 2021 group (c=247) Priv $2.1B | DFAA $450M -->
+    <rect x="207" y="243" width="36" height="57" fill="#e0c8cc" rx="3"/>
+    <text x="225" y="238" fill="#bbb" font-size="9" text-anchor="middle">$2.1B</text>
+    <rect x="251" y="288" width="36" height="12" fill="#c4c4c2" rx="2"/>
+    <!-- 2022 group (c=366) Priv $3.1B | DFAA $2.42B (BC 2021 floods pmt) -->
+    <rect x="326" y="216" width="36" height="84" fill="#e0c8cc" rx="3"/>
+    <text x="344" y="211" fill="#bbb" font-size="9" text-anchor="middle">$3.1B</text>
+    <rect x="370" y="235" width="36" height="65" fill="#c4c4c2" rx="3"/>
+    <text x="388" y="230" fill="#999" font-size="8.5" text-anchor="middle">$2.42B</text>
+    <!-- 2023 group (c=484) Priv $3.1B | DFAA $410M -->
+    <rect x="444" y="216" width="36" height="84" fill="#e0c8cc" rx="3"/>
+    <text x="462" y="211" fill="#bbb" font-size="9" text-anchor="middle">$3.1B</text>
+    <rect x="488" y="289" width="36" height="11" fill="#c4c4c2" rx="2"/>
+    <!-- 2024 group (c=602) Priv $9.2B | DFAA $340M -->
+    <rect x="562" y="52" width="36" height="248" fill="#D01F3D" rx="3"/>
+    <text x="580" y="46" fill="#D01F3D" font-size="11" font-weight="500" text-anchor="middle">$9.2B</text>
+    <rect x="606" y="291" width="36" height="9" fill="#c4c4c2" rx="2"/>
+    <!-- 2025 group (c=720) Priv $2.4B | DFAA FY pending -->
+    <rect x="680" y="235" width="36" height="65" fill="#e0c8cc" rx="3"/>
+    <text x="698" y="230" fill="#bbb" font-size="9" text-anchor="middle">$2.4B</text>
+    <!-- X labels -->
+    <text x="129" y="318" fill="#bbb" font-size="10" text-anchor="middle">2020</text>
+    <text x="247" y="318" fill="#bbb" font-size="10" text-anchor="middle">2021</text>
+    <text x="366" y="318" fill="#bbb" font-size="10" text-anchor="middle">2022</text>
+    <text x="484" y="318" fill="#bbb" font-size="10" text-anchor="middle">2023</text>
+    <text x="602" y="318" fill="#D01F3D" font-size="10" font-weight="500" text-anchor="middle">2024</text>
+    <text x="720" y="318" fill="#bbb" font-size="10" text-anchor="middle">2025</text>
+    <!-- DFAA disbursement row -->
+    <text x="62" y="334" fill="#bbb" font-size="7.5" text-anchor="end">DFAA:</text>
+    <text x="151" y="334" fill="#bbb" font-size="7.5" text-anchor="middle">$220M</text>
+    <text x="269" y="334" fill="#bbb" font-size="7.5" text-anchor="middle">$450M</text>
+    <text x="388" y="334" fill="#999" font-size="7.5" font-weight="500" text-anchor="middle">$2.42B †</text>
+    <text x="506" y="334" fill="#bbb" font-size="7.5" text-anchor="middle">$410M</text>
+    <text x="624" y="334" fill="#bbb" font-size="7.5" text-anchor="middle">$340M</text>
+    <text x="738" y="334" fill="#bbb" font-size="7.5" text-anchor="middle">pending</text>
+    <!-- 5Y avg line (2020–2024 avg $4.0B → y=192) -->
+    <line x1="70" y1="192" x2="780" y2="192" stroke="#ccc" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="74" y="188" fill="#ccc" font-size="8.5">5Y avg $4.0B</text>
+    <!-- Source -->
+    <text x="70" y="390" fill="#ccc" font-size="8">Source: IBC/CatIQ (calendar yr) · 2024 revised to $9.2B (IBC updated) · DFAA: Public Safety Canada DRRs (fiscal yr — payments lag disaster yr) · † 2022 DFAA = BC 2021 floods/wildfire</text>
+  </svg>
+
+  <!-- Mobile chart: 3:4 portrait, 2025→2020 top-down horizontal bars -->
+  <svg viewBox="0 0 480 640" xmlns="http://www.w3.org/2000/svg" class="chart-mobile" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+    <!-- Title -->
+    <text x="70" y="22" fill="#999" font-size="8.5" letter-spacing="0.06em">INSURED LOSSES VS GOV DFAA — CANADA</text>
+    <!-- Legend -->
+    <rect x="70" y="30" width="8" height="8" fill="#e0c8cc" rx="1"/>
+    <text x="82" y="38" fill="#aaa" font-size="8">Private insured (IBC)</text>
+    <rect x="195" y="30" width="8" height="8" fill="#c4c4c2" rx="1"/>
+    <text x="207" y="38" fill="#aaa" font-size="8">Gov DFAA (fiscal yr)</text>
+    <!-- X grid lines (vertical): $1B=38px, origin x=70 -->
+    <line x1="70"  y1="52" x2="70"  y2="532" stroke="#e0e0de" stroke-width="0.8"/>
+    <line x1="146" y1="52" x2="146" y2="532" stroke="#ebebea" stroke-width="0.5"/>
+    <line x1="298" y1="52" x2="298" y2="532" stroke="#ebebea" stroke-width="0.5"/>
+    <line x1="374" y1="52" x2="374" y2="532" stroke="#ebebea" stroke-width="0.5"/>
+    <line x1="450" y1="52" x2="450" y2="532" stroke="#e0e0de" stroke-width="0.8"/>
+    <!-- 5Y avg (2020-24 $4.0B) dashed vertical at x=222 -->
+    <line x1="222" y1="52" x2="222" y2="532" stroke="#ccc" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="224" y="61" fill="#ccc" font-size="7.5">5Y avg $4.0B</text>
+    <!-- X-axis labels -->
+    <text x="146" y="548" fill="#ccc" font-size="8" text-anchor="middle">$2B</text>
+    <text x="222" y="548" fill="#ccc" font-size="8" text-anchor="middle">$4B</text>
+    <text x="298" y="548" fill="#ccc" font-size="8" text-anchor="middle">$6B</text>
+    <text x="374" y="548" fill="#ccc" font-size="8" text-anchor="middle">$8B</text>
+    <text x="450" y="548" fill="#ccc" font-size="8" text-anchor="middle">$10B</text>
+
+    <!-- Row 0 — 2025 (y=64) -->
+    <text x="62" y="79" fill="#bbb" font-size="10" font-weight="400" text-anchor="end">2025</text>
+    <rect x="70" y="66" width="91" height="20" fill="#e0c8cc" rx="3"/>
+    <text x="165" y="80" fill="#bbb" font-size="9" letter-spacing="-0.02em">$2.4B</text>
+    <text x="74" y="100" fill="#ccc" font-size="7.5">— DFAA pending</text>
+
+    <!-- Row 1 — 2024 (y=116) -->
+    <text x="62" y="133" fill="#D01F3D" font-size="10" font-weight="500" text-anchor="end">2024</text>
+    <rect x="70" y="120" width="350" height="20" fill="#D01F3D" rx="3"/>
+    <text x="424" y="134" fill="#D01F3D" font-size="9" font-weight="500" letter-spacing="-0.02em">$9.2B</text>
+    <rect x="70" y="146" width="13" height="10" fill="#c4c4c2" rx="2"/>
+    <text x="87" y="155" fill="#bbb" font-size="7.5">$340M</text>
+
+    <!-- Row 2 — 2023 (y=174) -->
+    <text x="62" y="191" fill="#bbb" font-size="10" text-anchor="end">2023</text>
+    <rect x="70" y="178" width="118" height="20" fill="#e0c8cc" rx="3"/>
+    <text x="192" y="192" fill="#bbb" font-size="9" letter-spacing="-0.02em">$3.1B</text>
+    <rect x="70" y="204" width="16" height="10" fill="#c4c4c2" rx="2"/>
+    <text x="90" y="213" fill="#bbb" font-size="7.5">$410M</text>
+
+    <!-- Row 3 — 2022 (y=232) -->
+    <text x="62" y="249" fill="#bbb" font-size="10" text-anchor="end">2022</text>
+    <rect x="70" y="236" width="118" height="20" fill="#e0c8cc" rx="3"/>
+    <text x="192" y="250" fill="#bbb" font-size="9" letter-spacing="-0.02em">$3.1B</text>
+    <rect x="70" y="262" width="92" height="10" fill="#c4c4c2" rx="3"/>
+    <text x="166" y="271" fill="#999" font-size="7.5" font-weight="500">$2.42B †</text>
+
+    <!-- Row 4 — 2021 (y=290) -->
+    <text x="62" y="307" fill="#bbb" font-size="10" text-anchor="end">2021</text>
+    <rect x="70" y="294" width="80" height="20" fill="#e0c8cc" rx="3"/>
+    <text x="154" y="308" fill="#bbb" font-size="9" letter-spacing="-0.02em">$2.1B</text>
+    <rect x="70" y="320" width="17" height="10" fill="#c4c4c2" rx="2"/>
+    <text x="91" y="329" fill="#bbb" font-size="7.5">$450M</text>
+
+    <!-- Row 5 — 2020 (y=348) -->
+    <text x="62" y="365" fill="#bbb" font-size="10" text-anchor="end">2020</text>
+    <rect x="70" y="352" width="91" height="20" fill="#e0c8cc" rx="3"/>
+    <text x="165" y="366" fill="#bbb" font-size="9" letter-spacing="-0.02em">$2.4B</text>
+    <rect x="70" y="378" width="8" height="10" fill="#c4c4c2" rx="2"/>
+    <text x="82" y="387" fill="#bbb" font-size="7.5">$220M</text>
+
+    <!-- Source -->
+    <text x="70" y="408" fill="#ccc" font-size="7">Source: IBC/CatIQ · DFAA: Public Safety Canada DRRs (FY, lagged) · † BC 2021 floods pmt</text>
+  </svg>
+</section>
+
+<!-- Government vs Private Comparison -->
+<section class="project-section wrap" style="padding-top:24px; padding-bottom:0;">
+  <div class="gov-compare-grid">
+    <!-- Header -->
+    <div class="gcell" style="background:var(--bg); font-size:10px; color:var(--muted); letter-spacing:0.07em;">DIMENSION</div>
+    <div class="gcell" style="background:var(--bg); font-size:10px; color:#aaa; letter-spacing:0.07em; border-left:1px solid var(--line);">GOVERNMENT PROGRAMS</div>
+    <div class="gcell" style="background:var(--bg); font-size:10px; color:#D01F3D; letter-spacing:0.07em; border-left:1px solid var(--line);">PRIVATE INSURANCE</div>
+    <!-- Row 1 -->
+    <div class="gcell" style="background:var(--bg); font-size:13px; font-weight:500; letter-spacing:-0.03em;">Crisis Response Speed</div>
+    <div class="gcell" style="background:var(--bg); font-size:12px; color:var(--muted); letter-spacing:-0.02em; line-height:1.5; border-left:1px solid var(--line);">6–18 months via DFAA; advance payments cover emergency costs only</div>
+    <div class="gcell" style="background:var(--bg); font-size:12px; letter-spacing:-0.02em; line-height:1.5; border-left:1px solid var(--line);">92% of 2024 flood claims resolved within weeks — at record 250K+ volume</div>
+    <!-- Row 2 -->
+    <div class="gcell" style="background:var(--bg); font-size:13px; font-weight:500; letter-spacing:-0.03em;">Coverage Eligibility</div>
+    <div class="gcell" style="background:var(--bg); font-size:12px; color:var(--muted); letter-spacing:-0.02em; line-height:1.5; border-left:1px solid var(--line);">Uninsured losses only; means-tested; excludes standard policyholders</div>
+    <div class="gcell" style="background:var(--bg); font-size:12px; letter-spacing:-0.02em; line-height:1.5; border-left:1px solid var(--line);">All policyholders; event-specific; full policy value</div>
+    <!-- Row 3 -->
+    <div class="gcell" style="background:var(--bg); font-size:13px; font-weight:500; letter-spacing:-0.03em;">Financial Guidance</div>
+    <div class="gcell" style="background:var(--bg); font-size:12px; color:var(--muted); letter-spacing:-0.02em; line-height:1.5; border-left:1px solid var(--line);">Generic programs (FCAC); 49% of 18–34s still can't access reliable advice</div>
+    <div class="gcell" style="background:var(--bg); font-size:12px; letter-spacing:-0.02em; line-height:1.5; border-left:1px solid var(--line);">Personalized, AI-driven, embedded in existing policy relationship</div>
+    <!-- Row 4 -->
+    <div class="gcell" style="background:var(--bg); font-size:13px; font-weight:500; letter-spacing:-0.03em;">Operational Flexibility</div>
+    <div class="gcell" style="background:var(--bg); font-size:12px; color:var(--muted); letter-spacing:-0.02em; line-height:1.5; border-left:1px solid var(--line);">Cross-provincial licensing restricts adjuster redeployment during disasters</div>
+    <div class="gcell" style="background:var(--bg); font-size:12px; letter-spacing:-0.02em; line-height:1.5; border-left:1px solid var(--line);">National operations; flexible deployment; no jurisdictional barrier</div>
+  </div>
+  <p style="font-size:12px; color:var(--muted); margin-top:12px; letter-spacing:-0.02em; line-height:1.6;">Government sets the regulatory direction — OSFI, FCAC, provincial frameworks. Lifolio follows that direction. Private execution closes the gap.</p>
+</section>
+
+<section class="project-section wrap" style="padding-top:16px;">
+  <div class="ca-stats-grid">
+    <div style="background:#ECC4CB; padding:clamp(20px,3vw,40px);">
+      <div style="font-size:clamp(30px,4vw,52px); font-weight:500; letter-spacing:-0.05em; line-height:1; margin-bottom:12px;">$9.2B</div>
+      <div style="font-size:13px; color:var(--muted); line-height:1.55; letter-spacing:-0.02em;">Insured losses in Canada in 2024 — the highest annual total ever recorded, shattering the previous record of $6.2B set in 2016. Three events drove the spike: a Calgary hailstorm ($2.8B in one hour), the Jasper wildfire ($1.3B), and the GTA flooding. 250,000+ claims in two months: 50% above any prior annual average.</div>
+      <div style="font-size:11px; color:#bbb; margin-top:10px;">Source: <a href="https://www.ibc.ca/news-insights/news/2024-shatters-record-for-costliest-year-for-severe-weather-related-losses-in-canadian-history-at-8-5-billion" target="_blank" rel="noopener" style="color:inherit;border-bottom:1px solid currentColor;">IBC, Jan 2025</a></div>
     </div>
-    <div class="feat-item">
-      <div class="feat-num">02</div>
-      <div class="feat-title">Lorem Feature</div>
-      <div class="feat-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.</div>
+    <div style="background:#ECC4CB; padding:clamp(20px,3vw,40px);">
+      <div style="font-size:clamp(30px,4vw,52px); font-weight:500; letter-spacing:-0.05em; line-height:1; margin-bottom:12px;">92%</div>
+      <div style="font-size:13px; color:var(--muted); line-height:1.55; letter-spacing:-0.02em;">of July 2024 flood claims resolved by private insurers despite record volume. Government response was constrained by cross-provincial licensing restrictions preventing adjuster redeployment across borders.</div>
+      <div style="font-size:11px; color:#bbb; margin-top:10px;">Source: <a href="https://www.ibc.ca/news-insights/news/2024-shatters-record-for-costliest-year-for-severe-weather-related-losses-in-canadian-history-at-8-5-billion" target="_blank" rel="noopener" style="color:inherit;border-bottom:1px solid currentColor;">IBC, Jan 2025</a></div>
     </div>
-    <div class="feat-item">
-      <div class="feat-num">03</div>
-      <div class="feat-title">Lorem Feature</div>
-      <div class="feat-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.</div>
+    <div style="background:#ECC4CB; padding:clamp(20px,3vw,40px);">
+      <div style="font-size:clamp(30px,4vw,52px); font-weight:500; letter-spacing:-0.05em; line-height:1; margin-bottom:12px;">49%</div>
+      <div style="font-size:13px; color:var(--muted); line-height:1.55; letter-spacing:-0.02em;">of Canadians ages 18–34 don't know where to access reliable financial advice — the top barrier, above understanding financial concepts (37%). Government programs have not closed this gap.</div>
+      <div style="font-size:11px; color:#bbb; margin-top:10px;">Source: <a href="https://www.finresilienceinstitute.org/financial-vulnerability/june-2025-financial-resilience-index-model-release-highlights-continued-financial-vulnerability-with-new-data-on-the-financial-literacy-and-financial-resilience-gap-for-youth/" target="_blank" rel="noopener" style="color:inherit;border-bottom:1px solid currentColor;">Financial Resilience Institute, Jun 2025</a></div>
     </div>
+  </div>
+  <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); line-height:1.65; letter-spacing:-0.02em; max-width:800px;">
+    <span style="color:var(--ink); font-weight:500;">Regulatory alignment.</span> Lifolio operates in full alignment with OSFI's consumer protection guidelines, FCAC's national financial literacy mandate, and provincial superintendents of insurance. The argument isn't that government shouldn't lead — it's that Intact's data reach, operational agility, and trust relationships enable a layer of proactive, personalized guidance that no government program currently delivers at the individual level.
   </div>
 </section>
 
@@ -339,18 +604,20 @@
   </div>
 </section>
 
-<!-- Research / Insight -->
+<!-- Problem Space -->
 <section class="project-section wrap">
   <div class="two-col">
     <div class="ph-text-block">
-      <div class="ph-label">Research</div>
-      <h2 class="ph-heading">Lorem ipsum dolor sit amet consectetur</h2>
-      <p class="ph-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <div class="ph-label">Problem</div>
+      <h2 class="ph-heading">Three structural gaps insurance doesn't address</h2>
+      <p class="ph-body">Insurance resolves uncertainty after the fact — but the uncertainty that shapes a person's financial trajectory happens before any claim is filed. Life events like a home purchase, a marriage, or a job change carry legal and financial obligations that most people navigate blind.</p>
+      <p class="ph-body" style="margin-top:14px;">For young adults and first-time earners, the gap is wider. Financial literacy isn't a given, and the systems designed to help — lawyers, advisors, accountants — are priced out of reach at exactly the moments they're needed most.</p>
     </div>
     <div class="ph-text-block">
-      <div class="ph-label">Insight</div>
-      <h2 class="ph-heading">Duis aute irure dolor in reprehenderit</h2>
-      <p class="ph-body">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+      <div class="ph-label">Design Principles</div>
+      <h2 class="ph-heading">Proactive over reactive. Personal over generic.</h2>
+      <p class="ph-body">Lifolio is built on the premise that the best time to offer guidance is before a customer realizes they need it. Intact's existing policy data becomes the signal. The AI layer becomes the interpreter. The professional network becomes the safety net.</p>
+      <p class="ph-body" style="margin-top:14px;">The goal isn't to replace insurance — it's to extend the relationship from protection into life planning, rebuilding insurance at the micro level around individual decisions rather than population-level risk models.</p>
     </div>
   </div>
 </section>
@@ -358,6 +625,28 @@
 <!-- Full-width image placeholder -->
 <section class="project-section wrap">
   <div class="ph-img" style="min-height:520px;">Full-Width Visual Placeholder</div>
+</section>
+
+<!-- Service Component Proposal -->
+<section class="project-section wrap">
+  <div class="ph-label" style="margin-bottom:32px;">Service Component Proposal</div>
+  <div class="feat-grid">
+    <div class="feat-item">
+      <div class="feat-num">01</div>
+      <div class="feat-title">Life Event Detection</div>
+      <div class="feat-desc">Customers enter a life event, or Lifolio detects it from existing Intact data — a new home policy signals a purchase, a beneficiary change signals a relationship shift. AI maps all relevant legal and tax obligations to that event automatically.</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-num">02</div>
+      <div class="feat-title">Living Obligations Dashboard</div>
+      <div class="feat-desc">Obligations surface as a living dashboard with deadlines, required documents, and progress indicators. Proactive alerts prevent missed filings, expired POAs, and outdated beneficiary designations.</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-num">03</div>
+      <div class="feat-title">Verified Professional Handoff</div>
+      <div class="feat-desc">When AI reaches its limit, it connects customers to a lawyer, CPA, or notary through a structured micro-consultation. The professional receives a pre-built brief. The customer gets affordable, targeted advice exactly when needed.</div>
+    </div>
+  </div>
 </section>
 
 </body>
