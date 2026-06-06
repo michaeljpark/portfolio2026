@@ -327,6 +327,33 @@
     .ai-chart-desktop{ display:none; }
     .ai-chart-mobile{ display:block; }
   }
+
+  /* PHASE COLLAPSIBLE */
+  .phase-media-wrap{ max-width:var(--max); margin:0 auto; padding:clamp(28px,4vw,48px) var(--pad) 0; cursor:pointer; }
+  .phase-toggle{
+    display:block; width:100%; background:none; border:none; cursor:pointer;
+    font-family:var(--font); color:var(--ink);
+    padding:clamp(20px,3vw,32px) 0;
+  }
+  .phase-toggle-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:24px; max-width:var(--max); margin:0 auto; text-align:left;
+    padding-left:var(--pad); padding-right:var(--pad);
+  }
+  .phase-num{ font-size:11px; color:var(--muted); letter-spacing:0.07em; margin-bottom:4px; }
+  .phase-name{ font-size:clamp(22px,3vw,42px); font-weight:500; letter-spacing:-0.04em; line-height:1.1; transition:opacity .2s; margin-bottom:4px; }
+  .phase-sub{ font-size:13px; color:var(--muted); letter-spacing:-0.02em; line-height:1.4; }
+  .phase-toggle:hover .phase-name{ opacity:0.6; }
+  .phase-arrow{ flex-shrink:0; color:var(--muted); transition:transform 0.38s ease; }
+  .phase-block[data-open] .phase-arrow{ transform:rotate(180deg); }
+  .phase-body{ display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.45s ease; }
+  .phase-block[data-open] .phase-body{ grid-template-rows:1fr; }
+  .phase-body-inner{ overflow:hidden; }
+  .phase-media{
+    width:100%; aspect-ratio:16/9; border-radius:16px; overflow:hidden;
+    background:#d8d8d6; display:flex; align-items:center; justify-content:center;
+    font-size:11px; color:var(--muted); letter-spacing:0;
+  }
 </style>
 </head>
 <body>
@@ -374,12 +401,28 @@
   </div>
 </header>
 
-<section class="project-section wrap">
-  <div class="project-stage">
-    <video src="./tokentrustprev1.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"
-      style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+<div class="phase-wrap">
+<div class="phase-block" data-open>
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">01</div>
+        <div class="phase-name">Overview</div>
+        <div class="phase-sub">Ethical AI data governance platform</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media">
+      <video src="./tokentrustprev1.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"
+        style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+    </div>
   </div>
-</section>
+  <div class="phase-body">
+    <div class="phase-body-inner">
 
 <section class="kpi-section wrap">
   <div class="kpi-row">
@@ -468,6 +511,29 @@
     </div>
   </div>
 </section>
+
+    </div><!-- /phase-body-inner -->
+  </div><!-- /phase-body -->
+</div><!-- /phase-block 01 -->
+
+<div class="phase-block">
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">02</div>
+        <div class="phase-name">Research</div>
+        <div class="phase-sub">Data sovereignty and the regulatory gap</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media"></div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner">
 
 <!-- ===== 02 BACKGROUND — GDPR ===== -->
 <section class="tt-section wrap">
@@ -743,6 +809,29 @@
     </div>
   </div>
 </section>
+
+    </div><!-- /phase-body-inner -->
+  </div><!-- /phase-body -->
+</div><!-- /phase-block 02 -->
+
+<div class="phase-block">
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">03</div>
+        <div class="phase-name">Strategy</div>
+        <div class="phase-sub">Service architecture and market positioning</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media"></div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner">
 
 <!-- ===== 06 VALUE SHIFT ===== -->
 <section class="tt-section wrap">
@@ -1301,6 +1390,11 @@
   </div>
 </section>
 
+    </div><!-- /phase-body-inner -->
+  </div><!-- /phase-body -->
+</div><!-- /phase-block 03 -->
+</div><!-- /phase-wrap -->
+
 <style>
 /* ===== PART 2 STYLES ===== */
 .pt2-banner{
@@ -1458,6 +1552,26 @@
   #rm-mb{ display:block; width:100%; max-width:420px; margin:0 auto; }
 }
 </style>
+
+<div class="phase-wrap">
+<div class="phase-block">
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">04</div>
+        <div class="phase-name">Blueprint</div>
+        <div class="phase-sub">From data ownership to data economy</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media"></div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner">
 
 <!-- ============================================================
      PART 2 — A Regulatory and Operational Blueprint
@@ -2794,6 +2908,55 @@
 })();
 </script>
 
+    </div><!-- /phase-body-inner -->
+  </div><!-- /phase-body -->
+</div><!-- /phase-block 04 -->
+</div><!-- /phase-wrap -->
+
+<div class="phase-wrap">
+<div class="phase-block">
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">05</div>
+        <div class="phase-name">Conclusion</div>
+        <div class="phase-sub">Reflections and key takeaways</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media"></div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner"></div>
+  </div>
+</div>
+</div><!-- /phase-wrap -->
+
+<footer style="padding:clamp(64px,8vw,120px) var(--pad) clamp(48px,6vw,80px); text-align:center;">
+  <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
+</footer>
+
+<script>
+function togglePhase(el) {
+  const block = el.closest('.phase-block');
+  if (block.hasAttribute('data-open')) {
+    block.removeAttribute('data-open');
+  } else {
+    block.setAttribute('data-open', '');
+    setTimeout(() => {
+      const nav = document.querySelector('nav.top');
+      const offset = nav ? nav.offsetHeight + 16 : 72;
+      const target = block.querySelector('.phase-media-wrap') || block;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }, 40);
+  }
+}
+</script>
 
 </body>
 </html>

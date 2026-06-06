@@ -19,7 +19,7 @@
   body{
     font-family:var(--font); font-size:14px; line-height:1.5; font-weight:400;
     letter-spacing:-0.05em; -webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility; overflow-x:hidden;
+    text-rendering:optimizeLegibility; overflow-x:clip;
   }
   a{ color:inherit; text-decoration:none; }
   img{ display:block; max-width:100%; }
@@ -399,7 +399,7 @@
     }
   }
 
-  .kpi-section{ padding-top:120px; padding-bottom:120px; border-top:1px solid var(--line); }
+  .kpi-section{ padding-top:120px; padding-bottom:120px; }
   .kpi-head{
     display:flex; justify-content:space-between; align-items:flex-start;
     margin-bottom:48px; gap:24px;
@@ -456,7 +456,7 @@
   }
 
   /* Timeline */
-  .tl-section{ padding-top:64px; padding-bottom:24px; border-top:1px solid var(--line); }
+  .tl-section{ padding-top:clamp(48px,7vw,96px); padding-bottom:clamp(48px,7vw,96px); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
   .tl-phase + .tl-phase{ margin-top:48px; }
   .tl-head{
     display:flex; justify-content:space-between; align-items:flex-start;
@@ -640,7 +640,7 @@
   /* Phase divider removed */
 
   @media(max-width:880px){
-    .tl-section{ padding-top:48px; padding-bottom:24px; }
+    .tl-section{ padding-top:48px; padding-bottom:48px; }
     .tl-head{ margin-bottom:16px; flex-direction:column; gap:6px; }
     .tl-phase-meta{ text-align:left; }
 
@@ -712,7 +712,6 @@
   .dep-section{
     padding-top:64px;
     padding-bottom:120px;
-    border-top:1px solid var(--line);
   }
   .dep-block{
     font-size:clamp(28px,4vw,64px);
@@ -755,13 +754,12 @@
   .vs-section{
     padding-top:96px;
     padding-bottom:120px;
-    border-top:1px solid var(--line);
   }
   .vs-head{ margin-bottom:64px; }
   .vs-stage{
     position:relative;
     width:100%;
-    overflow:visible;
+    overflow:hidden;
   }
   .vs-stage-large{ min-height:clamp(220px,26vw,360px); }
   .vs-stage-small{
@@ -946,7 +944,6 @@
   .ft-section{
     padding-top:120px;
     padding-bottom:140px;
-    border-top:1px solid var(--line);
   }
   .ft-head{ margin-bottom:56px; }
   .ft-grid{
@@ -1138,17 +1135,7 @@
     position:relative;
     height:300vh; /* 3 panels × 100vh of scroll */
   }
-  .market-stack::before{
-    content:"";
-    position:absolute;
-    top:0; left:0; right:0;
-    height:1px;
-    max-width:var(--max);
-    margin:0 auto;
-    background:var(--line);
-    z-index:1;
-    pointer-events:none;
-  }
+  .market-stack::before{ display:none; }
   .market-stage{
     position:sticky; top:0;
     height:100vh;
@@ -1200,7 +1187,7 @@
     .market-nav{ display:none; }
   }
 
-  .hyp-section{ padding-top:64px; padding-bottom:64px; border-top:1px solid var(--line); }
+  .hyp-section{ padding-top:64px; padding-bottom:64px; }
   .hyp-head{ margin-bottom:48px; }
   .hyp-title{
     font-size:clamp(32px,4vw,56px); font-weight:400;
@@ -1242,16 +1229,7 @@
     background:var(--bg); color:var(--ink);
     position:relative;
   }
-  .entity-section::before{
-    content:"";
-    display:block;
-    position:absolute;
-    top:0; left:0; right:0;
-    height:1px;
-    max-width:var(--max);
-    margin:0 auto;
-    background:var(--line);
-  }
+  .entity-section::before{ display:none; }
   .entity-head{
     max-width:var(--max);
     margin:0 auto 56px;
@@ -1573,10 +1551,13 @@
     .em-entity .em-tag{ font-size:9px; opacity:0.55; margin-left:auto; text-align:right; }
   }
 
+  .interaction-overview-section{
+    padding-top:clamp(56px,8vw,120px);
+    padding-bottom:clamp(56px,8vw,120px);
+  }
   .vimeo-section{
     padding-top:clamp(56px,8vw,120px);
     padding-bottom:clamp(56px,8vw,120px);
-    border-top:1px solid var(--line);
   }
   .vimeo-frame{
     width:100%;
@@ -1588,6 +1569,37 @@
     aspect-ratio:16/9;
     border:0;
     display:block;
+  }
+
+  /* PHASE COLLAPSIBLE */
+  .phase-media-wrap{ max-width:var(--max); margin:0 auto; padding:clamp(28px,4vw,48px) var(--pad) 0; cursor:pointer; }
+  .phase-toggle{
+    display:block; width:100%; background:none; border:none; cursor:pointer;
+    font-family:var(--font); color:var(--ink);
+    padding:clamp(20px,3vw,32px) 0;
+  }
+  .phase-toggle-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:24px; max-width:var(--max); margin:0 auto; text-align:left;
+    padding-left:var(--pad); padding-right:var(--pad);
+  }
+  .phase-num{ font-size:11px; color:var(--muted); letter-spacing:0.07em; margin-bottom:4px; }
+  .phase-name{ font-size:clamp(22px,3vw,42px); font-weight:500; letter-spacing:-0.04em; line-height:1.1; transition:opacity .2s; margin-bottom:4px; }
+  .phase-sub{ font-size:13px; color:var(--muted); letter-spacing:-0.02em; line-height:1.4; }
+  .phase-toggle:hover .phase-name{ opacity:0.6; }
+  .phase-arrow{ flex-shrink:0; color:var(--muted); transition:transform 0.38s ease; }
+  .phase-block[data-open] .phase-arrow{ transform:rotate(180deg); }
+  .phase-body{ display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.45s ease; }
+  .phase-block[data-open] .phase-body{ grid-template-rows:1fr; }
+  .phase-body-inner{ overflow:hidden; }
+  /* Market Analysis: sticky-safe — no overflow:hidden so market-stage sticky works */
+  .phase-block[data-market-phase] .phase-body{ display:none; }
+  .phase-block[data-market-phase][data-open] .phase-body{ display:block; }
+  .phase-block[data-market-phase] .phase-body-inner{ overflow:visible; }
+  .phase-media{
+    width:100%; aspect-ratio:16/9; border-radius:16px; overflow:hidden;
+    background:#1a1a1a; display:flex; align-items:center; justify-content:center;
+    font-size:11px; color:var(--muted); letter-spacing:0;
   }
 </style>
 </head>
@@ -1621,21 +1633,38 @@
   </div>
 </header>
 
-<section class="project-section wrap">
-  <video
-    id="ongen-showcase-video"
-    src="./OnGen2026Showcase.mp4"
-    autoplay
-    loop
-    muted
-    defaultMuted
-    playsinline
-    webkit-playsinline
-    disableRemotePlayback
-    preload="metadata"
-    style="width:100%; display:block; border-radius:20px; background:#0a0a0a;"
-  ></video>
-</section>
+<div class="phase-wrap">
+<div class="phase-block" data-open>
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">01</div>
+        <div class="phase-name">Overview</div>
+        <div class="phase-sub">Reimagined radio in augmented reality</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media">
+      <video
+        id="ongen-showcase-video"
+        src="./OnGen2026Showcase.mp4"
+        autoplay
+        loop
+        muted
+        defaultMuted
+        playsinline
+        webkit-playsinline
+        disableRemotePlayback
+        preload="metadata"
+        style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner">
 
 <section class="project-section wrap" style="padding-bottom:0;">
   <div class="stage-card">
@@ -1733,12 +1762,6 @@
   </div>
 </section>
 
-<section class="project-section wrap">
-  <div class="project-stage">
-    <video src="./ongenprev3.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"></video>
-  </div>
-</section>
-
 <section class="seek-section wrap">
   <div class="seek-grid">
     <div class="seek-left">
@@ -1797,6 +1820,11 @@
     </div>
   </div>
 </section>
+
+    </div><!-- /phase-body-inner -->
+  </div><!-- /phase-body -->
+</div><!-- /phase-block 01 -->
+</div><!-- /phase-wrap -->
 
 <section class="tl-section wrap">
   <div class="tl-head" style="margin-bottom:32px;">
@@ -1953,6 +1981,26 @@
   </div>
 </section>
 
+<div class="phase-wrap">
+<div class="phase-block">
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">02</div>
+        <div class="phase-name">Hypothesis</div>
+        <div class="phase-sub">User-centric context and AR behaviour</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media"></div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner">
+
 <section class="dep-section wrap">
   <div class="dep-block">
     <span class="a">User-Centric Context</span><br>
@@ -1992,23 +2040,45 @@
   </div>
 </section>
 
+    </div><!-- /phase-body-inner -->
+  </div><!-- /phase-body -->
+</div><!-- /phase-block 02 -->
+</div><!-- /phase-wrap -->
+
+<div class="phase-wrap">
+<div class="phase-block" data-market-phase>
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">03</div>
+        <div class="phase-name">Value Architecture</div>
+        <div class="phase-sub">Value shift, stakeholder ecosystem, and strategic positioning</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media"></div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner">
+
 <section class="vs-section wrap">
   <div class="vs-head">
     <div class="hyp-title">Value Shift</div>
   </div>
-
   <div class="vs-stage vs-stage-large">
     <div class="vs-text" data-vs-text data-vs-dir="lr"
          data-vs-a="Outdated&#10;Radio&#10;Station"
          data-vs-b="AI to AI&#10;Regional Channel /&#10;Contextual Ecosystem"></div>
   </div>
-
   <div class="vs-stage vs-stage-small">
     <div class="vs-text" data-vs-text data-vs-dir="rl"
          data-vs-a="Slow&#10;Confined&#10;Outdated Media"
          data-vs-b="Alternative Channel&#10;Regional&#10;Stable"></div>
   </div>
-
   <div class="vm-block">
     <div id="vmChart" class="vm-chart" aria-hidden="false"></div>
   </div>
@@ -2052,6 +2122,31 @@
     </div>
   </div>
 </section>
+
+    </div><!-- /phase-body-inner -->
+  </div><!-- /phase-body -->
+</div><!-- /phase-block value-arch -->
+</div><!-- /phase-wrap -->
+
+<div class="phase-wrap">
+<div class="phase-block" data-market-phase>
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">04</div>
+        <div class="phase-name">Market Analysis</div>
+        <div class="phase-sub">TAM, SAM, and SOM across geospatial and AR markets</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media"></div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner">
 
 <section class="market-stack">
   <div class="market-stage">
@@ -2195,6 +2290,11 @@
     </div>
   </div>
 </section>
+
+    </div><!-- /phase-body-inner -->
+  </div><!-- /phase-body -->
+</div><!-- /phase-block market -->
+</div><!-- /phase-wrap -->
 
 <script>
 /* TAM → SAM → SOM scroll-driven panel switcher with per-panel count-up */
@@ -3005,6 +3105,26 @@ window.addEventListener('load', function(){
 });
 </script>
 
+<div class="phase-wrap">
+<div class="phase-block">
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">05</div>
+        <div class="phase-name">Stakeholder Research</div>
+        <div class="phase-sub">RACI orbit, journey mapping, and user behaviour</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media"></div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner">
+
 <section class="stakeholder-section wrap">
   <div class="ft-head">
     <div class="hyp-title">Stakeholder Map</div>
@@ -3032,6 +3152,64 @@ window.addEventListener('load', function(){
     <div class="raci-outer-nodes"></div>
   </div>
 </section>
+
+<section class="raci-table-section wrap">
+  <div class="raci-table-head">
+    <div class="hyp-title">Stakeholder Map</div>
+  </div>
+  <div class="raci-table-wrap">
+    <table class="raci-table">
+      <thead>
+        <tr>
+          <th class="raci-th raci-col-r">R — Responsible</th>
+          <th class="raci-th raci-col-a">A — Accountable</th>
+          <th class="raci-th raci-col-c">C — Consulted</th>
+          <th class="raci-th raci-col-i">I — Informed</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Feature Lead</td><td>Go-to-Market Lead</td><td>3D Environment Developer</td><td>Early Adopter</td></tr>
+        <tr><td>User Research Analyst</td><td>Competitive Analyst</td><td>Geospatial Data Specialist</td><td>Accessibility User</td></tr>
+        <tr><td>Interaction Designer</td><td>Product Marketing Manager</td><td>AR SDK Integrator</td><td>Community Member</td></tr>
+        <tr><td>Spatial UI Specialist</td><td>Revenue Strategist</td><td>Acoustic Engineer</td><td>Tourist / Visitor</td></tr>
+        <tr><td>Prototyping Lead</td><td>Technical Program Manager</td><td>Voice UI Designer</td><td>Regular Commuter</td></tr>
+        <tr><td>AR Interface Designer</td><td>API Governance Lead</td><td>Spatial Audio Engineer</td><td>Privacy Audit Reviewer</td></tr>
+        <tr><td>Local Events Coordinator</td><td>Platform Architect</td><td>Geofencing Analyst</td><td>Telecom Regulator</td></tr>
+        <tr><td>Regional Story Editor</td><td>Regional Partner Manager</td><td>GPS Accuracy Tester</td><td>Local Government Liaison</td></tr>
+        <tr><td>Multilingual Curator</td><td>Data Licensing Negotiator</td><td>Real-time Data Feed Manager</td><td>Data Sovereignty Officer</td></tr>
+        <tr><td>Community Contributor</td><td>Ecosystem Builder</td><td>Contextual Trigger Engineer</td><td>Innovation Policy Advisor</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<style>
+  .raci-table-section{
+    padding-top:clamp(48px,6vw,80px);
+    padding-bottom:clamp(48px,6vw,80px);
+  }
+  .raci-table-head{ margin-bottom:clamp(28px,3vw,48px); }
+  .raci-table-wrap{ overflow-x:auto; }
+  .raci-table{
+    width:100%; border-collapse:collapse;
+    font-size:13px; line-height:1.5;
+  }
+  .raci-th{
+    text-align:left; padding:10px 16px;
+    font-weight:500; font-size:11px; letter-spacing:0.04em;
+    border-bottom:1px solid var(--line);
+  }
+  .raci-col-r{ color:#0a0a0a; }
+  .raci-col-a{ color:#0a0a0a; }
+  .raci-col-c{ color:#0a0a0a; }
+  .raci-col-i{ color:#0a0a0a; }
+  .raci-table td{
+    padding:10px 16px; vertical-align:top;
+    border-bottom:1px solid var(--line);
+    color:var(--muted);
+  }
+  .raci-table tbody tr:last-child td{ border-bottom:none; }
+</style>
 
 <script>
 /* Stakeholder Map: stadium / pill orbit layout */
@@ -3434,7 +3612,6 @@ window.addEventListener('load', function(){
   .stakeholder-section{
     padding-top:clamp(80px,10vw,140px);
     padding-bottom:clamp(80px,10vw,140px);
-    border-top:1px solid var(--line);
   }
   .stakeholder-section .ft-head{ margin-bottom:clamp(36px,4vw,64px); }
 
@@ -3601,7 +3778,6 @@ window.addEventListener('load', function(){
   .jm-section{
     padding-top:clamp(72px,9vw,140px);
     padding-bottom:clamp(72px,8vw,120px);
-    border-top:1px solid var(--line);
     color:var(--ink);
     background:var(--bg);
   }
@@ -3830,13 +4006,6 @@ window.addEventListener('load', function(){
     .jm-arc-svg{ aspect-ratio: 1400 / 500; }
   }
 </style>
-
-<section class="project-section wrap" style="padding-top:clamp(48px,6vw,96px);padding-bottom:clamp(48px,6vw,96px);border-top:1px solid var(--line);">
-  <video
-    src="./ongenoverview.mp4"
-    autoplay loop muted playsinline webkit-playsinline preload="metadata"
-    style="width:100%;display:block;border-radius:12px;"></video>
-</section>
 
 <!-- ============================================================
      JOURNEY MAPPING — three personas, three trajectories
@@ -4167,6 +4336,34 @@ window.addEventListener('load', function(){
   });
 })();
 </script>
+
+    </div><!-- /phase-body-inner -->
+  </div><!-- /phase-body -->
+</div><!-- /phase-block 04 -->
+</div><!-- /phase-wrap -->
+
+<div class="phase-wrap">
+<div class="phase-block">
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">06</div>
+        <div class="phase-name">Prototyping</div>
+        <div class="phase-sub">System architecture, entity model, and prototype</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media">
+      <video src="./ongenprev3.mp4" autoplay muted loop playsinline preload="metadata"
+        style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner">
 
 <!-- ============================================================
      ENTITY DIAGRAM — data model for the OnGen Radio prototype
@@ -4619,6 +4816,14 @@ window.addEventListener('load', function(){
 })();
 </script>
 
+<section class="interaction-overview-section wrap">
+  <div class="hyp-title">Interaction Overview</div>
+  <video
+    src="./ongenoverview.mp4"
+    autoplay loop muted playsinline webkit-playsinline preload="metadata"
+    style="width:100%;display:block;border-radius:12px;margin-top:clamp(28px,3vw,48px);"></video>
+</section>
+
 <section class="vimeo-section wrap" aria-label="OnGen Radio video">
   <div class="vimeo-frame">
     <iframe
@@ -4629,6 +4834,56 @@ window.addEventListener('load', function(){
       allowfullscreen></iframe>
   </div>
 </section>
+
+    </div><!-- /phase-body-inner -->
+  </div><!-- /phase-body -->
+</div><!-- /phase-block 06 -->
+</div><!-- /phase-wrap -->
+
+<div class="phase-wrap">
+<div class="phase-block">
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">07</div>
+        <div class="phase-name">Conclusion</div>
+        <div class="phase-sub">Reflections and key takeaways</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media"></div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner"></div>
+  </div>
+</div>
+</div><!-- /phase-wrap -->
+
+<footer style="padding:clamp(64px,8vw,120px) var(--pad) clamp(48px,6vw,80px); text-align:center;">
+  <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
+</footer>
+
+<script>
+function togglePhase(el) {
+  const block = el.closest('.phase-block');
+  if (block.hasAttribute('data-open')) {
+    block.removeAttribute('data-open');
+  } else {
+    block.setAttribute('data-open', '');
+    setTimeout(() => {
+      const nav = document.querySelector('nav.top');
+      const offset = nav ? nav.offsetHeight + 16 : 72;
+      const target = block.querySelector('.phase-media-wrap') || block;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }, 40);
+  }
+}
+</script>
 
 </body>
 </html>
