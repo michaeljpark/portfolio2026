@@ -195,6 +195,33 @@
 
 </div><!-- /phase-wrap -->
 
+<div class="phase-wrap">
+<div class="phase-block">
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">02</div>
+        <div class="phase-name">Conclusion</div>
+        <div class="phase-sub">Reflections and key takeaways</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media"></div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner"></div>
+  </div>
+</div>
+</div><!-- /phase-wrap -->
+
+<footer style="padding:clamp(64px,8vw,120px) var(--pad) clamp(48px,6vw,80px); text-align:center;">
+  <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
+</footer>
+
 <script>
 function togglePhase(el) {
   const block = el.closest('.phase-block');
