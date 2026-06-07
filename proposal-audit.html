@@ -1424,16 +1424,15 @@
 function togglePhase(el) {
   const block = el.closest('.phase-block');
   if (block.hasAttribute('data-open')) {
+    const nav = document.querySelector('nav.top');
+    const navH = nav ? nav.offsetHeight : 57;
+    const blockTop = block.getBoundingClientRect().top + window.scrollY;
+    if (window.scrollY > blockTop) {
+      window.scrollTo({ top: blockTop - navH, behavior: 'instant' });
+    }
     block.removeAttribute('data-open');
   } else {
     block.setAttribute('data-open', '');
-    setTimeout(() => {
-      const nav = document.querySelector('nav.top');
-      const offset = nav ? nav.offsetHeight + 16 : 72;
-      const target = block.querySelector('.phase-media-wrap') || block;
-      const top = target.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({ top, behavior: 'smooth' });
-    }, 40);
   }
 }
 (function(){const n=document.querySelector('nav.top');if(n)document.documentElement.style.setProperty('--nav-h',n.offsetHeight+'px');})();
