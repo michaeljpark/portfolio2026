@@ -219,9 +219,13 @@
   /* ===== PHASE COLLAPSIBLE ===== */
   .phase-media-wrap{ cursor:pointer; }
   .phase-toggle{
-    display:block; width:100%; background:none; border:none; cursor:pointer;
+    display:block; width:100%; border:none; cursor:pointer;
     font-family:var(--font); color:var(--ink);
     padding:clamp(20px,3vw,32px) 0;
+    position:sticky; top:var(--nav-h,57px); z-index:40;
+    background:var(--bg);
+    background:color-mix(in srgb, var(--bg) 94%, transparent);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
   }
   .phase-toggle-inner{
     display:flex; align-items:center; justify-content:space-between;
@@ -667,7 +671,7 @@
       <div style="font-size:11px; color:#D01F3D; margin-top:10px;">Source: <a href="https://www.finresilienceinstitute.org/financial-vulnerability/june-2025-financial-resilience-index-model-release-highlights-continued-financial-vulnerability-with-new-data-on-the-financial-literacy-and-financial-resilience-gap-for-youth/" target="_blank" rel="noopener" style="color:inherit;border-bottom:1px solid currentColor;">Financial Resilience Institute, Jun 2025</a></div>
     </div>
   </div>
-  <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); line-height:1.65; letter-spacing:-0.02em;">
+  <div style="margin-top:20px; padding-top:20px; font-size:13px; color:var(--muted); line-height:1.65; letter-spacing:-0.02em;">
     <span style="color:var(--ink); font-weight:500;">Regulatory alignment.</span> Lifolio operates in full alignment with OSFI's consumer protection guidelines, FCAC's national financial literacy mandate, and provincial superintendents of insurance. The argument isn't that government shouldn't lead — it's that Intact's data reach, operational agility, and trust relationships enable a layer of proactive, personalized guidance that no government program currently delivers at the individual level.
   </div>
   <img src="./lifolioimg3.png" alt="Lifolio regulatory alignment" style="width:100%;border-radius:20px;display:block;margin-top:20px;">
@@ -815,6 +819,7 @@ function togglePhase(el) {
     }, 40);
   }
 }
+(function(){const n=document.querySelector('nav.top');if(n)document.documentElement.style.setProperty('--nav-h',n.offsetHeight+'px');})();
 </script>
 </body>
 </html>

@@ -64,7 +64,6 @@
   .kpi-section{ padding-bottom:64px; }
   .kpi-row{
     display:grid; grid-template-columns:1fr 1fr 1fr;
-    border-top:1px solid var(--line);
     border-bottom:1px solid var(--line);
     padding:32px 0;
   }
@@ -110,9 +109,13 @@
   /* PHASE COLLAPSIBLE */
   .phase-media-wrap{ max-width:var(--max); margin:0 auto; padding:clamp(28px,4vw,48px) var(--pad) 0; cursor:pointer; }
   .phase-toggle{
-    display:block; width:100%; background:none; border:none; cursor:pointer;
+    display:block; width:100%; border:none; cursor:pointer;
     font-family:var(--font); color:var(--ink);
     padding:clamp(20px,3vw,32px) 0;
+    position:sticky; top:var(--nav-h,57px); z-index:40;
+    background:var(--bg);
+    background:color-mix(in srgb, var(--bg) 94%, transparent);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
   }
   .phase-toggle-inner{
     display:flex; align-items:center; justify-content:space-between;
@@ -333,6 +336,7 @@ function togglePhase(el) {
     }, 40);
   }
 }
+(function(){const n=document.querySelector('nav.top');if(n)document.documentElement.style.setProperty('--nav-h',n.offsetHeight+'px');})();
 </script>
 </body>
 </html>
