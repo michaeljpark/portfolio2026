@@ -1603,8 +1603,8 @@
     background:#000; display:flex; align-items:center; justify-content:center;
     font-size:11px; color:var(--muted); letter-spacing:0;
   }
-  #ascii-stage, #valu-stage{ position:relative; }
-  #ascii-pre, #valu-pre{
+  #ascii-stage, #valu-stage, #market-stage{ position:relative; }
+  #ascii-pre, #valu-pre, #market-pre{
     position:absolute; top:0; left:0; margin:0; padding:0;
     font-family:'Courier New',Courier,monospace;
     font-size:12px; line-height:1.15;
@@ -2157,7 +2157,7 @@
     </div>
   </button>
   <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media"></div>
+    <div class="phase-media" id="market-stage"><pre id="market-pre"></pre></div>
   </div>
   <div class="phase-body">
     <div class="phase-body-inner">
@@ -4883,6 +4883,7 @@ window.addEventListener('load', function(){
 
 <script src="./Hypothesisanimation.js"></script>
 <script src="./valuanimation.js"></script>
+<script src="./marketanimation.js"></script>
 <script>
 /* ascii players */
 (function(){
@@ -4920,8 +4921,9 @@ window.addEventListener('load', function(){
     }
   }
 
-  startPlayer('ascii-stage', 'ascii-pre', window.hypAnimFrames);
-  startPlayer('valu-stage',  'valu-pre',  window.valuAnimFrames);
+  startPlayer('ascii-stage',  'ascii-pre',  window.hypAnimFrames);
+  startPlayer('valu-stage',   'valu-pre',   window.valuAnimFrames);
+  startPlayer('market-stage', 'market-pre', window.marketAnimFrames);
 })();
 
 function togglePhase(el) {
