@@ -221,8 +221,8 @@
   .phase-toggle{
     display:block; width:100%; border:none; cursor:pointer;
     font-family:var(--font); color:var(--ink);
-    padding:clamp(20px,3vw,32px) 0;
-    position:sticky; top:var(--nav-h,57px); z-index:40;
+    padding:2px 0 clamp(20px,3vw,32px);
+    position:sticky; top:calc(var(--nav-h,57px) - 2px); z-index:40;
     background:var(--bg);
     background:color-mix(in srgb, var(--bg) 94%, transparent);
     backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
