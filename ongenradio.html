@@ -1603,8 +1603,8 @@
     background:#000; display:flex; align-items:center; justify-content:center;
     font-size:11px; color:var(--muted); letter-spacing:0;
   }
-  #ascii-stage{ position:relative; }
-  #ascii-pre{
+  #ascii-stage, #valu-stage{ position:relative; }
+  #ascii-pre, #valu-pre{
     position:absolute; top:0; left:0; margin:0; padding:0;
     font-family:'Courier New',Courier,monospace;
     font-size:12px; line-height:1.15;
@@ -2074,7 +2074,7 @@
     </div>
   </button>
   <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media"></div>
+    <div class="phase-media" id="valu-stage"><pre id="valu-pre"></pre></div>
   </div>
   <div class="phase-body">
     <div class="phase-body-inner">
@@ -4882,40 +4882,46 @@ window.addEventListener('load', function(){
 </footer>
 
 <script src="./Hypothesisanimation.js"></script>
+<script src="./valuanimation.js"></script>
 <script>
-/* ascii player */
+/* ascii players */
 (function(){
-  var stage = document.getElementById('ascii-stage');
-  var pre   = document.getElementById('ascii-pre');
-  if(!stage || !pre || typeof frames === 'undefined' || !frames.length) return;
-  var fi = 0;
+  function startPlayer(stageId, preId, frames){
+    var stage = document.getElementById(stageId);
+    var pre   = document.getElementById(preId);
+    if(!stage || !pre || !frames || !frames.length) return;
+    var fi = 0;
 
-  function computeScale(){
-    pre.style.transform = 'none';
-    var cw = stage.clientWidth, ch = stage.clientHeight;
-    var pw = pre.offsetWidth,   ph = pre.offsetHeight;
-    if(!cw || !ch || !pw || !ph) return;
-    var s  = Math.min(cw/pw, ch/ph);
-    var tx = (cw - pw*s)/2, ty = (ch - ph*s)/2;
-    pre.style.transform = 'translate('+tx+'px,'+ty+'px) scale('+s+')';
+    function computeScale(){
+      pre.style.transform = 'none';
+      var cw = stage.clientWidth, ch = stage.clientHeight;
+      var pw = pre.offsetWidth,   ph = pre.offsetHeight;
+      if(!cw || !ch || !pw || !ph) return;
+      var s  = Math.min(cw/pw, ch/ph);
+      var tx = (cw - pw*s)/2, ty = (ch - ph*s)/2;
+      pre.style.transform = 'translate('+tx+'px,'+ty+'px) scale('+s+')';
+    }
+
+    function nextFrame(){
+      pre.textContent = frames[fi];
+      fi = (fi+1) % frames.length;
+    }
+
+    nextFrame();
+    requestAnimationFrame(function(){
+      computeScale();
+      setInterval(nextFrame, 1000/24);
+    });
+
+    if(window.ResizeObserver){
+      new ResizeObserver(computeScale).observe(stage);
+    } else {
+      window.addEventListener('resize', computeScale);
+    }
   }
 
-  function nextFrame(){
-    pre.textContent = frames[fi];
-    fi = (fi+1) % frames.length;
-  }
-
-  nextFrame();
-  requestAnimationFrame(function(){
-    computeScale();
-    setInterval(nextFrame, 1000/24);
-  });
-
-  if(window.ResizeObserver){
-    new ResizeObserver(computeScale).observe(stage);
-  } else {
-    window.addEventListener('resize', computeScale);
-  }
+  startPlayer('ascii-stage', 'ascii-pre', window.hypAnimFrames);
+  startPlayer('valu-stage',  'valu-pre',  window.valuAnimFrames);
 })();
 
 function togglePhase(el) {

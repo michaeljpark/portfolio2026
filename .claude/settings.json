@@ -19,7 +19,9 @@
       "Bash(Measure-Object -Line)",
       "Bash(Get-Content \"c:\\\\Users\\\\joong\\\\Desktop\\\\Github\\\\porrtfolio2026\\\\tokentrust.html\")",
       "PowerShell(\\(Get-Content \"c:\\\\Users\\\\joong\\\\Desktop\\\\Github\\\\porrtfolio2026\\\\ongenradio.html\" | Measure-Object -Line\\).Lines; \\(Get-Content \"c:\\\\Users\\\\joong\\\\Desktop\\\\Github\\\\porrtfolio2026\\\\tokentrust.html\" | Measure-Object -Line\\).Lines)",
-      "Bash(awk -F: '$1 > 3140 && $1 < 3985')"
+      "Bash(awk -F: '$1 > 3140 && $1 < 3985')",
+      "PowerShell(\\(Get-Content 'c:\\\\Users\\\\joong\\\\Desktop\\\\Github\\\\porrtfolio2026\\\\Hypothesisanimation.js' -Raw\\) -replace 'const frames', 'var hypAnimFrames' | Set-Content 'c:\\\\Users\\\\joong\\\\Desktop\\\\Github\\\\porrtfolio2026\\\\Hypothesisanimation.js' -Encoding utf8)",
+      "PowerShell(\\(Get-Content 'c:\\\\Users\\\\joong\\\\Desktop\\\\Github\\\\porrtfolio2026\\\\valuanimation.js' -Raw\\) -replace 'const frames', 'var valuAnimFrames' | Set-Content 'c:\\\\Users\\\\joong\\\\Desktop\\\\Github\\\\porrtfolio2026\\\\valuanimation.js' -Encoding utf8)"
     ]
   }
 }
