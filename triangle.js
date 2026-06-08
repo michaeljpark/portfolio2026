@@ -8,8 +8,7 @@
   var s=document.createElement("style"); s.id="tri-style";
   s.textContent=
     "#tri-stage svg{width:100%;height:100%;display:block;overflow:visible;}"+
-    "#tri-stage text.marquee{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:400;letter-spacing:-0.05em;fill:#0a0c12;}"+
-    "#tri-stage image.white{filter:brightness(0) invert(1);}";
+    "#tri-stage text.marquee{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:400;letter-spacing:-0.05em;fill:#0a0c12;}";
   document.head.appendChild(s);
 })();
 
@@ -49,6 +48,9 @@ const CANADA = { a:5.0000, white:false, d:"data:image/svg+xml;base64,PD94bWwgdmV
   function build(){
     const svg=el("svg",{viewBox:"-90 -90 1180 1180",xmlns:SVG,preserveAspectRatio:"xMidYMid meet"});
     const defs=el("defs"); svg.appendChild(defs);
+    const flt=el("filter",{id:"to-white",colorInterpolationFilters:"sRGB"});
+    const fcm=el("feColorMatrix",{type:"matrix",values:"0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"});
+    flt.appendChild(fcm); defs.appendChild(flt);
     svg.appendChild(el("path",{d:"M "+A.x+" "+A.y+" L "+B.x+" "+B.y+" L "+Cc.x+" "+Cc.y+" Z M "+Ai.x+" "+Ai.y+" L "+Bi.x+" "+Bi.y+" L "+Ci.x+" "+Ci.y+" Z",fill:"var(--bar)","fill-rule":"evenodd"}));
     const animated=[];
 
@@ -75,7 +77,7 @@ const CANADA = { a:5.0000, white:false, d:"data:image/svg+xml;base64,PD94bWwgdmV
       const unit=e.logos.reduce((s,l)=>s+LH*l.a+SGAP,0); const need=Math.ceil(S/unit)+3; let cur=-(need*unit)/2;
       for(let rep=0;rep<need;rep++){ for(const l of e.logos){ const w=LH*l.a;
         const img=el("image",{x:cur,y:-LH/2,width:w,height:LH,preserveAspectRatio:"xMidYMid meet"});
-        if(l.white) img.setAttribute("class","white");
+        if(l.white) img.setAttribute("filter","url(#to-white)");
         img.setAttributeNS(XLINK,"xlink:href",l.d); img.setAttribute("href",l.d);
         gM.appendChild(img); cur+=w+SGAP; } }
       gF.appendChild(gM); gC.appendChild(gF); svg.appendChild(gC);
