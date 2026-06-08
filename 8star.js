@@ -11,7 +11,7 @@
   const REPEATS = 16;
   const SPEED   = 58;  // user-units / second
   const SPIN    = 60;  // seconds per full clockwise rotation
-  const MOUNT   = "#stage";
+  const MOUNT   = "#star8-stage";
 
   // ---- inject required styles ----
   function injectStyles(){
