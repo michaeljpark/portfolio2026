@@ -832,7 +832,7 @@
     </div>
   </button>
   <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media" id="stage" style="background:#0a0c12; --bar:#ffffff;"></div>
+    <div class="phase-media" id="tri-stage" style="background:#0a0c12; --bar:#ffffff;"></div>
   </div>
   <div class="phase-body">
     <div class="phase-body-inner">
@@ -1571,7 +1571,7 @@
     </div>
   </button>
   <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media"></div>
+    <div class="phase-media" id="stage" style="background:#0a0c12;"></div>
   </div>
   <div class="phase-body">
     <div class="phase-body-inner">
@@ -2945,6 +2945,7 @@
 
 <script src="./8star.js"></script>
 <script src="./triangle.js"></script>
+<script src="./tokentrustring.js"></script>
 <script>
 function togglePhase(el) {
   const block = el.closest('.phase-block');

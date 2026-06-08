@@ -7,9 +7,9 @@
   if (document.getElementById("tri-style")) return;
   var s=document.createElement("style"); s.id="tri-style";
   s.textContent=
-    "#stage svg{width:100%;height:100%;display:block;overflow:visible;}"+
-    "#stage text.marquee{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:400;letter-spacing:-0.05em;fill:#0a0c12;}"+
-    "#stage image.white{filter:brightness(0) invert(1);}";
+    "#tri-stage svg{width:100%;height:100%;display:block;overflow:visible;}"+
+    "#tri-stage text.marquee{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:400;letter-spacing:-0.05em;fill:#0a0c12;}"+
+    "#tri-stage image.white{filter:brightness(0) invert(1);}";
   document.head.appendChild(s);
 })();
 
@@ -82,7 +82,7 @@ const CANADA = { a:5.0000, white:false, d:"data:image/svg+xml;base64,PD94bWwgdmV
       animated.push({kind:"logo",moveNode:gM,dir:e.dir,unit});
     });
 
-    document.getElementById("stage").appendChild(svg);
+    document.getElementById("tri-stage").appendChild(svg);
     animated.forEach(a=>{
       let u,speed;
       if(a.kind==="text"){ const total=a.textNode.getComputedTextLength(); u=total/REPEATS; speed=SPEED;
