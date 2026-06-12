@@ -170,7 +170,7 @@
     </button>
     <div class="phase-media-wrap" onclick="togglePhase(this)">
       <div class="phase-media">
-        <video src="./ultprev.mp4" autoplay muted loop playsinline preload="metadata"
+        <video class="lazy-vid" data-src="./ultprev.mp4" poster="./posters/ultprev.jpg" muted loop playsinline preload="none"
           style="width:100%;height:100%;object-fit:cover;display:block;"></video>
       </div>
     </div>
@@ -242,5 +242,6 @@ function togglePhase(el) {
 }
 (function(){const n=document.querySelector('nav.top');if(n)document.documentElement.style.setProperty('--nav-h',n.offsetHeight+'px');})();
 </script>
+<script src="./lazy-video.js"></script>
 </body>
 </html>

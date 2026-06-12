@@ -7,6 +7,8 @@
 <meta name="description" content="Michael Joongmin Park — Digital product designer working at the intersection of human–AI experience, industrial design, and rapid prototyping. Toronto, ON." />
 
 <link rel="icon" type="image/svg+xml" href="./mkpk.svg" />
+<link rel="preload" as="image" href="./posters/ongenthumb.jpg" media="(min-width:881px)" fetchpriority="high" />
+<link rel="preload" as="image" href="./posters/ongenprevmobile.jpg" media="(max-width:880px)" fetchpriority="high" />
 
 <meta property="og:title" content="Michael Joongmin Park — Designer" />
 <meta property="og:description" content="Digital product designer. HAX · Product · Industrial. Toronto, ON. Portfolio 2026." />
@@ -675,7 +677,9 @@
 </head>
 <body>
 
-<div class="thumb-follow" id="thumb"><img src="" alt="" id="thumbImg" /></div>
+<script src="./lazy-video.js" defer></script>
+
+<div class="thumb-follow" id="thumb"><img decoding="async" loading="lazy" src="" alt="" id="thumbImg" /></div>
 
 
 <nav class="top">
@@ -718,10 +722,11 @@
       <a href="./ongenradio.html">
         <div class="work ongen-work">
           <div class="ongen-img">
-            <video autoplay muted loop playsinline preload="metadata">
-              <source src="./ongenprevmobile.mp4" media="(max-width:880px)" type="video/mp4">
-              <source src="./ongenthumb.mp4" type="video/mp4">
-            </video>
+            <video class="lazy-vid" muted loop playsinline preload="none"
+              poster="./posters/ongenthumb.jpg"
+              data-poster-mobile="./posters/ongenprevmobile.jpg"
+              data-src="./ongenthumb.mp4"
+              data-src-mobile="./ongenprevmobile.mp4"></video>
           </div>
         </div>
         <div class="w-info">
@@ -747,9 +752,10 @@
     <div class="work-block reveal">
       <a href="./proposal-audit.html">
         <div class="work ar-work">
-          <video id="promo-vid"
-            src="./amazonproposalthumb.mp4"
-            loop muted playsinline webkit-playsinline preload="metadata"
+          <video id="promo-vid" class="lazy-vid"
+            data-src="./amazonproposalthumb.mp4"
+            poster="./posters/amazonproposalthumb.jpg"
+            loop muted playsinline webkit-playsinline preload="none"
             style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.9);"></video>
         </div>
         <div class="w-info">
@@ -761,7 +767,7 @@
 
     <div class="work-block third reveal">
       <a href="./intact-lifolio.html">
-        <div class="work"><video src="./intactlifoliothumb.mp4" autoplay muted loop playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
+        <div class="work"><video class="lazy-vid" data-src="./intactlifoliothumb.mp4" poster="./posters/intactlifoliothumb.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
         <div class="w-info">
           <div class="t"><span>intact lifolio</span><span class="arrow">→</span></div>
           <div class="m"><span>2026</span><span>Product Design</span></div>
@@ -771,7 +777,7 @@
 
     <div class="work-block third reveal">
       <a href="https://michaeljpark.github.io/nearme/">
-        <div class="work"><video src="./nearmeprev.mp4" autoplay muted loop playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.95);"></video></div>
+        <div class="work"><video class="lazy-vid" data-src="./nearmeprev.mp4" poster="./posters/nearmeprev.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.95);"></video></div>
         <div class="w-info">
           <div class="t"><span>Near Me</span><span class="arrow">→</span></div>
           <div class="m"><span>2026</span><span>Geolocation App</span></div>
@@ -781,7 +787,7 @@
 
     <div class="work-block third reveal">
       <a href="./knowmedi.html">
-        <div class="work"><video src="./knowmediprev.mp4" autoplay muted loop playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
+        <div class="work"><video class="lazy-vid" data-src="./knowmediprev.mp4" poster="./posters/knowmediprev.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
         <div class="w-info">
           <div class="t"><span>KnowMedi</span><span class="arrow">→</span></div>
           <div class="m"><span>2026</span><span>Digital Prescription</span></div>
@@ -1125,34 +1131,8 @@
     });
   })();
 
-  /* 영상 자동재생 — iOS 포함 */
+  /* Pause/resume work-card animations based on viewport */
   (function(){
-    function playAll(){
-      document.querySelectorAll('video').forEach(function(v){
-        if(v.id==='promo-vid') return;
-        v.muted=true;
-        v.setAttribute('playsinline','');
-        v.setAttribute('webkit-playsinline','');
-        v.play().catch(function(){});
-      });
-    }
-    playAll();
-    ['touchstart','touchend','pointerdown','click'].forEach(function(ev){
-      document.addEventListener(ev,function unlock(){
-        playAll();
-        document.removeEventListener(ev,unlock);
-      },{once:true,passive:true});
-    });
-    document.querySelectorAll('video').forEach(function(v){
-      if(v.id==='promo-vid') return;
-      v.addEventListener('pause',function(){ if(!v.ended) v.play().catch(function(){}); });
-      v.addEventListener('ended',function(){ v.currentTime=0; v.play().catch(function(){}); });
-    });
-    document.addEventListener('visibilitychange',function(){
-      if(!document.hidden) playAll();
-    });
-
-    /* Pause/resume work-card animations based on viewport */
     document.querySelectorAll('.work-block').forEach(function(block){
       new IntersectionObserver(function(entries){
         entries.forEach(function(e){
@@ -1162,17 +1142,6 @@
     });
   })();
 
-  /* Promo video — lazy load + play on viewport enter */
-  (function(){
-    var vid=document.getElementById('promo-vid');
-    if(!vid) return;
-    new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if(e.isIntersecting) vid.play(); else vid.pause();
-      });
-    },{threshold:0.1}).observe(vid);
-  })();
-
   /* Token Trust — looping preview video */
     (function(){
       var wrap = document.getElementById('tt-grid-wrap');
@@ -1180,14 +1149,17 @@
       var face=document.createElement('div');
       face.className='tt-face tt-face-front';
       var vid=document.createElement('video');
-      vid.src='./tokentrustthumb.mp4';
-      vid.autoplay=true; vid.muted=true; vid.loop=true;
+      vid.className='lazy-vid';
+      vid.dataset.src='./tokentrustthumb.mp4';
+      vid.poster='./posters/tokentrustthumb.jpg';
+      vid.muted=true; vid.loop=true;
       vid.playsInline=true; vid.setAttribute('playsinline','');
-      vid.preload='metadata';
+      vid.preload='none';
       vid.style.opacity = '1';
       vid.style.animation = 'none';
       face.appendChild(vid);
       wrap.appendChild(face);
+      if(window.observeLazyVid) window.observeLazyVid(vid);
     })();
 
   /* Inject "More" button into every .work card */
@@ -1204,13 +1176,6 @@
   })();
 </script>
 
-
-
-</body>
-</html>
-    });
-  })();
-</script>
 
 
 </body>

@@ -356,7 +356,7 @@
   </button>
   <div class="phase-media-wrap" onclick="togglePhase(this)">
     <div class="phase-media">
-      <video src="./Amazonproposal.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"
+      <video class="lazy-vid" data-src="./Amazonproposal.mp4" poster="./posters/Amazonproposal.jpg" loop muted playsinline webkit-playsinline preload="none"
         style="width:100%;height:100%;object-fit:cover;display:block;"></video>
     </div>
   </div>
@@ -382,7 +382,7 @@
 
 <section class="project-section wrap">
   <div class="project-stage">
-    <video src="./ameliarufusprev1.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"
+    <video class="lazy-vid" data-src="./ameliarufusprev1.mp4" poster="./posters/ameliarufusprev1.jpg" loop muted playsinline webkit-playsinline preload="none"
       style="width:100%;height:100%;object-fit:cover;display:block;"></video>
   </div>
 </section>
@@ -634,7 +634,7 @@
   </button>
   <div class="phase-media-wrap" onclick="togglePhase(this)">
     <div class="phase-media">
-      <video src="./amazonstrategy.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"
+      <video class="lazy-vid" data-src="./amazonstrategy.mp4" poster="./posters/amazonstrategy.jpg" loop muted playsinline webkit-playsinline preload="none"
         style="width:100%;height:100%;object-fit:cover;display:block;"></video>
     </div>
   </div>
@@ -794,7 +794,7 @@
   </button>
   <div class="phase-media-wrap" onclick="togglePhase(this)">
     <div class="phase-media">
-      <video src="./amazonimpactanimation.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"
+      <video class="lazy-vid" data-src="./amazonimpactanimation.mp4" poster="./posters/amazonimpactanimation.jpg" loop muted playsinline webkit-playsinline preload="none"
         style="width:100%;height:100%;object-fit:cover;display:block;"></video>
     </div>
   </div>
@@ -970,7 +970,7 @@
   </button>
   <div class="phase-media-wrap" onclick="togglePhase(this)">
     <div class="phase-media">
-      <video src="./amazonrufusamelia2.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"
+      <video class="lazy-vid" data-src="./amazonrufusamelia2.mp4" poster="./posters/amazonrufusamelia2.jpg" loop muted playsinline webkit-playsinline preload="none"
         style="width:100%;height:100%;object-fit:cover;display:block;"></video>
     </div>
   </div>
@@ -1494,35 +1494,9 @@
   <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
 </footer>
 
-<script src="./amazon-logo-morph.js"></script>
-<script src="./amazon-bars.js"></script>
-
-<script>
-  (function(){
-    function playAll(){
-      document.querySelectorAll('video').forEach(function(v){
-        v.muted = true;
-        v.setAttribute('playsinline','');
-        v.setAttribute('webkit-playsinline','');
-        v.play().catch(function(){});
-      });
-    }
-    playAll();
-    ['touchstart','touchend','pointerdown','click'].forEach(function(ev){
-      document.addEventListener(ev, function unlock(){
-        playAll();
-        document.removeEventListener(ev, unlock);
-      }, {once:true, passive:true});
-    });
-    document.querySelectorAll('video').forEach(function(v){
-      v.addEventListener('pause', function(){ if(!v.ended) v.play().catch(function(){}); });
-      v.addEventListener('ended', function(){ v.currentTime=0; v.play().catch(function(){}); });
-    });
-    document.addEventListener('visibilitychange', function(){
-      if(!document.hidden) playAll();
-    });
-  })();
-</script>
+<script src="./amazon-logo-morph.js" defer></script>
+<script src="./amazon-bars.js" defer></script>
+<script src="./lazy-video.js"></script>
 
 <script>
 function togglePhase(el) {

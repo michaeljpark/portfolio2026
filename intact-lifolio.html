@@ -302,7 +302,7 @@
     </button>
     <div class="phase-media-wrap" onclick="togglePhase(this)">
       <div class="phase-media">
-        <video src="./intactlifolioprev.mp4" autoplay muted loop playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+        <video class="lazy-vid" data-src="./intactlifolioprev.mp4" poster="./posters/intactlifolioprev.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
       </div>
     </div>
     <div class="phase-body">
@@ -318,7 +318,7 @@
       <p class="ph-body" style="margin-top:16px;">The result is a living portfolio of a customer's life — obligations tracked, professionals on-demand, and uncertainty reduced at the moment it matters most.</p>
     </div>
     <div class="ph-img" style="min-height:480px;">
-      <img src="./lifolioimg.png" alt="Lifolio" style="width:100%;height:100%;object-fit:cover;border-radius:20px;display:block;">
+      <img decoding="async" loading="lazy" src="./lifolioimg.png" alt="Lifolio" style="width:100%;height:100%;object-fit:cover;border-radius:20px;display:block;">
     </div>
   </div>
 </section>
@@ -387,7 +387,7 @@
   <p class="divider-text" style="text-align:right; color:#D01F3D; max-width:100%; width:100%;">
     But where is the insurance for the decisions that shape what comes next?
   </p>
-  <img src="./lifolioimg2.png" alt="Lifolio" style="width:100%;border-radius:20px;display:block;">
+  <img decoding="async" loading="lazy" src="./lifolioimg2.png" alt="Lifolio" style="width:100%;border-radius:20px;display:block;">
 </section>
 
 <!-- Research Background -->
@@ -674,7 +674,7 @@
   <div style="margin-top:20px; padding-top:20px; font-size:13px; color:var(--muted); line-height:1.65; letter-spacing:-0.02em;">
     <span style="color:var(--ink); font-weight:500;">Regulatory alignment.</span> Lifolio operates in full alignment with OSFI's consumer protection guidelines, FCAC's national financial literacy mandate, and provincial superintendents of insurance. The argument isn't that government shouldn't lead — it's that Intact's data reach, operational agility, and trust relationships enable a layer of proactive, personalized guidance that no government program currently delivers at the individual level.
   </div>
-  <img src="./lifolioimg3.png" alt="Lifolio regulatory alignment" style="width:100%;border-radius:20px;display:block;margin-top:20px;">
+  <img decoding="async" loading="lazy" src="./lifolioimg3.png" alt="Lifolio regulatory alignment" style="width:100%;border-radius:20px;display:block;margin-top:20px;">
 </section>
 
       </div><!-- /phase-body-inner -->
@@ -820,5 +820,6 @@ function togglePhase(el) {
 }
 (function(){const n=document.querySelector('nav.top');if(n)document.documentElement.style.setProperty('--nav-h',n.offsetHeight+'px');})();
 </script>
+<script src="./lazy-video.js"></script>
 </body>
 </html>

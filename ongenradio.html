@@ -1665,15 +1665,14 @@
     <div class="phase-media">
       <video
         id="ongen-showcase-video"
-        src="./OnGen2026Showcase.mp4"
-        autoplay
+        class="lazy-vid" data-src="./OnGen2026Showcase.mp4" poster="./posters/OnGen2026Showcase.jpg"
         loop
         muted
         defaultMuted
         playsinline
         webkit-playsinline
         disableRemotePlayback
-        preload="metadata"
+        preload="none"
         style="width:100%;height:100%;object-fit:cover;display:block;"></video>
     </div>
   </div>
@@ -1706,7 +1705,7 @@
 
 <section class="project-section wrap" style="padding-top:16px; padding-bottom:0;">
   <div class="project-stage stage-pill">
-    <video src="./ongenprev4.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"></video>
+    <video class="lazy-vid" data-src="./ongenprev4.mp4" poster="./posters/ongenprev4.jpg" loop muted playsinline webkit-playsinline preload="none"></video>
   </div>
 </section>
 
@@ -1716,7 +1715,7 @@
 
 <section class="project-section wrap" style="padding-top:24px; padding-bottom:0;">
   <div class="project-stage stage-pill">
-    <video src="./daytimeview.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"></video>
+    <video class="lazy-vid" data-src="./daytimeview.mp4" poster="./posters/daytimeview.jpg" loop muted playsinline webkit-playsinline preload="none"></video>
   </div>
 </section>
 
@@ -1726,7 +1725,7 @@
 
 <section class="project-section wrap" style="padding-top:24px; padding-bottom:0;">
   <div class="project-stage stage-pill">
-    <video src="./ongenprev5.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"></video>
+    <video class="lazy-vid" data-src="./ongenprev5.mp4" poster="./posters/ongenprev5.jpg" loop muted playsinline webkit-playsinline preload="none"></video>
   </div>
 </section>
 
@@ -1736,7 +1735,7 @@
 
 <section class="project-section wrap" style="padding-top:24px; padding-bottom:0;">
   <div class="project-stage stage-pill">
-    <video src="./nighttimeview.mp4" autoplay loop muted playsinline webkit-playsinline preload="metadata"></video>
+    <video class="lazy-vid" data-src="./nighttimeview.mp4" poster="./posters/nighttimeview.jpg" loop muted playsinline webkit-playsinline preload="none"></video>
   </div>
 </section>
 
@@ -1747,16 +1746,16 @@
 <section class="project-section wrap" style="padding-top:48px; padding-bottom:24px;">
   <div class="img-marquee">
     <div class="img-marquee-track">
-      <img src="./meta.png" alt="Meta">
-      <img src="./googleglasses.png" alt="Google">
-      <img src="./appleglasses.png" alt="Apple">
-      <img src="./rokid.png" alt="Rokid">
-      <img src="./rayneo.png" alt="RayNeo">
-      <img src="./meta.png" alt="">
-      <img src="./googleglasses.png" alt="">
-      <img src="./appleglasses.png" alt="">
-      <img src="./rokid.png" alt="">
-      <img src="./rayneo.png" alt="">
+      <img decoding="async" loading="lazy" src="./meta.png" alt="Meta">
+      <img decoding="async" loading="lazy" src="./googleglasses.png" alt="Google">
+      <img decoding="async" loading="lazy" src="./appleglasses.png" alt="Apple">
+      <img decoding="async" loading="lazy" src="./rokid.png" alt="Rokid">
+      <img decoding="async" loading="lazy" src="./rayneo.png" alt="RayNeo">
+      <img decoding="async" loading="lazy" src="./meta.png" alt="">
+      <img decoding="async" loading="lazy" src="./googleglasses.png" alt="">
+      <img decoding="async" loading="lazy" src="./appleglasses.png" alt="">
+      <img decoding="async" loading="lazy" src="./rokid.png" alt="">
+      <img decoding="async" loading="lazy" src="./rayneo.png" alt="">
     </div>
   </div>
 </section>
@@ -1782,16 +1781,16 @@
 <section class="project-section wrap" style="padding-top:24px; padding-bottom:24px;">
   <div class="img-marquee reverse">
     <div class="img-marquee-track">
-      <img src="./meta.png" alt="Meta">
-      <img src="./googleglasses.png" alt="Google">
-      <img src="./appleglasses.png" alt="Apple">
-      <img src="./rokid.png" alt="Rokid">
-      <img src="./rayneo.png" alt="RayNeo">
-      <img src="./meta.png" alt="">
-      <img src="./googleglasses.png" alt="">
-      <img src="./appleglasses.png" alt="">
-      <img src="./rokid.png" alt="">
-      <img src="./rayneo.png" alt="">
+      <img decoding="async" loading="lazy" src="./meta.png" alt="Meta">
+      <img decoding="async" loading="lazy" src="./googleglasses.png" alt="Google">
+      <img decoding="async" loading="lazy" src="./appleglasses.png" alt="Apple">
+      <img decoding="async" loading="lazy" src="./rokid.png" alt="Rokid">
+      <img decoding="async" loading="lazy" src="./rayneo.png" alt="RayNeo">
+      <img decoding="async" loading="lazy" src="./meta.png" alt="">
+      <img decoding="async" loading="lazy" src="./googleglasses.png" alt="">
+      <img decoding="async" loading="lazy" src="./appleglasses.png" alt="">
+      <img decoding="async" loading="lazy" src="./rokid.png" alt="">
+      <img decoding="async" loading="lazy" src="./rayneo.png" alt="">
     </div>
   </div>
 </section>
@@ -1805,7 +1804,7 @@
       <span class="seek-word">Seek</span>
     </div>
     <div class="seek-right">
-      <video src="./seek.mp4" autoplay muted loop playsinline></video>
+      <video preload="none" class="lazy-vid" data-src="./seek.mp4" poster="./posters/seek.jpg" muted loop playsinline></video>
     </div>
   </div>
 </section>
@@ -1813,7 +1812,7 @@
 <section class="seek-section wrap" style="border-top:none; padding-top:0;">
   <div class="seek-grid seek-grid-reverse">
     <div class="seek-right">
-      <video src="./Personalization.mp4" autoplay muted loop playsinline></video>
+      <video preload="none" class="lazy-vid" data-src="./Personalization.mp4" poster="./posters/Personalization.jpg" muted loop playsinline></video>
     </div>
     <div class="seek-left">
       <span class="seek-wave w1"></span>
@@ -2068,8 +2067,7 @@
 
 <section class="project-section wrap" style="padding-top:16px; padding-bottom:0;">
   <div class="project-stage">
-    <video src="./radioanime.mp4"
-      autoplay muted loop playsinline preload="metadata"
+    <video class="lazy-vid" data-src="./radioanime.mp4" poster="./posters/radioanime.jpg" muted loop playsinline preload="none"
       style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;"></video>
   </div>
 </section>
@@ -4392,7 +4390,7 @@ window.addEventListener('load', function(){
   </button>
   <div class="phase-media-wrap" onclick="togglePhase(this)">
     <div class="phase-media">
-      <video src="./ongenprev3.mp4" autoplay muted loop playsinline preload="metadata"
+      <video class="lazy-vid" data-src="./ongenprev3.mp4" poster="./posters/ongenprev3.jpg" muted loop playsinline preload="none"
         style="width:100%;height:100%;object-fit:cover;display:block;"></video>
     </div>
   </div>
@@ -4853,8 +4851,7 @@ window.addEventListener('load', function(){
 <section class="interaction-overview-section wrap">
   <div class="hyp-title">Interaction Overview</div>
   <video
-    src="./ongenoverview.mp4"
-    autoplay loop muted playsinline webkit-playsinline preload="metadata"
+    class="lazy-vid" data-src="./ongenoverview.mp4" poster="./posters/ongenoverview.jpg" loop muted playsinline webkit-playsinline preload="none"
     style="width:100%;display:block;border-radius:12px;margin-top:clamp(28px,3vw,48px);"></video>
 </section>
 
@@ -4909,10 +4906,10 @@ window.addEventListener('load', function(){
   <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
 </footer>
 
-<script src="./Hypothesisanimation.js"></script>
-<script src="./valuanimation.js"></script>
-<script src="./marketanimation.js"></script>
-<script src="./stakeholderanimation.js"></script>
+<script src="./Hypothesisanimation.js" defer></script>
+<script src="./valuanimation.js" defer></script>
+<script src="./marketanimation.js" defer></script>
+<script src="./stakeholderanimation.js" defer></script>
 <script>
 /* ascii players */
 (function(){
@@ -4950,10 +4947,13 @@ window.addEventListener('load', function(){
     }
   }
 
-  startPlayer('ascii-stage',  'ascii-pre',  window.hypAnimFrames);
-  startPlayer('valu-stage',   'valu-pre',   window.valuAnimFrames);
-  startPlayer('market-stage',       'market-pre',       window.marketAnimFrames);
-  startPlayer('stakeholder-stage', 'stakeholder-pre', window.stakeholderAnimFrames);
+  /* frame data comes from deferred scripts — wait for them */
+  document.addEventListener('DOMContentLoaded', function(){
+    startPlayer('ascii-stage',  'ascii-pre',  window.hypAnimFrames);
+    startPlayer('valu-stage',   'valu-pre',   window.valuAnimFrames);
+    startPlayer('market-stage',       'market-pre',       window.marketAnimFrames);
+    startPlayer('stakeholder-stage', 'stakeholder-pre', window.stakeholderAnimFrames);
+  });
 })();
 
 function togglePhase(el) {
@@ -4973,5 +4973,6 @@ function togglePhase(el) {
 (function(){const n=document.querySelector('nav.top');if(n)document.documentElement.style.setProperty('--nav-h',n.offsetHeight+'px');})();
 </script>
 
+<script src="./lazy-video.js"></script>
 </body>
 </html>
