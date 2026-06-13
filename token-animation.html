@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>tokentrust — token loop</title>
+<style>
+  :root{
+    --bg-page:#0e0e10;
+    --bg-frame:#f7f7f8;
+    --ink:#1f1f24;
+    --label:#9a9aa2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    background:var(--bg-page);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    font-family:"Times New Roman",Times,serif;
+  }
+
+  /* ---------- 16:9 frame ---------- */
+  .frame{
+    position:relative;
+    width:min(96vw, calc(96vh * 16 / 9));
+    aspect-ratio:16/9;
+    background:var(--bg-frame);
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.55);
+    container-type:size;
+  }
+
+  /* ---------- Scene 1 : tokens ---------- */
+  #world{
+    position:absolute;inset:0;
+    transform-origin:50% 46%;
+    transition:transform .88s cubic-bezier(.76,0,.24,1), opacity .68s ease .14s;
+    will-change:transform,opacity;
+  }
+  #world.zoomed{
+    /* 1 / 0.26 : merged box가 정확히 로고 카드 크기까지만 커짐 */
+    transform:scale(3.8462);
+    opacity:0;
+    pointer-events:none;
+  }
+  .tokens{
+    position:absolute;
+    left:11%;right:11%;
+    top:50%;transform:translateY(-54%);
+    font-family:"Times New Roman",Times,serif;
+    letter-spacing:-0.05em;             /* 자간 -5% */
+    font-size:clamp(13px, 2.5cqw, 33px);
+    line-height:1.62;
+    color:var(--ink);
+    white-space:pre-wrap;
+    text-align:left;
+    text-wrap:balance;
+  }
+  .token{
+    display:inline-block;
+    white-space:pre;
+    border-radius:3px;
+    padding:.06em 0;
+    opacity:0;
+  }
+
+  /* ---------- Scene 1.5 : color rows + models + labs ---------- */
+  #rowsWrap{
+    position:absolute;
+    left:6.5%;right:6.5%;
+    top:50%;transform:translateY(-52%);
+    display:flex;
+    flex-direction:column;
+    gap:2.5cqh;                          /* 세로 갭 */
+    font-size:clamp(15px, 3cqw, 38px);   /* 모인 글자 크게 */
+    letter-spacing:-0.05em;
+    color:var(--ink);
+  }
+  .row{
+    display:flex;
+    align-items:center;
+    min-height:1.35em;
+    contain:layout style;   /* 타이핑 리플로우를 줄 내부로 격리 */
+  }
+  .rowTokens{
+    display:flex;
+    overflow:visible;      /* 모이는 동안 자유롭게 날아옴 (마스크 클리핑 방지) */
+    flex:0 0 auto;
+    max-width:72%;
+  }
+  .rowTokens.clip{
+    overflow:hidden;       /* 좌→우 수축 단계에서만 클리핑 */
+  }
+  .rowTokens .token{
+    flex:0 0 auto;
+  }
+  .rowModel{
+    margin-left:1.1em;
+    white-space:nowrap;
+    font-style:italic;
+  }
+  .rowOrg{
+    margin-left:auto;      /* 연구기관은 우정렬 */
+    white-space:nowrap;
+    padding:.05em .4em;
+    border-radius:3px;
+    display:none;
+  }
+  /* ----- receipt (data transfer) ----- */
+  .wire{
+    flex:1 1 auto;
+    align-self:center;
+    position:relative;
+    height:0;
+    border-top:1px dashed rgba(31,31,36,.28);
+    margin:0 .55em;
+    opacity:0;
+    transition:opacity .23s ease;
+  }
+  .wire.on{opacity:1;}
+  .wire .node{
+    position:absolute;
+    top:0;
+    width:.5em;height:.5em;
+    margin-top:-.25em;
+    margin-left:-.25em;
+    border-radius:50%;
+    pointer-events:none;
+  }
+  .rcptNum{
+    white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+    font-feature-settings:"tnum";
+    opacity:0;
+    padding:.05em .45em;
+    border-radius:3px;
+  }
+  .rcptNum.on{opacity:1;}
+  .tcaret{
+    display:inline-block;
+    width:2px;height:.95em;
+    background:var(--ink);
+    vertical-align:-.1em;
+    margin-left:2px;
+    animation:blink .55s steps(1) infinite;
+  }
+
+  .footer-labels{display:none;}
+
+  /* ---------- Scene 2 : logo (inside the merged box color) ---------- */
+  #logoScene{
+    position:absolute;inset:0;
+    opacity:0;
+    transform:scale(.26);
+    transform-origin:50% 46%;
+    transition:transform .88s cubic-bezier(.76,0,.24,1), opacity .34s ease .17s;
+    pointer-events:none;
+    will-change:transform,opacity;
+  }
+  #logoScene.shown{
+    opacity:1;          /* 뭉친 박스 위에 작게 등장 */
+  }
+  #logoScene.active{
+    transform:scale(1); /* 줌인 */
+  }
+  #logoScene.fading{
+    opacity:0;          /* 박스가 점점 사라짐 */
+    transition:opacity .68s ease;
+  }
+  #logoScene.shrinkOut{
+    transform:scale(0); /* 중앙으로 줄어들며 퇴장 */
+    opacity:0;
+    transition:transform .51s cubic-bezier(.7,0,.3,1), opacity .29s ease .23s;
+  }
+  /* 로고 영역 사이즈의 컬러 박스 — 화면 풀이 아니라 이 카드까지만 줌인 */
+  #logoCard{
+    position:absolute;
+    left:50%;top:46%;
+    transform:translate(-50%,-50%);
+    width:64%;
+    height:34%;
+    border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  #logoSvg{
+    width:82%;
+    height:auto;
+    overflow:visible;
+  }
+  #logoSvg .letter{
+    opacity:0;
+    transform:translateY(16px);
+    transition:transform .11s cubic-bezier(.2,1.4,.4,1), opacity .08s ease;
+  }
+  #logoSvg .letter.on{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .starWrap{
+    opacity:0;
+    transform:scale(0);
+    transform-box:fill-box;
+    transform-origin:center;
+    transition:transform .31s cubic-bezier(.2,1.6,.35,1), opacity .14s ease;
+  }
+  .starWrap.on{
+    opacity:1;
+    transform:scale(1);
+  }
+  .starSpin{
+    transform-box:fill-box;
+    transform-origin:center;
+    animation:spin 5s linear infinite;   /* 무한 회전 */
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  #caret{
+    fill:var(--ink);
+    opacity:0;
+  }
+  #caret.blink{
+    animation:blink .55s steps(1) infinite;
+  }
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+  @media (prefers-reduced-motion:reduce){
+    *,#world,#logoScene{transition:none !important;animation:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="frame" id="frame">
+
+  <!-- Scene 1 : tokenized lorem ipsum → color rows -->
+  <div id="world">
+    <div class="tokens" id="tokens"></div>
+  </div>
+
+  <!-- Scene 2 : tokentrust logo -->
+  <div id="logoScene">
+    <div id="logoCard">
+    <svg id="logoSvg" viewBox="-20 -20 713 228" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- 8-pointed star : pop in, then infinite spin -->
+      <g class="starWrap" id="starWrap">
+        <g class="starSpin">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M645.148 3.18803L629.96 39.7479L666.706 24.5608L670.27 32.4368L633.336 47.6218L670.27 62.8087L666.706 70.4965L629.96 55.3093L645.148 92.0575L637.458 95.62L622.274 58.6837L607.085 95.62L599.399 92.0575L614.4 55.3093L577.841 70.4965L574.652 62.8087L611.211 47.6218L574.652 32.4368L577.841 24.7491L614.4 39.7479L599.399 3.18803L607.085 0L622.274 36.56L637.458 0L645.148 3.18803Z" fill="#1f1f24"/>
+        </g>
+      </g>
+      <!-- letters : t o k e n t r u s t -->
+      <path class="letter" d="M28.8749 92.373V116.996H44.8207V124.124H28.8749V165.666C28.8749 169.554 29.0425 172.074 29.3777 173.226C29.7608 174.33 30.4072 175.242 31.317 175.962C32.2268 176.634 33.0649 176.97 33.831 176.97C36.9437 176.97 39.8887 174.594 42.666 169.842L44.8207 171.426C40.9419 180.642 34.645 185.25 25.9299 185.25C21.6681 185.25 18.0528 184.074 15.0839 181.722C12.1629 179.322 10.2954 176.658 9.48128 173.73C9.00246 172.098 8.76301 167.683 8.76301 160.483V124.124H0V121.604C6.03354 117.332 11.1573 112.844 15.3712 108.14C19.633 103.437 23.3441 98.1808 26.5045 92.373H28.8749Z" fill="#1f1f24"/>
+      <path class="letter" d="M77.0048 114.98C82.8467 114.98 88.2818 116.492 93.3098 119.516C98.3374 122.54 102.144 126.836 104.73 132.404C107.364 137.971 108.681 144.067 108.681 150.691C108.681 160.243 106.263 168.234 101.426 174.666C95.584 182.442 87.5154 186.33 77.2203 186.33C67.1165 186.33 59.3351 182.778 53.876 175.674C48.417 168.57 45.6875 160.338 45.6875 150.979C45.6875 141.331 48.4648 132.931 54.0198 125.78C59.6223 118.58 67.2838 114.98 77.0048 114.98ZM77.292 120.092C74.8497 120.092 72.7428 121.028 70.971 122.9C69.2473 124.724 68.098 128.371 67.5232 133.843C66.9966 139.267 66.7333 146.827 66.7333 156.522C66.7333 161.659 67.0683 166.458 67.7387 170.922C68.2657 174.33 69.3907 176.922 71.1148 178.698C72.8384 180.474 74.8019 181.362 77.0048 181.362C79.1595 181.362 80.9553 180.762 82.3917 179.562C84.2592 177.93 85.5045 175.65 86.1267 172.722C87.0844 168.162 87.5635 158.947 87.5635 145.075C87.5635 136.915 87.1086 131.323 86.1988 128.3C85.289 125.228 83.9481 122.996 82.1762 121.604C80.9314 120.596 79.3033 120.092 77.292 120.092Z" fill="#1f1f24"/>
+      <path class="letter" d="M140.293 86.6848V150.907L155.879 135.571C159.087 132.451 161.075 130.195 161.841 128.803C162.655 127.412 163.062 126.067 163.062 124.772C163.062 123.476 162.535 122.396 161.482 121.532C160.428 120.668 158.369 120.044 155.305 119.66V116.996H185.401V119.66C182.527 119.804 180.013 120.5 177.859 121.748C175.704 122.948 171.49 126.62 165.217 132.763L157.89 139.963L173.693 163.146C180.061 172.554 183.844 177.834 185.041 178.986C186.669 180.618 188.728 181.53 191.218 181.722V184.314H156.526V181.722C158.058 181.722 159.159 181.434 159.83 180.858C160.548 180.282 160.907 179.658 160.907 178.986C160.907 177.882 159.902 175.842 157.89 172.866L144.602 153.355L140.293 157.602V169.698C140.293 174.834 140.771 178.05 141.729 179.346C142.687 180.594 144.65 181.386 147.619 181.722V184.314H112.926V181.722C115.751 181.434 117.763 180.522 118.96 178.986C119.773 177.93 120.181 174.834 120.181 169.698V101.301C120.181 96.2127 119.702 93.0447 118.744 91.7966C117.834 90.5488 115.895 89.7326 112.926 89.3489V86.6848H140.293Z" fill="#1f1f24"/>
+      <path class="letter" d="M245.885 148.243H209.037C209.468 157.171 211.838 164.226 216.148 169.41C219.452 173.394 223.426 175.386 228.071 175.386C230.944 175.386 233.554 174.594 235.9 173.01C238.247 171.378 240.761 168.474 243.442 164.298L245.885 165.882C242.245 173.322 238.223 178.602 233.817 181.722C229.412 184.794 224.312 186.33 218.518 186.33C208.558 186.33 201.016 182.49 195.892 174.81C191.774 168.618 189.715 160.939 189.715 151.771C189.715 140.539 192.732 131.611 198.765 124.987C204.847 118.316 211.958 114.98 220.098 114.98C226.898 114.98 232.788 117.788 237.768 123.404C242.796 128.972 245.501 137.251 245.885 148.243ZM228.215 143.419C228.215 135.691 227.784 130.388 226.922 127.507C226.108 124.628 224.815 122.444 223.043 120.956C222.038 120.092 220.697 119.66 219.021 119.66C216.531 119.66 214.496 120.884 212.915 123.332C210.09 127.604 208.678 133.459 208.678 140.899V143.419H228.215Z" fill="#1f1f24"/>
+      <path class="letter" d="M275.913 116.996V125.708C279.361 121.964 282.665 119.252 285.826 117.572C288.986 115.844 292.386 114.98 296.025 114.98C300.383 114.98 303.998 116.204 306.871 118.652C309.744 121.052 311.66 124.052 312.617 127.652C313.384 130.387 313.766 135.643 313.766 143.419V169.626C313.766 174.81 314.221 178.05 315.131 179.346C316.089 180.594 318.052 181.386 321.021 181.722V184.314H287.047V181.722C289.584 181.386 291.404 180.33 292.506 178.554C293.272 177.354 293.655 174.378 293.655 169.626V139.675C293.655 134.155 293.439 130.675 293.008 129.236C292.577 127.796 291.835 126.692 290.782 125.924C289.776 125.108 288.651 124.7 287.406 124.7C283.288 124.7 279.457 127.652 275.913 133.555V169.626C275.913 174.666 276.368 177.858 277.278 179.202C278.236 180.546 279.984 181.386 282.522 181.722V184.314H248.547V181.722C251.372 181.434 253.383 180.522 254.58 178.986C255.395 177.93 255.801 174.81 255.801 169.626V131.611C255.801 126.524 255.322 123.356 254.365 122.108C253.455 120.86 251.516 120.044 248.547 119.66V116.996H275.913Z" fill="#1f1f24"/>
+      <path class="letter" d="M351.125 92.373V116.996H367.071V124.124H351.125V165.666C351.125 169.554 351.292 172.074 351.628 173.226C352.011 174.33 352.657 175.242 353.567 175.962C354.477 176.634 355.315 176.97 356.081 176.97C359.194 176.97 362.139 174.594 364.916 169.842L367.071 171.426C363.192 180.642 356.895 185.25 348.18 185.25C343.918 185.25 340.303 184.074 337.334 181.722C334.413 179.322 332.545 176.658 331.731 173.73C331.252 172.098 331.013 167.683 331.013 160.483V124.124H322.25V121.604C328.283 117.332 333.407 112.844 337.621 108.14C341.883 103.437 345.594 98.1808 348.754 92.373H351.125Z" fill="#1f1f24"/>
+      <path class="letter" d="M395.446 116.996V132.259C399.9 125.3 403.802 120.692 407.156 118.436C410.506 116.132 413.739 114.98 416.85 114.98C419.531 114.98 421.664 115.82 423.245 117.5C424.871 119.132 425.687 121.46 425.687 124.484C425.687 127.699 424.897 130.195 423.315 131.971C421.782 133.748 419.917 134.635 417.714 134.635C415.173 134.635 412.974 133.819 411.106 132.188C409.237 130.556 408.134 129.644 407.799 129.452C407.321 129.164 406.77 129.02 406.148 129.02C404.758 129.02 403.441 129.547 402.198 130.604C400.235 132.235 398.749 134.563 397.745 137.587C396.211 142.243 395.446 147.379 395.446 152.995V168.474L395.516 172.506C395.516 175.242 395.685 176.994 396.02 177.762C396.594 179.058 397.432 180.018 398.536 180.642C399.683 181.218 401.599 181.578 404.28 181.722V184.314H368.008V181.722C370.928 181.482 372.892 180.69 373.899 179.346C374.951 177.954 375.477 174.33 375.477 168.474V131.252C375.477 127.412 375.286 124.964 374.903 123.908C374.425 122.564 373.73 121.58 372.822 120.956C371.91 120.332 370.306 119.9 368.008 119.66V116.996H395.446Z" fill="#1f1f24"/>
+      <path class="letter" d="M491.917 116.996V169.699C491.917 174.834 492.395 178.05 493.355 179.346C494.311 180.594 496.249 181.386 499.173 181.722V184.314H471.804V175.314C468.597 179.154 465.387 181.962 462.18 183.738C458.973 185.466 455.38 186.33 451.405 186.33C447.624 186.33 444.248 185.178 441.277 182.874C438.357 180.522 436.393 177.786 435.389 174.666C434.381 171.547 433.881 166.099 433.881 158.323V131.612C433.881 126.524 433.399 123.356 432.443 122.108C431.535 120.86 429.593 120.044 426.625 119.66V116.996H453.99V163.003C453.99 167.802 454.207 170.899 454.637 172.29C455.115 173.682 455.836 174.738 456.792 175.458C457.8 176.178 458.947 176.538 460.242 176.538C461.963 176.538 463.522 176.082 464.909 175.17C466.825 173.922 469.123 171.402 471.804 167.611V131.612C471.804 126.524 471.326 123.356 470.37 122.108C469.458 120.86 467.52 120.044 464.552 119.66V116.996H491.917Z" fill="#1f1f24"/>
+      <path class="letter" d="M545.508 115.124L546.585 138.091H544.144C541.22 131.276 538.182 126.62 535.019 124.124C531.908 121.628 528.797 120.38 525.682 120.38C523.718 120.38 522.045 121.052 520.655 122.396C519.265 123.692 518.573 125.203 518.573 126.932C518.573 128.228 519.051 129.476 520.007 130.675C521.541 132.644 525.825 136.027 532.864 140.827C539.903 145.579 544.526 149.635 546.729 152.995C548.98 156.306 550.105 160.027 550.105 164.154C550.105 167.898 549.171 171.57 547.303 175.17C545.434 178.77 542.801 181.53 539.403 183.45C536.001 185.37 532.243 186.33 528.124 186.33C524.917 186.33 520.629 185.321 515.267 183.306C513.833 182.778 512.851 182.514 512.321 182.514C510.744 182.514 509.427 183.714 508.372 186.114H506.003L504.852 161.922H507.294C509.449 168.258 512.395 173.01 516.131 176.178C519.912 179.346 523.479 180.93 526.833 180.93C529.132 180.93 530.996 180.234 532.434 178.842C533.92 177.402 534.663 175.674 534.663 173.658C534.663 171.354 533.942 169.362 532.508 167.682C531.07 166.002 527.863 163.458 522.88 160.051C515.554 154.963 510.813 151.075 508.658 148.387C505.499 144.451 503.918 140.107 503.918 135.355C503.918 130.171 505.691 125.492 509.236 121.316C512.825 117.092 517.996 114.98 524.748 114.98C528.389 114.98 531.908 115.868 535.306 117.644C536.601 118.364 537.653 118.724 538.469 118.724C539.33 118.724 540.025 118.556 540.55 118.22C541.076 117.836 541.915 116.804 543.066 115.124H545.508Z" fill="#1f1f24"/>
+      <path class="letter" d="M581.142 92.373V116.996H597.088V124.124H581.142V165.666C581.142 169.554 581.308 172.074 581.646 173.226C582.028 174.33 582.676 175.242 583.584 175.962C584.492 176.634 585.331 176.97 586.099 176.97C589.211 176.97 592.157 174.594 594.933 169.842L597.088 171.426C593.208 180.642 586.912 185.25 578.196 185.25C573.934 185.25 570.319 184.074 567.351 181.722C564.431 179.322 562.563 176.658 561.746 173.73C561.268 172.098 561.029 167.683 561.029 160.483V124.124H552.266V121.604C558.301 117.332 563.423 112.844 567.638 108.14C571.9 103.437 575.611 98.1808 578.77 92.373H581.142Z" fill="#1f1f24"/>
+      <!-- typing caret -->
+      <rect id="caret" x="0" y="92" width="6" height="94" rx="1"/>
+    </svg>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(() => {
+  // ---------- config ----------
+  const PALETTE = [
+    '#b9e6c2', // green
+    '#f9d6a4', // peach
+    '#d6c6f2', // lilac
+    '#f6b9b9', // rose
+    '#aeddf2', // sky
+    '#f6e7aa', // butter
+    '#f8c9dd', // pink
+    '#b9e9e1'  // mint
+  ];
+
+  // 2026.6 기준 최신 프런티어 모델 + 소속 연구기관
+  const MODELS = [
+    { model: 'Claude Fable 5',  org: 'Anthropic' },
+    { model: 'Claude Opus 4.8', org: 'Anthropic' },
+    { model: 'GPT-5.5',         org: 'OpenAI' },
+    { model: 'Gemini 3.1 Pro',  org: 'Google DeepMind' },
+    { model: 'Grok 4.3',        org: 'xAI' },
+    { model: 'Llama 4',         org: 'Meta AI' },
+    { model: 'Qwen 3.7 Max',    org: 'Alibaba Cloud' },
+    { model: 'Kimi K2.6',       org: 'Moonshot AI' }
+  ];
+
+  const TEXT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum';
+
+  // timings (ms)
+  const T = {
+    riseStagger : 15,
+    riseDur     : 650,
+    holdTokens  : 1200,
+    rowsDur     : 1150,   // 색상별 줄 정렬
+    holdRows    : 0,      // 정렬 꼬리와 타이핑이 겹치므로 정지 없음
+    charStep    : 36,     // 타이핑 속도
+    rowStagger  : 230,    // 줄별 타이핑 시작 간격
+    eraseDur    : 350,    // lorem 텍스트 지우기
+    collapseDur : 900,    // 박스 우→좌 수축
+    mergeDur    : 1000,
+    typeStep    : 95,
+    typeStartLag: 300,
+    zoomDur     : 1550,
+    holdLogo    : 2400,
+    afterReset  : 350
+  };
+
+  const ZOOM_ORIGIN_Y = 0.46;
+  const SCENE_SCALE   = 0.26;   // logoScene 시작 scale = 1 / world zoom scale
+  const CARD_W        = 0.64;
+  const CARD_H        = 0.34;
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const frame     = document.getElementById('frame');
+  const world     = document.getElementById('world');
+  const logoScene = document.getElementById('logoScene');
+  const logoCard  = document.getElementById('logoCard');
+  const tokensEl  = document.getElementById('tokens');
+  const letters   = [...document.querySelectorAll('#logoSvg .letter')];
+  const starWrap  = document.getElementById('starWrap');
+  const caret     = document.getElementById('caret');
+
+  // ===== 전체 타이밍 스케일 (1.0 = 원래 ~26.5s, 0.57 ≈ 15s) =====
+  const SPEED = 0.566;
+  const SP = v => v * SPEED;
+  const sleep   = ms => new Promise(r => setTimeout(r, ms * SPEED));
+  const rand    = (a,b) => a + Math.random()*(b-a);
+  const shuffle = arr => { const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+
+  // ---------- tokenizer ----------
+  function tokenize(text){
+    const out = [];
+    text.split(' ').forEach((word, wi) => {
+      const lead = wi === 0 ? '' : ' ';
+      const m = word.match(/^(.*?)([.,]*)$/);
+      let core = m[1], punct = m[2];
+      if (core.length > 5 && Math.random() < 0.5){
+        const cut = 2 + Math.floor(Math.random() * (core.length - 4));
+        out.push(lead + core.slice(0, cut));
+        out.push(core.slice(cut));
+      } else {
+        out.push(lead + core);
+      }
+      if (punct) out.push(punct);
+    });
+    return out;
+  }
+
+  function paintColors(spans){
+    let prev = -1;
+    spans.forEach(s => {
+      let i;
+      do { i = Math.floor(Math.random() * PALETTE.length); } while (i === prev);
+      prev = i;
+      s.dataset.c = i;
+      s.style.backgroundColor = PALETTE[i];
+    });
+  }
+
+  function buildTokens(){
+    tokensEl.innerHTML = '';
+    const spans = tokenize(TEXT).map(t => {
+      const s = document.createElement('span');
+      s.className = 'token';
+      s.textContent = t;
+      tokensEl.appendChild(s);
+      return s;
+    });
+    paintColors(spans);
+    return spans;
+  }
+
+  let spans = buildTokens();
+  let rowsWrap = null;
+  let rows = [];   // { tokensBox, modelEl, orgEl, colorIdx, modelData }
+
+  // ---------- typing helper ----------
+  async function typeText(host, text){
+    const txt = document.createElement('span');
+    const tc  = document.createElement('span');
+    tc.className = 'tcaret';
+    host.appendChild(txt);
+    host.appendChild(tc);
+    for (const ch of text){
+      txt.textContent += ch;
+      await sleep(T.charStep + rand(-8, 14));
+    }
+    await sleep(220);
+    tc.remove();
+  }
+
+  // ---------- phase 1 : rise ----------
+  async function riseTokens(){
+    let maxEnd = 0;
+    spans.forEach((s, i) => {
+      const d = i * T.riseStagger + rand(0, 60);
+      s.style.opacity = '1';
+      s.animate(
+        [
+          { opacity: 0, transform: 'translateY(26px)' },
+          { opacity: 1, transform: 'translateY(0)' }
+        ],
+        { duration: SP(T.riseDur), delay: SP(d), easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' }
+      );
+      maxEnd = Math.max(maxEnd, d + T.riseDur);
+    });
+    await sleep(maxEnd);
+  }
+
+  // ---------- phase 2 : 색상별 줄 정렬 (FLIP, translate+scale) ----------
+  // 토큰을 하나도 버리지 않고(텍스트 유지) 폰트를 자동 축소해 전부 줄에 담는다.
+  async function gatherIntoRows(){
+    const before = new Map(spans.map(s => [s, s.getBoundingClientRect()]));
+    const assigned = shuffle(MODELS);
+
+    rowsWrap = document.createElement('div');
+    rowsWrap.id = 'rowsWrap';
+    rows = PALETTE.map((color, ci) => {
+      const row = document.createElement('div');
+      row.className = 'row';
+      const tb = document.createElement('div');
+      tb.className = 'rowTokens';
+      const me = document.createElement('span');
+      me.className = 'rowModel';
+      const oe = document.createElement('span');
+      oe.className = 'rowOrg';
+      oe.style.background = color;
+      row.append(tb, me, oe);
+      rowsWrap.appendChild(row);
+      return { rowEl: row, tokensBox: tb, modelEl: me, orgEl: oe, colorIdx: ci, modelData: assigned[ci] };
+    });
+    world.appendChild(rowsWrap);
+
+    // 토큰들을 자기 색 줄로 이동 (원래 순서 유지, 텍스트 전부 유지)
+    spans.forEach(s => rows[+s.dataset.c].tokensBox.appendChild(s));
+
+    // 줄 시작은 공백 없이 깔끔하게
+    rows.forEach(r => {
+      const f = r.tokensBox.firstChild;
+      if (f && /^ /.test(f.textContent)) f.textContent = f.textContent.replace(/^ +/, '');
+    });
+
+    // 폰트 자동 맞춤 — 토큰이 우측 모델명 자리를 침범하지 않고(가로),
+    // 8줄이 프레임 안에 다 들어오도록(세로) 한다. → 절대 안 겹침.
+    const probe = document.createElement('span');
+    probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font-style:italic;letter-spacing:-0.05em;';
+    rowsWrap.appendChild(probe);
+    let longestModel = 0;
+    MODELS.forEach(m => { probe.textContent = m.model; longestModel = Math.max(longestModel, probe.offsetWidth); });
+    probe.remove();
+
+    const fs0    = parseFloat(getComputedStyle(rowsWrap).fontSize);
+    const gapPx  = fs0 * 1.6;                                   // 토큰↔모델 여백
+    const availW = rowsWrap.clientWidth - longestModel - gapPx; // 토큰이 쓸 수 있는 최대 가로
+    let widest = 0;
+    rows.forEach(r => { widest = Math.max(widest, r.tokensBox.scrollWidth); });
+    const scaleW = widest > availW ? availW / widest : 1;
+
+    const maxH   = frame.getBoundingClientRect().height * 0.9;  // 세로 9할 안에
+    const scaleH = rowsWrap.scrollHeight > maxH ? maxH / rowsWrap.scrollHeight : 1;
+
+    const k = Math.min(scaleW, scaleH);
+    if (k < 1) rowsWrap.style.fontSize = Math.max(6, fs0 * k * 0.985) + 'px';
+
+    // FLIP : 읽기 전부 → 쓰기 전부 (레이아웃 스래싱 제거)
+    // 갑자기 튀던 진짜 원인 — 배율을 '박스 높이' 비율로 잡았던 것.
+    // 박스 높이엔 line-height(단락 1.62 vs 줄 1.2) 차이가 섞여 있어
+    // 글자 크기가 같아도 비율이 ~1.35로 잡혀, 첫 프레임에 글자가 확 커졌다.
+    // → 실제 폰트 크기 비율로 균일 배율을 잡고, 글자 '중심' 기준으로 정렬한다.
+    const paraFont = parseFloat(getComputedStyle(tokensEl).fontSize);
+    const rowFont  = parseFloat(getComputedStyle(rowsWrap).fontSize);
+    const scale    = paraFont / rowFont;          // 진짜 글자 크기 비율
+
+    const items = [];
+    rows.forEach((r, ri) => [...r.tokensBox.children].forEach(s => items.push({ s, ri })));
+    const after = items.map(it => it.s.getBoundingClientRect());
+
+    items.forEach((it, i) => {
+      const s = it.s;
+      const b = before.get(s);
+      const a = after[i];
+      const dx = (b.left + b.width / 2)  - (a.left + a.width / 2);
+      const dy = (b.top  + b.height / 2) - (a.top  + a.height / 2);
+      s.style.transformOrigin = '50% 50%';
+      s.animate(
+        [
+          { transform: `translate(${dx}px, ${dy}px) scale(${scale})` },
+          { transform: 'none' }
+        ],
+        {
+          duration: SP(T.rowsDur),
+          delay: SP(it.ri * 60),             // 위 줄부터 아래로 부드러운 캐스케이드
+          easing: 'cubic-bezier(.33,0,.15,1)',
+          fill: 'backwards'
+        }
+      );
+    });
+
+    const totalDelay = (rows.length - 1) * 60;
+    // 정렬 마무리와 모델명 타이핑이 자연스럽게 겹침
+    await sleep((T.rowsDur + totalDelay) * 0.72);
+  }
+
+  // ---------- phase 3 : 모델명 타이핑 (한 줄에 한 모델) ----------
+  async function typeModels(){
+    await Promise.all(rows.map((r, i) =>
+      (async () => {
+        await sleep(i * T.rowStagger);
+        await typeText(r.modelEl, r.modelData.model);
+      })()
+    ));
+  }
+
+  // ---------- phase 4 : lorem 철자 단위로 하나씩 지우기 + 박스 우→좌 수축 ----------
+  async function eraseLeft(){
+    // 각 토큰의 글자를 단어 span 하나로 감싼다 (박스 배경은 토큰에 그대로 유지)
+    rows.forEach(r => {
+      [...r.tokensBox.children].forEach(tok => {
+        const w = document.createElement('span');
+        w.textContent = tok.textContent;
+        w.style.display = 'inline-block';
+        w.style.transition = `opacity ${SP(220)}ms ease, transform ${SP(300)}ms cubic-bezier(.5,0,1,1)`;
+        tok.textContent = '';
+        tok.appendChild(w);
+        tok._word = w;
+      });
+    });
+    // 줄마다 우→좌로 한 단어씩, 아래로 뚝 떨어지며 사라짐 (줄들은 동시에)
+    await Promise.all(rows.map(r => (async () => {
+      const words = [...r.tokensBox.children].map(t => t._word).reverse();
+      for (const w of words){
+        w.style.opacity = '0';
+        w.style.transform = `translateY(${26 + rand(0, 8)}px)`;   // 아래로 빠짐
+        await sleep(55);
+      }
+    })()));
+    await sleep(160);
+
+    rows.forEach((r, i) => {
+      const w = r.tokensBox.getBoundingClientRect().width;
+      r.tokensBox.classList.add('clip');   // 수축 단계에서만 클리핑 켜기
+      r.tokensBox.style.maxWidth = 'none';
+      r.tokensBox.style.width = w + 'px';
+    });
+    void rowsWrap.offsetHeight;
+    rows.forEach((r, i) => {
+      r.tokensBox.style.transition = `width ${SP(T.collapseDur)}ms cubic-bezier(.7,0,.25,1) ${SP(i * 55)}ms, margin ${SP(T.collapseDur)}ms cubic-bezier(.7,0,.25,1) ${SP(i * 55)}ms`;
+      r.tokensBox.style.width = '0px';
+      // 모델이 좌측 끝까지 붙도록
+      r.modelEl.style.transition = `margin-left ${SP(T.collapseDur)}ms cubic-bezier(.7,0,.25,1) ${SP(i * 55)}ms`;
+      r.modelEl.style.marginLeft = '0px';
+    });
+    await sleep(T.collapseDur + rows.length * 55 + 120);
+  }
+
+  // ---------- phase 5 : 연구기관 타이핑 + 박스 (모델 ── 연구소 와이어) ----------
+  async function typeOrgs(){
+    // 모델과 연구소 사이에 점선 와이어 삽입 (org 우정렬 대신 와이어가 공간을 채움)
+    rows.forEach(r => {
+      r.orgEl.style.marginLeft = '0';
+      const wire = makeWire(PALETTE[r.colorIdx]);
+      r.rowEl.insertBefore(wire, r.orgEl);   // [model][wire][org]
+      r.wireEl = wire;
+    });
+    await Promise.all(rows.map((r, i) =>
+      (async () => {
+        await sleep(i * T.rowStagger);
+        runWire(r.wireEl, 1500);
+        r.orgEl.style.display = 'inline-block';
+        await typeText(r.orgEl, r.modelData.org);
+      })()
+    ));
+  }
+
+  // 점선 와이어 + 좌→우로 흐르는 컬러 원형 노드들
+  function makeWire(color){
+    const wire = document.createElement('span');
+    wire.className = 'wire';
+    for (let k = 0; k < 3; k++){
+      const node = document.createElement('span');
+      node.className = 'node';
+      node.style.background = color;
+      wire.appendChild(node);
+    }
+    return wire;
+  }
+  function runWire(wire, dur = 1500){
+    dur = SP(dur);
+    requestAnimationFrame(() => wire.classList.add('on'));
+    [...wire.children].forEach((node, k) => {
+      node.animate(
+        [
+          { left: '0%',   opacity: 0 },
+          { left: '6%',   opacity: 1 },
+          { left: '94%',  opacity: 1 },
+          { left: '100%', opacity: 0 }
+        ],
+        { duration: dur, delay: k * (dur / 3), iterations: Infinity, easing: 'linear' }
+      );
+    });
+  }
+
+  // 토큰수 — 멈추지 않고 계속 올라감
+  function startTicker(r){
+    r.tokenCount = 600 + Math.floor(Math.random() * 3200);
+    r.rate = 2200 + Math.random() * 6000;   // tokens/sec
+    r.ticking = true;
+    let last = performance.now();
+    const tick = now => {
+      if (!r.ticking) return;
+      r.tokenCount += r.rate * (now - last) / 1000;
+      last = now;
+      r.numEl.textContent = Math.floor(r.tokenCount).toLocaleString() + ' tokens';
+      r._raf = requestAnimationFrame(tick);
+    };
+    r._raf = requestAnimationFrame(tick);
+  }
+  function stopTicker(r){
+    r.ticking = false;
+    if (r._raf) cancelAnimationFrame(r._raf);
+  }
+
+  // ---------- phase 5.5 : 영수증 — 연구소 좌측 이동 + 점선 + 토큰수 상승 ----------
+  async function receiptTransfer(){
+    // 모델명 페이드아웃 → 좌측은 연구소만 남김
+    rows.forEach(r => {
+      r.modelEl.style.transition = `opacity ${SP(400)}ms ease`;
+      r.modelEl.style.opacity = 0;
+    });
+    await sleep(380);
+    rows.forEach(r => { r.modelEl.style.display = 'none'; });
+
+    // 재구성 : [연구소(좌)] ──•──→ [토큰수(우, 컬러 박스)]
+    const beforeOrg = rows.map(r => r.orgEl.getBoundingClientRect());
+    rows.forEach(r => {
+      if (r.wireEl) r.wireEl.remove();             // 모델→연구소 와이어 제거
+      const wire = makeWire(PALETTE[r.colorIdx]);  // 연구소→토큰 와이어 (노드 흐름)
+      const num  = document.createElement('span'); num.className = 'rcptNum';
+      num.textContent = '0 tokens';
+      num.style.background = PALETTE[r.colorIdx];   // 줄 색상 박스
+      r.orgEl.style.marginLeft = '0';
+      r.rowEl.insertBefore(r.orgEl, r.rowEl.firstChild);  // 연구소를 맨 좌측으로
+      r.rowEl.append(wire, num);
+      r.wireEl = wire; r.numEl = num;
+    });
+
+    // FLIP : 연구소가 우 → 좌로 이동
+    rows.forEach((r, i) => {
+      const a = r.orgEl.getBoundingClientRect();
+      const b = beforeOrg[i];
+      r.orgEl.animate(
+        [ { transform: `translateX(${b.left - a.left}px)` }, { transform: 'none' } ],
+        { duration: SP(720), delay: SP(i * 55), easing: 'cubic-bezier(.5,0,.18,1)', fill: 'backwards' }
+      );
+    });
+
+    // 점선 와이어 + 좌→우 노드 흐름 + 토큰수 계속 상승 (데이터 전송)
+    rows.forEach((r, i) => {
+      setTimeout(() => {
+        runWire(r.wireEl, 1400);
+        r.numEl.classList.add('on');
+        startTicker(r);
+      }, SP(i * 55 + 360));
+    });
+
+    // 숫자가 한동안 계속 차오르는 걸 보여줌 (멈추지 않음)
+    await sleep(rows.length * 55 + 360 + 1700);
+  }
+
+  // ---------- phase 6 : 영수증 줄들이 각자 수평 중앙으로 모이며 사라짐 ----------
+  async function mergeToBox(chosenIdx){
+    rows.forEach(stopTicker);   // 토큰 카운터 정지
+
+    rows.forEach(r => {
+      const rc    = r.rowEl.getBoundingClientRect();
+      const cxRow = rc.left + rc.width / 2;          // 그 줄의 수평 중앙
+      const ease  = 'cubic-bezier(.7,0,.25,1)';
+      const dur   = SP(600);
+
+      if (r.wireEl){
+        [...r.wireEl.children].forEach(n => n.getAnimations().forEach(a => a.cancel())); // 노드 정지
+        r.wireEl.style.transformOrigin = 'center';
+        r.wireEl.animate(
+          [ { transform: 'scaleX(1)', opacity: 1 }, { transform: 'scaleX(0)', opacity: 0 } ],
+          { duration: dur, easing: ease, fill: 'forwards' }
+        );
+      }
+      // 좌측 연구소 → 중앙으로 (수평 이동만)
+      const o = r.orgEl.getBoundingClientRect();
+      r.orgEl.style.transformOrigin = 'center';
+      r.orgEl.animate(
+        [ { transform: 'translateX(0)', opacity: 1 },
+          { transform: `translateX(${cxRow - (o.left + o.width / 2)}px)`, opacity: 0 } ],
+        { duration: dur, easing: ease, fill: 'forwards' }
+      );
+      // 우측 토큰 박스 → 중앙으로 (수평 이동만)
+      if (r.numEl){
+        const n = r.numEl.getBoundingClientRect();
+        r.numEl.style.transformOrigin = 'center';
+        r.numEl.animate(
+          [ { transform: 'translateX(0)', opacity: 1 },
+            { transform: `translateX(${cxRow - (n.left + n.width / 2)}px)`, opacity: 0 } ],
+          { duration: dur, easing: ease, fill: 'forwards' }
+        );
+      }
+    });
+    await sleep(660);
+  }
+
+  // ---------- logo ----------
+  function resetLogo(){
+    letters.forEach(l => l.classList.remove('on'));
+    starWrap.classList.remove('on');
+    caret.classList.remove('blink');
+    caret.style.opacity = 0;
+  }
+
+  async function typeLogo(){
+    caret.style.opacity = '';
+    caret.classList.add('blink');
+    const first = letters[0].getBBox();
+    caret.setAttribute('x', first.x - 2);
+    await sleep(T.typeStartLag);
+
+    for (const l of letters){
+      l.classList.add('on');
+      const b = l.getBBox();
+      caret.setAttribute('x', b.x + b.width + 9);
+      await sleep(T.typeStep);
+    }
+    await sleep(120);
+    starWrap.classList.add('on');   // 별 등장 → 무한 회전
+    await sleep(450);
+    caret.classList.remove('blink');
+    caret.style.opacity = 0;
+  }
+
+  // 타이핑 지우기 (백스페이스처럼 뒤에서부터)
+  async function untypeLogo(){
+    caret.style.opacity = '';
+    caret.classList.add('blink');
+    const last = letters[letters.length - 1].getBBox();
+    caret.setAttribute('x', last.x + last.width + 9);
+    await sleep(380);
+
+    for (let i = letters.length - 1; i >= 0; i--){
+      const b = letters[i].getBBox();
+      letters[i].classList.remove('on');
+      caret.setAttribute('x', b.x - 4);
+      await sleep(T.typeStep);
+    }
+    await sleep(150);
+    starWrap.classList.remove('on');
+    await sleep(320);
+    caret.classList.remove('blink');
+    caret.style.opacity = 0;
+  }
+
+  // ---------- reset ----------
+  function resetAll(){
+    if (rowsWrap){ rows.forEach(stopTicker); rowsWrap.remove(); rowsWrap = null; rows = []; }
+    spans = buildTokens();           // 새 분할 + 새 랜덤 컬러
+  }
+
+  // ---------- main loop ----------
+  async function loop(){
+    if (reduced){
+      spans.forEach(s => s.style.opacity = '1');
+      letters.forEach(l => l.classList.add('on'));
+      starWrap.classList.add('on');
+      logoScene.classList.add('shown');
+      return;
+    }
+
+    while (true){
+      // 1. 토큰이 아래에서 위로
+      await riseTokens();
+      await sleep(T.holdTokens);
+
+      // 2. 색상별로, 세로 갭을 두고 줄 정렬 (텍스트 전부 유지)
+      await gatherIntoRows();
+
+      // 3. 우측에 최신 AI 모델명 타이핑 — 정렬 마무리와 자연스럽게 겹쳐 시작
+      await typeModels();
+      await sleep(700);
+
+      // 4. lorem 텍스트 지우기 + 박스 우→좌 수축, 모델이 좌측으로
+      await eraseLeft();
+      await sleep(350);
+
+      // 5. 거기에 소속 연구기관 타이핑 + 컬러 박스
+      await typeOrgs();
+      await sleep(650);
+
+      // 5.5 영수증 — 연구소가 좌측으로 이동, 점선 리더, 우측 토큰수 상승 (데이터 전송)
+      await receiptTransfer();
+
+      // 6. 한 색의 박스로 뭉치기 → 로고 카드로 전환
+      const chosenIdx = Math.floor(Math.random() * PALETTE.length);
+      logoCard.style.background = PALETTE[chosenIdx];
+      resetLogo();
+      await mergeToBox(chosenIdx);
+
+      // 7. 뭉친 박스 안에서 tokentrust 타이핑 + 별 무한 회전
+      logoScene.classList.add('shown');
+      await sleep(150);
+      await typeLogo();
+      await sleep(400);
+
+      // 8. 로고 영역 사이즈까지만 줌인
+      world.classList.add('zoomed');
+      logoScene.classList.add('active');
+      await sleep(T.zoomDur);
+      await sleep(T.holdLogo);
+
+      // 9. 타이핑 지우기 → 박스가 중앙으로 줄어들며 사라짐 → 처음처럼
+      await untypeLogo();
+      logoScene.classList.add('shrinkOut');
+      await sleep(1000);
+
+      resetAll();
+      logoScene.classList.remove('shown', 'active', 'shrinkOut');
+      world.style.transition = 'none';
+      world.classList.remove('zoomed');
+      void world.offsetHeight;
+      world.style.transition = '';
+      await sleep(T.afterReset);
+    }
+  }
+
+  loop();
+})();
+
+</script>
+</body>
+</html>

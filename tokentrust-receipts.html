@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenTrust — Receipt Ledger Motion</title>
+<style>
+  :root{
+    --ink:#221c15;
+    --paper:#f4efe3;
+    --bg:#0e0d0b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:100%;height:100%;background:#000;overflow:hidden}
+
+  /* ---------- viewport letterbox + 1920x1080 stage ---------- */
+  .frame{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .stage{
+    position:relative;width:1920px;height:1080px;flex:none;
+    background:var(--bg);
+    overflow:hidden;
+    transform-origin:center center;
+  }
+  .stage::after{ /* film vignette + subtle grain bands above everything */
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:80;
+    background:
+      repeating-linear-gradient(0deg, rgba(20,16,10,.02) 0 3px, transparent 3px 7px),
+      radial-gradient(130% 100% at 50% 50%, transparent 52%, rgba(22,17,10,.38) 100%);
+  }
+
+  /* ---------- full-bleed receipt slides ---------- */
+  .slides{position:absolute;inset:0;z-index:1}
+  .slide{position:absolute;inset:0;display:none;overflow:hidden}
+  .bgfill{position:absolute;inset:-50px;pointer-events:none}
+  .slide.active{display:block}
+
+  /* entrance slam: 촤좌작 stepped jolt on every cut */
+  .slide.active .slam{
+    position:absolute;inset:0;
+    animation:slam .16s steps(3,end) both;
+  }
+  @keyframes slam{
+    0%  {transform:scale(1.12) translate(14px,-9px)}
+    50% {transform:scale(1.045) translate(-6px,5px)}
+    100%{transform:scale(1) translate(0,0)}
+  }
+  /* slow zoom drift while the slide holds (duration set per-cut in JS) */
+  .slide.active .zoom{
+    position:absolute;inset:0;
+    animation:drift 1s linear both;
+  }
+  @keyframes drift{
+    from{transform:scale(1)}
+    to  {transform:scale(1.085)}
+  }
+  .pos{position:absolute;left:50%;top:50%}
+
+  /* quick print-head sweep on each cut */
+  .slide.active .sweep{
+    position:absolute;left:0;width:100%;height:4px;z-index:6;pointer-events:none;
+    background:linear-gradient(90deg, transparent, rgba(255,252,240,.9), transparent);
+    box-shadow:0 0 22px 6px rgba(255,248,224,.35);
+    animation:sweep .26s ease-out both;
+  }
+  @keyframes sweep{
+    0%{top:-2%;opacity:.9} 80%{opacity:.6} 100%{top:102%;opacity:0}
+  }
+
+  /* ---------- receipt base (flat top, torn bottom) ---------- */
+  .receipt{
+    position:relative;
+    width:var(--w,330px);
+    background:
+      repeating-linear-gradient(0deg, rgba(29,26,22,.028) 0 2px, transparent 2px 5px),
+      linear-gradient(180deg, var(--p1,#f4efe3) 0%, var(--p2,#efe8d8) 100%);
+    color:var(--rink,var(--ink));
+    font-family:var(--ff,"Courier New"), ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size:15.5px; line-height:1.42; font-weight:700;
+    letter-spacing:.2px;
+    padding:24px 22px 30px;
+    clip-path:polygon(
+      0 0, 100% 0,
+      100% calc(100% - 7px), 97% 100%, 94% calc(100% - 7px), 91% 100%, 88% calc(100% - 7px),
+      85% 100%, 82% calc(100% - 7px), 79% 100%, 76% calc(100% - 7px), 73% 100%,
+      70% calc(100% - 7px), 67% 100%, 64% calc(100% - 7px), 61% 100%, 58% calc(100% - 7px),
+      55% 100%, 52% calc(100% - 7px), 49% 100%, 46% calc(100% - 7px), 43% 100%,
+      40% calc(100% - 7px), 37% 100%, 34% calc(100% - 7px), 31% 100%, 28% calc(100% - 7px),
+      25% 100%, 22% calc(100% - 7px), 19% 100%, 16% calc(100% - 7px), 13% 100%,
+      10% calc(100% - 7px), 7% 100%, 4% calc(100% - 7px), 1% 100%, 0 calc(100% - 7px)
+    );
+  }
+  .receipt::after{
+    content:"";position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;
+    background:
+      repeating-linear-gradient(0deg, rgba(120,104,80,.05) 0 9px, transparent 9px 31px),
+      linear-gradient(98deg, transparent 60%, rgba(110,96,72,.10) 78%, transparent 92%);
+  }
+
+  /* ---------- variants ---------- */
+  .v-invoice{--p1:#fbf7ec;--p2:#f3edde;--ff:"Lucida Console";font-size:14px;letter-spacing:0;padding-top:0}
+  .v-invoice .rc-topbar{margin:0 -22px 14px;height:12px;background:var(--ink)}
+  .v-invoice .rc-h{text-align:left;font-size:19px;letter-spacing:1.5px}
+  .v-invoice .rc-sub{text-align:left;letter-spacing:1px}
+  .v-invoice .rule{border-top:2px solid rgba(29,26,22,.8)}
+  .v-invoice .rule.thin{border-top:1px solid rgba(29,26,22,.45)}
+
+  .v-band{padding-top:0}
+  .v-band .rc-band{
+    margin:0 -22px 12px;padding:10px 18px 8px;background:var(--ink);color:var(--p1,#f4efe3);
+    text-align:center;font-size:19px;letter-spacing:4px;
+  }
+  .v-band .rc-band small{display:block;font-size:11px;letter-spacing:2px;opacity:.75}
+  .v-band .rule{border-top:3px double rgba(29,26,22,.7);margin:9px 0}
+
+  .v-aged{--p1:#efe3c6;--p2:#e7d7b2;--rink:#3c2f1b;font-size:15px}
+  .v-aged .rule{border-top:2px dashed rgba(60,47,27,.6)}
+  .v-aged .rc-h{letter-spacing:5px}
+  .v-aged::after{
+    background:
+      repeating-linear-gradient(0deg, rgba(120,90,40,.08) 0 7px, transparent 7px 26px),
+      linear-gradient(115deg, rgba(120,90,40,.14) 4%, transparent 30%, rgba(120,90,40,.12) 88%);
+  }
+
+  .v-tape{--p1:#f6f2e8;--p2:#efe9da;font-size:12px;padding:14px 12px 22px}
+  .v-tape .rc-sub{font-size:11px}
+
+  .v-card{--p1:#f1ece0;--p2:#e9e2cf;font-size:14.5px}
+  .v-card .rc-inner{border:2px solid rgba(29,26,22,.75);padding:12px 12px 8px;margin:-6px -6px 0}
+  .v-card .rc-h{font-size:18px}
+
+  /* ---------- line styles ---------- */
+  .rc-h{font-size:21px;letter-spacing:3px;text-align:center;margin-bottom:2px}
+  .rc-sub{font-size:12.5px;letter-spacing:2px;text-align:center;opacity:.72;font-weight:700}
+  .rc-c{text-align:center}
+  .rule{border:none;border-top:2px dashed rgba(29,26,22,.55);margin:10px 0}
+  .rule.thin{border-top:1px dashed rgba(29,26,22,.4);margin:7px 0}
+  .kv{display:flex;justify-content:space-between;gap:12px;white-space:nowrap}
+  .kv .dots{flex:1;overflow:hidden;opacity:.45;font-weight:400}
+  .kv .dots::before{content:"··········································"}
+  .sm{font-size:13px}
+  .xs{font-size:11.5px;letter-spacing:1px}
+  .big{font-size:18px}
+  .stamp-ok{
+    display:inline-block;border:3px solid currentColor;padding:2px 12px;
+    letter-spacing:4px;transform:rotate(-5deg);font-size:15px;border-radius:3px;opacity:.85;
+  }
+  .faded{
+    -webkit-mask-image:linear-gradient(90deg,#000 0%,rgba(0,0,0,.25) 32%,#000 55%,rgba(0,0,0,.45) 80%,#000 100%);
+            mask-image:linear-gradient(90deg,#000 0%,rgba(0,0,0,.25) 32%,#000 55%,rgba(0,0,0,.45) 80%,#000 100%);
+  }
+  .faded2{
+    -webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,.5) 0%,#000 28%,rgba(0,0,0,.2) 60%,#000 100%);
+            mask-image:linear-gradient(90deg,rgba(0,0,0,.5) 0%,#000 28%,rgba(0,0,0,.2) 60%,#000 100%);
+  }
+  .ghost{text-shadow:1.4px .4px 0 rgba(29,26,22,.30)}
+  .blurline{filter:blur(.45px);opacity:.88}
+  .smear{filter:blur(.3px);text-shadow:0 1.6px 2px rgba(29,26,22,.4)}
+  .barcode{
+    height:46px;margin:10px auto 2px;width:86%;
+    background:repeating-linear-gradient(90deg,
+      currentColor 0 2px, transparent 2px 4px,
+      currentColor 4px 9px, transparent 9px 11px,
+      currentColor 11px 12px, transparent 12px 16px,
+      currentColor 16px 19px, transparent 19px 21px,
+      currentColor 21px 22px, transparent 22px 27px);
+    opacity:.9;
+  }
+  .barcode.smudged{filter:blur(.6px)}
+  .qr{margin:10px auto 4px;position:relative}
+  .qr i{position:absolute;background:currentColor}
+  .holes{display:flex;justify-content:space-between;margin:6px 4px}
+  .holes i{width:9px;height:9px;border-radius:50%;background:rgba(20,16,10,.85);box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
+
+  /* ---------- ink-soaked logo, always on top ---------- */
+  .press{ /* slightly pressed/bleached paper area so the stamp reads on any crop */
+    position:absolute;z-index:48;left:50%;top:50%;
+    width:1150px;height:420px;transform:translate(-50%,-50%);
+    background:radial-gradient(closest-side, rgba(246,241,229,.78), rgba(246,241,229,.34) 58%, transparent 75%);
+    filter:blur(14px);
+    pointer-events:none;
+  }
+  .logoWrap{
+    position:absolute;z-index:50;left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    width:880px;
+    mix-blend-mode:multiply;          /* ink absorbed into the paper */
+    pointer-events:none;
+  }
+  .logoWrap svg{width:100%;height:auto;display:block;color:var(--ink);filter:url(#inkbleed)}
+  .logoMark{
+    transform-origin:622.3px 47.8px;
+    animation:spinMark 7s linear infinite;
+  }
+  @keyframes spinMark{to{transform:rotate(360deg)}}
+
+  /* ---------- controls ---------- */
+  .ui{position:fixed;right:18px;bottom:16px;z-index:100;display:flex;gap:10px}
+  .ui button{
+    background:rgba(24,20,14,.55);color:#e8e2d2;border:1px solid rgba(244,239,227,.3);
+    font:700 12px/1 ui-monospace,monospace;letter-spacing:2px;
+    padding:10px 16px;border-radius:4px;cursor:pointer;
+  }
+  .ui button:hover{background:rgba(24,20,14,.8)}
+  .ui button:focus-visible{outline:2px solid #f4efe3;outline-offset:2px}
+
+  @media (prefers-reduced-motion: reduce){
+    .slide.active .slam,.slide.active .zoom{animation:none !important}
+    .slide.active .sweep{display:none}
+    .logoMark{animation:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="stage" id="stage">
+
+    <div class="slides" id="slides"></div>
+
+    <div class="press"></div>
+
+    <div class="logoWrap">
+      <!-- TokenTrust — dark ink, bleed filter, spinning mark -->
+      <svg viewBox="0 0 673 188" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="tokentrust">
+        <g class="logoMark">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M645.148 3.18803L629.96 39.7479L666.706 24.5608L670.27 32.4368L633.336 47.6218L670.27 62.8087L666.706 70.4965L629.96 55.3093L645.148 92.0575L637.458 95.62L622.274 58.6837L607.085 95.62L599.399 92.0575L614.4 55.3093L577.841 70.4965L574.652 62.8087L611.211 47.6218L574.652 32.4368L577.841 24.7491L614.4 39.7479L599.399 3.18803L607.085 0L622.274 36.56L637.458 0L645.148 3.18803Z" fill="currentColor"/>
+        </g>
+        <g fill="currentColor">
+          <path d="M28.8749 92.373V116.996H44.8207V124.124H28.8749V165.666C28.8749 169.554 29.0425 172.074 29.3777 173.226C29.7608 174.33 30.4072 175.242 31.317 175.962C32.2268 176.634 33.0649 176.97 33.831 176.97C36.9437 176.97 39.8887 174.594 42.666 169.842L44.8207 171.426C40.9419 180.642 34.645 185.25 25.9299 185.25C21.6681 185.25 18.0528 184.074 15.0839 181.722C12.1629 179.322 10.2954 176.658 9.48128 173.73C9.00246 172.098 8.76301 167.683 8.76301 160.483V124.124H0V121.604C6.03354 117.332 11.1573 112.844 15.3712 108.14C19.633 103.437 23.3441 98.1808 26.5045 92.373H28.8749Z"/>
+          <path d="M77.0048 114.98C82.8467 114.98 88.2818 116.492 93.3098 119.516C98.3374 122.54 102.144 126.836 104.73 132.404C107.364 137.971 108.681 144.067 108.681 150.691C108.681 160.243 106.263 168.234 101.426 174.666C95.584 182.442 87.5154 186.33 77.2203 186.33C67.1165 186.33 59.3351 182.778 53.876 175.674C48.417 168.57 45.6875 160.338 45.6875 150.979C45.6875 141.331 48.4648 132.931 54.0198 125.78C59.6223 118.58 67.2838 114.98 77.0048 114.98ZM77.292 120.092C74.8497 120.092 72.7428 121.028 70.971 122.9C69.2473 124.724 68.098 128.371 67.5232 133.843C66.9966 139.267 66.7333 146.827 66.7333 156.522C66.7333 161.659 67.0683 166.458 67.7387 170.922C68.2657 174.33 69.3907 176.922 71.1148 178.698C72.8384 180.474 74.8019 181.362 77.0048 181.362C79.1595 181.362 80.9553 180.762 82.3917 179.562C84.2592 177.93 85.5045 175.65 86.1267 172.722C87.0844 168.162 87.5635 158.947 87.5635 145.075C87.5635 136.915 87.1086 131.323 86.1988 128.3C85.289 125.228 83.9481 122.996 82.1762 121.604C80.9314 120.596 79.3033 120.092 77.292 120.092Z"/>
+          <path d="M140.293 86.6848V150.907L155.879 135.571C159.087 132.451 161.075 130.195 161.841 128.803C162.655 127.412 163.062 126.067 163.062 124.772C163.062 123.476 162.535 122.396 161.482 121.532C160.428 120.668 158.369 120.044 155.305 119.66V116.996H185.401V119.66C182.527 119.804 180.013 120.5 177.859 121.748C175.704 122.948 171.49 126.62 165.217 132.763L157.89 139.963L173.693 163.146C180.061 172.554 183.844 177.834 185.041 178.986C186.669 180.618 188.728 181.53 191.218 181.722V184.314H156.526V181.722C158.058 181.722 159.159 181.434 159.83 180.858C160.548 180.282 160.907 179.658 160.907 178.986C160.907 177.882 159.902 175.842 157.89 172.866L144.602 153.355L140.293 157.602V169.698C140.293 174.834 140.771 178.05 141.729 179.346C142.687 180.594 144.65 181.386 147.619 181.722V184.314H112.926V181.722C115.751 181.434 117.763 180.522 118.96 178.986C119.773 177.93 120.181 174.834 120.181 169.698V101.301C120.181 96.2127 119.702 93.0447 118.744 91.7966C117.834 90.5488 115.895 89.7326 112.926 89.3489V86.6848H140.293Z"/>
+          <path d="M245.885 148.243H209.037C209.468 157.171 211.838 164.226 216.148 169.41C219.452 173.394 223.426 175.386 228.071 175.386C230.944 175.386 233.554 174.594 235.9 173.01C238.247 171.378 240.761 168.474 243.442 164.298L245.885 165.882C242.245 173.322 238.223 178.602 233.817 181.722C229.412 184.794 224.312 186.33 218.518 186.33C208.558 186.33 201.016 182.49 195.892 174.81C191.774 168.618 189.715 160.939 189.715 151.771C189.715 140.539 192.732 131.611 198.765 124.987C204.847 118.316 211.958 114.98 220.098 114.98C226.898 114.98 232.788 117.788 237.768 123.404C242.796 128.972 245.501 137.251 245.885 148.243ZM228.215 143.419C228.215 135.691 227.784 130.388 226.922 127.507C226.108 124.628 224.815 122.444 223.043 120.956C222.038 120.092 220.697 119.66 219.021 119.66C216.531 119.66 214.496 120.884 212.915 123.332C210.09 127.604 208.678 133.459 208.678 140.899V143.419H228.215Z"/>
+          <path d="M275.913 116.996V125.708C279.361 121.964 282.665 119.252 285.826 117.572C288.986 115.844 292.386 114.98 296.025 114.98C300.383 114.98 303.998 116.204 306.871 118.652C309.744 121.052 311.66 124.052 312.617 127.652C313.384 130.387 313.766 135.643 313.766 143.419V169.626C313.766 174.81 314.221 178.05 315.131 179.346C316.089 180.594 318.052 181.386 321.021 181.722V184.314H287.047V181.722C289.584 181.386 291.404 180.33 292.506 178.554C293.272 177.354 293.655 174.378 293.655 169.626V139.675C293.655 134.155 293.439 130.675 293.008 129.236C292.577 127.796 291.835 126.692 290.782 125.924C289.776 125.108 288.651 124.7 287.406 124.7C283.288 124.7 279.457 127.652 275.913 133.555V169.626C275.913 174.666 276.368 177.858 277.278 179.202C278.236 180.546 279.984 181.386 282.522 181.722V184.314H248.547V181.722C251.372 181.434 253.383 180.522 254.58 178.986C255.395 177.93 255.801 174.81 255.801 169.626V131.611C255.801 126.524 255.322 123.356 254.365 122.108C253.455 120.86 251.516 120.044 248.547 119.66V116.996H275.913Z"/>
+          <path d="M351.125 92.373V116.996H367.071V124.124H351.125V165.666C351.125 169.554 351.292 172.074 351.628 173.226C352.011 174.33 352.657 175.242 353.567 175.962C354.477 176.634 355.315 176.97 356.081 176.97C359.194 176.97 362.139 174.594 364.916 169.842L367.071 171.426C363.192 180.642 356.895 185.25 348.18 185.25C343.918 185.25 340.303 184.074 337.334 181.722C334.413 179.322 332.545 176.658 331.731 173.73C331.252 172.098 331.013 167.683 331.013 160.483V124.124H322.25V121.604C328.283 117.332 333.407 112.844 337.621 108.14C341.883 103.437 345.594 98.1808 348.754 92.373H351.125Z"/>
+          <path d="M395.446 116.996V132.259C399.9 125.3 403.802 120.692 407.156 118.436C410.506 116.132 413.739 114.98 416.85 114.98C419.531 114.98 421.664 115.82 423.245 117.5C424.871 119.132 425.687 121.46 425.687 124.484C425.687 127.699 424.897 130.195 423.315 131.971C421.782 133.748 419.917 134.635 417.714 134.635C415.173 134.635 412.974 133.819 411.106 132.188C409.237 130.556 408.134 129.644 407.799 129.452C407.321 129.164 406.77 129.02 406.148 129.02C404.758 129.02 403.441 129.547 402.198 130.604C400.235 132.235 398.749 134.563 397.745 137.587C396.211 142.243 395.446 147.379 395.446 152.995V168.474L395.516 172.506C395.516 175.242 395.685 176.994 396.02 177.762C396.594 179.058 397.432 180.018 398.536 180.642C399.683 181.218 401.599 181.578 404.28 181.722V184.314H368.008V181.722C370.928 181.482 372.892 180.69 373.899 179.346C374.951 177.954 375.477 174.33 375.477 168.474V131.252C375.477 127.412 375.286 124.964 374.903 123.908C374.425 122.564 373.73 121.58 372.822 120.956C371.91 120.332 370.306 119.9 368.008 119.66V116.996H395.446Z"/>
+          <path d="M491.917 116.996V169.699C491.917 174.834 492.395 178.05 493.355 179.346C494.311 180.594 496.249 181.386 499.173 181.722V184.314H471.804V175.314C468.597 179.154 465.387 181.962 462.18 183.738C458.973 185.466 455.38 186.33 451.405 186.33C447.624 186.33 444.248 185.178 441.277 182.874C438.357 180.522 436.393 177.786 435.389 174.666C434.381 171.547 433.881 166.099 433.881 158.323V131.612C433.881 126.524 433.399 123.356 432.443 122.108C431.535 120.86 429.593 120.044 426.625 119.66V116.996H453.99V163.003C453.99 167.802 454.207 170.899 454.637 172.29C455.115 173.682 455.836 174.738 456.792 175.458C457.8 176.178 458.947 176.538 460.242 176.538C461.963 176.538 463.522 176.082 464.909 175.17C466.825 173.922 469.123 171.402 471.804 167.611V131.612C471.804 126.524 471.326 123.356 470.37 122.108C469.458 120.86 467.52 120.044 464.552 119.66V116.996H491.917Z"/>
+          <path d="M545.508 115.124L546.585 138.091H544.144C541.22 131.276 538.182 126.62 535.019 124.124C531.908 121.628 528.797 120.38 525.682 120.38C523.718 120.38 522.045 121.052 520.655 122.396C519.265 123.692 518.573 125.203 518.573 126.932C518.573 128.228 519.051 129.476 520.007 130.675C521.541 132.644 525.825 136.027 532.864 140.827C539.903 145.579 544.526 149.635 546.729 152.995C548.98 156.306 550.105 160.027 550.105 164.154C550.105 167.898 549.171 171.57 547.303 175.17C545.434 178.77 542.801 181.53 539.403 183.45C536.001 185.37 532.243 186.33 528.124 186.33C524.917 186.33 520.629 185.321 515.267 183.306C513.833 182.778 512.851 182.514 512.321 182.514C510.744 182.514 509.427 183.714 508.372 186.114H506.003L504.852 161.922H507.294C509.449 168.258 512.395 173.01 516.131 176.178C519.912 179.346 523.479 180.93 526.833 180.93C529.132 180.93 530.996 180.234 532.434 178.842C533.92 177.402 534.663 175.674 534.663 173.658C534.663 171.354 533.942 169.362 532.508 167.682C531.07 166.002 527.863 163.458 522.88 160.051C515.554 154.963 510.813 151.075 508.658 148.387C505.499 144.451 503.918 140.107 503.918 135.355C503.918 130.171 505.691 125.492 509.236 121.316C512.825 117.092 517.996 114.98 524.748 114.98C528.389 114.98 531.908 115.868 535.306 117.644C536.601 118.364 537.653 118.724 538.469 118.724C539.33 118.724 540.025 118.556 540.55 118.22C541.076 117.836 541.915 116.804 543.066 115.124H545.508Z"/>
+          <path d="M581.142 92.373V116.996H597.088V124.124H581.142V165.666C581.142 169.554 581.308 172.074 581.646 173.226C582.028 174.33 582.676 175.242 583.584 175.962C584.492 176.634 585.331 176.97 586.099 176.97C589.211 176.97 592.157 174.594 594.933 169.842L597.088 171.426C593.208 180.642 586.912 185.25 578.196 185.25C573.934 185.25 570.319 184.074 567.351 181.722C564.431 179.322 562.563 176.658 561.746 173.73C561.268 172.098 561.029 167.683 561.029 160.483V124.124H552.266V121.604C558.301 117.332 563.423 112.844 567.638 108.14C571.9 103.437 575.611 98.1808 578.77 92.373H581.142Z"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- filters: ink bleed (logo) + paper crinkle/smudge (slides) -->
+    <svg width="0" height="0" style="position:absolute">
+      <!-- INK BLEED: rough fiber edges + soak-in entrance + living halo -->
+      <filter id="inkbleed" x="-15%" y="-25%" width="130%" height="150%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.035 0.05" numOctaves="3" seed="5" result="fiber"/>
+        <feDisplacementMap in="SourceGraphic" in2="fiber" scale="6" result="rough">
+          <animate attributeName="scale" values="46;6" dur="2.2s" fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+        </feDisplacementMap>
+        <feGaussianBlur in="rough" stdDeviation="1" result="soft">
+          <animate attributeName="stdDeviation" values="9;1" dur="2.2s" fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+        </feGaussianBlur>
+        <!-- choke alpha back so edges stay inky, not foggy -->
+        <feComponentTransfer in="soft" result="body">
+          <feFuncA type="gamma" amplitude="1.6" exponent="0.7" offset="0"/>
+        </feComponentTransfer>
+        <!-- wide soaked halo, breathing forever -->
+        <feGaussianBlur in="rough" stdDeviation="7" result="haloblur">
+          <animate attributeName="stdDeviation" values="6;11;6" dur="5.5s" repeatCount="indefinite" begin="2.2s"/>
+        </feGaussianBlur>
+        <feComponentTransfer in="haloblur" result="halo">
+          <feFuncA type="linear" slope="0.35" intercept="0"/>
+        </feComponentTransfer>
+        <feMerge>
+          <feMergeNode in="halo"/>
+          <feMergeNode in="body"/>
+        </feMerge>
+      </filter>
+
+      <filter id="smudgeA" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="turbulence" baseFrequency="0.9 0.18" numOctaves="2" seed="11" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="1.8"/>
+      </filter>
+      <filter id="smudgeB" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="turbulence" baseFrequency="0.7 0.12" numOctaves="2" seed="29" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6"/>
+      </filter>
+      <filter id="smudgeC" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012 0.05" numOctaves="2" seed="7" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="3"/>
+      </filter>
+    </svg>
+  </div>
+</div>
+
+<div class="ui">
+  <button id="pause" type="button">⏸ PAUSE</button>
+</div>
+
+<script>
+/* ============ receipt content (real models / token ledger) ============ */
+const R = {
+  h:(t)=>({t:'h',v:t}), sub:(t)=>({t:'sub',v:t}), c:(t,cls)=>({t:'c',v:t,cls}),
+  kv:(k,v,cls)=>({t:'kv',k,v,cls}), rule:()=>({t:'rule'}), thin:()=>({t:'thin'}),
+  bar:(s)=>({t:'bar',s}), holes:()=>({t:'holes'}), stamp:(v)=>({t:'stamp',v}),
+  topbar:()=>({t:'topbar'}), band:(v,s)=>({t:'band',v,s}), qr:()=>({t:'qr'}),
+};
+
+/* ox/oy = crop focus in receipt px (positive oy → show upper part) */
+const receipts = [
+  { v:'', w:344, rot:-1.6, oy:46, smudge:'smudgeA', lines:[
+      R.h('OPENAI'), R.sub('CHATGPT · PLAN RECEIPT'), R.c('TERMINAL 04 · TORONTO ON','xs'),
+      R.rule(),
+      R.kv('FREE PLAN','CA$0 /MO'), R.kv('  GPT-5.5 INSTANT','LTD','sm faded'),
+      R.kv('GO PLAN','CA$11 /MO','ghost'), R.kv('  MORE MSGS+UPLOADS','✓','sm'),
+      R.kv('PLUS PLAN','CA$25 /MO'), R.kv('  GPT-5.5 THINKING','ADV','sm faded2'),
+      R.thin(),
+      R.kv('SUBTOTAL','CA$25.00'), R.kv('TAX (HST 13%)','CA$3.25','blurline'),
+      R.kv('TOTAL','CA$28.25','big ghost'),
+      R.rule(),
+      R.c('AUTH 048871 · APPROVED','xs'), R.bar(),
+  ]},
+  { v:'v-band', w:356, rot:1.2, oy:60, smudge:'smudgeC', lines:[
+      R.band('TOKEN TRANSFER','TX-88412 · SETTLED'),
+      R.kv('FROM','0x3F9A…C21E'),
+      R.kv('TO','gpt-5.5-instant','ghost'),
+      R.rule(),
+      R.kv('TOKENS IN','1,204,883'),
+      R.kv('TOKENS OUT','96,412','faded'),
+      R.kv('CACHE READ','488,201','sm blurline'),
+      R.kv('FEE','$1.7461'),
+      R.thin(),
+      R.kv('BLOCK','#9,114,002','xs'),
+      R.stamp('SETTLED ✓'), R.bar(),
+  ]},
+  { v:'v-invoice', w:332, rot:-0.8, oy:30, smudge:'smudgeB', lines:[
+      R.topbar(),
+      R.h('xAI / IMAGINE API'), R.sub('RATE CARD · USD'),
+      R.rule(),
+      R.kv('grok-imagine-image-quality','','sm'),
+      R.kv('  IN','$0.01 /img','sm'),
+      R.kv('  OUT 1K / 2K','$0.05 / $0.07','sm faded'),
+      R.thin(),
+      R.kv('grok-imagine-video','','sm'),
+      R.kv('  OUT 480p','$0.05 /sec','sm'),
+      R.kv('  OUT 720p','$0.07 /sec','sm smear'),
+      R.rule(),
+      R.qr(), R.c('TEXT · IMAGE · VIDEO → VIDEO','xs faded2'),
+  ]},
+  { v:'', w:330, rot:1.8, oy:42, smudge:'smudgeA', lines:[
+      R.h('ANTHROPIC'), R.sub('CLAUDE · PRO PLAN'),
+      R.rule(),
+      R.kv('BILLING','MONTHLY'),
+      R.kv('AUTO-RENEW','JUN 11 2026','faded'),
+      R.kv('PAYMENT','VISA ••••','ghost'),
+      R.thin(),
+      R.kv('EXTRA USAGE BAL','CA$0.00'),
+      R.kv('AUTO-RELOAD','OFF','blurline'),
+      R.rule(),
+      R.c('*** THANK YOU ***'), R.bar(),
+  ]},
+  { v:'v-aged', w:300, rot:-2.0, oy:38, smudge:'smudgeB', lines:[
+      R.h('xAI LEDGER'), R.sub('MODEL RATES /1M TOK'),
+      R.rule(),
+      R.kv('grok-4.3','NEW'),
+      R.kv('  CTX','1M','sm'),
+      R.kv('  IN','$1.25','sm ghost'),
+      R.kv('  OUT','$2.50','sm'),
+      R.thin(),
+      R.kv('grok-build-0.1','NEW','faded'),
+      R.kv('  IN','$1.00','sm blurline'),
+      R.kv('  OUT','$2.00','sm'),
+      R.rule(), R.bar('smudged'),
+  ]},
+  { v:'v-card', w:318, rot:1.4, oy:40, smudge:'smudgeC', inner:true, lines:[
+      R.h('TOKEN TRANSFER'), R.sub('TX-88413 · SETTLED'),
+      R.rule(),
+      R.kv('FROM','0x3F9A…C21E'),
+      R.kv('TO','claude-opus-4-8','ghost'),
+      R.kv('TOKENS IN','482,116'),
+      R.kv('TOKENS OUT','31,008','faded'),
+      R.kv('FEE','$0.9412','blurline'),
+      R.stamp('SETTLED ✓'),
+  ]},
+  { v:'v-invoice', w:348, rot:-1.0, oy:52, smudge:'smudgeA', lines:[
+      R.topbar(),
+      R.h('DAILY STATEMENT'), R.sub('TOKEN LEDGER · 06/11/2026'),
+      R.rule(),
+      R.kv('OPENING BAL','4,000,000 TOK'),
+      R.kv('ISSUED','+2,250,000','ghost'),
+      R.kv('TRANSFERRED','-1,812,940','faded'),
+      R.kv('BURNED','-118,400','sm blurline'),
+      R.thin(),
+      R.kv('CLOSING BAL','4,318,660 TOK','big'),
+      R.rule(),
+      R.kv('USAGE','█▇▇▆▅▆▇█▇▆','sm faded2'),
+      R.holes(),
+  ]},
+  { v:'v-aged', w:300, rot:2.2, oy:34, smudge:'smudgeB', lines:[
+      R.h('REPRINT'), R.sub('** DUPLICATE COPY **'),
+      R.rule(),
+      R.kv('TX-88401','VOID','smear'),
+      R.kv('TO','grok-imagine-video','sm faded'),
+      R.kv('OUT 720p','312 sec','blurline'),
+      R.kv('AMT','$21.84','ghost faded2'),
+      R.thin(),
+      R.c('INK LOW — REPLACE ROLL','xs smear'),
+      R.bar('smudged'),
+  ]},
+  { v:'v-tape', w:190, rot:0.6, oy:10, smudge:'smudgeC', lines:[
+      R.sub('JOURNAL TAPE'),
+      R.thin(),
+      R.kv('TX-88395','+12,044','xs'),
+      R.kv('TX-88396','-8,210','xs faded'),
+      R.kv('TX-88397','+91,377','xs'),
+      R.kv('TX-88398','-44,061','xs ghost'),
+      R.kv('TX-88399','+2,118','xs blurline'),
+      R.kv('TX-88400','-19,930','xs'),
+      R.kv('TX-88402','+77,402','xs faded2'),
+      R.thin(),
+      R.kv('NET','+167,203','xs ghost'),
+      R.holes(),
+  ]},
+  { v:'v-band', w:330, rot:-1.4, oy:48, smudge:'smudgeA', lines:[
+      R.band('TOKEN TRANSFER','TX-88414 · SETTLED'),
+      R.kv('FROM','0x71CC…09BD'),
+      R.kv('TO','grok-4.3','ghost'),
+      R.kv('TOKENS IN','3,008,114','faded'),
+      R.kv('TOKENS OUT','248,716'),
+      R.kv('FEE','$4.3825','blurline'),
+      R.stamp('SETTLED ✓'),
+  ]},
+  { v:'v-card', w:312, rot:0.9, oy:36, smudge:'smudgeB', inner:true, lines:[
+      R.h('MINT EVENT'), R.sub('BATCH #2210'),
+      R.rule(),
+      R.kv('MINTED','2,250,000 TOK','ghost'),
+      R.kv('TO TREASURY','0x91B2…77F0','sm faded'),
+      R.kv('GAS','0.0042','sm'),
+      R.thin(),
+      R.stamp('VERIFIED'),
+  ]},
+  { v:'', w:320, rot:-1.8, oy:40, smudge:'smudgeC', lines:[
+      R.h('EXCHANGE SLIP'), R.sub('CA$ → TOK'),
+      R.rule(),
+      R.kv('TENDERED','CA$25.00'),
+      R.kv('RATE','1 CA$ = 41,2k TOK','sm faded'),
+      R.kv('CREDITED','1,030,000 TOK','ghost'),
+      R.kv('CHANGE','CA$0.00','blurline'),
+      R.thin(),
+      R.c('NO REFUNDS ON BURNED TOKENS','xs faded2'),
+      R.bar(),
+  ]},
+  { v:'v-invoice', w:296, rot:1.6, oy:30, smudge:'smudgeA', lines:[
+      R.topbar(),
+      R.h('USAGE METER'), R.sub('GPT-5.5 · HOURLY'),
+      R.rule(),
+      R.kv('00–06','▂▂▃▂▁▂','sm faded'),
+      R.kv('06–12','▄▅▆▇▆▅','sm'),
+      R.kv('12–18','▇█▇█▇▆','sm ghost'),
+      R.kv('18–24','▅▄▃▃▂▂','sm faded2'),
+      R.thin(),
+      R.kv('TOTAL','8.91M TOK','blurline'),
+      R.qr(),
+  ]},
+  { v:'v-aged', w:286, rot:-0.7, oy:36, smudge:'smudgeB', lines:[
+      R.h('NETWORK FEE'), R.sub('SETTLEMENT BATCH'),
+      R.rule(),
+      R.kv('BASE FEE','$0.0012','sm'),
+      R.kv('PRIORITY','$0.0004','sm faded'),
+      R.kv('BATCHED','x 1,402','ghost'),
+      R.kv('TOTAL','$2.2432','blurline'),
+      R.thin(),
+      R.stamp('CLEARED'),
+  ]},
+  { v:'v-card', w:312, rot:1.1, oy:34, smudge:'smudgeC', inner:true, lines:[
+      R.h('HASH PROOF'), R.sub('LEDGER CHECKPOINT'),
+      R.rule(),
+      R.kv('ROOT','a91f…07cd','sm faded'),
+      R.kv('PREV','3be0…5512','sm'),
+      R.kv('TXNS','1,402','ghost'),
+      R.kv('SIGNERS','9 / 12','blurline'),
+      R.thin(),
+      R.c('CHAIN OF CUSTODY INTACT','xs faded2'),
+  ]},
+  { v:'', w:300, rot:-1.2, oy:38, smudge:'smudgeA', lines:[
+      R.h('*** RECEIPT ***'), R.sub('CUSTOMER COPY'),
+      R.rule(),
+      R.kv('ITEMS','16'),
+      R.kv('MODELS','GPT·CLAUDE·GROK','sm ghost'),
+      R.kv('LEDGER','BALANCED ✓','faded'),
+      R.thin(),
+      R.c('AUDITED BY TOKENTRUST','xs smear'),
+      R.bar('smudged'),
+  ]},
+];
+
+/* ============ render slides ============ */
+let qrSeed = 7;
+function qrHTML(){
+  let s = (qrSeed += 13), cells = '';
+  const rnd = ()=> (s = (s*9301+49297)%233280) / 233280;
+  for(let y=0;y<11;y++) for(let x=0;x<11;x++){
+    const corner = (x<3&&y<3)||(x>7&&y<3)||(x<3&&y>7);
+    if(corner ? !((x%2)&&(y%2)) : rnd()>.52)
+      cells += `<i style="left:${x*7}px;top:${y*7}px;width:7px;height:7px"></i>`;
+  }
+  return `<div class="qr" style="width:77px;height:77px">${cells}</div>`;
+}
+function lineHTML(L){
+  switch(L.t){
+    case 'h':    return `<div class="rc-h">${L.v}</div>`;
+    case 'sub':  return `<div class="rc-sub">${L.v}</div>`;
+    case 'c':    return `<div class="rc-c ${L.cls||''}">${L.v}</div>`;
+    case 'kv':   return `<div class="kv ${L.cls||''}"><span>${L.k}</span><span class="dots"></span><span>${L.v}</span></div>`;
+    case 'rule': return `<hr class="rule">`;
+    case 'thin': return `<hr class="rule thin">`;
+    case 'bar':  return `<div class="barcode ${L.s||''}"></div>`;
+    case 'holes':return `<div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i></div>`;
+    case 'stamp':return `<div class="rc-c" style="margin:8px 0 4px"><span class="stamp-ok">${L.v}</span></div>`;
+    case 'topbar':return `<div class="rc-topbar"></div>`;
+    case 'band': return `<div class="rc-band">${L.v}<small>${L.s||''}</small></div>`;
+    case 'qr':   return qrHTML();
+  }
+  return '';
+}
+
+const slidesEl = document.getElementById('slides');
+receipts.forEach((rc)=>{
+  const K = (2300 / rc.w).toFixed(3);          // fill 1920 with bleed
+  const paper = {'':'#f0ebdd','v-invoice':'#f7f2e4','v-band':'#f0ebdd','v-aged':'#eadcba','v-tape':'#f2eddf','v-card':'#ece6d6'}[rc.v||''];
+  const body = rc.lines.map(lineHTML).join('');
+  const slide = document.createElement('div');
+  slide.className = 'slide';
+  slide.style.filter = `url(#${rc.smudge})`;
+
+  slide.innerHTML = `
+    <div class="bgfill" style="background:${paper}"></div>
+    <div class="slam"><div class="zoom">
+      <div class="pos" style="transform:translate(-50%,-50%) rotate(${rc.rot}deg) scale(${K}) translate(0px,${rc.oy}px)">
+        <div class="receipt ${rc.v||''}" style="--w:${rc.w}px">
+          ${rc.inner ? `<div class="rc-inner">${body}</div>` : body}
+        </div>
+      </div>
+    </div></div>
+    <div class="sweep"></div>`;
+  slidesEl.appendChild(slide);
+});
+const slides = [...slidesEl.children];
+
+/* ============ rapid-cut driver (촤좌작), infinite ============ */
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let idx = 0, timer = null, playing = true;
+
+function show(i, holdMs){
+  slides.forEach((s,j)=>s.classList.toggle('active', j===i));
+  const z = slides[i].querySelector('.zoom');
+  z.style.animationDuration = (holdMs + 240) + 'ms';   // drift spans the hold
+}
+function next(){
+  if(!playing) return;
+  /* rhythm: bursts of 3-4 quick cuts, then one longer beat */
+  const beat = (idx % 4 === 3);
+  const hold = beat ? 1250 + Math.random()*350
+                    : 480  + Math.random()*260;
+  show(idx, hold);
+  idx = (idx + 1) % slides.length;
+  timer = setTimeout(next, hold);
+}
+if (reduced){ show(0, 999999); }
+else next();
+
+/* ============ fit 1920x1080 ============ */
+function fit(){
+  const s = Math.min(innerWidth/1920, innerHeight/1080);
+  document.getElementById('stage').style.transform = `scale(${s})`;
+}
+addEventListener('resize', fit); fit();
+
+/* ============ pause / play ============ */
+const btn = document.getElementById('pause');
+btn.addEventListener('click', ()=>{
+  playing = !playing;
+  btn.textContent = playing ? '⏸ PAUSE' : '▶ PLAY';
+  document.querySelectorAll('.stage *').forEach(el=>{
+    el.style.animationPlayState = playing ? 'running' : 'paused';
+  });
+  if (!playing) clearTimeout(timer);
+  else next();
+});
+</script>
+</body>
+</html>
