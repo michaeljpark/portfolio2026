@@ -15,7 +15,7 @@
      (recolored white) in a rounded box. Monochrome white on near-black.
   -------------------------------------------------------------------*/
 
-  const BG       = "#0d0d0c";
+  const BG       = "#1a1a1a";
   const WHITE    = [238, 238, 235];
   const LOGO_OP  = 0.78;   // logos kept translucent
   const GRAY_HI  = [200, 200, 196];
