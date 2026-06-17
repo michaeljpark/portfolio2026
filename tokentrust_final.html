@@ -152,7 +152,7 @@
     shctx.restore();
     const sd=shctx.getImageData(0,0,SB,SB).data;
 
-    const mcx=W/2, mcy=H*0.46, mSize=U*0.92, half=mSize/2;
+    const mcx=W/2, mcy=H*0.5, mSize=U*0.92, half=mSize/2;
 
     sctx.clearRect(0,0,W,H);
     sctx.font=monoMain;
@@ -217,7 +217,7 @@
     const boxW = lw + padX*2;
     const boxH = lh + padY*2;
     const bx = Math.round(W/2 - boxW/2);
-    const by = Math.round(H*0.46 - boxH/2);
+    const by = Math.round(H*0.5 - boxH/2);
     // box color == background -> the lockup knocks a clean pocket out of the pattern
     ctx.fillStyle=BG;
     ctx.fillRect(bx,by,boxW,boxH);
