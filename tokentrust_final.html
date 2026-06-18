@@ -35,6 +35,9 @@
   const GRAY     = [120, 120, 118];
   const BOX_BG   = "#141413";
   const BOX_LINE = "rgba(255,255,255,0.22)";
+  // lockup box padding as a fraction of lockup height (snug to the SVG).
+  // Used by BOTH the loop's clear-pocket and drawLockup so they always match.
+  const BOX_PADX = 0.18, BOX_PADY = 0.24;
 
   const STAR_PATH = "M232.841 10.5296L182.681 131.282L304.054 81.1211L315.82 107.134L193.829 157.288L315.82 207.449L304.054 232.841L182.681 182.68L232.841 304.054L207.452 315.82L157.292 193.824L107.131 315.82L81.7422 304.054L131.284 182.68L10.5297 232.841L0 207.449L120.754 157.288L0 107.134L10.5297 81.743L131.284 131.282L81.7422 10.5296L107.131 0L157.292 120.752L207.452 0L232.841 10.5296Z";
   const STAR_VIEW = 315.82, STAR_CENTER = STAR_VIEW / 2;
@@ -154,13 +157,22 @@
 
     const mcx=W/2, mcy=H*0.5, mSize=U*0.92, half=mSize/2;
 
+    // lockup box footprint (matches drawLockup) — keep this pocket clear so no
+    // logos (and none of their bloom) render under the TokenTrust box.
+    const _lw=Math.round(W*0.50), _lh=Math.round(_lw*LOCK_AR);
+    const _bw=_lw+Math.round(_lh*BOX_PADX)*2, _bh=_lh+Math.round(_lh*BOX_PADY)*2;
+    const boxL=Math.round(W/2-_bw/2), boxT=Math.round(H*0.5-_bh/2);
+    const boxR=boxL+_bw, boxB=boxT+_bh;
+
     sctx.clearRect(0,0,W,H);
     sctx.font=monoMain;
 
     for(let gy=0; gy<rows; gy++){
       const py=gy*cell+cell/2, ry=(py-mcy)/half;
+      const inBoxY = py>=boxT && py<=boxB;
       for(let gx=0; gx<cols; gx++){
         const px=gx*cell+cell/2, rx=(px-mcx)/half;
+        if(inBoxY && px>=boxL && px<=boxR) continue;   // logos never render under the box
 
         let body=0;
         const sx=(rx*0.5+0.5)*SB, sy=(ry*0.5+0.5)*SB;
@@ -213,7 +225,7 @@
   function drawLockup(){
     const lw = Math.round(W*0.50);
     const lh = Math.round(lw*LOCK_AR);
-    const padX = Math.round(lh*0.70), padY = Math.round(lh*0.62);
+    const padX = Math.round(lh*BOX_PADX), padY = Math.round(lh*BOX_PADY);
     const boxW = lw + padX*2;
     const boxH = lh + padY*2;
     const bx = Math.round(W/2 - boxW/2);
