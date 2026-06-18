@@ -60,7 +60,9 @@
   }
   function fbm(x,y){ let val=0,amp=0.5,f=1; for(let i=0;i<4;i++){val+=amp*vnoise(x*f,y*f);f*=2;amp*=0.5;} return val; }
 
-  const W=1440, H=1080, U=Math.min(W,H);
+  // Internal buffer resolution — defaults to 4:3, but the host canvas can
+  // request another aspect via data-w / data-h (e.g. 1920×1080 for 16:9).
+  const W = (+stage.dataset.w) || 1440, H = (+stage.dataset.h) || 1080, U = Math.min(W, H);
   let cell=28, cols=0, rows=0, monoMain="";
   const GF=0.014, MAC=0.0026, MESO=0.0078, RG=0.0034, BF=0.0040;
 
