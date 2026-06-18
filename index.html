@@ -10,6 +10,11 @@
 <link rel="preload" as="image" href="./posters/ongenthumb.jpg" media="(min-width:881px)" fetchpriority="high" />
 <link rel="preload" as="image" href="./posters/ongenprevmobile.jpg" media="(max-width:880px)" fetchpriority="high" />
 
+<!-- Inter, subset to the ULT cam-telemetry glyphs only (tiny) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@600&text=ULT-QQ-382-175-924-CAM2&display=swap" />
+
 <meta property="og:title" content="Michael Joongmin Park — Designer" />
 <meta property="og:description" content="Digital product designer. HAX · Product · Industrial. Toronto, ON. Portfolio 2026." />
 <meta property="og:type" content="website" />
@@ -150,6 +155,48 @@
   .work-block.wide .work{ aspect-ratio: 16/9; }
   .work-block.third{ grid-column: span 4; }
   .work-block.third .work{ aspect-ratio: 1/1; }
+
+  /* ULT featured card — periwinkle field, black ULT wordmark up top, framed 4:3 video, cam telemetry pill */
+  .work.ult-work{ background:#B6B6ED; }
+  .ult-work .ult-logo{
+    position:absolute; left:50%; top:14%;
+    transform:translate(-50%,-50%);
+    width:38%; height:auto;
+    filter:brightness(0);   /* white SVG -> solid black, alpha preserved */
+    transition:none; pointer-events:none; z-index:3;
+  }
+  a:hover .ult-work .ult-logo{ transform:translate(-50%,-50%); }   /* cancel the .work img hover scale */
+  .ult-stage{
+    position:absolute; left:50%; top:56%;
+    transform:translate(-50%,-50%);
+    width:66%; aspect-ratio:4/3;
+    border-radius:18px; overflow:hidden;
+    background:#B6B6ED;
+    container-type:inline-size;   /* lets the cam pill scale to the video frame */
+  }
+  .ult-vid{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover; display:block;
+  }
+  .ult-cam{
+    position:absolute; left:50%; bottom:0.9em;
+    transform:translateX(-50%);
+    display:inline-flex; align-items:center; gap:0.55em;
+    background:#000; color:#fff;
+    border-radius:999px;
+    padding:0.58em 1.15em 0.58em 0.92em;
+    font-family:'Inter','Helvetica Neue',Arial,sans-serif;
+    font-size:clamp(7px, 4.8cqw, 11px);   /* scales with the video frame -> shrinks on mobile */
+    font-weight:600; letter-spacing:0.04em;
+    white-space:nowrap; line-height:1;
+    z-index:4; pointer-events:none;
+  }
+  .ult-cam svg{ width:1.3em; height:1.3em; flex-shrink:0; display:block; }
+  @media (max-width:880px){
+    .ult-work .ult-logo{ top:15%; width:30%; }
+    .ult-stage{ top:60%; width:52%; }
+  }
 
   /* More button (bottom-left of every .work card) */
   .more-btn{
@@ -790,7 +837,13 @@
 
     <div class="work-block third reveal">
       <a href="./ult.html">
-        <div class="work"><video class="lazy-vid" data-src="./ultprev.mp4" poster="./posters/ultprev.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
+        <div class="work ult-work">
+          <img class="ult-logo" src="./ultlogo.svg" alt="" aria-hidden="true" />
+          <div class="ult-stage">
+            <video class="lazy-vid ult-vid" data-src="./ultvid.mp4" poster="./posters/ultvid.jpg" muted loop playsinline preload="none"></video>
+            <div class="ult-cam"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 10 7 7"/><path d="m10 14-3 3"/><path d="m14 10 3-3"/><path d="m14 14 3 3"/><path d="M14.205 4.139a4 4 0 1 1 5.439 5.863"/><path d="M19.637 14a4 4 0 1 1-5.432 5.868"/><path d="M4.367 10a4 4 0 1 1 5.438-5.862"/><path d="M9.795 19.862a4 4 0 1 1-5.429-5.873"/><rect x="10" y="8" width="4" height="8" rx="1"/></svg><span>ULT-QQ-382-175-924-CAM2</span></div>
+          </div>
+        </div>
         <div class="w-info">
           <div class="t"><span>ULT</span><span class="arrow">→</span></div>
           <div class="m"><span>2025</span><span>Urban Logistics, Physical UX</span></div>
