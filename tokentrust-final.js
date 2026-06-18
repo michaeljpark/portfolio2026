@@ -157,12 +157,14 @@
 
     const mcx=W/2, mcy=H*0.5, mSize=U*0.92, half=mSize/2;
 
-    // lockup box footprint (matches drawLockup) — keep this pocket clear so no
-    // logos (and none of their bloom) render under the TokenTrust box.
+    // lockup box footprint (matches drawLockup), expanded by ~one glyph radius
+    // so logos straddling the box edge aren't half-clipped — clean margin, no
+    // bloom under the box.
     const _lw=Math.round(W*0.50), _lh=Math.round(_lw*LOCK_AR);
     const _bw=_lw+Math.round(_lh*BOX_PADX)*2, _bh=_lh+Math.round(_lh*BOX_PADY)*2;
-    const boxL=Math.round(W/2-_bw/2), boxT=Math.round(H*0.5-_bh/2);
-    const boxR=boxL+_bw, boxB=boxT+_bh;
+    const _m=Math.round(cell*0.55);
+    const boxL=Math.round(W/2-_bw/2)-_m, boxT=Math.round(H*0.5-_bh/2)-_m;
+    const boxR=boxL+_bw+_m*2, boxB=boxT+_bh+_m*2;
 
     sctx.clearRect(0,0,W,H);
     sctx.font=monoMain;
