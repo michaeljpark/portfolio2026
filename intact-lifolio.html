@@ -247,9 +247,23 @@
   .phase-body-inner{ overflow:hidden; }
   .phase-media-wrap{ max-width:var(--max); margin:0 auto; padding:clamp(28px,4vw,48px) var(--pad) clamp(40px,6vw,80px); }
   .phase-media{
-    width:100%; aspect-ratio:16/9; border-radius:16px; overflow:hidden;
-    background:#e8e8e6; display:flex; align-items:center; justify-content:center;
-    font-size:11px; color:var(--muted); letter-spacing:0;
+    width:100%; height:0; padding-top:56.25%;   /* 16:9 viewport */
+    border-radius:16px; overflow:hidden;
+    background:#e8e8e6; position:relative;
+    transition:padding-top .45s ease;
+  }
+  /* Expanded: viewport height halves (center-cropped); inner content keeps its size */
+  .phase-block[data-open] .phase-media{ padding-top:28.125%; }
+  .phase-media > *{
+    position:absolute; top:50%; left:0;
+    width:100%; height:auto !important; aspect-ratio:16/9;
+    transform:translateY(-50%);
+  }
+  /* text placeholders: fill the viewport and center (not the 16:9 media rule) */
+  .phase-media > span{
+    inset:0; top:0; width:100%; height:100% !important; aspect-ratio:auto; transform:none;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; color:var(--muted);
   }
 </style>
 </head>
@@ -374,7 +388,7 @@
       </div>
     </button>
     <div class="phase-media-wrap" onclick="togglePhase(this)">
-      <div class="phase-media">Media Placeholder</div>
+      <div class="phase-media"><span>Media Placeholder</span></div>
     </div>
     <div class="phase-body">
       <div class="phase-body-inner">
@@ -696,7 +710,7 @@
       </div>
     </button>
     <div class="phase-media-wrap" onclick="togglePhase(this)">
-      <div class="phase-media">Media Placeholder</div>
+      <div class="phase-media"><span>Media Placeholder</span></div>
     </div>
     <div class="phase-body">
       <div class="phase-body-inner">
@@ -743,7 +757,7 @@
       </div>
     </button>
     <div class="phase-media-wrap" onclick="togglePhase(this)">
-      <div class="phase-media">Media Placeholder</div>
+      <div class="phase-media"><span>Media Placeholder</span></div>
     </div>
     <div class="phase-body">
       <div class="phase-body-inner">
