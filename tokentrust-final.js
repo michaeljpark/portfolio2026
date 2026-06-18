@@ -48,7 +48,7 @@
   const sctx = scene.getContext("2d");
   const bloom = document.createElement("canvas");
   const blctx = bloom.getContext("2d");
-  const SB = 360;
+  const SB = 180;
   const shape = document.createElement("canvas");
   shape.width = SB; shape.height = SB;
   const shctx = shape.getContext("2d", { willReadFrequently: true });
@@ -65,14 +65,18 @@
 
   // Internal buffer resolution — defaults to 4:3, but the host canvas can
   // request another aspect via data-w / data-h (e.g. 1920×1080 for 16:9).
-  const W = (+stage.dataset.w) || 1440, H = (+stage.dataset.h) || 1080, U = Math.min(W, H);
+  // Internal buffer is just upscaled by CSS to the card, and the logo GRID
+  // (cols×rows) is set by aspect ratio, not pixel count — so a smaller buffer
+  // looks the same but makes the full-frame compositing far cheaper.
+  const W = (+stage.dataset.w) || 1024, H = (+stage.dataset.h) || 768, U = Math.min(W, H);
   let cell=28, cols=0, rows=0, monoMain="";
   const GF=0.014, MAC=0.0026, MESO=0.0078, RG=0.0034, BF=0.0040;
 
   function setup(){
     cell = Math.max(24, Math.min(52, Math.round(U/27)));
     cols = Math.ceil(W/cell)+1; rows = Math.ceil(H/cell)+1;
-    for(const c of [stage,scene,bloom]){ c.width=W; c.height=H; }
+    for(const c of [stage,scene]){ c.width=W; c.height=H; }
+    bloom.width=Math.round(W/2); bloom.height=Math.round(H/2);   // half-res bloom → far cheaper blur
     monoMain = `${Math.round(cell*0.92)}px ui-monospace,"SF Mono",Menlo,Consolas,monospace`;
     sctx.textAlign="center"; sctx.textBaseline="middle";
   }
@@ -124,7 +128,7 @@
   const LOCK_AR = 85/508;
 
   let angle=0, last=performance.now(), lastDraw=0, rafId=null, inView=true;
-  const FRAME_MS=1000/30;   // ~30fps throttle
+  const FRAME_MS=1000/20;   // ~20fps throttle (slow ambient spin — looks fine)
 
   function frame(now){
     rafId=requestAnimationFrame(frame);
@@ -135,7 +139,7 @@
 
     shctx.clearRect(0,0,SB,SB);
     shctx.save();
-    shctx.filter="blur(2px)";
+    shctx.filter="blur(1px)";
     shctx.translate(SB/2,SB/2); shctx.rotate(angle);
     const ss=(SB*0.92)/STAR_VIEW; shctx.scale(ss,ss);
     shctx.translate(-STAR_CENTER,-STAR_CENTER);
@@ -181,6 +185,10 @@
         const jit = vnoise(gx*1.9+2.0, gy*2.7-1.0);
         let idx = (Math.min(0.999, Math.max(0, rnoise))*4)|0;
         if(jit>0.82) idx=(idx+1)&3;
+        // Gemini (spark, index 0) reads best — seed extra Gemini clusters so it
+        // isn't rare. Separate low-freq noise => clustered patches. Raise the
+        // 0.42 threshold for even more Gemini, lower it for less.
+        if(idx!==0 && fbm(px*0.0040+13.0, py*0.0040-6.0) < 0.42) idx = 0;
         const im = LOGOS[idx];
         if(im._ready){
           const sz = Math.min(cell*0.92, cell*(0.46+0.56*v));   // <= cell -> never overlaps
@@ -198,12 +206,13 @@
     ctx.drawImage(scene,0,0);
     // glow: two-pass additive halo from the transparent logo layer (blacks stay black)
     ctx.globalCompositeOperation="lighter";
-    blctx.clearRect(0,0,W,H);
-    blctx.filter=`blur(${(U*0.006).toFixed(1)}px)`; blctx.drawImage(scene,0,0); blctx.filter="none";
-    ctx.globalAlpha=0.42; ctx.drawImage(bloom,0,0);
-    blctx.clearRect(0,0,W,H);
-    blctx.filter=`blur(${(U*0.016).toFixed(1)}px)`; blctx.drawImage(scene,0,0); blctx.filter="none";
-    ctx.globalAlpha=0.24; ctx.drawImage(bloom,0,0);
+    const bw=bloom.width, bh=bloom.height;   // bloom drawn at half-res, then upscaled
+    blctx.clearRect(0,0,bw,bh);
+    blctx.filter=`blur(${(U*0.003).toFixed(1)}px)`; blctx.drawImage(scene,0,0,bw,bh); blctx.filter="none";
+    ctx.globalAlpha=0.42; ctx.drawImage(bloom,0,0,W,H);
+    blctx.clearRect(0,0,bw,bh);
+    blctx.filter=`blur(${(U*0.008).toFixed(1)}px)`; blctx.drawImage(scene,0,0,bw,bh); blctx.filter="none";
+    ctx.globalAlpha=0.24; ctx.drawImage(bloom,0,0,W,H);
     ctx.globalAlpha=1; ctx.globalCompositeOperation="source-over";
 
     drawLockup();
