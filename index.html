@@ -35,7 +35,7 @@
     --line:  #e6e6e6;
     --max:   1320px;
     --pad:   clamp(20px, 4vw, 56px);
-    --font:  "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font:  -apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
 
   *{ box-sizing:border-box; margin:0; padding:0; }
@@ -733,6 +733,12 @@
     background:#1a1a1a;
     pointer-events:none;   /* never block the card link/hover */
   }
+</style>
+<style>
+/* ===== iOS design language (SF Pro Display + antialiasing + accent) ===== */
+:root{ --accent:#007aff; }
+html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection{ background:#007aff; color:#ffffff; }
 </style>
 </head>
 <body>

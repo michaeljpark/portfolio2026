@@ -12,7 +12,7 @@
   :root{
     --bg:#f5f5f3; --ink:#0a0a0a; --muted:#767676; --line:#e0e0de;
     --max:1320px; --pad:clamp(20px,4vw,56px);
-    --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{ background:var(--bg); color:var(--ink); }
@@ -266,6 +266,12 @@
     font-size:11px; color:var(--muted);
   }
 </style>
+<style>
+/* ===== iOS design language (SF Pro Display + antialiasing + accent) ===== */
+:root{ --accent:#007aff; }
+html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection{ background:#007aff; color:#ffffff; }
+</style>
 </head>
 <body>
 
@@ -415,7 +421,7 @@
 
 <section class="project-section wrap" style="padding-top:24px; padding-bottom:0;">
   <div style="background:#d6d6d4; border-radius:20px; overflow:hidden;">
-    <svg viewBox="0 0 960 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+    <svg viewBox="0 0 960 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;">
       <!-- ocean bg -->
       <rect width="960" height="500" fill="#d6d6d4"/>
 
@@ -498,7 +504,7 @@
 
 <!-- Insured Losses Chart -->
 <section class="project-section wrap" style="padding-top:48px; padding-bottom:48px;">
-  <svg viewBox="0 0 820 405" xmlns="http://www.w3.org/2000/svg" class="chart-desktop" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+  <svg viewBox="0 0 820 405" xmlns="http://www.w3.org/2000/svg" class="chart-desktop" style="font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;">
     <text x="70" y="28" fill="#999" font-size="9.5" letter-spacing="0.07em">PRIVATE INSURED LOSSES VS GOV DFAA — CANADA (CAD)</text>
     <!-- Legend: inline below title -->
     <rect x="70" y="38" width="9" height="9" fill="#e0c8cc" rx="2"/>
@@ -567,7 +573,7 @@
 
   <!-- Mobile chart: narrower viewBox=320 so elements scale UP on phone (~1.17x on 375px screen) -->
   <!-- x_origin=55, $1B=26px. Rows 82px. Private h=34, DFAA h=17, gap=9. -->
-  <svg viewBox="0 0 320 607" xmlns="http://www.w3.org/2000/svg" class="chart-mobile" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+  <svg viewBox="0 0 320 607" xmlns="http://www.w3.org/2000/svg" class="chart-mobile" style="font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;">
     <!-- Title -->
     <text x="55" y="16" fill="#999" font-size="8.5" letter-spacing="0.07em">INSURED LOSSES VS GOV DFAA — CANADA</text>
     <!-- Legend (stacked) -->

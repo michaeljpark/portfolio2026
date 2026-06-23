@@ -9,7 +9,7 @@
   :root{
     --bg:#E6E6E6; --ink:#000000; --muted:#444444; --line:#9a9a9a;
     --max:1320px; --pad:clamp(20px,4vw,56px);
-    --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{ background:var(--bg); color:var(--ink); scroll-behavior:smooth; }
@@ -297,6 +297,12 @@
     .kpi{ padding:20px 0; }
     .kpi + .kpi{ border-left:none; border-top:1px solid var(--line); }
   }
+</style>
+<style>
+/* ===== iOS design language (SF Pro Display + antialiasing + accent) ===== */
+:root{ --accent:#007aff; }
+html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection{ background:#007aff; color:#ffffff; }
 </style>
 </head>
 <body>

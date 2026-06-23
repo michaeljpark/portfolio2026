@@ -9,7 +9,7 @@
   :root{
     --bg:#ffffff; --ink:#0a0a0a; --muted:#8a8a8a; --line:#e6e6e6;
     --max:1320px; --pad:clamp(20px,4vw,56px);
-    --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{ background:var(--bg); color:var(--ink); }
@@ -89,6 +89,12 @@
     .kpi-row{ padding:24px 0; }
     .kpi{ padding:0 20px; }
   }
+</style>
+<style>
+/* ===== iOS design language (SF Pro Display + antialiasing + accent) ===== */
+:root{ --accent:#007aff; }
+html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection{ background:#007aff; color:#ffffff; }
 </style>
 </head>
 <body>

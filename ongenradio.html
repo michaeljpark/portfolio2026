@@ -12,7 +12,7 @@
   :root{
     --bg:#0a0a0a; --ink:#ffffff; --muted:#8a8a8a; --line:#2a2a2a;
     --max:1320px; --pad:clamp(20px,4vw,56px);
-    --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{ background:var(--bg); color:var(--ink); }
@@ -94,7 +94,7 @@
     position:absolute; top:8%; left:50%;
     transform:translateX(-50%);
     z-index:2; pointer-events:none;
-    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-weight:400;
     font-size:clamp(14px,1.4vw,20px);
     letter-spacing:-0.05em;
@@ -823,19 +823,19 @@
   }
   .vm-chart .vm-sector-line{ stroke:rgba(255,255,255,0.10); stroke-width:0.6; stroke-dasharray:2 3; }
   .vm-chart .vm-stakeholder-label{
-    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-weight:400;
     fill:#fff;
     letter-spacing:0;
   }
   .vm-chart .vm-item-text{
-    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-weight:400;
     fill:rgba(255,255,255,0.65);
     letter-spacing:0;
   }
   .vm-chart .vm-ring-label{
-    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-weight:400;
     fill:#fff;
     letter-spacing:0.04em;
@@ -846,7 +846,7 @@
     stroke-linejoin:round;
   }
   .vm-chart .vm-center-text{
-    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-weight:400;
     fill:#fff;
     letter-spacing:0;
@@ -912,21 +912,21 @@
     pointer-events:none;
   }
   .tier-step-num{
-    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size:12px;
     letter-spacing:0.14em;
     opacity:0.45;
     margin-bottom:10px;
   }
   .tier-step-title{
-    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size:28px;
     font-weight:500;
     letter-spacing:-0.01em;
     margin-bottom:10px;
   }
   .tier-step-body{
-    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size:14px;
     line-height:1.55;
     color:rgba(255,255,255,0.7);
@@ -1623,6 +1623,12 @@
     user-select:none;
     -webkit-user-select:none;
   }
+</style>
+<style>
+/* ===== iOS design language (SF Pro Display + antialiasing + accent) ===== */
+:root{ --accent:#007aff; }
+html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection{ background:#007aff; color:#ffffff; }
 </style>
 </head>
 <body>
