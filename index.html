@@ -156,46 +156,23 @@
   .work-block.third{ grid-column: span 4; }
   .work-block.third .work{ aspect-ratio: 1/1; }
 
-  /* ULT featured card — periwinkle field, black ULT wordmark up top, framed 4:3 video, cam telemetry pill */
+  /* ULT featured card — full-bleed video with periwinkle ULT wordmark overlay */
   .work.ult-work{ background:#B6B6ED; }
-  .ult-work .ult-logo{
-    position:absolute; left:50%; top:14%;
-    transform:translate(-50%,-50%);
-    width:38%; height:auto;
-    filter:brightness(0);   /* white SVG -> solid black, alpha preserved */
-    transition:none; pointer-events:none; z-index:3;
-  }
-  a:hover .ult-work .ult-logo{ transform:translate(-50%,-50%); }   /* cancel the .work img hover scale */
-  .ult-stage{
-    position:absolute; left:50%; top:56%;
-    transform:translate(-50%,-50%);
-    width:66%; aspect-ratio:4/3;
-    border-radius:18px; overflow:hidden;
-    background:#B6B6ED;
-    container-type:inline-size;   /* lets the cam pill scale to the video frame */
-  }
-  .ult-vid{
+  .ult-work .ult-vid{
     position:absolute; inset:0;
     width:100%; height:100%;
     object-fit:cover; display:block;
   }
-  .ult-cam{
-    position:absolute; left:50%; bottom:0.9em;
-    transform:translateX(-50%);
-    display:inline-flex; align-items:center; gap:0.55em;
-    background:#000; color:#fff;
-    border-radius:999px;
-    padding:0.58em 1.15em 0.58em 0.92em;
-    font-family:'Inter','Helvetica Neue',Arial,sans-serif;
-    font-size:clamp(7px, 4.8cqw, 11px);   /* scales with the video frame -> shrinks on mobile */
-    font-weight:600; letter-spacing:0.04em;
-    white-space:nowrap; line-height:1;
-    z-index:4; pointer-events:none;
+  .ult-work .ult-logo{
+    position:absolute; left:50%; top:14%;
+    transform:translate(-50%,-50%);
+    width:38%; height:auto; aspect-ratio:652/392;
+    color:#ffffff;            /* inline SVG fill:currentColor -> white wordmark */
+    transition:none; pointer-events:none; z-index:3;
   }
-  .ult-cam svg{ width:1.3em; height:1.3em; flex-shrink:0; display:block; }
+  a:hover .ult-work .ult-logo{ transform:translate(-50%,-50%); }   /* cancel the .work img hover scale */
   @media (max-width:880px){
     .ult-work .ult-logo{ top:15%; width:30%; }
-    .ult-stage{ top:60%; width:52%; }
   }
 
   /* More button (bottom-left of every .work card) */
@@ -841,11 +818,13 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     <div class="work-block third reveal">
       <a href="./ult.html">
         <div class="work ult-work">
-          <img class="ult-logo" src="./ultlogo.svg" alt="" aria-hidden="true" />
-          <div class="ult-stage">
-            <video class="lazy-vid ult-vid" data-src="./ultvid.mp4" poster="./posters/ultvid.jpg" muted loop playsinline preload="none"></video>
-            <div class="ult-cam"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 10 7 7"/><path d="m10 14-3 3"/><path d="m14 10 3-3"/><path d="m14 14 3 3"/><path d="M14.205 4.139a4 4 0 1 1 5.439 5.863"/><path d="M19.637 14a4 4 0 1 1-5.432 5.868"/><path d="M4.367 10a4 4 0 1 1 5.438-5.862"/><path d="M9.795 19.862a4 4 0 1 1-5.429-5.873"/><rect x="10" y="8" width="4" height="8" rx="1"/></svg><span>ULT-QQ-382-175-924-CAM2</span></div>
-          </div>
+          <video class="lazy-vid ult-vid" data-src="./ultvid.mp4" poster="./posters/ultvid.jpg" muted loop playsinline preload="none"></video>
+          <svg class="ult-logo" viewBox="0 0 652 392" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M86.8094 389.856C69.4476 389.856 54.2179 386.349 41.1203 379.33C28.3274 372.008 18.2757 361.023 10.9654 346.378C3.65514 331.429 0 312.665 0 290.086V157.365H38.3789V285.967C38.3789 309.461 43.4048 327.156 53.4564 339.055C63.508 350.955 77.9763 356.905 96.8613 356.905C109.959 356.905 121.533 353.701 131.585 347.294C141.942 340.886 150.013 331.581 155.8 319.376C161.892 307.173 164.938 292.374 164.938 274.983V157.365H203.317V384.364H169.507L165.852 348.666H164.024C156.409 360.872 146.053 370.788 132.956 378.414C120.163 386.043 104.78 389.856 86.8094 389.856Z"/>
+            <path d="M241.939 384.364V64.0018H280.317V384.364H241.939Z"/>
+            <path d="M409.083 384.364C395.376 384.364 383.496 382.23 373.445 377.957C363.393 373.686 355.626 366.516 350.144 356.447C344.966 346.075 342.377 332.191 342.377 314.8V184.824H303.084V157.365H342.377L346.946 102.904H380.756V157.365H447.461V184.824H380.756V314.8C380.756 330.666 383.649 341.344 389.437 346.836C395.225 352.024 405.428 354.617 420.048 354.617H443.806V384.364H409.083Z"/>
+            <path d="M617.891 15.6749C639.26 10.2065 657.694 31.5136 649.252 51.9221L560.757 265.859C553.138 284.279 528.828 288.223 515.792 273.155L474.951 225.948C464.936 214.371 473.144 196.363 488.439 196.363H516.265C526.122 196.363 534.112 188.358 534.112 178.485V158.776C534.112 148.902 526.122 140.899 516.265 140.899H432.393C422.535 140.899 414.545 132.895 414.545 123.021V81.5992C414.545 73.4301 420.073 66.3001 427.975 64.2781L617.891 15.6749Z"/>
+          </svg>
         </div>
         <div class="w-info">
           <div class="t"><span>ULT</span><span class="arrow">→</span></div>
