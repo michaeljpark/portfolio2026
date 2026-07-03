@@ -8,15 +8,33 @@
    Optional: data-src-mobile / data-poster-mobile (max-width:880px variants).
    Dynamically created videos: window.observeLazyVid(videoEl). */
 (function () {
+  var ASSET_VERSION = '20260703';
+  try {
+    var scriptVersion = new URL(document.currentScript.src, window.location.href).searchParams.get('v');
+    if (scriptVersion) ASSET_VERSION = scriptVersion;
+  } catch (e) {}
+
   var isMobile = window.matchMedia('(max-width:880px)').matches;
+
+  function versionedUrl(url) {
+    if (!url || /^(data:|blob:|https?:|#)/i.test(url) || /[?&]v=/.test(url)) return url;
+    var hashIndex = url.indexOf('#');
+    var hash = hashIndex === -1 ? '' : url.slice(hashIndex);
+    var base = hashIndex === -1 ? url : url.slice(0, hashIndex);
+    return base + (base.indexOf('?') === -1 ? '?' : '&') + 'v=' + ASSET_VERSION + hash;
+  }
+
+  function setPoster(v) {
+    var poster = (isMobile && v.dataset.posterMobile) ? v.dataset.posterMobile : v.getAttribute('poster');
+    if (poster) v.poster = versionedUrl(poster);
+  }
 
   function mount(v) {
     if (v.dataset.mounted) return;
     v.dataset.mounted = '1';
     var src = (isMobile && v.dataset.srcMobile) ? v.dataset.srcMobile : v.dataset.src;
-    var poster = (isMobile && v.dataset.posterMobile) ? v.dataset.posterMobile : null;
-    if (poster) v.poster = poster;
-    if (src) { v.src = src; v.load(); }
+    setPoster(v);
+    if (src) { v.src = versionedUrl(src); v.load(); }
   }
 
   function tryPlay(v) {
@@ -37,7 +55,10 @@
   window.observeLazyVid = function (v) { vio.observe(v); };
 
   function init() {
-    document.querySelectorAll('video.lazy-vid').forEach(function (v) { vio.observe(v); });
+    document.querySelectorAll('video.lazy-vid').forEach(function (v) {
+      setPoster(v);
+      vio.observe(v);
+    });
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
