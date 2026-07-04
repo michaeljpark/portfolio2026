@@ -24,15 +24,8 @@
   ::selection{ background:var(--ink); color:var(--bg); }
   .wrap{ max-width:var(--max); margin:0 auto; padding-left:var(--pad); padding-right:var(--pad); }
 
-  nav.top{
-    position:sticky; top:0; z-index:50;
-    background:color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
-  }
-  .nav-inner{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:18px var(--pad); max-width:var(--max); margin:0 auto; font-size:13px;
-  }
+  nav.top{ position:sticky; top:0; z-index:50; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; padding:18px var(--pad); max-width:var(--max); margin:0 auto; font-size:13px; }
   .nav-mark{ font-weight:500; }
   .nav-links{ display:flex; gap:28px; }
   .nav-links a{ color:var(--muted); transition:color .2s; }
@@ -54,19 +47,8 @@
   .status-dot.pulse{ animation:pulse 1.8s ease-in-out infinite; }
   @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
 
-  /* WIP badge + banner */
-  .wip-badge{
-    display:inline-flex; align-items:center; gap:7px;
-    padding:5px 12px; border-radius:100px;
-    background:var(--amber-bg); border:1px solid var(--amber-line); color:var(--amber);
-    font-size:12px; font-weight:500; letter-spacing:-0.01em; white-space:nowrap;
-  }
-  .uc-banner{
-    display:flex; gap:16px; align-items:flex-start;
-    padding:clamp(16px,2vw,22px) clamp(18px,2.4vw,30px);
-    border:1px solid var(--amber-line); background:var(--amber-bg);
-    border-radius:14px; margin:clamp(32px,4vw,52px) auto 0; max-width:var(--max);
-  }
+  .wip-badge{ display:inline-flex; align-items:center; gap:7px; padding:5px 12px; border-radius:100px; background:var(--amber-bg); border:1px solid var(--amber-line); color:var(--amber); font-size:12px; font-weight:500; letter-spacing:-0.01em; white-space:nowrap; }
+  .uc-banner{ display:flex; gap:16px; align-items:flex-start; padding:clamp(16px,2vw,22px) clamp(18px,2.4vw,30px); border:1px solid var(--amber-line); background:var(--amber-bg); border-radius:14px; margin:clamp(32px,4vw,52px) auto 0; max-width:var(--max); }
   .uc-banner .ico{ font-size:20px; line-height:1.2; }
   .uc-banner .txt b{ display:block; font-size:14px; font-weight:500; color:var(--amber); letter-spacing:-0.02em; margin-bottom:4px; }
   .uc-banner .txt span{ font-size:13px; color:#a98a48; line-height:1.55; letter-spacing:-0.02em; }
@@ -81,24 +63,23 @@
   .kpi-num{ font-size:clamp(28px,3.5vw,48px); font-weight:500; letter-spacing:-0.05em; line-height:1; }
   .kpi-label{ font-size:13px; color:var(--muted); line-height:1.45; }
 
-  /* SECTION COMMON */
-  .tt-section{ padding-top:clamp(64px,8vw,128px); padding-bottom:clamp(64px,8vw,128px); border-bottom:1px solid var(--line); }
+  /* SECTION COMMON (inside phase bodies) */
+  .sec-block{ padding-top:clamp(8px,1vw,16px); padding-bottom:clamp(48px,6vw,88px); }
   .section-label{ font-size:12px; color:var(--muted); margin-bottom:10px; letter-spacing:0.02em; }
-  .section-title{ font-size:clamp(26px,3.4vw,50px); font-weight:500; letter-spacing:-0.05em; line-height:1.05; margin-bottom:clamp(14px,1.5vw,22px); }
+  .section-title{ font-size:clamp(24px,3vw,42px); font-weight:500; letter-spacing:-0.05em; line-height:1.08; margin-bottom:clamp(12px,1.4vw,20px); }
   .section-sub{ font-size:clamp(14px,1vw,16px); color:var(--muted); line-height:1.6; letter-spacing:-0.02em; max-width:700px; }
-  .section-head{ margin-bottom:clamp(40px,5vw,72px); }
+  .section-head{ margin-bottom:clamp(32px,4vw,56px); }
+  .block-gap{ margin-top:clamp(48px,6vw,88px); }
 
-  /* DEMAND — big stats */
   .trend-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(24px,3vw,48px); }
   .trend-stat{ display:flex; flex-direction:column; gap:10px; }
-  .trend-num{ font-size:clamp(44px,6vw,88px); font-weight:500; letter-spacing:-0.05em; line-height:1; }
+  .trend-num{ font-size:clamp(40px,5.5vw,80px); font-weight:500; letter-spacing:-0.05em; line-height:1; }
   .trend-desc{ font-size:14px; color:var(--muted); line-height:1.55; letter-spacing:-0.02em; }
   .trend-source{ font-size:11px; color:var(--muted); opacity:0.55; margin-top:4px; letter-spacing:-0.01em; }
   @media(max-width:768px){ .trend-stats{ grid-template-columns:1fr; gap:32px; } }
 
-  /* FRICTIONS — 3 col */
   .fr-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
-  .fr-card{ padding:clamp(26px,3vw,40px); background:var(--bg); display:flex; flex-direction:column; gap:14px; min-height:280px; }
+  .fr-card{ padding:clamp(24px,3vw,38px); background:var(--bg); display:flex; flex-direction:column; gap:14px; min-height:280px; }
   .fr-num{ font-size:11px; color:var(--muted); letter-spacing:0.04em; }
   .fr-title{ font-size:clamp(18px,2vw,26px); font-weight:500; letter-spacing:-0.04em; }
   .fr-body{ font-size:13px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; }
@@ -107,9 +88,8 @@
   .fr-stat span{ display:block; font-size:12px; color:var(--muted); line-height:1.5; margin-top:4px; }
   @media(max-width:768px){ .fr-grid{ grid-template-columns:1fr; } .fr-card{ min-height:0; } }
 
-  /* STAKEHOLDERS */
   .stk-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
-  .stk-group{ padding:clamp(24px,3vw,38px); background:var(--bg); display:flex; flex-direction:column; }
+  .stk-group{ padding:clamp(22px,2.6vw,34px); background:var(--bg); display:flex; flex-direction:column; }
   .stk-group-label{ font-size:11px; color:var(--muted); letter-spacing:0.04em; margin-bottom:22px; }
   .stk-item{ margin-bottom:16px; }
   .stk-name{ font-size:clamp(14px,1.2vw,17px); font-weight:500; letter-spacing:-0.03em; }
@@ -117,9 +97,18 @@
   .stk-note{ font-size:12px; color:var(--muted); line-height:1.6; margin-top:auto; padding-top:18px; border-top:1px solid var(--line); letter-spacing:-0.02em; }
   @media(max-width:768px){ .stk-grid{ grid-template-columns:1fr; } }
 
+  /* SCOPE — TAM/SAM/SOM */
+  .scope-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
+  .scope-cell{ padding:clamp(24px,3vw,38px); background:var(--bg); display:flex; flex-direction:column; }
+  .scope-tag{ font-size:10px; letter-spacing:0.08em; color:var(--muted); margin-bottom:16px; }
+  .scope-num{ font-size:clamp(24px,2.6vw,38px); font-weight:500; letter-spacing:-0.05em; line-height:1; margin-bottom:8px; }
+  .scope-name{ font-size:clamp(14px,1.2vw,17px); font-weight:500; letter-spacing:-0.03em; margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid var(--line); }
+  .scope-desc{ font-size:13px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; }
+  @media(max-width:768px){ .scope-grid{ grid-template-columns:1fr; } }
+
   /* SYSTEM LAYERS */
   .layer-stack{ display:flex; flex-direction:column; gap:1px; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--line); }
-  .layer{ background:var(--bg); padding:clamp(24px,3vw,40px); display:grid; grid-template-columns:60px 1fr; gap:clamp(16px,2.2vw,32px); align-items:start; }
+  .layer{ background:var(--bg); padding:clamp(22px,2.8vw,38px); display:grid; grid-template-columns:60px 1fr; gap:clamp(16px,2.2vw,32px); align-items:start; }
   .layer-idx{ font-size:12px; color:var(--muted); letter-spacing:0.04em; padding-top:6px; }
   .layer-name{ font-size:clamp(18px,2vw,26px); font-weight:500; letter-spacing:-0.035em; }
   .layer-desc{ font-size:14px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; margin-top:8px; max-width:740px; }
@@ -128,17 +117,17 @@
   .layer-pass{ margin-top:14px; font-size:12px; color:var(--amber); letter-spacing:-0.01em; }
   @media(max-width:560px){ .layer{ grid-template-columns:1fr; gap:10px; } }
 
-  /* PIPELINE — 6 steps */
+  /* PIPELINE */
   .pipe{ display:flex; flex-direction:column; }
-  .pipe-step{ display:grid; grid-template-columns:56px 1fr; gap:clamp(16px,2.4vw,36px); padding-bottom:clamp(30px,4vw,52px); }
+  .pipe-step{ display:grid; grid-template-columns:56px 1fr; gap:clamp(16px,2.4vw,36px); padding-bottom:clamp(28px,3.6vw,48px); }
   .pipe-idx{ position:relative; }
   .pipe-num{ width:44px; height:44px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:500; background:var(--bg); position:relative; z-index:1; }
   .pipe-step:not(:last-child) .pipe-idx::before{ content:""; position:absolute; left:22px; top:46px; bottom:-6px; width:1px; background:var(--line); }
-  .pipe-name{ font-size:clamp(19px,2.1vw,28px); font-weight:500; letter-spacing:-0.04em; line-height:1.15; }
+  .pipe-name{ font-size:clamp(18px,2vw,26px); font-weight:500; letter-spacing:-0.04em; line-height:1.15; }
   .pipe-inherit{ display:block; font-size:12px; color:var(--muted); font-weight:400; letter-spacing:-0.01em; margin-top:6px; }
   .pipe-inherit b{ color:var(--ink); font-weight:500; }
-  .pipe-desc{ font-size:15px; color:var(--muted); line-height:1.65; letter-spacing:-0.02em; margin-top:12px; max-width:660px; }
-  .pipe-tech{ margin-top:16px; display:flex; flex-wrap:wrap; gap:8px; }
+  .pipe-desc{ font-size:14px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; margin-top:12px; max-width:660px; }
+  .pipe-tech{ margin-top:14px; display:flex; flex-wrap:wrap; gap:8px; }
   .pipe-tech span{ font-size:12px; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:5px 12px; letter-spacing:-0.01em; }
   @media(max-width:560px){
     .pipe-step{ grid-template-columns:40px 1fr; gap:16px; }
@@ -146,32 +135,9 @@
     .pipe-step:not(:last-child) .pipe-idx::before{ left:18px; top:38px; }
   }
 
-  /* VIDEO PLACEHOLDER */
-  .ph-media{
-    position:relative; width:100%; aspect-ratio:16/9;
-    background:#f4f4f2; border:1px dashed #cfcfca; border-radius:16px;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .ph-media-lb{ display:flex; flex-direction:column; align-items:center; gap:10px; color:#a6a6a1; }
-  .ph-media-lb .pin{ width:44px; height:44px; border-radius:50%; border:1px solid #d4d4cf; display:flex; align-items:center; justify-content:center; }
-  .ph-media-lb .cap{ font-size:13px; letter-spacing:-0.02em; }
-  .ph-media-lb .tag{ font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:#b8b8b3; }
-  .ph-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(12px,1.6vw,20px); }
-  .ph-3 .ph-cap{ font-size:12px; color:var(--muted); margin-top:12px; letter-spacing:-0.02em; }
-  @media(max-width:760px){ .ph-3{ grid-template-columns:1fr; } }
-
-  .content-video{ width:100%; aspect-ratio:16/9; background:#e8e8e6; border-radius:20px; overflow:hidden; position:relative; }
-  .content-video video{ position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; }
-
-  /* PHASE COLLAPSIBLE */
-  .phase-media-wrap{ max-width:var(--max); margin:0 auto; padding:clamp(28px,4vw,48px) var(--pad) clamp(40px,6vw,80px); }
-  .phase-toggle{
-    display:block; width:100%; border:none; cursor:pointer; font-family:var(--font); color:var(--ink);
-    padding:2px 0 clamp(20px,3vw,32px);
-    position:sticky; top:calc(var(--nav-h,57px) - 2px); z-index:40;
-    background:color-mix(in srgb, var(--bg) 94%, transparent);
-    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
-  }
+  /* PHASE COLLAPSIBLE — click 16:9 thumbnail to open */
+  .phase-media-wrap{ max-width:var(--max); margin:0 auto; padding:clamp(28px,4vw,48px) var(--pad) clamp(40px,6vw,80px); cursor:pointer; }
+  .phase-toggle{ display:block; width:100%; border:none; cursor:pointer; font-family:var(--font); color:var(--ink); padding:2px 0 clamp(20px,3vw,32px); position:sticky; top:calc(var(--nav-h,57px) - 2px); z-index:40; background:color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); }
   .phase-toggle-inner{ display:flex; align-items:center; justify-content:space-between; gap:24px; max-width:var(--max); margin:0 auto; text-align:left; padding-left:var(--pad); padding-right:var(--pad); }
   .phase-num{ font-size:11px; color:var(--muted); letter-spacing:0.07em; margin-bottom:4px; }
   .phase-name{ font-size:clamp(22px,3vw,42px); font-weight:500; letter-spacing:-0.04em; line-height:1.1; transition:opacity .2s; margin-bottom:4px; }
@@ -182,17 +148,85 @@
   .phase-body{ display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.45s ease; }
   .phase-block[data-open] .phase-body{ grid-template-rows:1fr; }
   .phase-body-inner{ overflow:hidden; }
+  .phase-media{ width:100%; height:0; padding-top:56.25%; border-radius:16px; overflow:hidden; background:#eeeeec; position:relative; transition:padding-top .45s ease; }
+  .phase-block[data-open] .phase-media{ padding-top:28.125%; }
+  .phase-media > *{ position:absolute; top:50%; left:0; width:100%; height:auto !important; aspect-ratio:16/9; transform:translateY(-50%); }
+  /* thumbnail placeholder inside 16:9 */
+  .ph-fill{ background:#f2f2f0; display:flex; align-items:center; justify-content:center; }
+  .ph-fill .lb{ display:flex; flex-direction:column; align-items:center; gap:10px; color:#a6a6a1; }
+  .ph-fill .pin{ width:52px; height:52px; border-radius:50%; border:1px solid #d4d4cf; display:flex; align-items:center; justify-content:center; }
+  .ph-fill .cap{ font-size:14px; letter-spacing:-0.02em; color:#8f8f8a; }
+  .ph-fill .tag{ font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#b8b8b3; }
+  .open-hint{ font-size:12px; color:var(--muted); text-align:center; margin-top:16px; letter-spacing:-0.01em; }
+  .phase-block[data-open] .open-hint{ opacity:0; }
+
+  /* ===== TIMELINE (scroll-driven) ===== */
+  .tl-section{ padding-top:clamp(56px,8vw,120px); padding-bottom:clamp(56px,8vw,120px); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .tl-head{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; gap:24px; }
+  .tl-title{ font-size:clamp(26px,3.4vw,48px); font-weight:500; letter-spacing:-0.05em; line-height:1; }
+  .tl-title .sub{ display:block; font-size:13px; color:var(--muted); font-weight:400; margin-top:12px; letter-spacing:-0.02em; }
+  .tl-phase-meta{ text-align:right; font-size:clamp(12px,1vw,14px); color:var(--muted); letter-spacing:-0.03em; line-height:1.6; }
+  .tl-phase-meta .strong{ color:var(--ink); }
+
+  .tl-scroll{ position:relative; height:500vh; padding:30vh 0 0; }
+  .tl-board{ display:block; position:sticky; top:50vh; transform:translateY(-50%); }
+  .tl-stage{ position:relative; min-height:340px; }
+  .tl-card{
+    position:absolute; inset:0; background:var(--bg); border:1px solid var(--line);
+    border-radius:20px; padding:clamp(22px,2.4vw,34px);
+    display:flex; flex-direction:column; gap:14px;
+    opacity:0; visibility:hidden; transform:translateY(10px);
+    transition:opacity .45s cubic-bezier(.22,.61,.36,1), transform .45s cubic-bezier(.22,.61,.36,1), visibility 0s linear .45s;
+    pointer-events:none;
+  }
+  .tl-card.is-active{ opacity:1; visibility:visible; transform:translateY(0); transition-delay:0s; pointer-events:auto; }
+  .tl-card-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .tl-gate-id{ font-size:clamp(11px,0.85vw,12px); font-weight:500; letter-spacing:-0.02em; color:var(--muted); }
+  .tl-gate-tag{ font-size:11px; color:var(--muted); letter-spacing:-0.02em; padding:4px 10px; border:1px solid var(--line); border-radius:999px; white-space:nowrap; }
+  .tl-gate-tag.wip{ color:var(--amber); border-color:var(--amber-line); background:var(--amber-bg); }
+  .tl-card-title{ font-size:clamp(20px,1.8vw,28px); font-weight:500; letter-spacing:-0.045em; line-height:1.2; color:var(--ink); }
+  .tl-card-sub{ font-size:clamp(12px,0.95vw,14px); color:var(--muted); letter-spacing:-0.03em; line-height:1.4; margin-top:-6px; }
+  .tl-card-list{ list-style:none; padding:16px 0 0; margin:0; display:flex; flex-direction:column; gap:9px; border-top:1px solid var(--line); }
+  .tl-card-list li{ font-size:clamp(12px,0.9vw,14px); color:var(--ink); letter-spacing:-0.03em; line-height:1.45; padding-left:16px; position:relative; }
+  .tl-card-list li::before{ content:'—'; position:absolute; left:0; color:var(--line); }
+  .tl-card-list li .dim{ color:var(--muted); }
+
+  .tl-track{ position:relative; display:flex; justify-content:space-between; align-items:flex-start; padding:32px 0 4px; margin-top:clamp(24px,2.6vw,36px); }
+  .tl-track::before{ content:''; position:absolute; left:4%; right:4%; top:calc(32px + 9px); height:1px; background:var(--line); }
+  .tl-node{ position:relative; flex:1 1 0; display:flex; flex-direction:column; align-items:center; gap:12px; background:transparent; border:0; cursor:default; color:var(--muted); padding:0; font:inherit; z-index:1; pointer-events:none; }
+  .tl-node-dot{ position:relative; width:18px; height:18px; border-radius:50%; background:var(--bg); border:1px solid #cfcfcf; transition:transform .35s cubic-bezier(.22,.61,.36,1), background-color .35s, border-color .35s, box-shadow .35s; }
+  .tl-node-dot::before, .tl-node-dot::after{ content:""; position:absolute; inset:-1px; border-radius:50%; border:1px solid var(--ink); opacity:0; pointer-events:none; transform:scale(1); }
+  .tl-node-meta{ display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .tl-node-label{ font-size:12px; letter-spacing:-0.02em; color:var(--muted); transition:color .35s; text-align:center; }
+  .tl-node-tag{ font-size:10.5px; letter-spacing:-0.02em; color:#bcbcbc; transition:color .35s; text-align:center; }
+  .tl-node.is-active .tl-node-dot{ background:var(--ink); border-color:var(--ink); transform:scale(1.35); box-shadow:0 0 0 6px rgba(0,0,0,0.05); }
+  .tl-node.is-active .tl-node-dot::before{ animation:tlPulse 2.2s cubic-bezier(.22,.61,.36,1) infinite; }
+  .tl-node.is-active .tl-node-dot::after{ animation:tlPulse 2.2s cubic-bezier(.22,.61,.36,1) infinite; animation-delay:1.1s; }
+  @keyframes tlPulse{ 0%{ transform:scale(1); opacity:0.4; } 70%{ transform:scale(3.2); opacity:0; } 100%{ transform:scale(3.2); opacity:0; } }
+  .tl-node.is-active .tl-node-label{ color:var(--ink); }
+  .tl-node.is-active .tl-node-tag{ color:var(--muted); }
+
+  @media(max-width:880px){
+    .tl-section{ padding-top:56px; padding-bottom:56px; }
+    .tl-head{ margin-bottom:16px; flex-direction:column; gap:8px; }
+    .tl-phase-meta{ text-align:left; }
+    .tl-scroll{ height:auto; padding:0; }
+    .tl-board{ position:static; transform:none; display:grid; grid-template-columns:56px 1fr; column-gap:14px; align-items:start; }
+    .tl-stage{ grid-column:2; grid-row:1; position:sticky; top:calc((100vh - 62vh) / 2); align-self:start; min-height:62vh; background:var(--bg); }
+    .tl-track{ grid-column:1; grid-row:1; flex-direction:column; justify-content:space-between; align-items:center; padding:24px 0 48vh; margin-top:0; min-height:230vh; }
+    .tl-track::before{ left:50%; right:auto; top:24px; bottom:24px; width:1px; height:auto; background:var(--line); transform:translateX(-0.5px); }
+    .tl-track::after{ content:''; position:absolute; left:50%; top:24px; width:1px; height:var(--tl-progress,0%); background:var(--ink); transform:translateX(-0.5px); transition:height .4s cubic-bezier(.22,.61,.36,1); pointer-events:none; }
+    .tl-node{ flex:none; flex-direction:column; align-items:center; gap:6px; padding:0; width:100%; }
+    .tl-node-dot{ width:12px; height:12px; }
+    .tl-node-meta{ display:none; }
+  }
 
   /* SOURCES */
   .sources{ font-size:12px; color:var(--muted); line-height:1.7; letter-spacing:-0.01em; }
   .sources a{ border-bottom:1px solid var(--line); }
   .sources a:hover{ color:var(--ink); }
 
-  @media(max-width:880px){
-    .hero-name{ font-size:clamp(24px,7vw,48px); }
-    .kpi-row{ padding:24px 0; }
-    .kpi{ padding:0 20px; }
-  }
+  @media(max-width:880px){ .hero-name{ font-size:clamp(24px,7vw,48px); } .kpi-row{ padding:24px 0; } .kpi{ padding:0 20px; } }
   @media(max-width:640px){
     .kpi-row{ grid-template-columns:1fr; padding:0; }
     .kpi{ padding:20px 0; }
@@ -200,7 +234,6 @@
   }
 </style>
 <style>
-/* ===== iOS design language ===== */
 :root{ --accent:#007aff; }
 html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 ::selection{ background:#007aff; color:#ffffff; }
@@ -238,13 +271,12 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
 </header>
 
-<!-- UNDER CONSTRUCTION NOTICE -->
 <div class="wrap">
   <div class="uc-banner">
     <div class="ico">🚧</div>
     <div class="txt">
       <b>This case study is under active construction.</b>
-      <span>The research foundation — market demand, stakeholders, and system architecture — is in place. Prototype videos, interaction detail, and final validation metrics are still being produced; sections marked <em>Preview coming soon</em> are placeholders.</span>
+      <span>The stages below open on click. The research foundation — problem, demand, stakeholders, and system architecture — is in place; the <em>16:9 thumbnails are placeholders</em> for stage walkthrough videos still in production.</span>
     </div>
   </div>
 </div>
@@ -262,14 +294,14 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
         <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
     </button>
-    <div class="phase-media-wrap">
-      <div class="content-video">
-        <video class="lazy-vid" data-src="./gridoneprev.mp4" poster="./posters/gridoneprev.jpg" muted loop playsinline preload="none"></video>
+    <div class="phase-media-wrap" onclick="togglePhase(this)">
+      <div class="phase-media">
+        <video class="lazy-vid" data-src="./gridoneprev.mp4" poster="./posters/gridoneprev.jpg" muted loop playsinline preload="none" style="object-fit:cover;"></video>
       </div>
     </div>
     <div class="phase-body">
       <div class="phase-body-inner">
-        <section class="kpi-section wrap">
+        <section class="kpi-section wrap" style="padding-bottom:clamp(40px,6vw,80px);">
           <div class="kpi-row">
             <div class="kpi"><div class="kpi-num">6</div><div class="kpi-label">Steps in one pipeline — scan to signed contract</div></div>
             <div class="kpi"><div class="kpi-num">$61B</div><div class="kpi-label">2025 Canadian residential renovation spend</div></div>
@@ -281,219 +313,403 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
 </div>
 
-<!-- ===== 01 — CONTEXT & DEMAND ===== -->
-<section class="tt-section wrap">
-  <div class="section-head">
-    <div class="section-label">01 — Context &amp; Demand</div>
-    <h2 class="section-title">An aging city, a booming<br>renovation economy</h2>
-    <p class="section-sub">Toronto's housing stock is old and getting older, while Canadians pour record spending into renovation and maintenance. The demand is large and durable — but the way owners buy it is broken.</p>
-  </div>
-  <div class="trend-stats">
-    <div class="trend-stat">
-      <div class="trend-num">~60%</div>
-      <div class="trend-desc">of Toronto's housing stock was built before 1981 — nearly 30% before 1960. These homes are reaching end-of-service-life: wiring, plumbing, insulation, and structure all need modernization.</div>
-      <div class="trend-source">Source: City of Toronto housing data · Woodsmith, 2025</div>
-    </div>
-    <div class="trend-stat">
-      <div class="trend-num">$61B</div>
-      <div class="trend-desc">Canadian residential renovation expenditure in 2025 (+2.9% YoY) — renovations now account for roughly 56% of all residential construction investment nationally.</div>
-      <div class="trend-source">Source: IBISWorld · Statistics Canada, 2025</div>
-    </div>
-    <div class="trend-stat">
-      <div class="trend-num">1.2M</div>
-      <div class="trend-desc">pre-1980 units targeted by 2025 building-code retrofit mandates, pushing that renovation segment to a ~5.2% CAGR through 2033.</div>
-      <div class="trend-source">Source: Mordor Intelligence · CHBA, 2026</div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== 02 — THE PROBLEM ===== -->
-<section class="tt-section wrap">
-  <div class="section-head">
-    <div class="section-label">02 — The Problem</div>
-    <h2 class="section-title">Three frictions make renovation<br>feel like a black box</h2>
-    <p class="section-sub">Owners approach renovation and maintenance with almost no leverage. GridOne targets the three structural frictions that break trust in the process — and dissolves each one with data.</p>
-  </div>
-  <div class="fr-grid">
-    <div class="fr-card">
-      <div class="fr-num">01</div>
-      <div class="fr-title">Information asymmetry</div>
-      <div class="fr-body">Estimates arrive as a black box. Owners can't see how a number is built or whether it's fair, and cost overruns surface only after work begins.</div>
-      <div class="fr-stat"><b>Black box</b><span>No transparent, measured basis for the price</span></div>
-    </div>
-    <div class="fr-card">
-      <div class="fr-num">02</div>
-      <div class="fr-title">Trust</div>
-      <div class="fr-body">Contractors go unverified. It's hard to know which professional or firm actually deserves the job — and the fallout is widespread.</div>
-      <div class="fr-stat"><b>32%</b><span>of Ontario homeowners admit being scammed; only 15% think enough is done to prevent it</span></div>
-    </div>
-    <div class="fr-card">
-      <div class="fr-num">03</div>
-      <div class="fr-title">Regulatory complexity</div>
-      <div class="fr-body">The Ontario Building Code and Toronto by-laws are near-impossible to self-assess — covering structure, energy, plumbing, and fire safety.</div>
-      <div class="fr-stat"><b>4–12 wks</b><span>typical Toronto permit review; incomplete, non-compliant applications are the top cause of delay</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== 03 — STAKEHOLDERS ===== -->
-<section class="tt-section wrap">
-  <div class="section-head">
-    <div class="section-label">03 — Stakeholders</div>
-    <h2 class="section-title">One pipeline, three sides<br>of the market</h2>
-    <p class="section-sub">GridOne sits at the center of a renovation ecosystem — connecting the owners who hold demand, the experts who verify and deliver, and the governance and instruments that make trust auditable.</p>
-  </div>
-  <div class="stk-grid">
-    <div class="stk-group">
-      <div class="stk-group-label">DEMAND SIDE</div>
-      <div class="stk-item"><div class="stk-name">Homeowners <span style="color:var(--amber);font-size:11px;">· primary</span></div><div class="stk-role">Aging-home &amp; condo owners in Toronto / GTA needing renovation or maintenance</div></div>
-      <div class="stk-item"><div class="stk-name">Property &amp; condo managers</div><div class="stk-role">Recurring maintenance across multiple aging units</div></div>
-      <div class="stk-note">Face opaque estimates, unverified trades, and unreadable code — and carry all the risk.</div>
-    </div>
-    <div class="stk-group">
-      <div class="stk-group-label">EXPERT / SUPPLY SIDE</div>
-      <div class="stk-item"><div class="stk-name">Verified consultants</div><div class="stk-role">Matched by fit score; run the on-site code check</div></div>
-      <div class="stk-item"><div class="stk-name">Certified inspectors</div><div class="stk-role">Operate instruments; capture live measurement telemetry</div></div>
-      <div class="stk-item"><div class="stk-name">Toronto-registered contractors</div><div class="stk-role">Receive the locked, signed scope and execute the work</div></div>
-      <div class="stk-note">Use GridOne as a working tool rather than a scatter of disconnected apps.</div>
-    </div>
-    <div class="stk-group">
-      <div class="stk-group-label">GOVERNANCE &amp; INFRASTRUCTURE</div>
-      <div class="stk-item"><div class="stk-name">City of Toronto</div><div class="stk-role">Ontario Building Code &amp; municipal by-laws — the compliance backbone</div></div>
-      <div class="stk-item"><div class="stk-name">Instrument vendors</div><div class="stk-role">Leica DISTO, Protimeter, FLIR — BLE-paired measurement hardware</div></div>
-      <div class="stk-item"><div class="stk-name">Verification / data layer</div><div class="stk-role">Turns scans, readings, and checks into an auditable record</div></div>
-      <div class="stk-note">Provide the standards and signals that make every estimate defensible.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== 04 — SYSTEM LAYERS ===== -->
-<section class="tt-section wrap">
-  <div class="section-head">
-    <div class="section-label">04 — System Layers</div>
-    <h2 class="section-title">Four layers, one continuous<br>data handoff</h2>
-    <p class="section-sub">The service is built as a stack: each layer transforms the layer below it and passes structured data up. Nothing is re-entered — the scan captured in Layer 1 is still doing work at the contract in Layer 4.</p>
-  </div>
-  <div class="layer-stack">
-    <div class="layer">
-      <div class="layer-idx">L1</div>
-      <div>
-        <div class="layer-name">Capture Layer</div>
-        <div class="layer-desc">A 3D polygon scan is built from smartphone camera footage — real-world terrain and spatial data extracted as vertex geometry. This measured mesh is the single source of truth for everything downstream.</div>
-        <div class="layer-tech"><span>Smartphone capture</span><span>3D polygon scan</span><span>Vertex geometry</span></div>
-        <div class="layer-pass">→ passes up: measured spatial mesh</div>
-      </div>
-    </div>
-    <div class="layer">
-      <div class="layer-idx">L2</div>
-      <div>
-        <div class="layer-name">Analysis Layer</div>
-        <div class="layer-desc">Area, ceiling height, and openings are auto-extracted from the mesh. An Aging Index plus latent plumbing, electrical, and insulation risk are quantified into an instant, transparent estimate range — and a fit-scored consultant match.</div>
-        <div class="layer-tech"><span>Auto measurement</span><span>Aging Index</span><span>Risk quantification</span><span>Fit score</span></div>
-        <div class="layer-pass">→ passes up: measured scope + estimate range</div>
-      </div>
-    </div>
-    <div class="layer">
-      <div class="layer-idx">L3</div>
-      <div>
-        <div class="layer-name">Verification Layer</div>
-        <div class="layer-desc">On site, a 10-item Ontario Building Code &amp; Toronto by-law checklist verifies compliance, while BLE-paired instruments stream live telemetry that AI reads and ranks into scored repair recommendations.</div>
-        <div class="layer-tech"><span>OBC · by-law checklist</span><span>BLE telemetry</span><span>Leica · Protimeter · FLIR</span><span>AI scoring</span></div>
-        <div class="layer-pass">→ passes up: verified, code-checked findings</div>
-      </div>
-    </div>
-    <div class="layer">
-      <div class="layer-idx">L4</div>
-      <div>
-        <div class="layer-name">Contract Layer</div>
-        <div class="layer-desc">Verified results are locked into a standard contract and closed with an e-signature, then matched to a Toronto-registered contractor to begin work — the whole chain traceable back to the original scan.</div>
-        <div class="layer-tech"><span>Standard contract</span><span>E-signature</span><span>Registered contractors</span><span>Audit trail</span></div>
-        <div class="layer-pass">→ output: signed, auditable scope of work</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== 05 — SERVICE PIPELINE ===== -->
-<section class="tt-section wrap">
-  <div class="section-head">
-    <div class="section-label">05 — Service Components</div>
-    <h2 class="section-title">Six steps, one pipeline</h2>
-    <p class="section-sub">Capture → auto-analysis → transparent estimate → code check → measurement → contract, handled continuously inside one app — so the owner never has to chase a different person at each stage. Each step inherits the data the previous one produced.</p>
-  </div>
-  <div class="pipe">
-    <div class="pipe-step"><div class="pipe-idx"><div class="pipe-num">01</div></div><div>
-      <div class="pipe-name">Scan<span class="pipe-inherit">Input — <b>smartphone camera footage</b></span></div>
-      <p class="pipe-desc">A 3D polygon scan built from smartphone camera footage. Real-world terrain and spatial data are extracted as vertex geometry — the measured foundation everything downstream is built on.</p>
-      <div class="pipe-tech"><span>3D polygon scan</span><span>Vertex geometry</span><span>Smartphone capture</span></div>
-    </div></div>
-    <div class="pipe-step"><div class="pipe-idx"><div class="pipe-num">02</div></div><div>
-      <div class="pipe-name">Match<span class="pipe-inherit">Inherits — <b>scan mesh</b></span></div>
-      <p class="pipe-desc">Area, ceiling height, and openings are auto-extracted from the scan mesh, then a verified consultant is matched against the scope of work with a fit score.</p>
-      <div class="pipe-tech"><span>Auto measurement</span><span>Fit score</span><span>Verified consultants</span></div>
-    </div></div>
-    <div class="pipe-step"><div class="pipe-idx"><div class="pipe-num">03</div></div><div>
-      <div class="pipe-name">Estimate<span class="pipe-inherit">Inherits — <b>measured scope</b></span></div>
-      <p class="pipe-desc">An Aging Index plus latent plumbing, electrical, and insulation risk are quantified to produce an instant, transparent estimate range — not a black box.</p>
-      <div class="pipe-tech"><span>Aging Index</span><span>Risk quantification</span><span>Instant range</span></div>
-    </div></div>
-    <div class="pipe-step"><div class="pipe-idx"><div class="pipe-num">04</div></div><div>
-      <div class="pipe-name">Codes<span class="pipe-inherit">Inherits — <b>estimate + site visit</b></span></div>
-      <p class="pipe-desc">On the consultant's site visit, a 10-item checklist grounded in the Ontario Building Code (OBC) and Toronto by-laws verifies compliance before anything is committed.</p>
-      <div class="pipe-tech"><span>OBC</span><span>Toronto by-laws</span><span>10-point checklist</span></div>
-    </div></div>
-    <div class="pipe-step"><div class="pipe-idx"><div class="pipe-num">05</div></div><div>
-      <div class="pipe-name">Inspect<span class="pipe-inherit">Inherits — <b>code-checked scope</b></span></div>
-      <p class="pipe-desc">Measurement instruments pair over BLE and stream live telemetry. AI reads the readings and recommends repairs by score, turning raw instrument data into a ranked action list.</p>
-      <div class="pipe-tech"><span>Leica DISTO</span><span>Protimeter</span><span>FLIR</span><span>BLE telemetry</span><span>AI scoring</span></div>
-    </div></div>
-    <div class="pipe-step"><div class="pipe-idx"><div class="pipe-num">06</div></div><div>
-      <div class="pipe-name">E-sign<span class="pipe-inherit">Inherits — <b>verified inspection</b></span></div>
-      <p class="pipe-desc">Verified results are locked into a standard contract and closed with an e-signature — then connected to a Toronto-registered contractor to start the work.</p>
-      <div class="pipe-tech"><span>Standard contract</span><span>E-signature</span><span>Registered contractors</span></div>
-    </div></div>
-  </div>
-</section>
-
-<!-- ===== PHASE 02 — PROTOTYPE (placeholders) ===== -->
+<!-- ===== PHASE 02 — PROBLEM DEFINITION ===== -->
 <div class="phase-wrap">
   <div class="phase-block">
     <button class="phase-toggle" onclick="togglePhase(this)">
       <div class="phase-toggle-inner">
         <div>
           <div class="phase-num">PHASE 02</div>
-          <div class="phase-name">Prototype Walkthrough</div>
-          <div class="phase-sub">Stage-by-stage demos — preview coming soon</div>
+          <div class="phase-name">Problem Definition</div>
+          <div class="phase-sub">Three frictions that make renovation a black box</div>
         </div>
         <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
     </button>
-    <div class="phase-media-wrap">
-      <div class="ph-3">
-        <div>
-          <div class="ph-media"><div class="ph-media-lb"><div class="pin"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="#b8b8b3"/></svg></div><div class="cap">Scan &amp; Match</div><div class="tag">Preview coming soon</div></div></div>
-          <div class="ph-cap">Stage 1–2 · capture to consultant match</div>
-        </div>
-        <div>
-          <div class="ph-media"><div class="ph-media-lb"><div class="pin"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="#b8b8b3"/></svg></div><div class="cap">Estimate &amp; Codes</div><div class="tag">Preview coming soon</div></div></div>
-          <div class="ph-cap">Stage 3–4 · transparent estimate to code check</div>
-        </div>
-        <div>
-          <div class="ph-media"><div class="ph-media-lb"><div class="pin"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="#b8b8b3"/></svg></div><div class="cap">Inspect &amp; E-sign</div><div class="tag">Preview coming soon</div></div></div>
-          <div class="ph-cap">Stage 5–6 · measurement to signed contract</div>
-        </div>
+    <div class="phase-media-wrap" onclick="togglePhase(this)">
+      <div class="phase-media">
+        <div class="ph-fill"><div class="lb"><div class="pin"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="#b8b8b3"/></svg></div><div class="cap">Problem Definition</div><div class="tag">Preview coming soon</div></div></div>
+      </div>
+      <div class="open-hint">Click the thumbnail to open ↑</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-body-inner">
+        <section class="sec-block wrap">
+          <div class="section-head">
+            <div class="section-label">02 — Problem Definition</div>
+            <h2 class="section-title">Owners approach renovation<br>with almost no leverage</h2>
+            <p class="section-sub">GridOne targets the three structural frictions that break trust in the process — and dissolves each one with data.</p>
+          </div>
+          <div class="fr-grid">
+            <div class="fr-card">
+              <div class="fr-num">01</div>
+              <div class="fr-title">Information asymmetry</div>
+              <div class="fr-body">Estimates arrive as a black box. Owners can't see how a number is built or whether it's fair, and cost overruns surface only after work begins.</div>
+              <div class="fr-stat"><b>Black box</b><span>No transparent, measured basis for the price</span></div>
+            </div>
+            <div class="fr-card">
+              <div class="fr-num">02</div>
+              <div class="fr-title">Trust</div>
+              <div class="fr-body">Contractors go unverified. It's hard to know which professional or firm actually deserves the job — and the fallout is widespread.</div>
+              <div class="fr-stat"><b>32%</b><span>of Ontario homeowners admit being scammed; only 15% think enough is done to prevent it</span></div>
+            </div>
+            <div class="fr-card">
+              <div class="fr-num">03</div>
+              <div class="fr-title">Regulatory complexity</div>
+              <div class="fr-body">The Ontario Building Code and Toronto by-laws are near-impossible to self-assess — covering structure, energy, plumbing, and fire safety.</div>
+              <div class="fr-stat"><b>4–12 wks</b><span>typical Toronto permit review; incomplete, non-compliant applications are the top cause of delay</span></div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
-    <div class="phase-body"><div class="phase-body-inner"></div></div>
   </div>
 </div>
 
+<!-- ===== PHASE 03 — RESEARCH ===== -->
+<div class="phase-wrap">
+  <div class="phase-block">
+    <button class="phase-toggle" onclick="togglePhase(this)">
+      <div class="phase-toggle-inner">
+        <div>
+          <div class="phase-num">PHASE 03</div>
+          <div class="phase-name">Research</div>
+          <div class="phase-sub">An aging city and the stakeholders around it</div>
+        </div>
+        <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </button>
+    <div class="phase-media-wrap" onclick="togglePhase(this)">
+      <div class="phase-media">
+        <div class="ph-fill"><div class="lb"><div class="pin"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="#b8b8b3"/></svg></div><div class="cap">Research</div><div class="tag">Preview coming soon</div></div></div>
+      </div>
+      <div class="open-hint">Click the thumbnail to open ↑</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-body-inner">
+        <section class="sec-block wrap">
+          <div class="section-head">
+            <div class="section-label">03 — Research · Context</div>
+            <h2 class="section-title">Toronto's housing stock is<br>old, and getting older</h2>
+            <p class="section-sub">These homes are reaching end-of-service-life — wiring, plumbing, insulation, and structure all need modernization, which keeps renovation demand large and durable.</p>
+          </div>
+          <div class="trend-stats">
+            <div class="trend-stat">
+              <div class="trend-num">~60%</div>
+              <div class="trend-desc">of Toronto's housing stock was built before 1981 — nearly 30% before 1960.</div>
+              <div class="trend-source">Source: City of Toronto housing data · Woodsmith, 2025</div>
+            </div>
+            <div class="trend-stat">
+              <div class="trend-num">87%</div>
+              <div class="trend-desc">of the GTA's purpose-built rental stock was built before 1980 — a deep, recurring maintenance backlog.</div>
+              <div class="trend-source">Source: BILD GTA, 2023</div>
+            </div>
+            <div class="trend-stat">
+              <div class="trend-num">3</div>
+              <div class="trend-desc">sides of the market GridOne must serve at once — demand, expert supply, and governance.</div>
+              <div class="trend-source">Stakeholder mapping</div>
+            </div>
+          </div>
+
+          <div class="block-gap">
+            <div class="section-head">
+              <div class="section-label">03 — Research · Stakeholders</div>
+              <h2 class="section-title">One pipeline, three sides<br>of the market</h2>
+              <p class="section-sub">GridOne connects the owners who hold demand, the experts who verify and deliver, and the governance and instruments that make trust auditable.</p>
+            </div>
+            <div class="stk-grid">
+              <div class="stk-group">
+                <div class="stk-group-label">DEMAND SIDE</div>
+                <div class="stk-item"><div class="stk-name">Homeowners <span style="color:var(--amber);font-size:11px;">· primary</span></div><div class="stk-role">Aging-home &amp; condo owners in Toronto / GTA needing renovation or maintenance</div></div>
+                <div class="stk-item"><div class="stk-name">Property &amp; condo managers</div><div class="stk-role">Recurring maintenance across multiple aging units</div></div>
+                <div class="stk-note">Face opaque estimates, unverified trades, and unreadable code — and carry all the risk.</div>
+              </div>
+              <div class="stk-group">
+                <div class="stk-group-label">EXPERT / SUPPLY SIDE</div>
+                <div class="stk-item"><div class="stk-name">Verified consultants</div><div class="stk-role">Matched by fit score; run the on-site code check</div></div>
+                <div class="stk-item"><div class="stk-name">Certified inspectors</div><div class="stk-role">Operate instruments; capture live measurement telemetry</div></div>
+                <div class="stk-item"><div class="stk-name">Toronto-registered contractors</div><div class="stk-role">Receive the locked, signed scope and execute the work</div></div>
+                <div class="stk-note">Use GridOne as a working tool rather than a scatter of disconnected apps.</div>
+              </div>
+              <div class="stk-group">
+                <div class="stk-group-label">GOVERNANCE &amp; INFRA</div>
+                <div class="stk-item"><div class="stk-name">City of Toronto</div><div class="stk-role">Ontario Building Code &amp; municipal by-laws — the compliance backbone</div></div>
+                <div class="stk-item"><div class="stk-name">Instrument vendors</div><div class="stk-role">Leica DISTO, Protimeter, FLIR — BLE-paired hardware</div></div>
+                <div class="stk-item"><div class="stk-name">Verification / data layer</div><div class="stk-role">Turns scans, readings, and checks into an auditable record</div></div>
+                <div class="stk-note">Provide the standards and signals that make every estimate defensible.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PHASE 04 — MARKET ANALYSIS ===== -->
+<div class="phase-wrap">
+  <div class="phase-block">
+    <button class="phase-toggle" onclick="togglePhase(this)">
+      <div class="phase-toggle-inner">
+        <div>
+          <div class="phase-num">PHASE 04</div>
+          <div class="phase-name">Market Analysis</div>
+          <div class="phase-sub">A $61B renovation economy, scoped to Toronto</div>
+        </div>
+        <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </button>
+    <div class="phase-media-wrap" onclick="togglePhase(this)">
+      <div class="phase-media">
+        <div class="ph-fill"><div class="lb"><div class="pin"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="#b8b8b3"/></svg></div><div class="cap">Market Analysis</div><div class="tag">Preview coming soon</div></div></div>
+      </div>
+      <div class="open-hint">Click the thumbnail to open ↑</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-body-inner">
+        <section class="sec-block wrap">
+          <div class="section-head">
+            <div class="section-label">04 — Market Analysis</div>
+            <h2 class="section-title">Large, growing, and<br>structurally under-served</h2>
+            <p class="section-sub">Renovation is now the majority of Canadian residential investment, and code-driven retrofits are accelerating it — yet no one owns the transparent, code-verified estimate.</p>
+          </div>
+          <div class="trend-stats">
+            <div class="trend-stat">
+              <div class="trend-num">$61B</div>
+              <div class="trend-desc">Canadian residential renovation expenditure in 2025 (+2.9% YoY) — roughly 56% of all residential construction investment.</div>
+              <div class="trend-source">Source: IBISWorld · Statistics Canada, 2025</div>
+            </div>
+            <div class="trend-stat">
+              <div class="trend-num">1.2M</div>
+              <div class="trend-desc">pre-1980 units targeted by 2025 building-code retrofit mandates, pushing that segment to a ~5.2% CAGR.</div>
+              <div class="trend-source">Source: Mordor Intelligence · CHBA, 2026</div>
+            </div>
+            <div class="trend-stat">
+              <div class="trend-num">5.2%</div>
+              <div class="trend-desc">CAGR for retrofit-driven renovation through 2033 — durable, regulation-backed demand growth.</div>
+              <div class="trend-source">Source: Mordor Intelligence, 2026</div>
+            </div>
+          </div>
+
+          <div class="block-gap">
+            <div class="section-head">
+              <div class="section-label">04 — Market Analysis · Scope</div>
+              <h2 class="section-title">From national spend to a<br>Toronto beachhead</h2>
+              <p class="section-sub">GridOne narrows a national market to a defensible entry wedge: Toronto owners of aging homes who want a transparent, code-verified path from estimate to contract.</p>
+            </div>
+            <div class="scope-grid">
+              <div class="scope-cell">
+                <div class="scope-tag">TAM</div>
+                <div class="scope-num">$61B</div>
+                <div class="scope-name">Canadian residential renovation</div>
+                <div class="scope-desc">Total national renovation &amp; maintenance expenditure — the outer boundary of the opportunity.</div>
+              </div>
+              <div class="scope-cell">
+                <div class="scope-tag">SAM</div>
+                <div class="scope-num">GTA</div>
+                <div class="scope-name">Aging-home renovation &amp; maintenance</div>
+                <div class="scope-desc">Owners of the ~60% pre-1981 Toronto / GTA stock needing modernization and recurring upkeep.</div>
+              </div>
+              <div class="scope-cell">
+                <div class="scope-tag">SOM</div>
+                <div class="scope-num">Wedge</div>
+                <div class="scope-name">Scan-to-contract early adopters</div>
+                <div class="scope-desc">Toronto owners seeking a transparent, code-verified estimate — the first segment GridOne serves end to end.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PHASE 05 — PROTOTYPING ===== -->
+<div class="phase-wrap">
+  <div class="phase-block">
+    <button class="phase-toggle" onclick="togglePhase(this)">
+      <div class="phase-toggle-inner">
+        <div>
+          <div class="phase-num">PHASE 05</div>
+          <div class="phase-name">Prototyping</div>
+          <div class="phase-sub">System layers &amp; the six-step pipeline</div>
+        </div>
+        <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </button>
+    <div class="phase-media-wrap" onclick="togglePhase(this)">
+      <div class="phase-media">
+        <div class="ph-fill"><div class="lb"><div class="pin"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="#b8b8b3"/></svg></div><div class="cap">Prototyping</div><div class="tag">Preview coming soon</div></div></div>
+      </div>
+      <div class="open-hint">Click the thumbnail to open ↑</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-body-inner">
+        <section class="sec-block wrap">
+          <div class="section-head">
+            <div class="section-label">05 — Prototyping · System Layers</div>
+            <h2 class="section-title">Four layers, one continuous<br>data handoff</h2>
+            <p class="section-sub">Each layer transforms the one below it and passes structured data up. Nothing is re-entered — the scan captured in Layer 1 is still doing work at the contract in Layer 4.</p>
+          </div>
+          <div class="layer-stack">
+            <div class="layer"><div class="layer-idx">L1</div><div>
+              <div class="layer-name">Capture Layer</div>
+              <div class="layer-desc">A 3D polygon scan is built from smartphone camera footage — real-world terrain and spatial data extracted as vertex geometry. This measured mesh is the single source of truth for everything downstream.</div>
+              <div class="layer-tech"><span>Smartphone capture</span><span>3D polygon scan</span><span>Vertex geometry</span></div>
+              <div class="layer-pass">→ passes up: measured spatial mesh</div>
+            </div></div>
+            <div class="layer"><div class="layer-idx">L2</div><div>
+              <div class="layer-name">Analysis Layer</div>
+              <div class="layer-desc">Area, ceiling height, and openings are auto-extracted from the mesh. An Aging Index plus latent plumbing, electrical, and insulation risk are quantified into an instant, transparent estimate range — and a fit-scored consultant match.</div>
+              <div class="layer-tech"><span>Auto measurement</span><span>Aging Index</span><span>Risk quantification</span><span>Fit score</span></div>
+              <div class="layer-pass">→ passes up: measured scope + estimate range</div>
+            </div></div>
+            <div class="layer"><div class="layer-idx">L3</div><div>
+              <div class="layer-name">Verification Layer</div>
+              <div class="layer-desc">On site, a 10-item Ontario Building Code &amp; Toronto by-law checklist verifies compliance, while BLE-paired instruments stream live telemetry that AI reads and ranks into scored repair recommendations.</div>
+              <div class="layer-tech"><span>OBC · by-law checklist</span><span>BLE telemetry</span><span>Leica · Protimeter · FLIR</span><span>AI scoring</span></div>
+              <div class="layer-pass">→ passes up: verified, code-checked findings</div>
+            </div></div>
+            <div class="layer"><div class="layer-idx">L4</div><div>
+              <div class="layer-name">Contract Layer</div>
+              <div class="layer-desc">Verified results are locked into a standard contract and closed with an e-signature, then matched to a Toronto-registered contractor to begin work — the whole chain traceable back to the original scan.</div>
+              <div class="layer-tech"><span>Standard contract</span><span>E-signature</span><span>Registered contractors</span><span>Audit trail</span></div>
+              <div class="layer-pass">→ output: signed, auditable scope of work</div>
+            </div></div>
+          </div>
+
+          <div class="block-gap">
+            <div class="section-head">
+              <div class="section-label">05 — Prototyping · Service Components</div>
+              <h2 class="section-title">Six steps, one pipeline</h2>
+              <p class="section-sub">Capture → auto-analysis → transparent estimate → code check → measurement → contract, handled continuously inside one app. Each step inherits the data the previous one produced.</p>
+            </div>
+            <div class="pipe">
+              <div class="pipe-step"><div class="pipe-idx"><div class="pipe-num">01</div></div><div>
+                <div class="pipe-name">Scan<span class="pipe-inherit">Input — <b>smartphone camera footage</b></span></div>
+                <p class="pipe-desc">A 3D polygon scan built from smartphone camera footage. Real-world terrain and spatial data are extracted as vertex geometry — the measured foundation everything downstream is built on.</p>
+                <div class="pipe-tech"><span>3D polygon scan</span><span>Vertex geometry</span><span>Smartphone capture</span></div>
+              </div></div>
+              <div class="pipe-step"><div class="pipe-idx"><div class="pipe-num">02</div></div><div>
+                <div class="pipe-name">Match<span class="pipe-inherit">Inherits — <b>scan mesh</b></span></div>
+                <p class="pipe-desc">Area, ceiling height, and openings are auto-extracted from the scan mesh, then a verified consultant is matched against the scope of work with a fit score.</p>
+                <div class="pipe-tech"><span>Auto measurement</span><span>Fit score</span><span>Verified consultants</span></div>
+              </div></div>
+              <div class="pipe-step"><div class="pipe-idx"><div class="pipe-num">03</div></div><div>
+                <div class="pipe-name">Estimate<span class="pipe-inherit">Inherits — <b>measured scope</b></span></div>
+                <p class="pipe-desc">An Aging Index plus latent plumbing, electrical, and insulation risk are quantified to produce an instant, transparent estimate range — not a black box.</p>
+                <div class="pipe-tech"><span>Aging Index</span><span>Risk quantification</span><span>Instant range</span></div>
+              </div></div>
+              <div class="pipe-step"><div class="pipe-idx"><div class="pipe-num">04</div></div><div>
+                <div class="pipe-name">Codes<span class="pipe-inherit">Inherits — <b>estimate + site visit</b></span></div>
+                <p class="pipe-desc">On the consultant's site visit, a 10-item checklist grounded in the Ontario Building Code (OBC) and Toronto by-laws verifies compliance before anything is committed.</p>
+                <div class="pipe-tech"><span>OBC</span><span>Toronto by-laws</span><span>10-point checklist</span></div>
+              </div></div>
+              <div class="pipe-step"><div class="pipe-idx"><div class="pipe-num">05</div></div><div>
+                <div class="pipe-name">Inspect<span class="pipe-inherit">Inherits — <b>code-checked scope</b></span></div>
+                <p class="pipe-desc">Measurement instruments pair over BLE and stream live telemetry. AI reads the readings and recommends repairs by score, turning raw instrument data into a ranked action list.</p>
+                <div class="pipe-tech"><span>Leica DISTO</span><span>Protimeter</span><span>FLIR</span><span>BLE telemetry</span><span>AI scoring</span></div>
+              </div></div>
+              <div class="pipe-step"><div class="pipe-idx"><div class="pipe-num">06</div></div><div>
+                <div class="pipe-name">E-sign<span class="pipe-inherit">Inherits — <b>verified inspection</b></span></div>
+                <p class="pipe-desc">Verified results are locked into a standard contract and closed with an e-signature — then connected to a Toronto-registered contractor to start the work.</p>
+                <div class="pipe-tech"><span>Standard contract</span><span>E-signature</span><span>Registered contractors</span></div>
+              </div></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TIMELINE (scroll-driven) ===== -->
+<section class="tl-section wrap">
+  <div class="tl-head">
+    <div class="tl-title">Process Timeline<span class="sub">Scroll to move through the stages</span></div>
+    <div class="tl-phase-meta">
+      <div><span class="strong">2026 / Jun — ongoing</span></div>
+      <div>Service Design · Work in progress</div>
+    </div>
+  </div>
+
+  <div class="tl-scroll" data-tl-scroll>
+    <div class="tl-board" data-tl-board>
+      <div class="tl-stage">
+        <article class="tl-card is-active" data-gate="1">
+          <div class="tl-card-head"><span class="tl-gate-id">Stage 01</span><span class="tl-gate-tag">Discovery</span></div>
+          <div class="tl-card-title">Problem Definition</div>
+          <div class="tl-card-sub">Framing the renovation black box</div>
+          <ul class="tl-card-list">
+            <li>Information asymmetry <span class="dim">— opaque, unmeasured estimates</span></li>
+            <li>Trust breakdown <span class="dim">— 32% scam victims, 15% confidence</span></li>
+            <li>Regulatory complexity <span class="dim">— OBC &amp; Toronto by-laws</span></li>
+            <li>Problem statement &amp; hypothesis</li>
+          </ul>
+        </article>
+        <article class="tl-card" data-gate="2">
+          <div class="tl-card-head"><span class="tl-gate-id">Stage 02</span><span class="tl-gate-tag">Field</span></div>
+          <div class="tl-card-title">Research</div>
+          <div class="tl-card-sub">Aging housing + stakeholder landscape</div>
+          <ul class="tl-card-list">
+            <li>Toronto housing age <span class="dim">— ~60% built pre-1981</span></li>
+            <li>Stakeholder mapping <span class="dim">— demand · supply · governance</span></li>
+            <li>Homeowner journeys <span class="dim">— planned interviews</span></li>
+            <li>Consultant &amp; inspector workflows</li>
+          </ul>
+        </article>
+        <article class="tl-card" data-gate="3">
+          <div class="tl-card-head"><span class="tl-gate-id">Stage 03</span><span class="tl-gate-tag">Analysis</span></div>
+          <div class="tl-card-title">Market Analysis</div>
+          <div class="tl-card-sub">Sizing a $61B renovation economy</div>
+          <ul class="tl-card-list">
+            <li>TAM / SAM / SOM scoping</li>
+            <li>$61B national renovation spend <span class="dim">— +2.9% YoY</span></li>
+            <li>Retrofit mandates <span class="dim">— 1.2M units, 5.2% CAGR</span></li>
+            <li>Competitive white space</li>
+          </ul>
+        </article>
+        <article class="tl-card" data-gate="4">
+          <div class="tl-card-head"><span class="tl-gate-id">Stage 04</span><span class="tl-gate-tag wip">In progress</span></div>
+          <div class="tl-card-title">Prototyping</div>
+          <div class="tl-card-sub">One continuous pipeline</div>
+          <ul class="tl-card-list">
+            <li>4-layer system architecture</li>
+            <li>Scan → E-sign, six-step flow</li>
+            <li>BLE instrument integration <span class="dim">— Leica · Protimeter · FLIR</span></li>
+            <li>Stage walkthrough videos <span class="dim">— in production</span></li>
+          </ul>
+        </article>
+        <article class="tl-card" data-gate="5">
+          <div class="tl-card-head"><span class="tl-gate-id">Stage 05</span><span class="tl-gate-tag wip">Upcoming</span></div>
+          <div class="tl-card-title">Validation</div>
+          <div class="tl-card-sub">Proving trust &amp; accuracy</div>
+          <ul class="tl-card-list">
+            <li>Estimate accuracy vs. actuals</li>
+            <li>Code-check reliability</li>
+            <li>Owner trust lift <span class="dim">— pre / post</span></li>
+            <li>Contractor match quality</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="tl-track">
+        <button type="button" class="tl-node is-active" data-gate="1"><span class="tl-node-dot"></span><span class="tl-node-meta"><span class="tl-node-label">Problem</span><span class="tl-node-tag">Discovery</span></span></button>
+        <button type="button" class="tl-node" data-gate="2"><span class="tl-node-dot"></span><span class="tl-node-meta"><span class="tl-node-label">Research</span><span class="tl-node-tag">Field</span></span></button>
+        <button type="button" class="tl-node" data-gate="3"><span class="tl-node-dot"></span><span class="tl-node-meta"><span class="tl-node-label">Market</span><span class="tl-node-tag">Analysis</span></span></button>
+        <button type="button" class="tl-node" data-gate="4"><span class="tl-node-dot"></span><span class="tl-node-meta"><span class="tl-node-label">Prototype</span><span class="tl-node-tag">In progress</span></span></button>
+        <button type="button" class="tl-node" data-gate="5"><span class="tl-node-dot"></span><span class="tl-node-meta"><span class="tl-node-label">Validation</span><span class="tl-node-tag">Upcoming</span></span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== DIRECTION + SOURCES ===== -->
-<section class="tt-section wrap" style="border-bottom:none;">
-  <div class="section-head" style="margin-bottom:clamp(32px,4vw,56px);">
+<section class="sec-block wrap" style="padding-top:clamp(56px,7vw,100px);padding-bottom:clamp(56px,7vw,100px);">
+  <div class="section-head" style="margin-bottom:clamp(28px,4vw,48px);">
     <div class="section-label">Direction</div>
     <h2 class="section-title" style="max-width:900px;">Resolve asymmetry, trust, and<br>complexity — with continuity</h2>
-    <p class="section-sub">When capture, analysis, estimate, code check, measurement, and contract all live in one flow, the consumer stops chasing a different person at every step — and every price becomes a measured, auditable claim rather than a black box.</p>
+    <p class="section-sub">When capture, analysis, estimate, code check, measurement, and contract all live in one flow, the owner stops chasing a different person at every step — and every price becomes a measured, auditable claim rather than a black box.</p>
   </div>
   <div class="sources">
     <strong style="color:var(--ink);font-weight:500;">Sources</strong> &nbsp;·&nbsp;
@@ -522,6 +738,48 @@ function togglePhase(el) {
   } else { block.setAttribute('data-open', ''); }
 }
 (function(){const n=document.querySelector('nav.top');if(n)document.documentElement.style.setProperty('--nav-h',n.offsetHeight+'px');})();
+</script>
+
+<script>
+/* Timeline: scroll-driven activation (desktop via scroll wrapper, mobile via node positions) */
+(function(){
+  var boards = document.querySelectorAll('[data-tl-board]');
+  if(!boards.length) return;
+  var mqMobile = window.matchMedia('(max-width: 880px)');
+  boards.forEach(function(board){
+    var nodes = Array.prototype.slice.call(board.querySelectorAll('.tl-node'));
+    var cards = board.querySelectorAll('.tl-card');
+    var track = board.querySelector('.tl-track');
+    var scrollWrap = board.closest('[data-tl-scroll]');
+    function activate(gate){
+      var idx = 0;
+      nodes.forEach(function(n, i){ var on = n.getAttribute('data-gate') === gate; n.classList.toggle('is-active', on); if(on) idx = i; });
+      cards.forEach(function(c){ c.classList.toggle('is-active', c.getAttribute('data-gate') === gate); });
+      if(track && nodes.length > 1){ track.style.setProperty('--tl-progress', (idx/(nodes.length-1))*100 + '%'); }
+    }
+    var ticking = false;
+    function onScroll(){
+      if(ticking) return; ticking = true;
+      requestAnimationFrame(function(){
+        ticking = false;
+        if(mqMobile.matches){
+          var best=null, bestDist=Infinity, center=window.innerHeight/2;
+          nodes.forEach(function(n){ var r=n.getBoundingClientRect(); var d=Math.abs((r.top+r.height/2)-center); if(d<bestDist){ bestDist=d; best=n; } });
+          if(best){ activate(best.getAttribute('data-gate')); }
+        } else if(scrollWrap){
+          var r=scrollWrap.getBoundingClientRect(); var total=r.height-window.innerHeight;
+          if(total<=0) return;
+          var p=Math.min(1,Math.max(0,-r.top/total));
+          var idx=Math.min(nodes.length-1, Math.floor(p*nodes.length));
+          activate(nodes[idx].getAttribute('data-gate'));
+        }
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive:true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
+  });
+})();
 </script>
 <script src="./lazy-video.js"></script>
 </body>
