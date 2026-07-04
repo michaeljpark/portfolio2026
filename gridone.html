@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GridOne — Michael Joongmin Park</title>
+<link rel="icon" type="image/svg+xml" href="./mkpk.svg" />
+<style>
+  :root{
+    --bg:#ffffff; --ink:#0a0a0a; --muted:#8a8a8a; --line:#e6e6e6;
+    --max:1320px; --pad:clamp(20px,4vw,56px);
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ background:var(--bg); color:var(--ink); }
+  body{
+    font-family:var(--font); font-size:14px; line-height:1.5; font-weight:400;
+    letter-spacing:-0.05em; -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility; overflow-x:hidden;
+  }
+  a{ color:inherit; text-decoration:none; }
+  img{ display:block; max-width:100%; }
+  ::selection{ background:var(--ink); color:var(--bg); }
+  .wrap{ max-width:var(--max); margin:0 auto; padding-left:var(--pad); padding-right:var(--pad); }
+
+  nav.top{
+    position:sticky; top:0; z-index:50;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px var(--pad); max-width:var(--max); margin:0 auto; font-size:13px;
+  }
+  .nav-mark{ font-weight:500; }
+  .nav-links{ display:flex; gap:28px; }
+  .nav-links a{ color:var(--muted); transition:color .2s; }
+  .nav-links a:hover{ color:var(--ink); }
+
+  header.hero{
+    padding:64px var(--pad) 64px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-back{ font-size:13px; color:var(--muted); margin-bottom:32px; }
+  .hero-back a:hover{ color:var(--ink); }
+  .hero-greeting{ font-size:17px; color:var(--muted); margin-bottom:6px; }
+  .hero-name{
+    font-weight:500; font-size:clamp(28px,4.5vw,64px);
+    line-height:1.05; letter-spacing:-0.05em;
+  }
+  .hero-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }
+  .hero-row{ margin-top:36px; padding-top:24px; border-top:1px solid var(--line); }
+  .hero-side{
+    display:flex; flex-direction:row; justify-content:space-between;
+    flex-wrap:wrap; font-size:13px; gap:16px;
+  }
+  .hero-side .pair{ display:flex; flex-direction:column; gap:2px; }
+  .hero-side dt{ color:var(--muted); }
+  .view-link{ border-bottom:1px solid var(--ink); transition:opacity .2s; }
+  .view-link:hover{ opacity:0.6; }
+  .status-live{ display:inline-flex; align-items:center; gap:7px; }
+  .status-dot{ width:7px; height:7px; border-radius:50%; background:#22c55e; flex-shrink:0; }
+
+  .kpi-section{ padding-bottom:64px; }
+  .kpi-row{
+    display:grid; grid-template-columns:1fr 1fr 1fr;
+    border-bottom:1px solid var(--line);
+    padding:32px 0;
+  }
+  .kpi{ display:flex; flex-direction:column; gap:6px; padding:0 40px; }
+  .kpi:first-child{ padding-left:0; }
+  .kpi:last-child{ padding-right:0; }
+  .kpi + .kpi{ border-left:1px solid var(--line); }
+  .kpi-num{
+    font-size:clamp(28px,3.5vw,48px); font-weight:500;
+    letter-spacing:-0.05em; line-height:1;
+  }
+  .kpi-label{ font-size:13px; color:var(--muted); }
+
+  /* CONTENT SECTIONS */
+  .content-section{
+    padding-top:clamp(56px,7vw,104px); padding-bottom:clamp(56px,7vw,104px);
+    border-bottom:1px solid var(--line);
+  }
+  .section-label{ font-size:12px; color:var(--muted); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:14px; }
+  .section-title{ font-size:clamp(26px,3.4vw,48px); font-weight:500; letter-spacing:-0.05em; line-height:1.1; max-width:860px; }
+  .section-intro{ font-size:clamp(15px,1.3vw,18px); color:var(--muted); line-height:1.6; max-width:700px; margin-top:20px; letter-spacing:-0.02em; }
+  .section-head{ margin-bottom:clamp(36px,5vw,64px); }
+
+  .lead{ font-size:clamp(17px,1.7vw,23px); line-height:1.55; letter-spacing:-0.035em; max-width:860px; }
+  .lead em{ color:var(--muted); font-style:normal; }
+
+  /* PROBLEM — 3 frictions */
+  .prob-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line);
+    border-radius:16px; overflow:hidden;
+  }
+  .prob-card{ background:var(--bg); padding:clamp(26px,3vw,38px); display:flex; flex-direction:column; gap:12px; min-height:220px; }
+  .prob-num{ font-size:12px; color:var(--muted); letter-spacing:0.04em; }
+  .prob-title{ font-size:clamp(17px,1.9vw,23px); font-weight:500; letter-spacing:-0.035em; line-height:1.2; }
+  .prob-desc{ font-size:14px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; margin-top:auto; }
+  @media(max-width:760px){ .prob-grid{ grid-template-columns:1fr; } .prob-card{ min-height:0; } }
+
+  /* PIPELINE — 6 steps */
+  .pipe{ display:flex; flex-direction:column; }
+  .pipe-step{
+    display:grid; grid-template-columns:56px 1fr; gap:clamp(16px,2.4vw,36px);
+    padding-bottom:clamp(30px,4vw,52px);
+  }
+  .pipe-idx{ position:relative; }
+  .pipe-num{
+    width:44px; height:44px; border-radius:50%; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px; font-weight:500; background:var(--bg); position:relative; z-index:1;
+  }
+  .pipe-step:not(:last-child) .pipe-idx::before{
+    content:""; position:absolute; left:22px; top:46px; bottom:-6px; width:1px; background:var(--line);
+  }
+  .pipe-name{ font-size:clamp(19px,2.1vw,28px); font-weight:500; letter-spacing:-0.04em; line-height:1.15; }
+  .pipe-inherit{ display:block; font-size:12px; color:var(--muted); font-weight:400; letter-spacing:-0.01em; margin-top:6px; }
+  .pipe-inherit b{ color:var(--ink); font-weight:500; }
+  .pipe-desc{ font-size:15px; color:var(--muted); line-height:1.65; letter-spacing:-0.02em; margin-top:12px; max-width:660px; }
+  .pipe-tech{ margin-top:16px; display:flex; flex-wrap:wrap; gap:8px; }
+  .pipe-tech span{ font-size:12px; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:5px 12px; letter-spacing:-0.01em; }
+  @media(max-width:560px){
+    .pipe-step{ grid-template-columns:40px 1fr; gap:16px; }
+    .pipe-num{ width:36px; height:36px; font-size:13px; }
+    .pipe-step:not(:last-child) .pipe-idx::before{ left:18px; top:38px; }
+  }
+
+  /* TARGET USERS */
+  .users-grid{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(14px,2vw,24px); }
+  .user-card{ border:1px solid var(--line); border-radius:16px; padding:clamp(26px,3vw,40px); }
+  .user-tag{ font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; }
+  .user-title{ font-size:clamp(18px,2vw,26px); font-weight:500; letter-spacing:-0.035em; margin-top:10px; line-height:1.2; }
+  .user-desc{ color:var(--muted); font-size:15px; line-height:1.65; letter-spacing:-0.02em; margin-top:14px; }
+  @media(max-width:640px){ .users-grid{ grid-template-columns:1fr; } }
+
+  .content-video{
+    width:100%; aspect-ratio:16/9;
+    background:#e8e8e6; border-radius:20px; overflow:hidden;
+    position:relative; margin-top:clamp(32px,4vw,56px);
+  }
+  .content-video video{
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    object-fit:cover; display:block;
+  }
+
+  @media(max-width:880px){
+    .hero-name{ font-size:clamp(24px,7vw,48px); }
+    .kpi-row{ padding:24px 0; }
+    .kpi{ padding:0 20px; }
+  }
+  @media(max-width:640px){
+    .kpi-row{ grid-template-columns:1fr; padding:0; }
+    .kpi{ padding:20px 0; }
+    .kpi + .kpi{ border-left:none; border-top:1px solid var(--line); }
+  }
+</style>
+<style>
+/* ===== iOS design language (SF Pro Display + antialiasing + accent) ===== */
+:root{ --accent:#007aff; }
+html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection{ background:#007aff; color:#ffffff; }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="nav-inner">
+    <a href="./index.html" class="nav-mark">Michael J. Park</a>
+    <div class="nav-links">
+      <a href="./index.html#work">Work</a>
+      <a href="./index.html#about">About</a>
+      <a href="./index.html#contact">Contact</a>
+      <a href="./Resume%202026%20-%20Joongmin%20Park%20(Michael%20Park).pdf" target="_blank" rel="noopener">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <div class="hero-back"><a href="./index.html">← Back to Work</a></div>
+  <div class="hero-greeting">Service Design</div>
+  <h1 class="hero-name">GridOne</h1>
+  <p class="hero-tagline">A tailored building-maintenance &amp; consulting firm — one scan carries all the way through to a signed contract.</p>
+  <div class="hero-row">
+    <dl class="hero-side">
+      <div class="pair"><dt>Year</dt><dd>2026 / Jun</dd></div>
+      <div class="pair"><dt>Type</dt><dd>Service Design</dd></div>
+      <div class="pair"><dt>Scope</dt><dd>6-step service pipeline</dd></div>
+      <div class="pair"><dt>Status</dt><dd class="status-live"><span class="status-dot"></span>Online · Published via GitHub</dd></div>
+    </dl>
+  </div>
+</header>
+
+<!-- OVERVIEW -->
+<section class="content-section wrap">
+  <div class="section-head">
+    <div class="section-label">01 — Overview</div>
+    <p class="lead">GridOne unifies interior-renovation estimation and building maintenance into a single flow. It starts from <em>one</em> smartphone scan and carries that data forward — through a six-step pipeline — all the way to a transparent estimate, a code check, and a signed contract with a matched contractor. Every step actually inherits the previous step's data.</p>
+  </div>
+
+  <div class="content-video">
+    <video class="lazy-vid" data-src="./gridoneprev.mp4" poster="./posters/gridoneprev.jpg" muted loop playsinline preload="none"></video>
+  </div>
+
+  <div class="kpi-row" style="margin-top:clamp(40px,5vw,72px);">
+    <div class="kpi">
+      <div class="kpi-num">6</div>
+      <div class="kpi-label">Steps in one continuous pipeline</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-num">1</div>
+      <div class="kpi-label">Scan starts the entire flow</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-num">3</div>
+      <div class="kpi-label">Renovation frictions removed</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="content-section wrap">
+  <div class="section-head">
+    <div class="section-label">Problem</div>
+    <h2 class="section-title">Three frictions make renovation feel like a black box.</h2>
+    <p class="section-intro">Homeowners face renovation and maintenance decisions with almost no leverage. GridOne targets the three frictions that break trust in the process — and dissolves each one with data.</p>
+  </div>
+  <div class="prob-grid">
+    <div class="prob-card">
+      <div class="prob-num">01</div>
+      <div class="prob-title">Information asymmetry</div>
+      <div class="prob-desc">Estimates arrive as a black box. Owners can't see how a number is built, or whether it's fair.</div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-num">02</div>
+      <div class="prob-title">Trust</div>
+      <div class="prob-desc">Contractors go unverified. It's hard to know which professional or firm actually deserves the job.</div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-num">03</div>
+      <div class="prob-title">Regulatory complexity</div>
+      <div class="prob-desc">The Ontario Building Code and Toronto by-laws are near-impossible to self-assess for compliance.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PIPELINE -->
+<section class="content-section wrap">
+  <div class="section-head">
+    <div class="section-label">Service Components</div>
+    <h2 class="section-title">Six steps, one pipeline.</h2>
+    <p class="section-intro">Capture → auto-analysis → transparent estimate → code check → measurement → contract, handled continuously inside one app — so the owner never has to chase a different person at each stage. Each step inherits the data the previous one produced.</p>
+  </div>
+
+  <div class="pipe">
+    <div class="pipe-step">
+      <div class="pipe-idx"><div class="pipe-num">01</div></div>
+      <div class="pipe-body">
+        <div class="pipe-name">Scan<span class="pipe-inherit">Input — <b>smartphone camera footage</b></span></div>
+        <p class="pipe-desc">A 3D polygon scan built from smartphone camera footage. Real-world terrain and spatial data are extracted as vertex geometry — the measured foundation everything downstream is built on.</p>
+        <div class="pipe-tech"><span>3D polygon scan</span><span>Vertex geometry</span><span>Smartphone capture</span></div>
+      </div>
+    </div>
+
+    <div class="pipe-step">
+      <div class="pipe-idx"><div class="pipe-num">02</div></div>
+      <div class="pipe-body">
+        <div class="pipe-name">Match<span class="pipe-inherit">Inherits — <b>scan mesh</b></span></div>
+        <p class="pipe-desc">Area, ceiling height, and openings are auto-extracted from the scan mesh, then a verified consultant is matched against the scope of work with a fit score.</p>
+        <div class="pipe-tech"><span>Auto measurement</span><span>Fit score</span><span>Verified consultants</span></div>
+      </div>
+    </div>
+
+    <div class="pipe-step">
+      <div class="pipe-idx"><div class="pipe-num">03</div></div>
+      <div class="pipe-body">
+        <div class="pipe-name">Estimate<span class="pipe-inherit">Inherits — <b>measured scope</b></span></div>
+        <p class="pipe-desc">An Aging Index plus latent plumbing, electrical, and insulation risk are quantified to produce an instant, transparent estimate range — not a black box.</p>
+        <div class="pipe-tech"><span>Aging Index</span><span>Risk quantification</span><span>Instant range</span></div>
+      </div>
+    </div>
+
+    <div class="pipe-step">
+      <div class="pipe-idx"><div class="pipe-num">04</div></div>
+      <div class="pipe-body">
+        <div class="pipe-name">Codes<span class="pipe-inherit">Inherits — <b>estimate + site visit</b></span></div>
+        <p class="pipe-desc">On the consultant's site visit, a 10-item checklist grounded in the Ontario Building Code (OBC) and Toronto by-laws verifies compliance before anything is committed.</p>
+        <div class="pipe-tech"><span>OBC</span><span>Toronto by-laws</span><span>10-point checklist</span></div>
+      </div>
+    </div>
+
+    <div class="pipe-step">
+      <div class="pipe-idx"><div class="pipe-num">05</div></div>
+      <div class="pipe-body">
+        <div class="pipe-name">Inspect<span class="pipe-inherit">Inherits — <b>code-checked scope</b></span></div>
+        <p class="pipe-desc">Measurement instruments pair over BLE and stream live telemetry. AI reads the readings and recommends repairs by score, turning raw instrument data into a ranked action list.</p>
+        <div class="pipe-tech"><span>Leica DISTO</span><span>Protimeter</span><span>FLIR</span><span>BLE telemetry</span><span>AI scoring</span></div>
+      </div>
+    </div>
+
+    <div class="pipe-step">
+      <div class="pipe-idx"><div class="pipe-num">06</div></div>
+      <div class="pipe-body">
+        <div class="pipe-name">E-sign<span class="pipe-inherit">Inherits — <b>verified inspection</b></span></div>
+        <p class="pipe-desc">Verified results are locked into a standard contract and closed with an e-signature — then connected to a Toronto-registered contractor to start the work.</p>
+        <div class="pipe-tech"><span>Standard contract</span><span>E-signature</span><span>Registered contractors</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TARGET USERS -->
+<section class="content-section wrap">
+  <div class="section-head">
+    <div class="section-label">Target Users</div>
+    <h2 class="section-title">Built for owners — and the pros who serve them.</h2>
+  </div>
+  <div class="users-grid">
+    <div class="user-card">
+      <div class="user-tag">Primary</div>
+      <div class="user-title">Aging-home &amp; condo owners in Toronto / GTA</div>
+      <p class="user-desc">People who need renovation or maintenance but face opaque estimates, don't know which professionals or firms to trust, and can't judge statutory code compliance on their own.</p>
+    </div>
+    <div class="user-card">
+      <div class="user-tag">Secondary</div>
+      <div class="user-title">Consultants &amp; inspectors</div>
+      <p class="user-desc">The same flow doubles as a working tool — matching, on-site code checks, and instrument-driven inspection run through GridOne rather than a scatter of disconnected apps.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DIRECTION -->
+<section class="content-section wrap" style="border-bottom:none;">
+  <div class="section-head" style="margin-bottom:0;">
+    <div class="section-label">Direction</div>
+    <p class="lead">Resolve information asymmetry, the trust problem, and regulatory complexity <em>with data</em> — and make the whole journey continuous. When capture, analysis, estimate, code check, measurement, and contract all live in one flow, the consumer stops chasing a different person at every step.</p>
+  </div>
+</section>
+
+<footer style="padding:clamp(64px,8vw,120px) var(--pad) clamp(48px,6vw,80px); text-align:center;">
+  <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
+</footer>
+
+<script src="./lazy-video.js"></script>
+</body>
+</html>
