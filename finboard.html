@@ -84,6 +84,50 @@
   .project-stage video,
   .project-stage img{ width:100%; height:100%; object-fit:cover; display:block; }
 
+  /* PROCESS PHASES — collapsible, each with a 16:9 media (matches ongenradio / proposal-audit) */
+  .phase-toggle{
+    display:block; width:100%; border:none; cursor:pointer;
+    font-family:var(--font); color:var(--ink);
+    padding:clamp(20px,2.6vw,32px) 0 clamp(18px,2.4vw,28px);
+    position:sticky; top:calc(var(--nav-h,57px) - 1px); z-index:40;
+    background:color-mix(in srgb, var(--bg) 94%, transparent);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border-top:1px solid var(--line);
+  }
+  .phase-toggle-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:24px; max-width:var(--max); margin:0 auto; text-align:left;
+    padding-left:var(--pad); padding-right:var(--pad);
+  }
+  .phase-num{ font-family:var(--mono); font-size:11px; color:var(--accent-ink); letter-spacing:0.08em; margin-bottom:6px; text-transform:uppercase; }
+  .phase-name{ font-size:clamp(22px,3vw,42px); font-weight:500; letter-spacing:-0.045em; line-height:1.08; transition:opacity .2s; margin-bottom:6px; }
+  .phase-sub{ font-size:13.5px; color:var(--muted); letter-spacing:-0.02em; line-height:1.45; max-width:64ch; }
+  .phase-toggle:hover .phase-name{ opacity:0.6; }
+  .phase-arrow{ flex-shrink:0; color:var(--muted); transition:transform 0.38s ease; }
+  .phase-block[data-open] .phase-arrow{ transform:rotate(180deg); }
+  .phase-block[data-open] .phase-num{ color:var(--accent); }
+  .phase-media-wrap{ max-width:var(--max); margin:0 auto; padding:clamp(24px,3.2vw,40px) var(--pad) clamp(32px,4.5vw,64px); cursor:pointer; }
+  .phase-media{
+    width:100%; height:0; padding-top:56.25%;   /* 16:9 viewport */
+    border-radius:16px; overflow:hidden;
+    background:#e3e3e1; position:relative;
+    transition:padding-top .45s ease;
+  }
+  .phase-block[data-open] .phase-media{ padding-top:28.125%; }
+  .phase-media > *{
+    position:absolute; top:50%; left:0;
+    width:100%; height:auto !important; aspect-ratio:16/9;
+    transform:translateY(-50%);
+  }
+  .phase-ph{ display:flex; align-items:center; justify-content:center; background:#e3e3e1; }
+  .phase-ph span{ font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#a2a09c; }
+  .phase-body{ display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.45s ease; }
+  .phase-block[data-open] .phase-body{ grid-template-rows:1fr; }
+  .phase-body-inner{ overflow:hidden; }
+  .phase-body-inner > .tt-section:first-child,
+  .phase-body-inner > .jm-section:first-child{ border-top:0; }
+  .phase-body-inner > .tt-section:first-child{ padding-top:0; }
+
   /* SECTION COMMON */
   .tt-section{ padding-top:clamp(64px,8vw,128px); padding-bottom:clamp(64px,8vw,128px); border-top:1px solid var(--line); }
   .section-label{ font-size:12px; color:var(--accent-ink); margin-bottom:12px; letter-spacing:0.04em; text-transform:uppercase; }
@@ -363,11 +407,27 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
 </header>
 
-<section class="project-section wrap">
-  <div class="project-stage">
-    <video class="lazy-vid" data-src="./finboardprev.mp4" poster="./posters/finboardprev.jpg" muted loop playsinline preload="none"></video>
+<!-- ===== PROCESS PHASES (16:9 media + collapsible body) ===== -->
+<div class="phase-wrap">
+
+<div class="phase-block" data-open>
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">00</div>
+        <div class="phase-name">Overview</div>
+        <div class="phase-sub">What finboard is, at a glance — and how this document is built.</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media">
+      <video class="lazy-vid" data-src="./finboardprev.mp4" poster="./posters/finboardprev.jpg" loop muted playsinline webkit-playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+    </div>
   </div>
-</section>
+  <div class="phase-body">
+    <div class="phase-body-inner">
 
 <!-- ============ 0 · DOCUMENT STRUCTURE ============ -->
 <section class="tt-section wrap" style="border-top:0;">
@@ -388,6 +448,29 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     <div class="toc-item"><div class="toc-num">09</div><div class="toc-text">Sources<span>Every figure and insight, cited.</span></div></div>
   </div>
 </section>
+
+    </div>
+  </div>
+</div><!-- /phase 00 Overview -->
+
+<div class="phase-block">
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">01</div>
+        <div class="phase-name">Discovery — market, research &amp; principles</div>
+        <div class="phase-sub">The opportunity, what people actually need, and the design principles that follow.</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media">
+      <div class="phase-ph"><span>Market &amp; research · 16:9</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner">
 
 <!-- ============ 1 · MARKET ============ -->
 <section class="tt-section wrap">
@@ -532,6 +615,29 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     </table>
   </div>
 </section>
+
+    </div>
+  </div>
+</div><!-- /phase 01 -->
+
+<div class="phase-block">
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">02</div>
+        <div class="phase-name">Users — case studies</div>
+        <div class="phase-sub">Three Canadians, three journeys, mapped end to end with emotional arcs.</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media">
+      <div class="phase-ph"><span>Persona journeys · 16:9</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner">
 
 <!-- ============ 4 · CASE STUDIES (journey maps) ============ -->
 <section class="jm-section" id="cases">
@@ -863,6 +969,29 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
 </section>
 
+    </div>
+  </div>
+</div><!-- /phase 02 -->
+
+<div class="phase-block">
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">03</div>
+        <div class="phase-name">Solution — flows &amp; compliance</div>
+        <div class="phase-sub">The information architecture, the key UX flows, and the Canadian regulatory strategy.</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media">
+      <div class="phase-ph"><span>Core flows &amp; IA · 16:9</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner">
+
 <!-- ============ 5 · UX FLOWS ============ -->
 <section class="tt-section wrap">
   <div class="section-head">
@@ -1126,6 +1255,29 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
 </section>
 
+    </div>
+  </div>
+</div><!-- /phase 03 -->
+
+<div class="phase-block">
+  <button class="phase-toggle" onclick="togglePhase(this)">
+    <div class="phase-toggle-inner">
+      <div>
+        <div class="phase-num">04</div>
+        <div class="phase-name">System &amp; validation</div>
+        <div class="phase-sub">The stakeholder map, the success metrics that prove it, and the sources.</div>
+      </div>
+      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </button>
+  <div class="phase-media-wrap" onclick="togglePhase(this)">
+    <div class="phase-media">
+      <div class="phase-ph"><span>Stakeholders &amp; metrics · 16:9</span></div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-body-inner">
+
 <!-- ============ 07 · STAKEHOLDER MAP ============ -->
 <section class="tt-section wrap">
   <style>
@@ -1315,6 +1467,12 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <p class="disclaimer">This document is a UX-research-based product-strategy artifact. Market figures are each research firm's estimates/forecasts and vary by source. Personas are composite profiles synthesized from research insights and do not represent real individuals.</p>
 </section>
 
+    </div>
+  </div>
+</div><!-- /phase 04 -->
+
+</div><!-- /phase-wrap -->
+
 <footer style="padding:clamp(48px,6vw,88px) var(--pad) clamp(48px,6vw,80px); text-align:center; border-top:1px solid var(--line);">
   <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
 </footer>
@@ -1358,6 +1516,21 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     });
   });
 })();
+</script>
+<script>
+function togglePhase(el){
+  var block = el.closest('.phase-block');
+  if(block.hasAttribute('data-open')){
+    var nav = document.querySelector('nav.top');
+    var navH = nav ? nav.offsetHeight : 57;
+    var blockTop = block.getBoundingClientRect().top + window.scrollY;
+    if(window.scrollY > blockTop){ window.scrollTo({ top: blockTop - navH, behavior:'instant' }); }
+    block.removeAttribute('data-open');
+  } else {
+    block.setAttribute('data-open','');
+  }
+}
+(function(){ var n=document.querySelector('nav.top'); if(n) document.documentElement.style.setProperty('--nav-h', n.offsetHeight+'px'); })();
 </script>
 <script src="./lazy-video.js"></script>
 </body>
