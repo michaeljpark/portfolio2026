@@ -51,6 +51,14 @@
   .hero-name{ font-weight:500; font-size:clamp(30px,5vw,68px); line-height:1.02; letter-spacing:-0.05em; }
   .hero-name .rd{ color:var(--muted); }
   .hero-tagline{ font-size:clamp(15px,1.3vw,18px); color:var(--ink); margin-top:18px; line-height:1.5; max-width:44ch; }
+  .hero-tagrow{ display:flex; justify-content:space-between; align-items:flex-start; gap:clamp(24px,5vw,80px); margin-top:18px; }
+  .hero-tagrow .hero-tagline{ margin-top:0; flex:1 1 auto; }
+  .hero-compliance{ font-size:13.5px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; max-width:42ch; text-align:right; flex:0 1 auto; }
+  .hero-compliance strong{ color:var(--accent-ink); font-weight:500; }
+  @media(max-width:880px){
+    .hero-tagrow{ flex-direction:column; gap:12px; }
+    .hero-compliance{ text-align:left; max-width:60ch; }
+  }
   .hero-row{ margin-top:36px; padding-top:24px; border-top:1px solid var(--line); }
   .hero-side{ display:flex; flex-direction:row; justify-content:space-between; flex-wrap:wrap; font-size:13px; gap:16px; }
   .hero-side .pair{ display:flex; flex-direction:column; gap:2px; }
@@ -329,7 +337,10 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
   <div class="hero-greeting">Native App Design · Intuitive Banking App UX</div>
   <h1 class="hero-name">finboard <span class="rd">— Intuitive Banking App UX</span></h1>
-  <p class="hero-tagline">An iOS-native app that lets you explore your own spending habits — intuitively and fast.</p>
+  <div class="hero-tagrow">
+    <p class="hero-tagline">An iOS-native app that lets you explore your own spending habits — intuitively and fast.</p>
+    <p class="hero-compliance">Designed to <strong>WCAG 2.1 AA</strong> and the Accessible Canada Act, and built within Canada's financial-data rules — <strong>OSFI · FCAC · PIPEDA</strong> aligned by design. See §06.</p>
+  </div>
 
   <div class="hero-frames">
     <div class="hero-frame">
@@ -371,8 +382,9 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     <div class="toc-item"><div class="toc-num">03</div><div class="toc-text">Design principles<span>Research → principle mapping.</span></div></div>
     <div class="toc-item"><div class="toc-num">04</div><div class="toc-text">Three case studies — persona + user journey mapping<span>Three segments, three trajectories, three emotional arcs.</span></div></div>
     <div class="toc-item"><div class="toc-num">05</div><div class="toc-text">UX flows — information architecture &amp; four core flows<span>What the product actually does, screen to screen.</span></div></div>
-    <div class="toc-item"><div class="toc-num">06</div><div class="toc-text">Success metrics<span>North Star &amp; guardrails.</span></div></div>
-    <div class="toc-item"><div class="toc-num">07</div><div class="toc-text">Sources<span>Every figure and insight, cited.</span></div></div>
+    <div class="toc-item"><div class="toc-num">06</div><div class="toc-text">Compliance &amp; regulatory strategy<span>Canadian financial regulators, electronic-data governance, and accessibility standards.</span></div></div>
+    <div class="toc-item"><div class="toc-num">07</div><div class="toc-text">Success metrics<span>North Star &amp; guardrails.</span></div></div>
+    <div class="toc-item"><div class="toc-num">08</div><div class="toc-text">Sources<span>Every figure and insight, cited.</span></div></div>
   </div>
 </section>
 
@@ -1060,10 +1072,63 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
 </section>
 
-<!-- ============ 6 · SUCCESS METRICS ============ -->
+<!-- ============ 6 · COMPLIANCE & REGULATORY STRATEGY ============ -->
 <section class="tt-section wrap">
   <div class="section-head">
-    <div class="section-label">06 · Success metrics</div>
+    <div class="section-label">06 · Compliance &amp; regulatory strategy</div>
+    <h2 class="section-title">Built for Canada's rules — and for everyone</h2>
+    <p class="section-sub">finboard handles Canadians' electronic financial information, so regulatory posture and accessibility aren't features — they're preconditions. Both are designed in from the first screen, not bolted on before launch.</p>
+  </div>
+
+  <div class="dtable-wrap">
+    <table class="dtable">
+      <thead><tr><th>Regulator / framework</th><th>What it governs</th><th>finboard's strategy</th></tr></thead>
+      <tbody>
+        <tr><td class="k">OSFI</td><td class="s">Federal prudential oversight of banks; security expectations for data sharing.</td><td>finboard never holds or moves funds — strictly <strong>read-only</strong> aggregation through regulated providers. Nothing to prudentially regulate.</td></tr>
+        <tr><td class="k">FCAC · Consumer-Driven Banking</td><td class="s">Canada's federal open-banking framework &amp; consumer financial protection.</td><td>Consume only <strong>accredited open-banking APIs</strong>. The consumer grants access, sees exactly what is shared, and can revoke it instantly.</td></tr>
+        <tr><td class="k">PIPEDA</td><td class="s">Electronic personal information — consent, purpose limitation, safeguards.</td><td>Explicit, granular, purpose-bound consent; <strong>data minimization</strong>; on-device processing where feasible; data is never sold or used for ads.</td></tr>
+        <tr><td class="k">Québec Law 25 · provincial privacy</td><td class="s">Enhanced consent, privacy-by-default, portability &amp; deletion.</td><td><strong>Privacy-by-default</strong> settings out of the box; one-tap data export and account deletion.</td></tr>
+        <tr><td class="k">Advice boundary</td><td class="s">Financial / investment advice requires registration (securities &amp; advisory law).</td><td>finboard <strong>reflects patterns, it doesn't recommend products</strong> — insight framed as self-understanding, never as regulated advice.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">Strategic posture</div>
+    <div class="callout-text">Stay a <em>mirror</em>, not a bank. By never holding funds and never giving regulated advice, finboard sits inside <em>consumer-data and privacy law</em> — not inside the far heavier prudential and advisory regimes.</div>
+    <div class="callout-attr">Electronic financial information is treated as the regulated asset it is: consented, minimized, and revocable.</div>
+  </div>
+
+  <p class="section-note" style="margin-top:clamp(48px,6vw,88px);"><strong>Accessibility — banking-grade, barrier-free.</strong> A finance app that excludes people is a failed finance app. finboard targets the standards Canada's banks are held to, and treats emotional accessibility as first-class.</p>
+
+  <div class="signals-grid">
+    <div class="signal">
+      <div class="signal-top"><span class="signal-tag">Accessible Canada Act · WCAG 2.1 AA</span><span class="signal-strength core">Target AA</span></div>
+      <div class="signal-title">Barrier-free to the ACA mandate.</div>
+      <div class="signal-body">Conformance targeted at <em>WCAG 2.1 Level AA</em> across the app, in line with the Accessible Canada Act's barrier-free direction — colour-independent status, 4.5:1 text contrast, focus order, and labelled controls.</div>
+    </div>
+    <div class="signal">
+      <div class="signal-top"><span class="signal-tag">iOS accessibility</span><span class="signal-strength strong">Native</span></div>
+      <div class="signal-title">VoiceOver, Dynamic Type, Reduce Motion.</div>
+      <div class="signal-body">Every surface — Home, widgets, Live Activity — carries VoiceOver labels, scales with Dynamic Type, honours Reduce Motion, and keeps tap targets ≥ 44pt, per Apple's Human Interface Guidelines.</div>
+    </div>
+    <div class="signal">
+      <div class="signal-top"><span class="signal-tag">Cognitive &amp; anxiety load</span><span class="signal-strength strong">By design</span></div>
+      <div class="signal-title">No guilt is an accessibility decision.</div>
+      <div class="signal-body">The no-red-bar, no-shame framing (P6) isn't just tone — it lowers the cognitive and emotional load that pushes anxious users (Persona B · Chloé) to disengage. Emotional accessibility is treated as real accessibility.</div>
+    </div>
+    <div class="signal">
+      <div class="signal-top"><span class="signal-tag">Banking-sector alignment</span><span class="signal-strength support">Sector</span></div>
+      <div class="signal-title">Held to the banks' own standards.</div>
+      <div class="signal-body">Meets the accessibility commitments Canada's major banks publish — RBC, TD, BMO, Scotiabank — and the EN 301 549 / CSA-style expectations their apps are measured against.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7 · SUCCESS METRICS ============ -->
+<section class="tt-section wrap">
+  <div class="section-head">
+    <div class="section-label">07 · Success metrics</div>
     <h2 class="section-title">North Star &amp; guardrails</h2>
     <p class="section-sub">Opens don't count. The metric that matters is whether people actually <em>explore</em>.</p>
   </div>
@@ -1090,10 +1155,10 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
 </section>
 
-<!-- ============ 7 · SOURCES ============ -->
+<!-- ============ 8 · SOURCES ============ -->
 <section class="tt-section wrap">
   <div class="section-head">
-    <div class="section-label">07 · Sources</div>
+    <div class="section-label">08 · Sources</div>
     <h2 class="section-title">Verified, current references</h2>
   </div>
 
@@ -1126,6 +1191,15 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       <div class="src-item"><b>YouGov</b> — What Americans think about saving, budgeting, debt (2025).</div>
       <div class="src-item"><b>The Harris Poll for Cash App</b> — Cash Is Cringe (2025): awareness vs perception gap.</div>
       <div class="src-item"><b>Intuit</b> — Beyond the Budget (2026.01): 58% treat money management as self-care.</div>
+    </div>
+    <div class="src-group">
+      <div class="src-group-label">Regulatory &amp; accessibility frameworks</div>
+      <div class="src-item"><b>OSFI</b> — Office of the Superintendent of Financial Institutions: federal bank oversight &amp; technology/data-security guidance.</div>
+      <div class="src-item"><b>FCAC</b> — Financial Consumer Agency of Canada: Consumer-Driven Banking (open-banking) framework &amp; consumer protection.</div>
+      <div class="src-item"><b>PIPEDA</b> — Personal Information Protection and Electronic Documents Act: consent, purpose limitation, safeguards.</div>
+      <div class="src-item"><b>Québec Law 25</b> — Act to modernize legislative provisions respecting the protection of personal information.</div>
+      <div class="src-item"><b>Accessible Canada Act</b> (2019) &amp; <b>WCAG 2.1 AA</b> (W3C); <b>EN 301 549</b> — accessibility conformance targets.</div>
+      <div class="src-item"><b>Apple</b> — Human Interface Guidelines: Accessibility (VoiceOver, Dynamic Type, contrast, Reduce Motion).</div>
     </div>
   </div>
 
