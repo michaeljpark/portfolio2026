@@ -3,20 +3,21 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>finboard — Michael Joongmin Park</title>
+<title>finboard — Intuitive Banking App UX — Michael Joongmin Park</title>
 <link rel="icon" type="image/svg+xml" href="./mkpk.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --bg:#f5f5f3; --ink:#0a0a0a; --muted:#767676; --line:#e0e0de;
-    --accent:#0FB884; --accent-soft:#BEEEDB;
+    --bg:#f4f4f2; --ink:#0a0a0a; --muted:#6a6a6a; --line:#dcdcda;
+    --accent:#0FB884; --accent-ink:#0a7a58; --accent-soft:#BEEEDB;
     --max:1320px; --pad:clamp(20px,4vw,56px);
     --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"JetBrains Mono","Roboto Mono",Menlo,Consolas,monospace;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
-  html,body{ background:var(--bg); color:var(--ink); }
+  html,body{ background:var(--bg); color:var(--ink); scroll-behavior:smooth; }
   body{
     font-family:var(--font); font-size:14px; line-height:1.5; font-weight:400;
     letter-spacing:-0.05em; -webkit-font-smoothing:antialiased;
@@ -24,12 +25,13 @@
   }
   a{ color:inherit; text-decoration:none; }
   img{ display:block; max-width:100%; }
-  ::selection{ background:var(--ink); color:var(--bg); }
+  ::selection{ background:var(--accent); color:#fff; }
   .wrap{ max-width:var(--max); margin:0 auto; padding-left:var(--pad); padding-right:var(--pad); }
 
+  /* NAV */
   nav.top{
     position:sticky; top:0; z-index:50;
-    background:color-mix(in srgb, var(--bg) 92%, transparent);
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
     backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   }
   .nav-inner{
@@ -41,168 +43,269 @@
   .nav-links a{ color:var(--muted); transition:color .2s; }
   .nav-links a:hover{ color:var(--ink); }
 
-  header.hero{
-    padding:64px var(--pad) 64px;
-    border-bottom:1px solid var(--line);
-  }
-  .hero-back{ font-size:13px; color:var(--muted); margin-bottom:32px; }
+  /* HERO */
+  header.hero{ padding:64px var(--pad) 56px; }
+  .hero-back{ font-size:13px; color:var(--muted); margin-bottom:32px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
   .hero-back a:hover{ color:var(--ink); }
-  .hero-greeting{ font-size:17px; color:var(--muted); margin-bottom:6px; }
-  .hero-name{
-    font-weight:500; font-size:clamp(28px,4.5vw,64px);
-    line-height:1.05; letter-spacing:-0.05em;
-  }
-  .hero-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }
+  .hero-greeting{ font-size:15px; color:var(--muted); margin-bottom:8px; letter-spacing:-0.02em; }
+  .hero-name{ font-weight:500; font-size:clamp(30px,5vw,68px); line-height:1.02; letter-spacing:-0.05em; }
+  .hero-name .rd{ color:var(--muted); }
+  .hero-tagline{ font-size:clamp(15px,1.3vw,18px); color:var(--ink); margin-top:18px; line-height:1.5; max-width:44ch; }
   .hero-row{ margin-top:36px; padding-top:24px; border-top:1px solid var(--line); }
-  .hero-side{
-    display:flex; flex-direction:row; justify-content:space-between;
-    flex-wrap:wrap; font-size:13px; gap:16px;
-  }
+  .hero-side{ display:flex; flex-direction:row; justify-content:space-between; flex-wrap:wrap; font-size:13px; gap:16px; }
   .hero-side .pair{ display:flex; flex-direction:column; gap:2px; }
   .hero-side dt{ color:var(--muted); }
-  .view-link{ border-bottom:1px solid var(--ink); transition:opacity .2s; }
-  .view-link:hover{ opacity:0.6; }
   .status-live{ display:inline-flex; align-items:center; gap:7px; }
   .status-dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); flex-shrink:0; }
-  .built-with{
-    display:inline-flex; align-items:center; gap:7px;
-    color:var(--ink);
-  }
-  .built-with a{ border-bottom:1px solid currentColor; }
-  .built-with a:hover{ color:var(--accent); }
 
-  .project-section{ padding-top:48px; padding-bottom:48px; }
+  /* Problem / Opportunity hero cards */
+  .hero-frames{ display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:36px; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--line); }
+  .hero-frame{ padding:clamp(22px,2.6vw,36px); background:var(--bg); display:flex; flex-direction:column; gap:12px; }
+  .hero-frame.opp{ background:var(--ink); color:#fff; }
+  .hero-frame-label{ font-size:11px; letter-spacing:0.06em; color:var(--muted); text-transform:uppercase; }
+  .hero-frame.opp .hero-frame-label{ color:var(--accent); }
+  .hero-frame-strong{ font-size:11px; letter-spacing:0.04em; color:var(--accent-ink); }
+  .hero-frame-body{ font-size:clamp(14px,1.2vw,16px); line-height:1.55; letter-spacing:-0.02em; }
+  .hero-frame.opp .hero-frame-body{ color:rgba(255,255,255,.72); }
+  .hero-frame.opp em{ color:#fff; font-style:normal; }
+  @media(max-width:640px){ .hero-frames{ grid-template-columns:1fr; } }
 
-  .ph-img{
-    width:100%; border-radius:20px;
-    background:#e8e8e6;
-    display:flex; align-items:center; justify-content:center;
-    color:#b0b0ae; font-size:11px; letter-spacing:0;
-    min-height:360px;
-  }
-  .ph-text-block{ max-width:680px; }
-  .ph-label{
-    font-size:12px; color:var(--muted); letter-spacing:0.04em;
-    text-transform:uppercase; margin-bottom:16px;
-  }
-  .ph-heading{
-    font-size:clamp(24px,3vw,40px); font-weight:400;
-    letter-spacing:-0.05em; line-height:1.15;
-    margin-bottom:20px;
-  }
-  .ph-body{
-    font-size:15px; color:var(--muted); line-height:1.7;
-    letter-spacing:-0.02em;
-  }
+  /* PROJECT STAGE */
+  .project-section{ padding-top:8px; padding-bottom:8px; }
+  .project-stage{ width:100%; aspect-ratio:16/9; background:#e0e0e0; border-radius:20px; overflow:hidden; }
+  .project-stage video,
+  .project-stage img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-  .two-col{
-    display:grid; grid-template-columns:1fr 1fr;
-    gap:clamp(24px,3vw,56px); align-items:start;
-  }
-  @media(max-width:760px){ .two-col{ grid-template-columns:1fr; } }
+  /* SECTION COMMON */
+  .tt-section{ padding-top:clamp(64px,8vw,128px); padding-bottom:clamp(64px,8vw,128px); border-top:1px solid var(--line); }
+  .section-label{ font-size:12px; color:var(--accent-ink); margin-bottom:12px; letter-spacing:0.04em; text-transform:uppercase; }
+  .section-title{ font-size:clamp(26px,3.4vw,50px); font-weight:500; letter-spacing:-0.05em; line-height:1.05; margin-bottom:clamp(14px,1.5vw,22px); }
+  .section-sub{ font-size:clamp(14px,1vw,17px); color:var(--muted); line-height:1.6; letter-spacing:-0.02em; max-width:720px; }
+  .section-head{ margin-bottom:clamp(40px,5vw,72px); }
+  .section-note{ font-size:13px; color:var(--muted); line-height:1.7; letter-spacing:-0.02em; margin-top:28px; max-width:820px; }
+  .section-note + .section-note{ margin-top:12px; }
+  .section-note strong{ color:var(--ink); font-weight:500; }
 
-  .feat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:2px; }
-  @media(max-width:760px){ .feat-grid{ grid-template-columns:1fr; } }
-  .feat-item{
-    padding:32px 28px; background:var(--accent-soft);
-    display:flex; flex-direction:column; gap:12px;
-  }
-  .feat-item:first-child{ border-radius:20px 0 0 20px; }
-  .feat-item:last-child{ border-radius:0 20px 20px 0; }
-  @media(max-width:760px){
-    .feat-item{ border-radius:0 !important; }
-    .feat-item:first-child{ border-radius:20px 20px 0 0 !important; }
-    .feat-item:last-child{ border-radius:0 0 20px 20px !important; }
-  }
-  .feat-num{ font-size:11px; color:var(--muted); letter-spacing:0.04em; text-transform:uppercase; }
-  .feat-title{ font-size:clamp(18px,1.8vw,24px); font-weight:400; letter-spacing:-0.04em; line-height:1.2; }
-  .feat-desc{ font-size:13px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; }
+  /* DOC STRUCTURE — numbered list */
+  .toc-list{ display:flex; flex-direction:column; }
+  .toc-item{ padding:clamp(20px,2.4vw,32px) 0; border-top:1px solid var(--line); display:grid; grid-template-columns:56px 1fr; gap:28px; align-items:baseline; }
+  .toc-item:last-child{ border-bottom:1px solid var(--line); }
+  .toc-num{ font-size:11px; color:var(--muted); letter-spacing:0.04em; }
+  .toc-text{ font-size:clamp(16px,1.6vw,24px); font-weight:400; line-height:1.3; letter-spacing:-0.03em; }
+  .toc-text span{ display:block; font-size:13px; color:var(--muted); margin-top:6px; letter-spacing:-0.02em; }
+  @media(max-width:640px){ .toc-item{ grid-template-columns:1fr; gap:8px; } }
 
-  .kpi-section{ padding-top:120px; padding-bottom:120px; }
-  .kpi-head{
-    display:flex; justify-content:space-between; align-items:flex-start;
-    margin-bottom:48px; gap:24px;
-  }
-  .kpi-title-wrap{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
-  .kpi-title{ font-size:clamp(32px,4vw,56px); font-weight:400; letter-spacing:-0.05em; line-height:1; }
-  .kpi-title-meta{ font-size:clamp(11px,0.9vw,14px); color:var(--muted); letter-spacing:-0.03em; }
-  .kpi-grid{ display:flex; justify-content:space-between; align-items:flex-start; gap:24px; flex-wrap:wrap; }
-  .kpi-item{ display:flex; flex-direction:column; gap:8px; }
-  .kpi-num{
-    font-size:clamp(28px,3.2vw,44px); font-weight:400;
-    letter-spacing:-0.05em; line-height:1; color:var(--ink);
-    display:flex; align-items:baseline; gap:6px;
-  }
-  .kpi-num .unit{ font-size:clamp(11px,0.9vw,14px); color:var(--muted); font-weight:400; letter-spacing:-0.03em; }
-  .kpi-label{ font-size:clamp(12px,0.95vw,14px); color:var(--muted); line-height:1.4; letter-spacing:-0.03em; max-width:22ch; }
+  /* TREND STATS */
+  .trend-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(20px,2.5vw,40px); margin-top:clamp(36px,4vw,64px); }
+  .trend-stat{ display:flex; flex-direction:column; gap:8px; }
+  .trend-num{ font-size:clamp(34px,4.6vw,68px); font-weight:500; letter-spacing:-0.05em; line-height:1; }
+  .trend-num .u{ font-size:0.42em; color:var(--muted); letter-spacing:-0.02em; margin-left:2px; }
+  .trend-desc{ font-size:13px; color:var(--muted); line-height:1.5; letter-spacing:-0.02em; }
+  .trend-source{ font-size:11px; color:var(--muted); opacity:0.55; margin-top:2px; }
+  @media(max-width:768px){ .trend-stats{ grid-template-columns:1fr 1fr; gap:28px; } }
 
-  .divider-section{ padding-top:96px; padding-bottom:96px; }
-  .divider-text{
-    font-size:clamp(28px,4vw,60px); font-weight:400;
-    letter-spacing:-0.05em; line-height:1.2; max-width:900px;
+  /* DATA TABLE */
+  .dtable-wrap{ overflow-x:auto; margin-top:clamp(36px,4vw,64px); }
+  .dtable{ width:100%; border-collapse:collapse; min-width:560px; }
+  .dtable th{ text-align:left; font-size:11px; font-weight:500; color:var(--muted); letter-spacing:0.04em; text-transform:uppercase; padding:0 24px 12px 0; border-bottom:1px solid var(--line); }
+  .dtable td{ font-size:clamp(13px,1vw,15px); padding:16px 24px 16px 0; border-bottom:1px solid var(--line); vertical-align:top; line-height:1.4; letter-spacing:-0.02em; }
+  .dtable td.k{ font-weight:500; }
+  .dtable td.v{ color:var(--ink); font-weight:500; white-space:nowrap; }
+  .dtable td.s{ color:var(--muted); font-size:12px; }
+  .dtable tr:last-child td{ border-bottom:0; }
+  .dtable td.map{ color:var(--accent-ink); font-size:12px; letter-spacing:0.02em; white-space:nowrap; }
+
+  /* SIGNALS (insights) */
+  .signals-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:clamp(36px,4vw,64px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
+  .signal{ padding:clamp(24px,3vw,40px); background:var(--bg); display:flex; flex-direction:column; gap:14px; }
+  .signal-top{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .signal-tag{ font-size:11px; color:var(--muted); letter-spacing:0.03em; }
+  .signal-strength{ display:inline-block; padding:3px 9px; border-radius:100px; font-size:10px; letter-spacing:0.03em; font-weight:600; text-transform:uppercase; }
+  .signal-strength.strong{ background:var(--ink); color:var(--accent); }
+  .signal-strength.core{ background:var(--accent); color:#04231a; }
+  .signal-strength.support{ background:var(--line); color:var(--muted); }
+  .signal-title{ font-size:clamp(16px,1.5vw,22px); font-weight:500; letter-spacing:-0.04em; line-height:1.2; }
+  .signal-body{ font-size:13px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; }
+  .signal-body cite{ font-style:normal; color:var(--accent-ink); font-size:12px; }
+  @media(max-width:720px){ .signals-grid{ grid-template-columns:1fr; } }
+
+  /* DARK CALLOUT */
+  .callout{ margin-top:clamp(36px,4vw,64px); padding:clamp(30px,4vw,60px); background:var(--ink); color:#fff; border-radius:18px; }
+  .callout-label{ font-size:11px; color:var(--accent); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:18px; }
+  .callout-text{ font-size:clamp(19px,2.3vw,34px); font-weight:400; letter-spacing:-0.04em; line-height:1.32; }
+  .callout-text em{ font-style:normal; color:var(--accent); }
+  .callout-attr{ margin-top:20px; font-size:12px; color:rgba(255,255,255,.4); letter-spacing:-0.01em; }
+
+  /* MONO DIAGRAM */
+  .mono-block{ margin-top:clamp(28px,3vw,44px); }
+  .mono-h{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:6px; }
+  .mono-h-title{ font-size:clamp(16px,1.5vw,21px); font-weight:500; letter-spacing:-0.03em; }
+  .mono-h-goal{ font-size:12px; color:var(--accent-ink); letter-spacing:-0.01em; }
+  .mono-note{ font-size:13px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; margin-bottom:18px; max-width:760px; }
+  .mono-diagram{
+    background:var(--ink); color:rgba(255,255,255,.82); border-radius:14px;
+    padding:clamp(20px,2.6vw,34px); overflow-x:auto;
+    font-family:var(--mono); font-size:clamp(11px,1vw,13.5px); line-height:1.7;
+    letter-spacing:0; white-space:pre; -webkit-font-smoothing:auto;
   }
-  .divider-text em{ color:var(--muted); font-style:normal; }
+  .mono-diagram b{ color:var(--accent); font-weight:600; }
+  .mono-diagram .dim{ color:rgba(255,255,255,.4); }
+
+  /* ENTITY-STYLE DIAGRAM (SVG node + connector) */
+  .dgm-canvas{ background:#0d0d0d; border-radius:14px; padding:clamp(18px,2.4vw,32px); overflow-x:auto; }
+  .dgm-canvas svg{ width:100%; height:auto; display:block; min-width:640px; }
+  .dgm-node rect{ fill:#161616; stroke:rgba(255,255,255,.16); stroke-width:1; }
+  .dgm-node .np{ fill:#fff; font-weight:500; letter-spacing:-0.02em; }
+  .dgm-node .ns{ fill:rgba(255,255,255,.45); letter-spacing:-0.01em; }
+  .dgm-node .nrule{ stroke:rgba(255,255,255,.14); stroke-width:.8; }
+  .dgm-node.key rect{ fill:var(--accent); stroke:none; }
+  .dgm-node.key .np{ fill:#04231a; }
+  .dgm-node.key .ns{ fill:rgba(4,35,26,.7); }
+  .dgm-node.hub rect{ fill:#1c1c1c; stroke:rgba(15,184,132,.55); stroke-width:1.4; }
+  .dgm-node.ghost rect{ fill:none; stroke:rgba(255,255,255,.22); stroke-dasharray:4 4; }
+  .dgm-node.ghost .np{ fill:rgba(255,255,255,.6); font-weight:400; }
+  .dgm-link{ fill:none; stroke:rgba(255,255,255,.3); stroke-width:1.4; }
+  .dgm-link.dash{ stroke-dasharray:5 5; stroke:rgba(255,255,255,.22); }
+  .dgm-link.mint{ stroke:var(--accent); stroke-width:1.6; }
+  .dgm-lbl{ fill:rgba(255,255,255,.5); font-size:11px; letter-spacing:-0.01em; }
+  .dgm-lbl.mint{ fill:var(--accent); }
+  .dgm-zone{ fill:rgba(255,255,255,.025); stroke:rgba(255,255,255,.08); stroke-width:1; }
+  .dgm-zone-lbl{ fill:var(--accent); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; }
+  .dgm-attr{ fill:rgba(255,255,255,.72); letter-spacing:-0.01em; }
+  .dgm-attr .k{ fill:var(--accent); }
+  .dgm-attr .d{ fill:rgba(255,255,255,.38); }
+
+  /* METRICS */
+  .metric-cols{ display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:clamp(36px,4vw,64px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
+  .metric-cell{ padding:clamp(24px,3vw,40px); background:var(--bg); }
+  .metric-cell-label{ font-size:11px; color:var(--muted); letter-spacing:0.04em; text-transform:uppercase; margin-bottom:18px; }
+  .metric-item{ padding:14px 0; border-top:1px solid var(--line); }
+  .metric-item:first-of-type{ border-top:0; padding-top:0; }
+  .metric-name{ font-size:14px; font-weight:500; letter-spacing:-0.03em; }
+  .metric-desc{ font-size:12px; color:var(--muted); line-height:1.55; margin-top:4px; letter-spacing:-0.02em; }
+  @media(max-width:720px){ .metric-cols{ grid-template-columns:1fr; } }
+
+  /* SOURCES */
+  .src-groups{ display:grid; grid-template-columns:repeat(2,1fr); gap:1px; margin-top:clamp(36px,4vw,64px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
+  .src-group{ padding:clamp(22px,2.6vw,36px); background:var(--bg); }
+  .src-group-label{ font-size:11px; color:var(--accent-ink); letter-spacing:0.04em; text-transform:uppercase; margin-bottom:18px; }
+  .src-item{ font-size:12.5px; color:var(--muted); line-height:1.55; letter-spacing:-0.02em; padding:10px 0; border-top:1px solid var(--line); }
+  .src-item:first-of-type{ border-top:0; }
+  .src-item b{ color:var(--ink); font-weight:500; }
+  @media(max-width:720px){ .src-groups{ grid-template-columns:1fr; } }
+
+  /* CONCLUSION */
+  .conclusion-block{ margin-top:clamp(40px,5vw,72px); padding:clamp(36px,5vw,72px); border:1px solid var(--line); border-radius:16px; }
+  .conclusion-quote{ font-size:clamp(20px,2.5vw,36px); font-weight:400; letter-spacing:-0.04em; line-height:1.35; max-width:900px; }
+  .conclusion-quote em{ font-style:normal; color:var(--accent-ink); }
+  .conclusion-attr{ margin-top:24px; font-size:13px; color:var(--muted); letter-spacing:-0.02em; }
+
+  .disclaimer{ font-size:11.5px; color:var(--muted); line-height:1.6; letter-spacing:-0.01em; max-width:900px; margin-top:clamp(40px,5vw,64px); opacity:0.8; }
+
+  /* ============ JOURNEY MAP (dark, tabbed) ============ */
+  .jm-section{ background:#0d0d0d; color:#fff; padding:clamp(64px,8vw,128px) 0; }
+  .jm-head{ margin-bottom:clamp(28px,3vw,44px); }
+  .jm-section .section-label{ color:var(--accent); }
+  .jm-section .section-title{ color:#fff; }
+  .jm-sub{ margin-top:14px; max-width:800px; color:rgba(255,255,255,.5); font-size:clamp(14px,1.05vw,17px); line-height:1.6; letter-spacing:-0.01em; }
+  .jm-tabs{ display:flex; flex-wrap:wrap; gap:0; margin:clamp(28px,3vw,48px) 0 clamp(36px,4vw,56px); border-top:1px solid rgba(255,255,255,.12); border-bottom:1px solid rgba(255,255,255,.12); }
+  .jm-tab{ flex:1 1 0; min-width:0; background:transparent; border:0; border-left:1px solid rgba(255,255,255,.12); color:rgba(255,255,255,.4); text-align:left; padding:22px clamp(16px,1.8vw,32px); font-family:inherit; font-weight:400; cursor:pointer; letter-spacing:-0.02em; position:relative; transition:color .2s ease, background-color .2s ease; }
+  .jm-tab::after{ content:''; position:absolute; bottom:-1px; left:0; right:0; height:2px; background:var(--accent); opacity:0; transition:opacity .2s ease; }
+  .jm-tab:first-child{ border-left:0; }
+  .jm-tab:hover{ color:rgba(255,255,255,.75); }
+  .jm-tab.is-active{ color:#fff; }
+  .jm-tab.is-active::after{ opacity:1; }
+  .jm-tab-num{ display:block; font-size:11px; letter-spacing:.02em; color:rgba(255,255,255,.3); margin-bottom:8px; }
+  .jm-tab.is-active .jm-tab-num{ color:var(--accent); }
+  .jm-tab-name{ display:block; font-size:clamp(15px,1.3vw,20px); font-weight:400; letter-spacing:-0.03em; }
+  .jm-tab-role{ display:block; margin-top:5px; font-size:12px; color:rgba(255,255,255,.35); letter-spacing:.01em; }
+  .jm-tab.is-active .jm-tab-role{ color:rgba(255,255,255,.5); }
+
+  .jm-panel{ display:none; opacity:0; transition:opacity .25s ease; }
+  .jm-panel.is-active{ display:block; opacity:1; }
+
+  .jm-persona-head{ display:flex; align-items:baseline; justify-content:space-between; gap:24px; margin-bottom:clamp(18px,2vw,28px); flex-wrap:wrap; }
+  .jm-persona-title{ font-size:clamp(20px,2.2vw,32px); font-weight:400; letter-spacing:-0.04em; line-height:1.15; max-width:700px; }
+  .jm-persona-meta{ font-size:13px; color:rgba(255,255,255,.35); letter-spacing:-0.01em; white-space:nowrap; }
+  .jm-persona-desc{ color:rgba(255,255,255,.5); font-size:clamp(13px,0.95vw,15px); line-height:1.6; max-width:760px; margin-bottom:clamp(28px,3vw,44px); }
+
+  /* persona attribute strip */
+  .jm-attrs{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; margin-bottom:clamp(30px,3.5vw,50px); border:1px solid rgba(255,255,255,.1); border-radius:10px; overflow:hidden; background:rgba(255,255,255,.1); }
+  .jm-attr{ background:#0d0d0d; padding:18px clamp(14px,1.6vw,24px); }
+  .jm-attr-k{ font-size:10.5px; color:rgba(255,255,255,.35); letter-spacing:0.04em; text-transform:uppercase; margin-bottom:7px; }
+  .jm-attr-v{ font-size:12.5px; color:rgba(255,255,255,.82); line-height:1.5; letter-spacing:-0.01em; }
+  @media(max-width:880px){ .jm-attrs{ grid-template-columns:1fr 1fr; } }
+
+  /* jtbd block */
+  .jm-jtbd{ margin-bottom:clamp(30px,3.5vw,50px); padding:clamp(22px,2.6vw,36px); border:1px solid rgba(255,255,255,.12); border-radius:12px; }
+  .jm-jtbd-label{ font-size:11px; color:var(--accent); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:14px; }
+  .jm-jtbd-text{ font-size:clamp(15px,1.5vw,21px); line-height:1.5; letter-spacing:-0.03em; color:rgba(255,255,255,.92); }
+  .jm-jtbd-text b{ color:var(--accent); font-weight:500; }
+
+  .jm-grid{ display:grid; grid-template-columns:150px repeat(5,1fr); border-top:1px solid rgba(255,255,255,.12); }
+  .jm-grid > *{ border-bottom:1px solid rgba(255,255,255,.08); padding:15px clamp(12px,1.2vw,20px); font-weight:400; }
+  .jm-stage-h{ border-left:1px solid rgba(255,255,255,.08); font-size:clamp(12px,1vw,15px); font-weight:500; color:#fff; letter-spacing:-0.03em; padding-top:20px; padding-bottom:20px; background:rgba(255,255,255,.03); }
+  .jm-row-label{ font-size:12px; color:rgba(255,255,255,.4); letter-spacing:-0.01em; padding-top:18px; border-right:1px solid rgba(255,255,255,.08); }
+  .jm-row-label.dim{ color:rgba(255,255,255,.24); }
+  .jm-cell{ border-left:1px solid rgba(255,255,255,.08); font-size:clamp(11.5px,0.86vw,13.5px); line-height:1.55; color:rgba(255,255,255,.72); letter-spacing:-0.01em; }
+  .jm-cell.feel{ color:#fff; font-size:clamp(12px,1vw,15px); }
+  .jm-cell.think{ color:rgba(255,255,255,.62); font-style:italic; }
+  .jm-cell.ctx{ color:rgba(255,255,255,.32); font-size:11.5px; }
+  .jm-cell.opp{ color:var(--accent); }
+  .jm-stage-corner{ border-left:0; border-right:0; }
+
+  .jm-arc{ margin-top:clamp(36px,4vw,60px); padding-top:clamp(22px,2.4vw,34px); border-top:1px solid rgba(255,255,255,.12); }
+  .jm-arc-head{ display:flex; justify-content:space-between; align-items:center; gap:24px; margin-bottom:20px; flex-wrap:wrap; }
+  .jm-arc-title{ font-size:13px; letter-spacing:-0.02em; color:rgba(255,255,255,.45); }
+  .jm-arc-legend{ display:flex; gap:20px; font-size:12px; color:rgba(255,255,255,.35); letter-spacing:-0.01em; }
+  .jm-arc-legend i{ display:inline-block; width:24px; height:2px; vertical-align:middle; margin-right:7px; background:var(--accent); }
+  .jm-arc-legend .proj i{ height:0; background:transparent; border-top:1px dashed rgba(255,255,255,.5); }
+  .jm-arc-svg{ width:100%; height:auto; display:block; aspect-ratio:1400/360; border:1px solid rgba(255,255,255,.07); border-radius:6px; }
+
+  .jm-key{ margin-top:clamp(24px,2.6vw,38px); padding:clamp(20px,2.4vw,32px); background:rgba(255,255,255,.04); border-left:2px solid var(--accent); border-radius:0 10px 10px 0; }
+  .jm-key-label{ font-size:11px; color:var(--accent); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:10px; }
+  .jm-key-text{ font-size:clamp(14px,1.2vw,17px); line-height:1.55; color:rgba(255,255,255,.85); letter-spacing:-0.02em; }
+  .jm-key-text b{ color:#fff; font-weight:500; }
+
+  /* persona compare table inside jm section */
+  .jm-compare-wrap{ overflow-x:auto; margin-top:clamp(44px,5vw,72px); padding-top:clamp(36px,4vw,56px); border-top:1px solid rgba(255,255,255,.12); }
+  .jm-compare{ width:100%; border-collapse:collapse; min-width:640px; }
+  .jm-compare th{ text-align:left; font-size:12px; font-weight:500; color:#fff; letter-spacing:-0.02em; padding:0 20px 16px 0; border-bottom:1px solid rgba(255,255,255,.15); }
+  .jm-compare th.k{ color:rgba(255,255,255,.4); font-weight:400; font-size:11px; text-transform:uppercase; letter-spacing:0.03em; }
+  .jm-compare td{ font-size:13px; padding:15px 20px 15px 0; border-bottom:1px solid rgba(255,255,255,.08); vertical-align:top; line-height:1.45; letter-spacing:-0.02em; color:rgba(255,255,255,.75); }
+  .jm-compare td.k{ color:rgba(255,255,255,.4); font-size:11.5px; letter-spacing:0.02em; text-transform:uppercase; }
+  .jm-compare tr:last-child td{ border-bottom:0; }
 
   @media(max-width:880px){
-    .hero-name{ font-size:clamp(24px,7vw,48px); }
-    .kpi-section{ padding-top:80px; padding-bottom:80px; }
-    .kpi-head{ margin-bottom:40px; }
-    .kpi-grid{ display:grid; grid-template-columns:1fr 1fr; gap:32px 24px; justify-content:initial; }
-    .kpi-item:nth-child(2), .kpi-item:nth-child(4){ align-items:flex-end; text-align:right; }
-    .divider-section{ padding-top:64px; padding-bottom:64px; }
+    .jm-tabs{ flex-direction:column; }
+    .jm-tab{ border-left:0; border-top:1px solid rgba(255,255,255,.12); }
+    .jm-tab:first-child{ border-top:0; }
+    .jm-grid{ grid-template-columns:1fr; border-top:0; }
+    .jm-grid > *{ border-left:0 !important; padding:13px 0; }
+    .jm-stage-corner{ display:none; }
+    .jm-stage-h{ padding-top:26px; border-top:1px dashed rgba(255,255,255,.24); font-size:17px; }
+    .jm-row-label{ padding-top:14px; padding-bottom:0; border-bottom:0; }
+    .jm-cell{ padding-top:5px; }
+    .jm-arc-svg{ aspect-ratio:1400/560; }
   }
 
-  /* ===== PHASE COLLAPSIBLE ===== */
-  .phase-toggle{
-    display:block; width:100%; border:none; cursor:pointer;
-    font-family:var(--font); color:var(--ink);
-    padding:2px 0 clamp(20px,3vw,32px);
-    position:sticky; top:calc(var(--nav-h,57px) - 2px); z-index:40;
-    background:var(--bg);
-    background:color-mix(in srgb, var(--bg) 94%, transparent);
-    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
-  }
-  .phase-toggle-inner{
-    display:flex; align-items:center; justify-content:space-between;
-    gap:24px; max-width:var(--max); margin:0 auto; text-align:left;
-    padding-left:var(--pad); padding-right:var(--pad);
-  }
-  .phase-num{ font-size:11px; color:var(--muted); letter-spacing:0.07em; margin-bottom:4px; }
-  .phase-name{
-    font-size:clamp(22px,3vw,42px); font-weight:500;
-    letter-spacing:-0.04em; line-height:1.1;
-    transition:opacity .2s; margin-bottom:4px;
-  }
-  .phase-sub{ font-size:13px; color:var(--muted); letter-spacing:-0.02em; line-height:1.4; }
-  .phase-toggle:hover .phase-name{ opacity:0.6; }
-  .phase-arrow{ flex-shrink:0; color:var(--muted); transition:transform 0.38s ease; }
-  .phase-block[data-open] .phase-arrow{ transform:rotate(180deg); }
-  .phase-body{ display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.45s ease; }
-  .phase-block[data-open] .phase-body{ grid-template-rows:1fr; }
-  .phase-body-inner{ overflow:hidden; }
-  .phase-media-wrap{ max-width:var(--max); margin:0 auto; padding:clamp(28px,4vw,48px) var(--pad) clamp(40px,6vw,80px); cursor:pointer; }
-  .phase-media{
-    width:100%; height:0; padding-top:56.25%;
-    border-radius:16px; overflow:hidden;
-    background:#e8e8e6; position:relative;
-    transition:padding-top .45s ease;
-  }
-  .phase-block[data-open] .phase-media{ padding-top:28.125%; }
-  .phase-media > *{
-    position:absolute; top:50%; left:0;
-    width:100%; height:auto !important; aspect-ratio:16/9;
-    transform:translateY(-50%);
-  }
-  .phase-media > span{
-    inset:0; top:0; width:100%; height:100% !important; aspect-ratio:auto; transform:none;
-    display:flex; align-items:center; justify-content:center;
-    font-size:11px; color:var(--muted);
-  }
+  /* VIDEO controls off */
+  video{ -webkit-appearance:none; appearance:none; }
+  video::-webkit-media-controls,
+  video::-webkit-media-controls-enclosure,
+  video::-webkit-media-controls-panel,
+  video::-webkit-media-controls-overlay-play-button,
+  video::-webkit-media-controls-play-button,
+  video::-webkit-media-controls-start-playback-button{ display:none !important; opacity:0 !important; }
+
+  @media(max-width:880px){ .hero-name{ font-size:clamp(26px,7vw,50px); } }
+
+  /* part nav link */
+  .pt-nav-link{ display:inline-flex; align-items:center; gap:8px; font-size:13px; letter-spacing:-0.02em; color:var(--ink); border-bottom:1px solid currentColor; padding-bottom:2px; transition:opacity .2s; }
+  .pt-nav-link:hover{ opacity:.45; }
 </style>
 <style>
-/* ===== iOS design language (SF Pro Display + antialiasing + accent) ===== */
 html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-::selection{ background:var(--accent); color:#ffffff; }
 </style>
 </head>
 <body>
@@ -219,227 +322,864 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
 </nav>
 
-<header class="hero wrap">
-  <div class="hero-back"><a href="./index.html">← Back to Work</a></div>
-  <div class="hero-greeting">Product Design · Personal Finance</div>
-  <h1 class="hero-name">finboard</h1>
-  <p class="hero-tagline">A live personal-finance dashboard — every account, every transaction,<br>one glance from the lock screen.</p>
+<header class="hero wrap" id="top">
+  <div class="hero-back">
+    <a href="./index.html">← Back to Work</a>
+    <a href="#cases" class="pt-nav-link">Jump to Case Studies ↓</a>
+  </div>
+  <div class="hero-greeting">Native App Design · Intuitive Banking App UX</div>
+  <h1 class="hero-name">finboard <span class="rd">— Intuitive Banking App UX</span></h1>
+  <p class="hero-tagline">An iOS-native app that lets you explore your own spending habits — intuitively and fast.</p>
+
+  <div class="hero-frames">
+    <div class="hero-frame">
+      <div class="hero-frame-label">Problem Statement</div>
+      <div class="hero-frame-body">There is no service that lets people understand their spending habits intuitively and quickly. Today's budgeting apps are excellent at collecting data, but they never turn it into <em>self-understanding</em>.</div>
+    </div>
+    <div class="hero-frame opp">
+      <div class="hero-frame-label">Opportunity · Strong Signal</div>
+      <div class="hero-frame-body">As cashless payment becomes universal, the very <em>sensation of spending money</em> is disappearing. finboard reframes spending as something to <em>explore</em> — a guilt-free, fast, iOS-native mirror that shows you "who you are" through your own spending data.</div>
+    </div>
+  </div>
+
   <div class="hero-row">
     <dl class="hero-side">
       <div class="pair"><dt>Year</dt><dd>2026 / Jul</dd></div>
-      <div class="pair"><dt>Type</dt><dd>Product Design, Mobile App</dd></div>
-      <div class="pair"><dt>Built with</dt><dd class="built-with"><a href="./autoq.html">AutoQ</a></dd></div>
-      <div class="pair"><dt>Status</dt><dd class="status-live"><span class="status-dot"></span>Working Prototype</dd></div>
+      <div class="pair"><dt>Type</dt><dd>Native App Design, UX Research</dd></div>
+      <div class="pair"><dt>Platform</dt><dd>iOS · Widgets · Live Activity</dd></div>
+      <div class="pair"><dt>Status</dt><dd class="status-live"><span class="status-dot"></span>Research → Product Strategy</dd></div>
     </dl>
   </div>
 </header>
 
-<!-- ===== PHASE COLLAPSIBLE ===== -->
-<div class="phase-wrap">
+<section class="project-section wrap">
+  <div class="project-stage">
+    <video class="lazy-vid" data-src="./finboardprev.mp4" poster="./posters/finboardprev.jpg" muted loop playsinline preload="none"></video>
+  </div>
+</section>
 
-  <!-- Phase 01: Overview -->
-  <div class="phase-block" data-open>
-    <button class="phase-toggle" onclick="togglePhase(this)">
-      <div class="phase-toggle-inner">
-        <div>
-          <div class="phase-num">01</div>
-          <div class="phase-name">Overview</div>
-          <div class="phase-sub">One board for money that actually moves</div>
+<!-- ============ 0 · DOCUMENT STRUCTURE ============ -->
+<section class="tt-section wrap" style="border-top:0;">
+  <div class="section-head">
+    <div class="section-label">00 · How this document is built</div>
+    <h2 class="section-title">A research-to-product paper trail</h2>
+    <p class="section-sub">This document moves from market evidence to behavioral synthesis, from principles to three concrete case studies, and finally to information architecture and success metrics — each decision traceable to a source.</p>
+  </div>
+  <div class="toc-list">
+    <div class="toc-item"><div class="toc-num">01</div><div class="toc-text">Market size &amp; opportunity<span>Verified, up-to-date figures — where the value is moving.</span></div></div>
+    <div class="toc-item"><div class="toc-num">02</div><div class="toc-text">Research synthesis — why existing apps fail<span>Five core insights from behavior, behavioral economics, and churn literature.</span></div></div>
+    <div class="toc-item"><div class="toc-num">03</div><div class="toc-text">Design principles<span>Research → principle mapping.</span></div></div>
+    <div class="toc-item"><div class="toc-num">04</div><div class="toc-text">Three case studies — persona + user journey mapping<span>Three segments, three trajectories, three emotional arcs.</span></div></div>
+    <div class="toc-item"><div class="toc-num">05</div><div class="toc-text">UX flows — information architecture &amp; four core flows<span>What the product actually does, screen to screen.</span></div></div>
+    <div class="toc-item"><div class="toc-num">06</div><div class="toc-text">Success metrics<span>North Star &amp; guardrails.</span></div></div>
+    <div class="toc-item"><div class="toc-num">07</div><div class="toc-text">Sources<span>Every figure and insight, cited.</span></div></div>
+  </div>
+</section>
+
+<!-- ============ 1 · MARKET ============ -->
+<section class="tt-section wrap">
+  <div class="section-head">
+    <div class="section-label">01 · Market size &amp; opportunity</div>
+    <h2 class="section-title">The market grows — but value is moving from tracking to insight</h2>
+    <p class="section-sub">Personal finance is a large, fast-growing category. Tracking itself has become table stakes; the differentiation has shifted to interpretation and exploration.</p>
+  </div>
+
+  <div class="trend-stats">
+    <div class="trend-stat">
+      <div class="trend-num">$173.6<span class="u">B</span></div>
+      <div class="trend-desc">Projected personal-finance app market by 2035 (from $31.7B in 2025).</div>
+      <div class="trend-source">Research Nester, 2025.12</div>
+    </div>
+    <div class="trend-stat">
+      <div class="trend-num">20.8<span class="u">%</span></div>
+      <div class="trend-desc">Category CAGR through 2035 — sustained double-digit growth.</div>
+      <div class="trend-source">Research Nester, 2025.12</div>
+    </div>
+    <div class="trend-stat">
+      <div class="trend-num">40.6<span class="u">%</span></div>
+      <div class="trend-desc">Revenue share held by the "budgeting &amp; expense-tracking" segment.</div>
+      <div class="trend-source">Mordor Intelligence, 2026.01</div>
+    </div>
+    <div class="trend-stat">
+      <div class="trend-num">+42<span class="u">%</span></div>
+      <div class="trend-desc">Retention advantage of AI-recommendation apps over passive trackers.</div>
+      <div class="trend-source">CoinLaw, 2026.03</div>
+    </div>
+  </div>
+
+  <div class="dtable-wrap">
+    <table class="dtable">
+      <thead><tr><th>Item</th><th>Figure</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Personal finance app market (2025 → 2026)</td><td class="v">$31.7B → $38.2B</td><td class="s">Research Nester (2025.12)</td></tr>
+        <tr><td class="k">2035 forecast / CAGR</td><td class="v">$173.6B / 20.8%</td><td class="s">Research Nester</td></tr>
+        <tr><td class="k">"Budgeting &amp; expense-tracking" revenue share (2025)</td><td class="v">40.6%</td><td class="s">Mordor Intelligence (2026.01)</td></tr>
+        <tr><td class="k">Asia-Pacific growth (2026–)</td><td class="v">Fastest-growing region</td><td class="s">Mordor / Research Nester</td></tr>
+        <tr><td class="k">AI-recommendation retention edge</td><td class="v">+42%</td><td class="s">CoinLaw (2026.03)</td></tr>
+        <tr><td class="k">iOS preferred paid tier</td><td class="v">$99–109 / yr</td><td class="s">Luminix competitive analysis (2026.03)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="section-note"><strong>Value is shifting.</strong> The market keeps expanding, but the center of gravity is moving from the "simple tracker" toward an "AI-based financial OS / insight layer." Tracking has levelled up across the board; the differentiator is now interpretation and exploration.</p>
+  <p class="section-note"><strong>iOS is where premium works.</strong> iOS shows a higher paid-conversion rate, making a subscription/premium model viable — the rationale for a native-iOS-first strategy.</p>
+  <p class="section-note"><strong>The open axis.</strong> Competitors cluster around control (YNAB), automation (Monarch, Copilot), subscription-cutting (Rocket Money), and net-worth dashboards (Empower). The axis of "fast, intuitive exploration of one's spending habits" is comparatively empty.</p>
+</section>
+
+<!-- ============ 2 · RESEARCH SYNTHESIS ============ -->
+<section class="tt-section wrap">
+  <div class="section-head">
+    <div class="section-label">02 · Research synthesis</div>
+    <h2 class="section-title">Why budgeting apps fail</h2>
+    <p class="section-sub">These five insights come not from market reports but from user behavior, behavioral economics, and the literature on churn. finboard's reason to exist starts here.</p>
+  </div>
+
+  <div class="signals-grid">
+    <div class="signal">
+      <div class="signal-top"><span class="signal-tag">Insight 01 · Awareness ≠ action</span><span class="signal-strength strong">Strong</span></div>
+      <div class="signal-title">Tracking is passive — it produces awareness, not behavior.</div>
+      <div class="signal-body">Knowing you overspent on dining last month doesn't change this month's spending. Most apps are excellent at recording failure (red bars, over-budget warnings) but never address <em>why</em> you spent that way. <cite>huntervault; econbrew, 2025</cite></div>
+    </div>
+    <div class="signal">
+      <div class="signal-top"><span class="signal-tag">Insight 02 · The automation paradox</span><span class="signal-strength strong">Strong</span></div>
+      <div class="signal-title">"Accurate data" is not "behavior change."</div>
+      <div class="signal-body">Apps that auto-parse bank SMS and auto-categorize are technically flawless, yet users say they "got a pretty monthly report, a vague sense of knowing, and changed nothing." The real reason people track is not data accuracy — it's to spend intentionally. <cite>Indie Hackers, 2026.04</cite></div>
+    </div>
+    <div class="signal">
+      <div class="signal-top"><span class="signal-tag">Insight 03 · Pain of paying</span><span class="signal-strength core">Core</span></div>
+      <div class="signal-title">Cashless payment erases the pain of paying.</div>
+      <div class="signal-body">The "pain of paying" is the loss-averse negative feeling at the moment of payment — a psychological brake on spending (Zellermayer 1996; Prelec &amp; Loewenstein 1998). Contactless and mobile payment reduce it to near zero: heavy contactless users (a) notice spending less, (b) spend more, and (c) feel less in control. Qualitative work names this the <em>micro-spend trap</em> and the <em>realisation gap</em>. <cite>Pain of paying (Wikipedia/HandWiki); Psychopedia Journals, 2026.05</cite></div>
+    </div>
+    <div class="signal">
+      <div class="signal-top"><span class="signal-tag">Insight 04 · Emotion drives spending</span><span class="signal-strength strong">Strong</span></div>
+      <div class="signal-title">Emotion moves money — but apps only speak logic.</div>
+      <div class="signal-body">People spend under stress, boredom, celebration, and social pressure. An "over budget" flag never addresses the <em>why</em>, so the pattern repeats — compounded by mental accounting, optimism bias, and decision fatigue. <cite>econbrew, 2025</cite></div>
+    </div>
+    <div class="signal">
+      <div class="signal-top"><span class="signal-tag">Insight 05 · Churn = lost utility</span><span class="signal-strength strong">Strong</span></div>
+      <div class="signal-title">Abandonment isn't low motivation — it's lost usefulness.</div>
+      <div class="signal-body">Most budget apps are dropped within weeks. Not from lack of discipline, but the moment the app feels like <em>maintenance</em> rather than <em>momentum</em>. Onboarding overload (link accounts + categories + goals + budgets, all at once) and guilt-framing are the finishing blows. <cite>Origin; Onething Design, 2025</cite></div>
+    </div>
+    <div class="signal">
+      <div class="signal-top"><span class="signal-tag">Generational signal</span><span class="signal-strength support">Context</span></div>
+      <div class="signal-title">The emotional terrain, in data.</div>
+      <div class="signal-body">The target doesn't fail for lack of data. They fail because it is emotionally heavy, because cashless erased the sensation, and because apps are joyless and guilt-inducing.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">finboard's core hypothesis (from Insight 03)</div>
+    <div class="callout-text">Real-time feedback plus a <em>visual depletion cue</em> can restore the psychological <em>salience</em> that cashless payment erased.</div>
+    <div class="callout-attr">Grounded in IJRASET and the behavioral-economics literature on cashless spending.</div>
+  </div>
+
+  <div class="trend-stats" style="margin-top:clamp(48px,6vw,88px);">
+    <div class="trend-stat">
+      <div class="trend-num">33<span class="u">%</span></div>
+      <div class="trend-desc">of Gen Z feel financial stress; under stress, 33% avoid their finances and 30% spend <em>on themselves</em> instead.</div>
+      <div class="trend-source">BofA Better Money Habits, 2025</div>
+    </div>
+    <div class="trend-stat">
+      <div class="trend-num">53<span class="u">%</span></div>
+      <div class="trend-desc">of Gen Z &amp; Millennials worry they can't even afford a small "treat day" for themselves.</div>
+      <div class="trend-source">YouGov, 2025</div>
+    </div>
+    <div class="trend-stat">
+      <div class="trend-num">90<span class="u">%</span></div>
+      <div class="trend-desc">of Gen Z do take an action (e.g. checking balance) when stressed — avoidance and action coexist.</div>
+      <div class="trend-source">BofA Better Money Habits, 2025</div>
+    </div>
+    <div class="trend-stat">
+      <div class="trend-num">58<span class="u">%</span></div>
+      <div class="trend-desc">of 18–35s fold money management into a self-care routine; 55% tie financial to mental/physical wellness.</div>
+      <div class="trend-source">Intuit, 2026.01</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 · DESIGN PRINCIPLES ============ -->
+<section class="tt-section wrap">
+  <div class="section-head">
+    <div class="section-label">03 · Design principles</div>
+    <h2 class="section-title">Research → principle</h2>
+    <p class="section-sub">Each principle is traceable to the insight that produced it. Together they define what finboard is — and refuses to be.</p>
+  </div>
+
+  <div class="dtable-wrap">
+    <table class="dtable">
+      <thead><tr><th>#</th><th>Principle</th><th>Rationale</th><th>From</th></tr></thead>
+      <tbody>
+        <tr><td class="v">P1</td><td class="k">Explore, don't audit — spark curiosity, never judge.</td><td class="s">Make spending an object of exploration, not a verdict.</td><td class="map">I1 · I4 · I5</td></tr>
+        <tr><td class="v">P2</td><td class="k">Restore salience — make "I spent money" felt, live &amp; visual.</td><td class="s">Rebuild the psychological brake cashless removed.</td><td class="map">I3</td></tr>
+        <tr><td class="v">P3</td><td class="k">One insight in one sentence, in 3 seconds.</td><td class="s">Intuition and speed <em>are</em> the product's identity.</td><td class="map">I1 · I2</td></tr>
+        <tr><td class="v">P4</td><td class="k">Turn emotion into data — capture "why," judgment-free.</td><td class="s">Reflect the feeling behind the spend, lightly.</td><td class="map">I4</td></tr>
+        <tr><td class="v">P5</td><td class="k">Zero-friction onboarding — first insight in 60s, link later.</td><td class="s">Defend against the onboarding-overload drop-off.</td><td class="map">I5</td></tr>
+        <tr><td class="v">P6</td><td class="k">No guilt, no red bars — failure becomes discovery.</td><td class="s">Reframe "you failed" into "here's what you found."</td><td class="map">I4 · I5</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 4 · CASE STUDIES (journey maps) ============ -->
+<section class="jm-section" id="cases">
+  <div class="wrap">
+    <div class="jm-head">
+      <div class="section-label">04 · Case studies</div>
+      <h2 class="section-title">Three people, three trajectories</h2>
+      <p class="jm-sub">Each case represents a different segment surfaced by the research — (A) comfortable but numb, (B) anxious and avoidant, (C) precise but burned out. Each is a persona + JTBD + behavioral triggers + a user journey map with its emotional arc.</p>
+    </div>
+
+    <div class="jm-tabs" role="tablist">
+      <button class="jm-tab is-active" data-jm="A" role="tab" aria-selected="true">
+        <span class="jm-tab-num">Case A</span>
+        <span class="jm-tab-name">Jiwoo, 28</span>
+        <span class="jm-tab-role">The Realisation-Gap Spender</span>
+      </button>
+      <button class="jm-tab" data-jm="B" role="tab" aria-selected="false">
+        <span class="jm-tab-num">Case B</span>
+        <span class="jm-tab-name">Haram, 23</span>
+        <span class="jm-tab-role">The Anxious Avoider</span>
+      </button>
+      <button class="jm-tab" data-jm="C" role="tab" aria-selected="false">
+        <span class="jm-tab-num">Case C</span>
+        <span class="jm-tab-name">Junhyuk, 34</span>
+        <span class="jm-tab-role">The Burned-out Optimizer</span>
+      </button>
+    </div>
+
+    <!-- ===== CASE A ===== -->
+    <div class="jm-panel is-active" data-jm-panel="A">
+      <div class="jm-persona-head">
+        <div class="jm-persona-title">Uses Apple Pay for everything. Income is fine — but has no sense of where the money went.</div>
+        <div class="jm-persona-meta">Jiwoo · Product Marketer · Seoul</div>
+      </div>
+      <p class="jm-persona-desc">The textbook realisation-gap spender: stable finances, no "problem" — just no sense of control or awareness. The job isn't to budget; it's to be handed a mirror.</p>
+
+      <div class="jm-attrs">
+        <div class="jm-attr"><div class="jm-attr-k">Tech stance</div><div class="jm-attr-v">Heavy iOS user; loves widget &amp; lock-screen customization. Low barrier to trying new apps.</div></div>
+        <div class="jm-attr"><div class="jm-attr-k">Payment habit</div><div class="jm-attr-v">90%+ contactless / one-tap pay. Almost no cash. 6–7 subscriptions.</div></div>
+        <div class="jm-attr"><div class="jm-attr-k">Financial state</div><div class="jm-attr-v">Stable. No "problem," but no sense of control or awareness — the I3 archetype.</div></div>
+        <div class="jm-attr"><div class="jm-attr-k">Emotion</div><div class="jm-attr-v">Vagueness more than anxiety. "Shouldn't there be more left, earning this much?"</div></div>
+      </div>
+
+      <div class="jm-jtbd">
+        <div class="jm-jtbd-label">Jobs To Be Done</div>
+        <div class="jm-jtbd-text"><b>When</b> a card statement makes me flinch, <b>I want to</b> grasp the character of my spending in 3 seconds, <b>so I can</b> make my next purchase a little more consciously — without guilt.</div>
+      </div>
+
+      <div class="jm-grid">
+        <div class="jm-row-label dim jm-stage-corner"></div>
+        <div class="jm-stage-h">① Trigger</div>
+        <div class="jm-stage-h">② First open · 60s</div>
+        <div class="jm-stage-h">③ First insight</div>
+        <div class="jm-stage-h">④ Habit loop</div>
+        <div class="jm-stage-h">⑤ Retention</div>
+
+        <div class="jm-row-label">Doing</div>
+        <div class="jm-cell">Sees the card-bill alert, "whoa" → searches the App Store.</div>
+        <div class="jm-cell">Starts on sample data / a quick scan of recent cards instead of linking accounts.</div>
+        <div class="jm-cell">One card: "Last 30 days — 62 micro-payments, delivery is #1."</div>
+        <div class="jm-cell">Right after paying, a widget / Live Activity shows "today ₩32k"; one tap adds a "why?" emoji.</div>
+        <div class="jm-cell">Weekly recap push: "This week = comfort spender."</div>
+
+        <div class="jm-row-label dim">Thinking</div>
+        <div class="jm-cell think">"It slipped away again without me noticing."</div>
+        <div class="jm-cell think">"If setup takes long, I'm out immediately."</div>
+        <div class="jm-cell think">"Ah — it was delivery. More than I thought."</div>
+        <div class="jm-cell think">"One tap, no pressure."</div>
+        <div class="jm-cell think">"I actually get curious enough to open it."</div>
+
+        <div class="jm-row-label">Feeling</div>
+        <div class="jm-cell feel">😵 vague · annoyed</div>
+        <div class="jm-cell feel">😐 wary · impatient</div>
+        <div class="jm-cell feel">😲 surprise → interest</div>
+        <div class="jm-cell feel">🙂 control restored</div>
+        <div class="jm-cell feel">😌 habitual · small delight</div>
+
+        <div class="jm-row-label dim">Touchpoint</div>
+        <div class="jm-cell ctx">App Store · push</div>
+        <div class="jm-cell ctx">Onboarding scan</div>
+        <div class="jm-cell ctx">Insight card</div>
+        <div class="jm-cell ctx">Home widget · Live Activity · post-pay tag</div>
+        <div class="jm-cell ctx">Weekly recap · lock-screen widget</div>
+
+        <div class="jm-row-label">Pain</div>
+        <div class="jm-cell">A statement of numbers is meaningless.</div>
+        <div class="jm-cell">Onboarding friction risk.</div>
+        <div class="jm-cell">Churns if the insight is obvious.</div>
+        <div class="jm-cell">Collapses if tagging is a chore.</div>
+        <div class="jm-cell">Churns if the recap nags.</div>
+
+        <div class="jm-row-label dim">Opportunity</div>
+        <div class="jm-cell opp">"3-second diagnosis" hook.</div>
+        <div class="jm-cell opp">Deferred onboarding (P5).</div>
+        <div class="jm-cell opp">Character label sparks exploration (P1).</div>
+        <div class="jm-cell opp">Live Activity restores salience (P2·P3).</div>
+        <div class="jm-cell opp">Character recap = a Wrapped-style share hook.</div>
+      </div>
+
+      <div class="jm-arc">
+        <div class="jm-arc-head">
+          <div class="jm-arc-title">Emotional arc · vagueness → surprise → control → habit</div>
+          <div class="jm-arc-legend"><span class="proj"><i></i>Projection</span><span><i></i>Actual</span></div>
         </div>
-        <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg class="jm-arc-svg" viewBox="0 0 1400 360" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="340" x2="1400" y2="340" stroke="#fff" stroke-opacity="0.08"/>
+          <line x1="280" y1="0" x2="280" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
+          <line x1="560" y1="0" x2="560" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
+          <line x1="840" y1="0" x2="840" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
+          <line x1="1120" y1="0" x2="1120" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
+          <path d="M 0,250 C 120,240 200,225 280,215 C 400,200 480,185 560,170 C 680,150 760,135 840,125 C 960,112 1040,105 1120,100 C 1240,94 1320,90 1400,88" stroke="#fff" stroke-opacity="0.5" stroke-width="1.2" fill="none" stroke-dasharray="9 6"/>
+          <path d="M 0,280 C 100,282 190,286 280,300 C 370,312 450,318 560,150 C 640,70 720,58 840,120 C 940,168 1020,150 1120,110 C 1220,74 1320,60 1400,54" stroke="#0FB884" stroke-width="1.8" fill="none"/>
+          <circle cx="560" cy="150" r="4" fill="#0FB884"/><circle cx="560" cy="150" r="9" fill="#0FB884" fill-opacity="0.14"/>
         </svg>
       </div>
-    </button>
-    <div class="phase-media-wrap" onclick="togglePhase(this)">
-      <div class="phase-media">
-        <video class="lazy-vid" data-src="./finboardprev.mp4" poster="./posters/finboardprev.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+
+      <div class="jm-key">
+        <div class="jm-key-label">Key design decision · A</div>
+        <div class="jm-key-text">You must not sell this user a budget. You sell a <b>mirror</b> — "this is the kind of spender you are." Fun and self-awareness create the retention.</div>
       </div>
     </div>
-    <div class="phase-body">
-      <div class="phase-body-inner">
 
-<section class="project-section wrap">
-  <div class="ph-text-block">
-    <div class="ph-label">Overview</div>
-    <h2 class="ph-heading">One board for money that actually moves</h2>
-    <p class="ph-body">Most budgeting apps ask you to log in, dig through menus, and reconcile numbers that are already a day old. finboard flips that — your accounts across Scotiabank, TD, BMO, and RBC land on a single live board, and the number you check most often sits right on the lock screen: today's spend, and how much is left.</p>
-    <p class="ph-body" style="margin-top:16px;">Designed for students and first earners, finboard turns a stream of raw transactions — Campus Coffee, Transit Pass, Dining Hall, Ramen Spot — into something legible at a glance, so a quick check replaces the monthly reckoning.</p>
-  </div>
-</section>
+    <!-- ===== CASE B ===== -->
+    <div class="jm-panel" data-jm-panel="B">
+      <div class="jm-persona-head">
+        <div class="jm-persona-title">Deleted the app because thinking about money makes her anxious. Under stress, she spends on herself.</div>
+        <div class="jm-persona-meta">Haram · Final-year student · first job hunt</div>
+      </div>
+      <p class="jm-persona-desc">For this user, precise numbers are not a weapon but a threat. Receive the emotion first; reveal data gently, with context. This is where finboard becomes an "emotion-aware finance app."</p>
 
-<section class="kpi-section wrap">
-  <div class="kpi-head">
-    <div class="kpi-title-wrap">
-      <div class="kpi-title">At a glance</div>
-      <div class="kpi-title-meta">(Concept targets)</div>
-    </div>
-  </div>
-  <div class="kpi-grid">
-    <div class="kpi-item">
-      <div class="kpi-num">4</div>
-      <div class="kpi-label">Canadian banks connected in one feed</div>
-    </div>
-    <div class="kpi-item">
-      <div class="kpi-num">1<span class="unit">tap</span></div>
-      <div class="kpi-label">Lock-screen widget to today's balance</div>
-    </div>
-    <div class="kpi-item">
-      <div class="kpi-num">Live</div>
-      <div class="kpi-label">Transactions land as they clear</div>
-    </div>
-    <div class="kpi-item">
-      <div class="kpi-num">0<span class="unit">spreadsheets</span></div>
-      <div class="kpi-label">No manual logging or reconciling</div>
-    </div>
-  </div>
-</section>
+      <div class="jm-attrs">
+        <div class="jm-attr"><div class="jm-attr-k">Tech stance</div><div class="jm-attr-v">Prefers emotion-based apps (mood trackers). Repelled by rigid financial UI.</div></div>
+        <div class="jm-attr"><div class="jm-attr-k">Payment habit</div><div class="jm-attr-v">Frequent small spends, occasional BNPL. Afraid to look at the account balance.</div></div>
+        <div class="jm-attr"><div class="jm-attr-k">Financial state</div><div class="jm-attr-v">Perceived instability — feels worse than reality (emotion &gt; facts).</div></div>
+        <div class="jm-attr"><div class="jm-attr-k">Emotion</div><div class="jm-attr-v">A loop of avoidance ↔ impulse. Highly sensitive to guilt.</div></div>
+      </div>
 
-      </div><!-- /phase-body-inner -->
-    </div><!-- /phase-body -->
-  </div><!-- /phase-block 01 -->
+      <div class="jm-jtbd">
+        <div class="jm-jtbd-label">Jobs To Be Done</div>
+        <div class="jm-jtbd-text"><b>When</b> I'm hesitating over whether to even open the app, <b>I want to</b> face my situation gently — no judgment, no lecture — <b>so I can</b> stop avoiding and gain one small sense of control.</div>
+      </div>
 
-  <!-- Phase 02: Problem -->
-  <div class="phase-block">
-    <button class="phase-toggle" onclick="togglePhase(this)">
-      <div class="phase-toggle-inner">
-        <div>
-          <div class="phase-num">02</div>
-          <div class="phase-name">Problem</div>
-          <div class="phase-sub">Budgeting fails at the moment of spending</div>
+      <div class="jm-grid">
+        <div class="jm-row-label dim jm-stage-corner"></div>
+        <div class="jm-stage-h">① Avoidance</div>
+        <div class="jm-stage-h">② Gentle entry</div>
+        <div class="jm-stage-h">③ Reframe moment</div>
+        <div class="jm-stage-h">④ Emotional loop</div>
+        <div class="jm-stage-h">⑤ Re-engagement</div>
+
+        <div class="jm-row-label">Doing</div>
+        <div class="jm-cell">Hesitates to open; avoids checking the balance.</div>
+        <div class="jm-cell">"Start without numbers" — asks mood / intent first.</div>
+        <div class="jm-cell">Context message: "Total rose, but from essentials; discretionary is actually −12%."</div>
+        <div class="jm-cell">After paying, a light optional "how do you feel?" emoji capture.</div>
+        <div class="jm-cell">Weekly "warm summary" — wins first.</div>
+
+        <div class="jm-row-label dim">Thinking</div>
+        <div class="jm-cell think">"Looking will only make me more depressed."</div>
+        <div class="jm-cell think">"Oh — this isn't scary."</div>
+        <div class="jm-cell think">"I didn't actually spend recklessly."</div>
+        <div class="jm-cell think">"Tagging a mood is quietly comforting."</div>
+        <div class="jm-cell think">"This feels like encouragement, not nagging."</div>
+
+        <div class="jm-row-label">Feeling</div>
+        <div class="jm-cell feel">😨 anxious · avoidant</div>
+        <div class="jm-cell feel">😌 reassured</div>
+        <div class="jm-cell feel">🥹 relief · release</div>
+        <div class="jm-cell feel">🫶 self-acceptance</div>
+        <div class="jm-cell feel">🙂 motivated to return</div>
+
+        <div class="jm-row-label dim">Touchpoint</div>
+        <div class="jm-cell ctx">(app unopened)</div>
+        <div class="jm-cell ctx">Emotion-first onboarding</div>
+        <div class="jm-cell ctx">Context insight card</div>
+        <div class="jm-cell ctx">Post-pay mood tag</div>
+        <div class="jm-cell ctx">Weekly recap push (supportive tone)</div>
+
+        <div class="jm-row-label">Pain</div>
+        <div class="jm-cell">Entry itself is a wall.</div>
+        <div class="jm-cell">Financial jargon repels.</div>
+        <div class="jm-cell">Hollow comfort breeds distrust.</div>
+        <div class="jm-cell">Obligatory tagging burdens.</div>
+        <div class="jm-cell">Too many alerts add stress.</div>
+
+        <div class="jm-row-label dim">Opportunity</div>
+        <div class="jm-cell opp">Mood-based entry point.</div>
+        <div class="jm-cell opp">Emotion before amount (P4).</div>
+        <div class="jm-cell opp">Reframe "failure" as "discovery" (P6).</div>
+        <div class="jm-cell opp">Emotion × spend correlation ("stress days → delivery ↑").</div>
+        <div class="jm-cell opp">Self-care framing fits the Intuit trend.</div>
+      </div>
+
+      <div class="jm-arc">
+        <div class="jm-arc-head">
+          <div class="jm-arc-title">Emotional arc · anxiety → reassurance → relief → acceptance</div>
+          <div class="jm-arc-legend"><span class="proj"><i></i>Projection</span><span><i></i>Actual</span></div>
         </div>
-        <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg class="jm-arc-svg" viewBox="0 0 1400 360" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="340" x2="1400" y2="340" stroke="#fff" stroke-opacity="0.08"/>
+          <line x1="280" y1="0" x2="280" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
+          <line x1="560" y1="0" x2="560" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
+          <line x1="840" y1="0" x2="840" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
+          <line x1="1120" y1="0" x2="1120" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
+          <path d="M 0,300 C 140,302 200,305 280,308 C 420,312 500,314 560,315 C 700,317 780,318 840,318 C 980,319 1060,320 1120,320 C 1260,321 1340,322 1400,322" stroke="#fff" stroke-opacity="0.5" stroke-width="1.2" fill="none" stroke-dasharray="9 6"/>
+          <path d="M 0,320 C 120,322 200,320 280,270 C 360,222 460,205 560,150 C 660,96 740,80 840,88 C 940,96 1020,88 1120,80 C 1220,72 1320,66 1400,62" stroke="#0FB884" stroke-width="1.8" fill="none"/>
+          <circle cx="560" cy="150" r="4" fill="#0FB884"/><circle cx="560" cy="150" r="9" fill="#0FB884" fill-opacity="0.14"/>
         </svg>
       </div>
-    </button>
-    <div class="phase-media-wrap" onclick="togglePhase(this)">
-      <div class="phase-media"><span>Media Placeholder</span></div>
-    </div>
-    <div class="phase-body">
-      <div class="phase-body-inner">
 
-<section class="project-section wrap">
-  <div class="two-col">
-    <div class="ph-text-block">
-      <div class="ph-label">Problem</div>
-      <h2 class="ph-heading">Budgeting fails at the moment of spending</h2>
-      <p class="ph-body">The decision that breaks a budget — buy the coffee, tap the transit pass, order the ramen — happens in seconds, phone in hand. But the tools meant to help live a login and three taps away, and the balance they show is stale. By the time you reconcile, the month is already gone.</p>
-      <p class="ph-body" style="margin-top:14px;">For students juggling several bank accounts, the problem multiplies: money is scattered, statements arrive late, and there is no single place that answers the only question that matters in the moment — <em>can I afford this right now?</em></p>
+      <div class="jm-key">
+        <div class="jm-key-label">Key design decision · B</div>
+        <div class="jm-key-text">Accurate numbers are a <b>threat, not a weapon</b>. Take the emotion first; expose data gently, always with context. This is the point where finboard becomes an emotion-aware finance app.</div>
+      </div>
     </div>
-    <div class="ph-text-block">
-      <div class="ph-label">Design Principles</div>
-      <h2 class="ph-heading">Glanceable first. Effortless always.</h2>
-      <p class="ph-body">finboard is built so the most important number reaches you before you open anything. The lock-screen widget shows today's spend and what's left; open the app and the same board expands into a live transaction feed and budget rings.</p>
-      <p class="ph-body" style="margin-top:14px;">Nothing to log, nothing to categorize by hand. Accounts sync, transactions self-sort, and the interface stays quiet until a number needs your attention.</p>
-    </div>
-  </div>
-</section>
 
-      </div><!-- /phase-body-inner -->
-    </div><!-- /phase-body -->
-  </div><!-- /phase-block 02 -->
+    <!-- ===== CASE C ===== -->
+    <div class="jm-panel" data-jm-panel="C">
+      <div class="jm-persona-head">
+        <div class="jm-persona-title">Tried YNAB and Monarch. Burned out on manual entry and dropped them all.</div>
+        <div class="jm-persona-meta">Junhyuk · Senior developer · one child</div>
+      </div>
+      <p class="jm-persona-desc">This user doesn't need more input — he needs deeper tools to explore. Hide automation (collection) as the default; put the questioning, drill-down analysis up front. finboard's "pro" layer.</p>
 
-  <!-- Phase 03: Solution -->
-  <div class="phase-block">
-    <button class="phase-toggle" onclick="togglePhase(this)">
-      <div class="phase-toggle-inner">
-        <div>
-          <div class="phase-num">03</div>
-          <div class="phase-name">Solution</div>
-          <div class="phase-sub">A live board, from lock screen to ledger</div>
+      <div class="jm-attrs">
+        <div class="jm-attr"><div class="jm-attr-k">Tech stance</div><div class="jm-attr-v">Power user. Loves data, charts, CSVs — but cold to "maintenance labor."</div></div>
+        <div class="jm-attr"><div class="jm-attr-k">Payment habit</div><div class="jm-attr-v">Many cards &amp; auto-payments. 10+ subscriptions. Shared family spending.</div></div>
+        <div class="jm-attr"><div class="jm-attr-k">Financial state</div><div class="jm-attr-v">Healthy, invests too. The problem is time and sustainability.</div></div>
+        <div class="jm-attr"><div class="jm-attr-k">Emotion</div><div class="jm-attr-v">Cynical about apps ("this'll turn into a chore again").</div></div>
+      </div>
+
+      <div class="jm-jtbd">
+        <div class="jm-jtbd-label">Jobs To Be Done</div>
+        <div class="jm-jtbd-text"><b>When</b> I want to check quarterly "where is our money leaking," <b>I want to</b> get analysis I can explore hands-free, <b>so I can</b> make decisions (cut subscriptions, adjust discretionary) without maintenance labor.</div>
+      </div>
+
+      <div class="jm-grid">
+        <div class="jm-row-label dim jm-stage-corner"></div>
+        <div class="jm-stage-h">① Skeptical return</div>
+        <div class="jm-stage-h">② Frictionless setup</div>
+        <div class="jm-stage-h">③ Exploratory query</div>
+        <div class="jm-stage-h">④ Decision</div>
+        <div class="jm-stage-h">⑤ Advocacy</div>
+
+        <div class="jm-row-label">Doing</div>
+        <div class="jm-cell">Reinstalls warily — "one chore and I'm done."</div>
+        <div class="jm-cell">Auto-links accounts (Plaid-style); categories auto + learned.</div>
+        <div class="jm-cell">Asks in natural language: "subscriptions vs delivery, 6-month trend."</div>
+        <div class="jm-cell">Cancels 2 subscriptions; sets a discretionary cap.</div>
+        <div class="jm-cell">Shares the recap with his spouse and community.</div>
+
+        <div class="jm-row-label dim">Thinking</div>
+        <div class="jm-cell think">"Prove it."</div>
+        <div class="jm-cell think">"Oh — no manual input."</div>
+        <div class="jm-cell think">"This replaces what I dug out of CSVs."</div>
+        <div class="jm-cell think">"Cleaning up saves ₩40k / month."</div>
+        <div class="jm-cell think">"Worth recommending."</div>
+
+        <div class="jm-row-label">Feeling</div>
+        <div class="jm-cell feel">🙄 cynical</div>
+        <div class="jm-cell feel">😮 relieved</div>
+        <div class="jm-cell feel">🤓 immersed (exploration is fun)</div>
+        <div class="jm-cell feel">💪 control · achievement</div>
+        <div class="jm-cell feel">😎 satisfied · evangelist</div>
+
+        <div class="jm-row-label dim">Touchpoint</div>
+        <div class="jm-cell ctx">App Store re-visit</div>
+        <div class="jm-cell ctx">Auto-link onboarding</div>
+        <div class="jm-cell ctx">NL query / interactive charts</div>
+        <div class="jm-cell ctx">Action card (subscription-cancel deep link)</div>
+        <div class="jm-cell ctx">Share recap · widget</div>
+
+        <div class="jm-row-label">Pain</div>
+        <div class="jm-cell">Trust must be rebuilt.</div>
+        <div class="jm-cell">A link failure = instant churn.</div>
+        <div class="jm-cell">Shallow analysis = "knew it."</div>
+        <div class="jm-cell">Action outside the app = friction.</div>
+        <div class="jm-cell">A bland share = he won't do it.</div>
+
+        <div class="jm-row-label dim">Opportunity</div>
+        <div class="jm-cell opp">Prove "no labor" on the first screen.</div>
+        <div class="jm-cell opp">Auto-classify + user-correction learning.</div>
+        <div class="jm-cell opp">Exploratory analysis (NL, drill-down) is the differentiator (P1).</div>
+        <div class="jm-cell opp">In-app execution (cancel subs) closes the loop.</div>
+        <div class="jm-cell opp">A shareable asset for data lovers.</div>
+      </div>
+
+      <div class="jm-arc">
+        <div class="jm-arc-head">
+          <div class="jm-arc-title">Emotional arc · cynicism → relief → immersion → satisfaction</div>
+          <div class="jm-arc-legend"><span class="proj"><i></i>Projection</span><span><i></i>Actual</span></div>
         </div>
-        <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg class="jm-arc-svg" viewBox="0 0 1400 360" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="340" x2="1400" y2="340" stroke="#fff" stroke-opacity="0.08"/>
+          <line x1="280" y1="0" x2="280" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
+          <line x1="560" y1="0" x2="560" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
+          <line x1="840" y1="0" x2="840" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
+          <line x1="1120" y1="0" x2="1120" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
+          <path d="M 0,270 C 140,268 200,262 280,255 C 420,244 500,238 560,232 C 700,220 780,214 840,210 C 980,202 1060,198 1120,196 C 1260,192 1340,190 1400,188" stroke="#fff" stroke-opacity="0.5" stroke-width="1.2" fill="none" stroke-dasharray="9 6"/>
+          <path d="M 0,300 C 100,302 200,300 280,250 C 360,200 460,180 560,140 C 660,102 740,78 840,66 C 940,56 1020,52 1120,48 C 1220,44 1320,42 1400,40" stroke="#0FB884" stroke-width="1.8" fill="none"/>
+          <circle cx="560" cy="140" r="4" fill="#0FB884"/><circle cx="560" cy="140" r="9" fill="#0FB884" fill-opacity="0.14"/>
         </svg>
       </div>
-    </button>
-    <div class="phase-media-wrap" onclick="togglePhase(this)">
-      <div class="phase-media"><span>Media Placeholder</span></div>
-    </div>
-    <div class="phase-body">
-      <div class="phase-body-inner">
 
-<section class="project-section wrap">
-  <div class="ph-label" style="margin-bottom:32px;">Core Features</div>
-  <div class="feat-grid">
-    <div class="feat-item">
-      <div class="feat-num">01</div>
-      <div class="feat-title">Lock-screen widget</div>
-      <div class="feat-desc">Today's spend and remaining balance live behind a private "Tap to view" glance — the check you make twenty times a day, without unlocking or opening the app.</div>
+      <div class="jm-key">
+        <div class="jm-key-label">Key design decision · C</div>
+        <div class="jm-key-text">Give this user <b>deeper exploration tools, not more input</b>. Automation (collection) hides as the default; the questioning, drill-down analysis takes the front.</div>
+      </div>
     </div>
-    <div class="feat-item">
-      <div class="feat-num">02</div>
-      <div class="feat-title">Unified bank feed</div>
-      <div class="feat-desc">Scotiabank, TD, BMO, and RBC accounts flow into one chronological feed. Each transaction carries its bank, last-four, merchant, time, and amount — no switching apps.</div>
-    </div>
-    <div class="feat-item">
-      <div class="feat-num">03</div>
-      <div class="feat-title">Budget rings</div>
-      <div class="feat-desc">A daily allowance renders as a single progress bar — spent versus left — so pacing is felt, not calculated. Categories auto-sort from the merchant.</div>
+
+    <!-- comparison -->
+    <div class="jm-compare-wrap">
+      <table class="jm-compare">
+        <thead><tr><th class="k">&nbsp;</th><th>A · Jiwoo</th><th>B · Haram</th><th>C · Junhyuk</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Core problem</td><td>Numbness (realisation gap)</td><td>Anxiety · avoidance</td><td>Burnout · cynicism</td></tr>
+          <tr><td class="k">What to sell</td><td>A mirror (character label)</td><td>Reassurance (emotional reframe)</td><td>Exploration tools (analysis)</td></tr>
+          <tr><td class="k">Onboarding</td><td>Deferred link + sample</td><td>Emotion first</td><td>Auto-link</td></tr>
+          <tr><td class="k">Salience device</td><td>Live Activity · widget</td><td>Mood tag</td><td>Natural-language query</td></tr>
+          <tr><td class="k">Retention hook</td><td>Wrapped-style recap</td><td>Supportive weekly summary</td><td>Return-to analysis dashboard</td></tr>
+          <tr><td class="k">Lead principle</td><td>P2 · P3</td><td>P4 · P6</td><td>P1</td></tr>
+        </tbody>
+      </table>
+      <div class="jm-key" style="margin-top:clamp(32px,4vw,52px);">
+        <div class="jm-key-label">The common core</div>
+        <div class="jm-key-text">None of the three want an app that "keeps them on budget." All three want an app that <b>lets them understand themselves through their spending.</b> That is finboard's shared core.</div>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="divider-section wrap">
-  <p class="divider-text">Prompt to product in one pass — <em>finboard was designed, built, and shipped through</em> <a href="./autoq.html" style="border-bottom:2px solid var(--accent);">AutoQ</a>.</p>
-</section>
+<!-- ============ 5 · UX FLOWS ============ -->
+<section class="tt-section wrap">
+  <div class="section-head">
+    <div class="section-label">05 · UX flows</div>
+    <h2 class="section-title">Information architecture &amp; four core flows</h2>
+    <p class="section-sub">In most apps the first-class citizen is Budget. In finboard it's <em>Explore</em>. Budgets are demoted to a feature; exploration, awareness, and emotion take the front.</p>
+  </div>
 
-      </div><!-- /phase-body-inner -->
-    </div><!-- /phase-body -->
-  </div><!-- /phase-block 03 -->
+  <!-- shared arrow markers -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <marker id="fbar" viewBox="0 0 10 10" refX="8.4" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#8a8a8a"/></marker>
+    <marker id="fbarm" viewBox="0 0 10 10" refX="8.4" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0FB884"/></marker>
+  </defs></svg>
 
-</div><!-- /phase-wrap -->
+  <!-- 5.1 · IA — entity boxes -->
+  <div class="mono-block">
+    <div class="mono-h"><span class="mono-h-title">5.1 · Information architecture</span><span class="mono-h-goal">Entity map · Explore is the first-class citizen</span></div>
+    <div class="dgm-canvas">
+      <svg viewBox="0 0 940 600" xmlns="http://www.w3.org/2000/svg">
+        <!-- root -->
+        <g class="dgm-node hub"><rect x="14" y="262" width="196" height="76" rx="10"/>
+          <text class="np" x="34" y="296" font-size="17">finboard</text>
+          <text class="ns" x="34" y="316" font-size="11.5">iOS · native app</text>
+        </g>
+        <!-- connectors root → sections -->
+        <path class="dgm-link" d="M210 300 C 300 300 320 58 420 58"   marker-end="url(#fbar)"/>
+        <path class="dgm-link mint" d="M210 300 C 300 300 320 205 420 205" marker-end="url(#fbarm)"/>
+        <path class="dgm-link" d="M210 300 C 300 300 320 352 420 352"  marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M210 300 C 300 300 320 452 420 452"  marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M210 300 C 300 300 320 540 420 540"  marker-end="url(#fbar)"/>
 
-<div class="phase-wrap">
-<div class="phase-block">
-  <button class="phase-toggle" onclick="togglePhase(this)">
-    <div class="phase-toggle-inner">
-      <div>
-        <div class="phase-num">04</div>
-        <div class="phase-name">Conclusion</div>
-        <div class="phase-sub">Reflections and key takeaways</div>
-      </div>
-      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Home -->
+        <g class="dgm-node"><rect x="420" y="14" width="500" height="118" rx="10"/>
+          <text class="np" x="440" y="44" font-size="14.5">Home (Today)</text>
+          <text class="ns" x="906" y="44" font-size="10" text-anchor="end">screen</text>
+          <line class="nrule" x1="420" y1="56" x2="920" y2="56"/>
+          <text class="dgm-attr" x="440" y="78" font-size="12.5">• Real-time depletion cue <tspan class="d">today / week spent, visual</tspan></text>
+          <text class="dgm-attr" x="440" y="100" font-size="12.5">• "3-second insight" card <tspan class="d">refreshed daily</tspan></text>
+          <text class="dgm-attr" x="440" y="122" font-size="12.5">• Quick entry <tspan class="d">→ Explore · Mood check-in</tspan></text>
+        </g>
+        <!-- Explore (heart) -->
+        <g class="dgm-node hub"><rect x="420" y="146" width="500" height="140" rx="10"/>
+          <text class="np" x="440" y="176" font-size="14.5">Explore</text>
+          <text class="ns" x="906" y="176" font-size="10" text-anchor="end" fill="#0FB884">★ the heart</text>
+          <line class="nrule" x1="420" y1="188" x2="920" y2="188"/>
+          <text class="dgm-attr" x="440" y="210" font-size="12.5"><tspan class="k">◆</tspan> Spending-character (persona) view</text>
+          <text class="dgm-attr" x="440" y="232" font-size="12.5"><tspan class="k">◆</tspan> Category drill-down</text>
+          <text class="dgm-attr" x="440" y="254" font-size="12.5"><tspan class="k">◆</tspan> Emotion × spending view</text>
+          <text class="dgm-attr" x="440" y="276" font-size="12.5"><tspan class="k">◆</tspan> Natural-language query <tspan class="d">"why did March spike?"</tspan></text>
+        </g>
+        <!-- Recap -->
+        <g class="dgm-node"><rect x="420" y="300" width="500" height="96" rx="10"/>
+          <text class="np" x="440" y="330" font-size="14.5">Recap <tspan class="ns" font-size="11">weekly / monthly</tspan></text>
+          <line class="nrule" x1="420" y1="342" x2="920" y2="342"/>
+          <text class="dgm-attr" x="440" y="364" font-size="12.5">• Wrapped-style story slides</text>
+          <text class="dgm-attr" x="440" y="386" font-size="12.5">• Share card <tspan class="d">character &amp; ratios only</tspan></text>
+        </g>
+        <!-- Moments -->
+        <g class="dgm-node"><rect x="420" y="410" width="500" height="84" rx="10"/>
+          <text class="np" x="440" y="440" font-size="14.5">Moments <tspan class="ns" font-size="11">post-payment trigger</tspan></text>
+          <line class="nrule" x1="420" y1="452" x2="920" y2="452"/>
+          <text class="dgm-attr" x="440" y="476" font-size="12.5">• "Why did you spend?" emotion tag <tspan class="d">optional, 5s</tspan></text>
+        </g>
+        <!-- Settings -->
+        <g class="dgm-node"><rect x="420" y="508" width="500" height="84" rx="10"/>
+          <text class="np" x="440" y="536" font-size="14.5">Settings</text>
+          <line class="nrule" x1="420" y1="548" x2="920" y2="548"/>
+          <text class="dgm-attr" x="440" y="572" font-size="12.5">• Account linking <tspan class="d">deferrable</tspan>&#160;&#160; • Alert tone <tspan class="d">supportive / minimal</tspan></text>
+          <text class="dgm-attr" x="440" y="588" font-size="12.5">• Widget · Live Activity config</text>
+        </g>
       </svg>
     </div>
-  </button>
-  <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media"></div>
   </div>
-  <div class="phase-body">
-    <div class="phase-body-inner">
-      <section class="project-section wrap">
-        <div class="ph-text-block">
-          <p class="ph-body">finboard started as a one-line brief — "make a live dashboard to track personal transactions that fully works" — and became a case study in how far a single prompt can go when the design intent is clear. The lock-screen-first framing, the unified bank feed, and the student-scale budget all came out of asking what a person actually needs in the two seconds before they spend.</p>
-        </div>
-      </section>
+
+  <!-- 5.2 · Onboarding -->
+  <div class="mono-block">
+    <div class="mono-h"><span class="mono-h-title">5.2 · Flow ① — Zero-friction onboarding</span><span class="mono-h-goal">Goal: first insight in 60s</span></div>
+    <p class="mono-note">Deliver the first insight <em>before</em> account linking — the drop-off defense (P5). Dismantle onboarding overload; place the first dopamine hit ahead of the account connection.</p>
+    <div class="dgm-canvas">
+      <svg viewBox="0 0 1240 340" xmlns="http://www.w3.org/2000/svg">
+        <g class="dgm-node"><rect x="8" y="142" width="150" height="54" rx="9"/><text class="np" x="83" y="174" font-size="13.5" text-anchor="middle">First launch</text></g>
+        <g class="dgm-node"><rect x="196" y="142" width="176" height="54" rx="9"/><text class="np" x="284" y="174" font-size="13.5" text-anchor="middle">One-line value</text></g>
+        <g class="dgm-node"><rect x="410" y="142" width="150" height="54" rx="9"/><text class="np" x="485" y="174" font-size="13.5" text-anchor="middle">Choose entry</text></g>
+        <!-- fan -->
+        <g class="dgm-node"><rect x="600" y="32" width="196" height="54" rx="9"/><text class="np" x="698" y="54" font-size="13" text-anchor="middle">Quick skim</text><text class="ns" x="698" y="72" font-size="10.5" text-anchor="middle">A · scan / sample</text></g>
+        <g class="dgm-node"><rect x="600" y="143" width="196" height="54" rx="9"/><text class="np" x="698" y="165" font-size="13" text-anchor="middle">Mood first</text><text class="ns" x="698" y="183" font-size="10.5" text-anchor="middle">B · 2 emotion Qs</text></g>
+        <g class="dgm-node"><rect x="600" y="254" width="196" height="54" rx="9"/><text class="np" x="698" y="276" font-size="13" text-anchor="middle">Link account</text><text class="ns" x="698" y="294" font-size="10.5" text-anchor="middle">C · auto-connect</text></g>
+        <!-- first insight (key) -->
+        <g class="dgm-node key"><rect x="844" y="140" width="196" height="58" rx="9"/><text class="np" x="942" y="165" font-size="13.5" text-anchor="middle">First insight</text><text class="ns" x="942" y="184" font-size="11" text-anchor="middle">≤ 60s · no account yet</text></g>
+        <g class="dgm-node"><rect x="1078" y="142" width="154" height="54" rx="9"/><text class="np" x="1155" y="174" font-size="13.5" text-anchor="middle">Land on Home</text></g>
+        <!-- links -->
+        <path class="dgm-link" d="M158 169 L196 169" marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M372 169 L410 169" marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M560 169 C 580 169 580 59 600 59"  marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M560 169 L600 169" marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M560 169 C 580 169 580 281 600 281" marker-end="url(#fbar)"/>
+        <path class="dgm-link mint" d="M796 59 C 820 59 820 169 844 169"  marker-end="url(#fbarm)"/>
+        <path class="dgm-link mint" d="M796 169 L844 169" marker-end="url(#fbarm)"/>
+        <path class="dgm-link mint" d="M796 281 C 820 281 820 169 844 169" marker-end="url(#fbarm)"/>
+        <path class="dgm-link" d="M1040 169 L1078 169" marker-end="url(#fbar)"/>
+        <text class="dgm-lbl mint" x="942" y="234" text-anchor="middle">"62 micro-payments · #1 delivery · comfort spender"</text>
+        <text class="dgm-lbl" x="1155" y="222" text-anchor="middle">optional · never forced</text>
+      </svg>
     </div>
   </div>
-</div>
-</div><!-- /phase-wrap -->
 
-<footer style="padding:clamp(64px,8vw,120px) var(--pad) clamp(48px,6vw,80px); text-align:center;">
+  <!-- 5.3 · Salience -->
+  <div class="mono-block">
+    <div class="mono-h"><span class="mono-h-title">5.3 · Flow ② — Real-time salience</span><span class="mono-h-goal">Goal: restore the "I spent" sensation</span></div>
+    <p class="mono-note">Revive, visually and in real time, the sense of spending that cashless erased (P2, I3). Alerts are neutral facts plus curiosity — never a red bar. Not "Over budget!" but "Pace +18% — why?" (P6).</p>
+    <div class="dgm-canvas">
+      <svg viewBox="0 0 1040 300" xmlns="http://www.w3.org/2000/svg">
+        <g class="dgm-node"><rect x="8" y="96" width="184" height="56" rx="9"/><text class="np" x="100" y="121" font-size="13.5" text-anchor="middle">Apple Pay</text><text class="ns" x="100" y="140" font-size="11" text-anchor="middle">payment</text></g>
+        <g class="dgm-node key"><rect x="252" y="96" width="230" height="56" rx="9"/><text class="np" x="367" y="121" font-size="13.5" text-anchor="middle">Live Activity / widget</text><text class="ns" x="367" y="140" font-size="11" text-anchor="middle">"Today ₩32,400 · pace +18%"</text></g>
+        <g class="dgm-node hub"><rect x="560" y="96" width="240" height="56" rx="9"/><text class="np" x="680" y="121" font-size="13.5" text-anchor="middle">Explore</text><text class="ns" x="680" y="140" font-size="11" text-anchor="middle">emotion × spending view</text></g>
+        <g class="dgm-node ghost"><rect x="252" y="214" width="230" height="52" rx="9"/><text class="np" x="367" y="238" font-size="13" text-anchor="middle">Moments · "why?" tag</text><text class="ns" x="367" y="256" font-size="11" text-anchor="middle">optional · 5s · 😋 😩 🎁 🔁</text></g>
+        <path class="dgm-link" d="M192 124 L252 124" marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M482 124 L560 124" marker-end="url(#fbar)"/>
+        <path class="dgm-link dash" d="M367 152 L367 214" marker-end="url(#fbar)"/>
+        <path class="dgm-link dash" d="M482 240 C 620 240 660 175 680 152" marker-end="url(#fbar)"/>
+        <text class="dgm-lbl" x="378" y="188">optional, no pressure</text>
+        <text class="dgm-lbl mint" x="560" y="196">"on stress-tagged days, delivery is 2.3×"</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 5.4 · Explore -->
+  <div class="mono-block">
+    <div class="mono-h"><span class="mono-h-title">5.4 · Flow ③ — Explore</span><span class="mono-h-goal">Goal: exploration, not audit — the heart</span></div>
+    <p class="mono-note">Not an audit but an exploration (P1, P3): a 3-second insight that opens into drill-down. Character lens hooks A, natural-language drill-down is C's killer feature, the emotion lens is B's safe entry.</p>
+    <div class="dgm-canvas">
+      <svg viewBox="0 0 1240 340" xmlns="http://www.w3.org/2000/svg">
+        <g class="dgm-node"><rect x="8" y="145" width="160" height="52" rx="9"/><text class="np" x="88" y="176" font-size="13" text-anchor="middle">Insight card tap</text></g>
+        <g class="dgm-node hub"><rect x="206" y="145" width="176" height="52" rx="9"/><text class="np" x="294" y="176" font-size="13" text-anchor="middle">Explore · 3 lenses</text></g>
+        <g class="dgm-node"><rect x="420" y="38" width="200" height="48" rx="9"/><text class="np" x="520" y="67" font-size="12.5" text-anchor="middle">🪞 Character lens</text></g>
+        <g class="dgm-node"><rect x="420" y="147" width="200" height="48" rx="9"/><text class="np" x="520" y="176" font-size="12.5" text-anchor="middle">📊 Category lens</text></g>
+        <g class="dgm-node"><rect x="420" y="256" width="200" height="48" rx="9"/><text class="np" x="520" y="285" font-size="12.5" text-anchor="middle">🫀 Emotion lens</text></g>
+        <text class="dgm-lbl" x="630" y="66">"weekend-evening · comfort spender"</text>
+        <text class="dgm-lbl" x="520" y="222" text-anchor="middle">drill: delivery → hour → weekday</text>
+        <text class="dgm-lbl" x="630" y="284">mood tag × spend correlation</text>
+        <g class="dgm-node"><rect x="660" y="145" width="170" height="52" rx="9"/><text class="np" x="745" y="176" font-size="13" text-anchor="middle">NL query bar</text></g>
+        <g class="dgm-node"><rect x="866" y="145" width="170" height="52" rx="9"/><text class="np" x="951" y="176" font-size="13" text-anchor="middle">Answer card</text></g>
+        <g class="dgm-node ghost"><rect x="1072" y="145" width="160" height="52" rx="9"/><text class="np" x="1152" y="176" font-size="13" text-anchor="middle">Optional action</text></g>
+        <path class="dgm-link" d="M168 171 L206 171" marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M382 171 C 401 171 401 62 420 62"  marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M382 171 L420 171" marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M382 171 C 401 171 401 280 420 280" marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M632 171 L660 171" marker-end="url(#fbar)" opacity="0"/>
+        <path class="dgm-link" d="M620 171 L660 171" marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M830 171 L866 171" marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M1036 171 L1072 171" marker-end="url(#fbar)"/>
+        <text class="dgm-lbl mint" x="866" y="228">"March: 2 life events + a flight — discretionary below average"</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 5.5 · Recap -->
+  <div class="mono-block">
+    <div class="mono-h"><span class="mono-h-title">5.5 · Flow ④ — Recap &amp; share</span><span class="mono-h-goal">Goal: retention &amp; organic reach</span></div>
+    <p class="mono-note">Turn weekly / monthly into a story, not a lecture. No failure framing (P6): not "you went over" but "here's who you were." Share cards expose character &amp; patterns only — no amounts — for psychological safety and Wrapped-style spread.</p>
+    <div class="dgm-canvas">
+      <svg viewBox="0 0 1120 320" xmlns="http://www.w3.org/2000/svg">
+        <g class="dgm-node"><rect x="8" y="110" width="150" height="56" rx="9"/><text class="np" x="83" y="135" font-size="13" text-anchor="middle">Weekly push</text><text class="ns" x="83" y="154" font-size="11" text-anchor="middle">"recap is ready"</text></g>
+        <g class="dgm-node"><rect x="196" y="44" width="308" height="196" rx="10"/>
+          <text class="np" x="216" y="74" font-size="14">Wrapped-style story slides</text>
+          <line class="nrule" x1="196" y1="88" x2="504" y2="88"/>
+          <text class="dgm-attr" x="216" y="112" font-size="12.5"><tspan class="k">1</tspan>&#160; Character: "social spender"</text>
+          <text class="dgm-attr" x="216" y="140" font-size="12.5"><tspan class="k">2</tspan>&#160; Wins first: discretionary −12%</text>
+          <text class="dgm-attr" x="216" y="168" font-size="12.5"><tspan class="k">3</tspan>&#160; Discovery: Tuesday delivery spikes</text>
+          <text class="dgm-attr" x="216" y="196" font-size="12.5"><tspan class="k">4</tspan>&#160; Curiosity: "will this hold?"</text>
+          <text class="dgm-attr d" x="216" y="222" font-size="11.5">wins first — never a failure frame (P6)</text>
+        </g>
+        <g class="dgm-node key"><rect x="548" y="114" width="170" height="56" rx="9"/><text class="np" x="633" y="139" font-size="13" text-anchor="middle">Share card</text><text class="ns" x="633" y="158" font-size="11" text-anchor="middle">character only · no amounts</text></g>
+        <g class="dgm-node"><rect x="762" y="114" width="230" height="56" rx="9"/><text class="np" x="877" y="139" font-size="13" text-anchor="middle">Organic reach</text><text class="ns" x="877" y="158" font-size="11" text-anchor="middle">→ new Trigger</text></g>
+        <path class="dgm-link" d="M158 140 L196 140" marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M504 142 L548 142" marker-end="url(#fbar)"/>
+        <path class="dgm-link mint" d="M718 142 L762 142" marker-end="url(#fbarm)"/>
+        <path class="dgm-link dash" d="M877 170 C 877 250 83 250 83 166" marker-end="url(#fbar)"/>
+        <text class="dgm-lbl" x="360" y="284">loops back into a new trigger</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 5.6 · Overall -->
+  <div class="mono-block">
+    <div class="mono-h"><span class="mono-h-title">5.6 · The whole flow at a glance</span></div>
+    <div class="dgm-canvas">
+      <svg viewBox="0 0 1200 340" xmlns="http://www.w3.org/2000/svg">
+        <g class="dgm-node"><rect x="8" y="140" width="140" height="52" rx="9"/><text class="np" x="78" y="164" font-size="12.5" text-anchor="middle">Trigger</text><text class="ns" x="78" y="182" font-size="10.5" text-anchor="middle">bill / stress / review</text></g>
+        <g class="dgm-node"><rect x="188" y="140" width="150" height="52" rx="9"/><text class="np" x="263" y="164" font-size="12.5" text-anchor="middle">Onboarding</text><text class="ns" x="263" y="182" font-size="10.5" text-anchor="middle">≤ 60s, link later</text></g>
+        <g class="dgm-node hub"><rect x="378" y="140" width="150" height="52" rx="9"/><text class="np" x="453" y="171" font-size="13.5" text-anchor="middle">Home (Today)</text></g>
+        <g class="dgm-node hub"><rect x="568" y="46" width="150" height="52" rx="9"/><text class="np" x="643" y="77" font-size="13.5" text-anchor="middle">Explore</text></g>
+        <g class="dgm-node"><rect x="568" y="234" width="150" height="52" rx="9"/><text class="np" x="643" y="258" font-size="12.5" text-anchor="middle">Moments</text><text class="ns" x="643" y="276" font-size="10.5" text-anchor="middle">post-pay tag</text></g>
+        <g class="dgm-node"><rect x="772" y="140" width="150" height="52" rx="9"/><text class="np" x="847" y="171" font-size="13.5" text-anchor="middle">Recap</text></g>
+        <g class="dgm-node key"><rect x="962" y="140" width="170" height="52" rx="9"/><text class="np" x="1047" y="164" font-size="12.5" text-anchor="middle">Share card</text><text class="ns" x="1047" y="182" font-size="10.5" text-anchor="middle">character only</text></g>
+        <path class="dgm-link" d="M148 166 L188 166" marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M338 166 L378 166" marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M528 166 C 548 166 548 72 568 72"   marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M528 166 C 548 166 548 260 568 260"  marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M718 72 C 745 72 752 166 772 166"    marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M718 260 C 745 260 752 166 772 166"  marker-end="url(#fbar)"/>
+        <path class="dgm-link" d="M922 166 L962 166" marker-end="url(#fbar)"/>
+        <path class="dgm-link dash" d="M1047 192 C 1047 314 78 314 78 192" marker-end="url(#fbar)"/>
+        <text class="dgm-lbl" x="600" y="300">share (character only) → organic reach → new Trigger</text>
+        <text class="dgm-lbl mint" x="740" y="238">emotion × spending accrues</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 · SUCCESS METRICS ============ -->
+<section class="tt-section wrap">
+  <div class="section-head">
+    <div class="section-label">06 · Success metrics</div>
+    <h2 class="section-title">North Star &amp; guardrails</h2>
+    <p class="section-sub">Opens don't count. The metric that matters is whether people actually <em>explore</em>.</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">North Star Metric</div>
+    <div class="callout-text"><em>Weekly Exploring Users</em> — the share of users who perform at least one drill-down or query in Explore each week, not merely open the app.</div>
+    <div class="callout-attr">Deliberately excludes the tracker's trap: "opens it, does nothing."</div>
+  </div>
+
+  <div class="metric-cols">
+    <div class="metric-cell">
+      <div class="metric-cell-label">Input (leading) metrics</div>
+      <div class="metric-item"><div class="metric-name">First-insight reach rate</div><div class="metric-desc">Instead of "onboarding completion" — target ≥ 80% within 60 seconds.</div></div>
+      <div class="metric-item"><div class="metric-name">Post-pay mood-tag participation</div><div class="metric-desc">Never forced — a health signal for the salience loop.</div></div>
+      <div class="metric-item"><div class="metric-name">Week-3 retention</div><div class="metric-desc">A direct rebuttal to I5 (drop-off within weeks).</div></div>
+    </div>
+    <div class="metric-cell">
+      <div class="metric-cell-label">Guardrails (against backfire)</div>
+      <div class="metric-item"><div class="metric-name">Notification fatigue / opt-out rate</div><div class="metric-desc">Protects Persona B from over-alerting.</div></div>
+      <div class="metric-item"><div class="metric-name">"Guilt" negative feedback / churn events</div><div class="metric-desc">Monitored explicitly — guilt is a design failure here.</div></div>
+      <div class="metric-item"><div class="metric-name">Auto-categorization correction frequency</div><div class="metric-desc">Keeps Persona C's trust in the automation.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7 · SOURCES ============ -->
+<section class="tt-section wrap">
+  <div class="section-head">
+    <div class="section-label">07 · Sources</div>
+    <h2 class="section-title">Verified, current references</h2>
+  </div>
+
+  <div class="src-groups">
+    <div class="src-group">
+      <div class="src-group-label">Market size</div>
+      <div class="src-item"><b>Research Nester</b> — Personal Finance Apps Market (2025.12): $31.7B (2025) → $173.6B (2035), CAGR 20.8%.</div>
+      <div class="src-item"><b>Mordor Intelligence</b> — Personal Finance Tools Market (2026.01): budgeting &amp; expense-tracking 40.6% share.</div>
+      <div class="src-item"><b>Luminix</b> — Competitive Landscape: Personal Finance &amp; Budgeting Apps 2026 (2026.03): iOS pricing &amp; competitive map.</div>
+      <div class="src-item"><b>CoinLaw</b> — Personal Finance App Industry Statistics 2026 (2026.03): AI-recommendation +42% retention.</div>
+    </div>
+    <div class="src-group">
+      <div class="src-group-label">Churn &amp; pain points</div>
+      <div class="src-item"><b>huntervault</b> — Why Budgeting Apps Don't Work (2026).</div>
+      <div class="src-item"><b>Origin</b> — Why Budgeting Apps Fail Most People (2026).</div>
+      <div class="src-item"><b>Onething Design</b> — Budget App Design &amp; Retention (2025.12).</div>
+      <div class="src-item"><b>Indie Hackers</b> — Intentional friction in expense tracking (2026.04).</div>
+      <div class="src-item"><b>econbrew</b> — Why Budgeting Apps Fail: Behavioral Aspects (2025.08).</div>
+    </div>
+    <div class="src-group">
+      <div class="src-group-label">Behavioral economics · pain of paying / cashless effect</div>
+      <div class="src-item"><b>Zellermayer (1996); Prelec &amp; Loewenstein (1998)</b> — origin of "pain of paying" (via Wikipedia / HandWiki).</div>
+      <div class="src-item"><b>Psychopedia Journals</b> — Cashless Spending &amp; the Pain of Paying: Qualitative Study (2026.05): micro-spend trap, realisation gap.</div>
+      <div class="src-item"><b>ScienceDirect</b> — A meta-analysis on the cashless effect (2024).</div>
+      <div class="src-item"><b>IJRASET</b> — The Psychology of Spending in Cashless Societies: restoring salience via real-time &amp; visual cues.</div>
+    </div>
+    <div class="src-group">
+      <div class="src-group-label">Generational &amp; emotional data</div>
+      <div class="src-item"><b>Bank of America</b> — Better Money Habits Study (2025): Gen Z 33% avoid / 30% self-spend under stress.</div>
+      <div class="src-item"><b>YouGov</b> — What Americans think about saving, budgeting, debt (2025).</div>
+      <div class="src-item"><b>The Harris Poll for Cash App</b> — Cash Is Cringe (2025): awareness vs perception gap.</div>
+      <div class="src-item"><b>Intuit</b> — Beyond the Budget (2026.01): 58% treat money management as self-care.</div>
+    </div>
+  </div>
+
+  <div class="conclusion-block">
+    <p class="conclusion-quote">The target isn't failing for lack of data. They're failing because it's <em>emotionally heavy</em>, because cashless <em>erased the sensation</em>, and because the apps are <em>joyless and guilt-inducing</em>. finboard's job is to make spending something you explore — fast, native, and without shame.</p>
+    <div class="conclusion-attr">finboard — Intuitive Banking App UX · Native App Design, iOS</div>
+  </div>
+
+  <p class="disclaimer">This document is a UX-research-based product-strategy artifact. Market figures are each research firm's estimates/forecasts and vary by source. Personas are composite profiles synthesized from research insights and do not represent real individuals.</p>
+</section>
+
+<footer style="padding:clamp(48px,6vw,88px) var(--pad) clamp(48px,6vw,80px); text-align:center; border-top:1px solid var(--line);">
   <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
 </footer>
 
 <script>
-function togglePhase(el) {
-  const block = el.closest('.phase-block');
-  if (block.hasAttribute('data-open')) {
-    const nav = document.querySelector('nav.top');
-    const navH = nav ? nav.offsetHeight : 57;
-    const blockTop = block.getBoundingClientRect().top + window.scrollY;
-    if (window.scrollY > blockTop) {
-      window.scrollTo({ top: blockTop - navH, behavior: 'instant' });
-    }
-    block.removeAttribute('data-open');
-  } else {
-    block.setAttribute('data-open', '');
-  }
-}
-(function(){const n=document.querySelector('nav.top');if(n)document.documentElement.style.setProperty('--nav-h',n.offsetHeight+'px');})();
+/* Journey-map persona tab switcher — cross-fade */
+(function(){
+  var tabs = document.querySelectorAll('.jm-tab');
+  var panels = document.querySelectorAll('[data-jm-panel]');
+  var busy = false;
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      if(busy) return;
+      var k = t.getAttribute('data-jm');
+      var curr = document.querySelector('.jm-panel.is-active');
+      var next = document.querySelector('[data-jm-panel="'+k+'"]');
+      if(!next || next === curr) return;
+      busy = true;
+      tabs.forEach(function(x){
+        var on = x === t;
+        x.classList.toggle('is-active', on);
+        x.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      if(curr){
+        curr.style.opacity = '0';
+        setTimeout(function(){
+          curr.classList.remove('is-active');
+          curr.style.display = 'none';
+          curr.style.opacity = '';
+          next.style.display = 'block';
+          next.style.opacity = '0';
+          requestAnimationFrame(function(){
+            requestAnimationFrame(function(){
+              next.classList.add('is-active');
+              next.style.opacity = '';
+              setTimeout(function(){ busy = false; }, 260);
+            });
+          });
+        }, 240);
+      }
+    });
+  });
+})();
 </script>
 <script src="./lazy-video.js"></script>
 </body>
