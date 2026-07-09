@@ -383,8 +383,9 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     <div class="toc-item"><div class="toc-num">04</div><div class="toc-text">Three case studies — persona + user journey mapping<span>Three segments, three trajectories, three emotional arcs.</span></div></div>
     <div class="toc-item"><div class="toc-num">05</div><div class="toc-text">UX flows — information architecture &amp; four core flows<span>What the product actually does, screen to screen.</span></div></div>
     <div class="toc-item"><div class="toc-num">06</div><div class="toc-text">Compliance &amp; regulatory strategy<span>Canadian financial regulators, electronic-data governance, and accessibility standards.</span></div></div>
-    <div class="toc-item"><div class="toc-num">07</div><div class="toc-text">Success metrics<span>North Star &amp; guardrails.</span></div></div>
-    <div class="toc-item"><div class="toc-num">08</div><div class="toc-text">Sources<span>Every figure and insight, cited.</span></div></div>
+    <div class="toc-item"><div class="toc-num">07</div><div class="toc-text">Stakeholder map<span>The system's actors, in primary / secondary / tertiary rings.</span></div></div>
+    <div class="toc-item"><div class="toc-num">08</div><div class="toc-text">Success metrics<span>North Star &amp; guardrails.</span></div></div>
+    <div class="toc-item"><div class="toc-num">09</div><div class="toc-text">Sources<span>Every figure and insight, cited.</span></div></div>
   </div>
 </section>
 
@@ -1125,10 +1126,113 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
 </section>
 
-<!-- ============ 7 · SUCCESS METRICS ============ -->
+<!-- ============ 07 · STAKEHOLDER MAP ============ -->
+<section class="tt-section wrap">
+  <style>
+    .sk-wrap{ max-width:780px; margin:0 auto; }
+    .sk-svg{ width:100%; height:auto; display:block; font-family:var(--font); overflow:visible; }
+    .sk-core{ fill:#fff; font-size:16px; font-weight:600; letter-spacing:-0.03em; }
+    .sk-core-sub{ fill:rgba(255,255,255,.78); font-size:9px; letter-spacing:0.02em; }
+    .sk-cat{ fill:var(--ink); font-size:13px; font-weight:500; letter-spacing:-0.02em; }
+    .sk-tier{ fill:var(--muted); font-size:8.5px; letter-spacing:0.05em; text-transform:uppercase; }
+    .sk-lbl{ fill:var(--ink); font-size:9.5px; letter-spacing:-0.01em; }
+    .sk-legend{ display:flex; gap:14px 30px; flex-wrap:wrap; margin-top:clamp(24px,3vw,40px); justify-content:center; }
+    .sk-legend .lg{ display:inline-flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); letter-spacing:-0.01em; }
+    .sk-legend .d{ width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  </style>
+  <div class="section-head">
+    <div class="section-label">07 · Stakeholder map</div>
+    <h2 class="section-title">Who's in the system</h2>
+    <p class="section-sub">Concentric rings by proximity to the money-exploration loop: <strong>primary</strong> actors touch it directly; <strong>secondary</strong> are the accounts, rails, and platform surfaces it depends on; <strong>tertiary</strong> are the standards and context around it. Four categories divide the field.</p>
+  </div>
+  <div class="sk-wrap">
+        <svg viewBox="0 0 720 720" xmlns="http://www.w3.org/2000/svg" class="sk-svg">
+        <circle cx="360" cy="360" r="248" fill="none" stroke="var(--line)" stroke-width="1" stroke-dasharray="2 6"/>
+        <circle cx="360" cy="360" r="170" fill="none" stroke="var(--line)" stroke-width="1"/>
+        <circle cx="360" cy="360" r="95" fill="none" stroke="var(--line)" stroke-width="1"/>
+        <text x="360.0" y="259.0" class="sk-tier" text-anchor="middle">1 · Primary</text>
+        <text x="360.0" y="184.0" class="sk-tier" text-anchor="middle">2 · Secondary</text>
+        <text x="360.0" y="106.0" class="sk-tier" text-anchor="middle">3 · Tertiary</text>
+        <text x="556.6" y="163.4" class="sk-cat" text-anchor="middle" dominant-baseline="central">Users &amp; Household</text>
+        <text x="556.6" y="556.6" class="sk-cat" text-anchor="middle" dominant-baseline="central">Financial institutions</text>
+        <text x="163.4" y="556.6" class="sk-cat" text-anchor="middle" dominant-baseline="central">Platform &amp; Tech</text>
+        <text x="163.4" y="163.4" class="sk-cat" text-anchor="middle" dominant-baseline="central">Regulators &amp; Standards</text>
+        <line x1="400.3" y1="319.7" x2="427.2" y2="292.8" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="427.2" cy="292.8" r="5" fill="var(--accent)"/>
+        <text x="436.2" y="296.0" class="sk-lbl" text-anchor="start">The individual</text>
+        <line x1="400.3" y1="319.7" x2="480.2" y2="239.8" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="480.2" cy="239.8" r="4" fill="#333333"/>
+        <text x="489.2" y="243.0" class="sk-lbl" text-anchor="start">Household / family</text>
+        <line x1="400.3" y1="319.7" x2="535.4" y2="184.6" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="535.4" cy="184.6" r="3.4" fill="#8a8a8a"/>
+        <text x="544.4" y="187.8" class="sk-lbl" text-anchor="start">Financial educators</text>
+        <line x1="400.3" y1="400.3" x2="427.2" y2="427.2" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="427.2" cy="427.2" r="5" fill="var(--accent)"/>
+        <text x="436.2" y="430.4" class="sk-lbl" text-anchor="start">Connected bank</text>
+        <line x1="415.1" y1="374.8" x2="524.2" y2="404.0" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="524.2" cy="404.0" r="4" fill="#333333"/>
+        <text x="533.2" y="407.2" class="sk-lbl" text-anchor="start">Scotiabank</text>
+        <line x1="406.7" y1="392.7" x2="499.3" y2="457.5" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="499.3" cy="457.5" r="4" fill="#333333"/>
+        <text x="508.3" y="460.7" class="sk-lbl" text-anchor="start">TD</text>
+        <line x1="392.7" y1="406.7" x2="457.5" y2="499.3" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="457.5" cy="499.3" r="4" fill="#333333"/>
+        <text x="466.5" y="502.5" class="sk-lbl" text-anchor="start">BMO</text>
+        <line x1="374.8" y1="415.1" x2="404.0" y2="524.2" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="404.0" cy="524.2" r="4" fill="#333333"/>
+        <text x="413.0" y="527.4" class="sk-lbl" text-anchor="start">RBC</text>
+        <line x1="415.1" y1="374.8" x2="599.5" y2="424.2" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="599.5" cy="424.2" r="3.4" fill="#8a8a8a"/>
+        <text x="608.5" y="427.4" class="sk-lbl" text-anchor="start">Flinks / Plaid</text>
+        <line x1="400.3" y1="400.3" x2="535.4" y2="535.4" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="535.4" cy="535.4" r="3.4" fill="#8a8a8a"/>
+        <text x="544.4" y="538.6" class="sk-lbl" text-anchor="start">Visa · networks</text>
+        <line x1="374.8" y1="415.1" x2="424.2" y2="599.5" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="424.2" cy="599.5" r="3.4" fill="#8a8a8a"/>
+        <text x="433.2" y="602.7" class="sk-lbl" text-anchor="start">CDIC</text>
+        <line x1="319.7" y1="400.3" x2="292.8" y2="427.2" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="292.8" cy="427.2" r="5" fill="var(--accent)"/>
+        <text x="283.8" y="430.4" class="sk-lbl" text-anchor="end">Apple · iOS</text>
+        <line x1="345.2" y1="415.1" x2="316.0" y2="524.2" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="316.0" cy="524.2" r="4" fill="#333333"/>
+        <text x="307.0" y="527.4" class="sk-lbl" text-anchor="end">Widgets · Live Activity</text>
+        <line x1="304.9" y1="374.8" x2="195.8" y2="404.0" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="195.8" cy="404.0" r="4" fill="#333333"/>
+        <text x="186.8" y="407.2" class="sk-lbl" text-anchor="end">App Store</text>
+        <line x1="345.2" y1="415.1" x2="295.8" y2="599.5" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="295.8" cy="599.5" r="3.4" fill="#8a8a8a"/>
+        <text x="286.8" y="602.7" class="sk-lbl" text-anchor="end">VoiceOver · a11y APIs</text>
+        <line x1="304.9" y1="374.8" x2="120.5" y2="424.2" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="120.5" cy="424.2" r="3.4" fill="#8a8a8a"/>
+        <text x="111.5" y="427.4" class="sk-lbl" text-anchor="end">Device makers</text>
+        <line x1="304.9" y1="345.2" x2="195.8" y2="316.0" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="195.8" cy="316.0" r="4" fill="#333333"/>
+        <text x="186.8" y="319.2" class="sk-lbl" text-anchor="end">FCAC · Open Banking</text>
+        <line x1="345.2" y1="304.9" x2="316.0" y2="195.8" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="316.0" cy="195.8" r="4" fill="#333333"/>
+        <text x="307.0" y="199.0" class="sk-lbl" text-anchor="end">OSFI</text>
+        <line x1="304.9" y1="345.2" x2="120.5" y2="295.8" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="120.5" cy="295.8" r="3.4" fill="#8a8a8a"/>
+        <text x="111.5" y="299.0" class="sk-lbl" text-anchor="end">PIPEDA · OPC</text>
+        <line x1="319.7" y1="319.7" x2="184.6" y2="184.6" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="184.6" cy="184.6" r="3.4" fill="#8a8a8a"/>
+        <text x="175.6" y="187.8" class="sk-lbl" text-anchor="end">Québec Law 25</text>
+        <line x1="345.2" y1="304.9" x2="295.8" y2="120.5" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="295.8" cy="120.5" r="3.4" fill="#8a8a8a"/>
+        <text x="286.8" y="123.7" class="sk-lbl" text-anchor="end">ACA · WCAG</text>
+        <circle cx="360" cy="360" r="48" fill="var(--accent)"/>
+        <text x="360" y="356" class="sk-core" text-anchor="middle">finboard</text>
+        <text x="360" y="372" class="sk-core-sub" text-anchor="middle">iOS finance</text>
+        </svg>
+  </div>
+  <div class="sk-legend"><span class="lg"><span class="d" style="background:var(--accent)"></span>1 · Primary — direct value exchange</span><span class="lg"><span class="d" style="background:#333333"></span>2 · Secondary — ecosystem &amp; dependencies</span><span class="lg"><span class="d" style="background:#8a8a8a"></span>3 · Tertiary — context &amp; governance</span></div>
+  <p class="section-note" style="margin-top:clamp(28px,3vw,44px);"><strong>Categories.</strong> Users &amp; Household, Financial institutions (the connected accounts and payment rails), Platform &amp; Tech (Apple / iOS surfaces), and Regulators &amp; Standards (the frameworks finboard is built within). The individual, their connected bank, and Apple sit at the core; card networks, privacy regulators, and accessibility bodies sit at the edge.</p>
+</section>
+
+<!-- ============ 8 · SUCCESS METRICS ============ -->
 <section class="tt-section wrap">
   <div class="section-head">
-    <div class="section-label">07 · Success metrics</div>
+    <div class="section-label">08 · Success metrics</div>
     <h2 class="section-title">North Star &amp; guardrails</h2>
     <p class="section-sub">Opens don't count. The metric that matters is whether people actually <em>explore</em>.</p>
   </div>
@@ -1155,10 +1259,10 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
 </section>
 
-<!-- ============ 8 · SOURCES ============ -->
+<!-- ============ 9 · SOURCES ============ -->
 <section class="tt-section wrap">
   <div class="section-head">
-    <div class="section-label">08 · Sources</div>
+    <div class="section-label">09 · Sources</div>
     <h2 class="section-title">Verified, current references</h2>
   </div>
 
