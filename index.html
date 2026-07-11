@@ -31,13 +31,13 @@
 
 <style>
   :root{
-    --bg:    #ffffff;
-    --ink:   #0a0a0a;
-    --muted: #8a8a8a;
-    --line:  #e6e6e6;
-    --max:   1320px;
-    --pad:   clamp(20px, 4vw, 56px);
-    --font:  -apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --bg:    #000000;
+    --ink:   #ffffff;
+    --muted: #9a9a9a;
+    --line:  #222222;
+    --max:   1440px;
+    --pad:   clamp(12px, 2vw, 28px);
+    --font:  "Helvetica Neue",Helvetica,Arial,sans-serif;
   }
 
   *{ box-sizing:border-box; margin:0; padding:0; }
@@ -123,16 +123,34 @@
     font-size:14px; color:var(--muted); max-width:38ch; line-height:1.5;
   }
 
-  /* SELECTED */
+  /* SELECTED — single grid: 3 big full-bleed rows + 6 small (3-per-row).
+     Order is controlled with `order` so the DOM stays untouched. */
   .selected{
-    display:grid; grid-template-columns:repeat(12,1fr); gap:48px 24px;
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    column-gap:20px; row-gap:56px;
+    align-items:start;
   }
+  /* BIG: full-bleed, edge-to-edge, 2:1 */
+  .work-block.is-big{
+    grid-column:1 / -1;
+    width:100vw; margin-left:calc(50% - 50vw);
+  }
+  .work-block.is-big .work{ aspect-ratio:2/1; }
+  .work-block.is-big .w-info{ padding:0 var(--pad); margin-top:18px; }
+  .work-block.is-big .w-info .t{ font-size:clamp(20px,2.4vw,32px); }
+  /* SMALL: 2 of 6 columns → 3 per row, 2:1 */
+  .work-block.is-small{ grid-column:span 2; }
+  .work-block.is-small .work{ aspect-ratio:2/1; }
+  /* explicit order: bigs first (ongen→token→finboard), then smalls */
+  .work-block.o1{ order:1 } .work-block.o2{ order:2 } .work-block.o3{ order:3 }
+  .work-block.is-small{ order:4 }
   .work{
     position:relative; overflow:hidden;
-    background:#f4f4f4;
-    aspect-ratio: 4/3;
+    background:#0e0e0e;
+    aspect-ratio: 2/1;
     display:block;
-    border-radius: 30px;
+    border-radius: 0;
   }
   .app-icon-ph{
     position:absolute; top:16px; right:16px; z-index:2;
@@ -179,11 +197,7 @@
   .w-tags{ display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; flex-shrink:0; }
   .w-tag{ font-size:11px; color:var(--muted); letter-spacing:0.01em; }
 
-  .work-block{ grid-column: span 6; }
-  .work-block.wide{ grid-column: span 12; }
-  .work-block.wide .work{ aspect-ratio: 16/9; }
-  .work-block.third{ grid-column: span 4; }
-  .work-block.third .work{ aspect-ratio: 1/1; }
+  .work-block{ position:relative; }
 
   /* ULT featured card */
   .work.ult-work{ background:#B6B6ED; }
@@ -288,7 +302,7 @@
   /* floating thumbnail */
   .thumb-follow{
     position:fixed; pointer-events:none; z-index:60;
-    width:260px; height:180px; background:#f4f4f4;
+    width:260px; height:180px; background:#0e0e0e;
     overflow:hidden;
     opacity:0; transform:translate(-50%,-50%) scale(.95);
     transition: opacity .2s, transform .3s cubic-bezier(.7,0,.2,1);
@@ -693,9 +707,9 @@
     .hero-info-mobile{ display:flex; flex-direction:column; gap:14px; font-size:13px; margin-top:24px; }
     .hero-info-mobile .pair{ display:flex; flex-direction:column; gap:2px; }
     .hero-info-mobile dt{ color:var(--muted); }
-    .selected{ gap:36px 16px; }
-    .work-block, .work-block.wide, .work-block.third{ grid-column: span 12; }
-    .work-block.wide .work, .work-block.third .work{ aspect-ratio: 4/3; }
+    .selected{ column-gap:12px; row-gap:36px; }
+    /* small pieces: 2 per row on tablet */
+    .work-block.is-small{ grid-column:span 3; }
     .row{ grid-template-columns: 60px 1fr 30px; gap:12px; padding:16px 0; }
     .row .ty, .row .du{ display:none; }
     .row .ti{ font-size:18px; }
@@ -708,6 +722,10 @@
     .contact{ padding-top:72px; padding-bottom:64px; }
     .contact .links{ font-size:15px; }
     .contact .links a{ flex-direction:column; align-items:flex-start; gap:3px; }
+  }
+  @media (max-width:560px){
+    /* small pieces: 1 per row on phones */
+    .work-block.is-small{ grid-column:1 / -1; }
   }
   video{ -webkit-appearance:none; appearance:none; }
   video::-webkit-media-controls,
@@ -779,7 +797,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
 
   <div class="selected">
-    <div class="work-block reveal">
+    <div class="work-block reveal is-big o3">
       <a href="./finboard.html">
         <div class="work" style="background:#0a0a0a;">
           <div class="app-icon-ph"><img src="./finboard.svg" alt="finboard" style="width:40px;height:auto;filter:invert(20%);" /></div>
@@ -792,7 +810,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
-    <div class="work-block reveal">
+    <div class="work-block reveal is-small">
       <a href="./autoq.html">
         <div class="work" style="background:#1a1a1a;">
           <div class="app-icon-ph" style="background:#DB6A4E;"><span style="color:#fff;font-size:13px;letter-spacing:-0.01em;line-height:1;white-space:nowrap;"><span style="font-family:var(--font);font-weight:400;">Auto</span><span style="font-family:'anthropicSerif',ui-serif,Georgia,'Times New Roman',serif;font-weight:700;">Q</span></span></div>
@@ -805,7 +823,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
-    <div class="work-block reveal">
+    <div class="work-block reveal is-small">
       <a href="./gridone.html">
         <div class="work">
           <div class="app-icon-ph gridone-mark"><span>GridOne</span></div>
@@ -818,7 +836,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
-    <div class="work-block reveal">
+    <div class="work-block reveal is-big o1">
       <a href="./ongenradio.html">
         <div class="work ongen-work">
           <div class="app-icon-ph" style="background:#000;"><div class="app-icon" style="background-image:url('./ongenlogo.svg');filter:brightness(0) invert(1);"></div></div>
@@ -837,7 +855,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
-    <div class="work-block reveal">
+    <div class="work-block reveal is-big o2">
       <a href="./tokentrust.html">
         <div class="work"><div class="app-icon-ph"><svg viewBox="574 0 96 96" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M645.148 3.18803L629.96 39.7479L666.706 24.5608L670.27 32.4368L633.336 47.6218L670.27 62.8087L666.706 70.4965L629.96 55.3093L645.148 92.0575L637.458 95.62L622.274 58.6837L607.085 95.62L599.399 92.0575L614.4 55.3093L577.841 70.4965L574.652 62.8087L611.211 47.6218L574.652 32.4368L577.841 24.7491L614.4 39.7479L599.399 3.18803L607.085 0L622.274 36.56L637.458 0L645.148 3.18803Z" fill="#000"/></svg></div><video class="lazy-vid" data-src="./tokentrustthumb.mp4" poster="./posters/tokentrustthumb.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
         <div class="w-info">
@@ -847,7 +865,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
-    <div class="work-block reveal">
+    <div class="work-block reveal is-small">
       <a href="./proposal-audit.html">
         <div class="work ar-work">
           <div class="app-icon-ph" style="overflow:hidden;padding:0;background:#232f3e;"><object data="./aap.svg" type="image/svg+xml" width="38" height="34" style="display:block;pointer-events:none;"></object></div>
@@ -864,7 +882,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
-    <div class="work-block reveal">
+    <div class="work-block reveal is-small">
       <a href="./intact-lifolio.html">
         <div class="work"><div class="app-icon-ph"><div class="app-icon" style="background-image:url('./lifolio+.svg');"></div></div><video class="lazy-vid" data-src="./intactlifoliothumb.mp4" poster="./posters/intactlifoliothumb.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
         <div class="w-info">
@@ -874,7 +892,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
-    <div class="work-block reveal">
+    <div class="work-block reveal is-small">
       <a href="./ult.html">
         <div class="work ult-work">
           <div class="app-icon-ph" style="background:#111116;"><svg viewBox="0 0 652 392" style="width:36px;height:auto;" fill="#BABAE6" xmlns="http://www.w3.org/2000/svg"><path d="M86.8094 389.856C69.4476 389.856 54.2179 386.349 41.1203 379.33C28.3274 372.008 18.2757 361.023 10.9654 346.378C3.65514 331.429 0 312.665 0 290.086V157.365H38.3789V285.967C38.3789 309.461 43.4048 327.156 53.4564 339.055C63.508 350.955 77.9763 356.905 96.8613 356.905C109.959 356.905 121.533 353.701 131.585 347.294C141.942 340.886 150.013 331.581 155.8 319.376C161.892 307.173 164.938 292.374 164.938 274.983V157.365H203.317V384.364H169.507L165.852 348.666H164.024C156.409 360.872 146.053 370.788 132.956 378.414C120.163 386.043 104.78 389.856 86.8094 389.856Z"/><path d="M241.939 384.364V64.0018H280.317V384.364H241.939Z"/><path d="M409.083 384.364C395.376 384.364 383.496 382.23 373.445 377.957C363.393 373.686 355.626 366.516 350.144 356.447C344.966 346.075 342.377 332.191 342.377 314.8V184.824H303.084V157.365H342.377L346.946 102.904H380.756V157.365H447.461V184.824H380.756V314.8C380.756 330.666 383.649 341.344 389.437 346.836C395.225 352.024 405.428 354.617 420.048 354.617H443.806V384.364H409.083Z"/><path d="M617.891 15.6749C639.26 10.2065 657.694 31.5136 649.252 51.9221L560.757 265.859C553.138 284.279 528.828 288.223 515.792 273.155L474.951 225.948C464.936 214.371 473.144 196.363 488.439 196.363H516.265C526.122 196.363 534.112 188.358 534.112 178.485V158.776C534.112 148.902 526.122 140.899 516.265 140.899H432.393C422.535 140.899 414.545 132.895 414.545 123.021V81.5992C414.545 73.4301 420.073 66.3001 427.975 64.2781L617.891 15.6749Z"/></svg></div>
@@ -887,7 +905,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
-    <div class="work-block reveal">
+    <div class="work-block reveal is-small">
       <a href="./knowmedi.html">
         <div class="work"><div class="app-icon-ph" style="background:#000;"><span class="knowmedi-mark"><b>Know</b>Medi</span></div><video class="lazy-vid" data-src="./knowmediprev.mp4" poster="./posters/knowmediprev.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
         <div class="w-info">
