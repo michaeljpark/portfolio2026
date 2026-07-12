@@ -8,7 +8,7 @@
    Optional: data-src-mobile / data-poster-mobile (max-width:880px variants).
    Dynamically created videos: window.observeLazyVid(videoEl). */
 (function () {
-  var ASSET_VERSION = '20260710';
+  var ASSET_VERSION = '20260712';
   try {
     var scriptVersion = new URL(document.currentScript.src, window.location.href).searchParams.get('v');
     if (scriptVersion) ASSET_VERSION = scriptVersion;
