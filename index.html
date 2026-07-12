@@ -7,8 +7,7 @@
 <meta name="description" content="Michael Joongmin Park — Digital product designer working at the intersection of human–AI experience, industrial design, and rapid prototyping. Toronto, ON." />
 
 <link rel="icon" type="image/svg+xml" href="./mkpk.svg" />
-<link rel="preload" as="image" href="./posters/ongenthumb.jpg" media="(min-width:881px)" fetchpriority="high" />
-<link rel="preload" as="image" href="./posters/ongenprevmobile.jpg" media="(max-width:880px)" fetchpriority="high" />
+<link rel="preload" as="image" href="./posters/ongenthumb.jpg" fetchpriority="high" />
 
 <!-- Inter, subset to the ULT cam-telemetry glyphs only (tiny) -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -71,9 +70,17 @@
     font-size:13px;
   }
   .nav-mark{ font-weight:500; }
-  .nav-links{ display:flex; gap:28px; }
+  .nav-links{ display:flex; align-items:center; gap:28px; }
   .nav-links a{ color:var(--muted); transition:color .2s; }
   .nav-links a:hover{ color:var(--ink); }
+  /* Résumé call-to-action: white pill, black text */
+  .nav-links a.nav-cta{
+    color:#000; background:#fff;
+    padding:7px 15px; border-radius:999px;
+    font-weight:500; letter-spacing:-0.02em;
+    transition:background-color .2s, transform .2s;
+  }
+  .nav-links a.nav-cta:hover{ color:#000; background:#e4e4e4; }
 
   /* HERO */
   header.hero{
@@ -768,7 +775,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       <a href="#work">Work</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
-      <a href="./Resume%202026%20-%20Joongmin%20Park%20(Michael%20Park).pdf" target="_blank" rel="noopener">Résumé</a>
+      <a class="nav-cta" href="./Resume%202026%20-%20Joongmin%20Park%20(Michael%20Park).pdf" target="_blank" rel="noopener">Résumé</a>
     </div>
   </div>
 </nav>
@@ -843,9 +850,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
           <div class="ongen-img">
             <video class="lazy-vid" muted loop playsinline preload="none"
               poster="./posters/ongenthumb.jpg"
-              data-poster-mobile="./posters/ongenprevmobile.jpg"
-              data-src="./ongenthumb.mp4"
-              data-src-mobile="./ongenprevmobile.mp4"></video>
+              data-src="./ongenthumb.mp4"></video>
           </div>
         </div>
         <div class="w-info">
