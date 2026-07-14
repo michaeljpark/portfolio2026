@@ -3,6 +3,15 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<script>
+  /* Apply saved theme before first paint (default: light). */
+  (function(){
+    try{
+      if(localStorage.getItem('theme') === 'dark')
+        document.documentElement.setAttribute('data-theme','dark');
+    }catch(e){}
+  })();
+</script>
 <title>Michael Joongmin Park — Designer</title>
 <meta name="description" content="Michael Joongmin Park — Digital product designer working at the intersection of human–AI experience, industrial design, and rapid prototyping. Toronto, ON." />
 
@@ -30,14 +39,24 @@
 
 <style>
   :root{
-    --bg:    #000000;
-    --ink:   #ffffff;
-    --muted: #9a9a9a;
-    --line:  #222222;
+    /* Light theme (default) */
+    --bg:    #ffffff;
+    --ink:   #0a0a0a;
+    --muted: #8a8a8a;
+    --line:  #e6e6e6;
+    --card:  #f4f4f4;
     --max:   1440px;
     --pad:   clamp(12px, 2vw, 28px);
     --font:  "Helvetica Neue",Helvetica,Arial,sans-serif;
   }
+  :root[data-theme="dark"]{
+    --bg:    #000000;
+    --ink:   #ffffff;
+    --muted: #9a9a9a;
+    --line:  #222222;
+    --card:  #0e0e0e;
+  }
+  html{ background:var(--bg); }
 
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{ background:var(--bg); color:var(--ink); }
@@ -65,22 +84,44 @@
     -webkit-backdrop-filter: blur(10px);
   }
   .nav-inner{
-    display:flex; align-items:center; justify-content:space-between;
+    display:flex; align-items:center; gap:12px;
     padding:18px var(--pad); max-width:var(--max); margin:0 auto;
     font-size:13px;
   }
-  .nav-mark{ font-weight:500; }
-  .nav-links{ display:flex; align-items:center; gap:28px; }
+  .nav-mark{ font-weight:500; order:1; }
+  .nav-links{ display:flex; align-items:center; gap:28px; order:3; margin-left:auto; }
   .nav-links a{ color:var(--muted); transition:color .2s; }
   .nav-links a:hover{ color:var(--ink); }
-  /* Résumé call-to-action: white pill, black text */
+  /* Résumé call-to-action: inverted pill (adapts to theme) */
   .nav-links a.nav-cta{
-    color:#000; background:#fff;
+    color:var(--bg); background:var(--ink);
     padding:7px 15px; border-radius:999px;
     font-weight:500; letter-spacing:-0.02em;
-    transition:background-color .2s, transform .2s;
+    transition:opacity .2s, transform .2s;
   }
-  .nav-links a.nav-cta:hover{ color:#000; background:#e4e4e4; }
+  .nav-links a.nav-cta:hover{ color:var(--bg); opacity:.82; }
+
+  /* Theme toggle button */
+  .theme-toggle{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:34px; height:34px; flex-shrink:0; order:2;
+    padding:0; border:none; background:none; cursor:pointer;
+    color:var(--muted); border-radius:999px;
+    transition:color .2s;
+  }
+  .theme-toggle:hover{ color:var(--ink); }
+  .theme-toggle svg{ width:19px; height:19px; display:block; }
+  /* Light (default): offer the moon (switch to dark). Dark: offer the sun. */
+  .theme-toggle .tt-sun{ display:none; }
+  .theme-toggle .tt-moon{ display:block; }
+  :root[data-theme="dark"] .theme-toggle .tt-sun{ display:block; }
+  :root[data-theme="dark"] .theme-toggle .tt-moon{ display:none; }
+
+  /* Smooth cross-fade while switching themes (class toggled by JS on click) */
+  .theme-anim, .theme-anim *{
+    transition: background-color .35s ease, color .35s ease,
+                border-color .35s ease, fill .35s ease, stroke .35s ease !important;
+  }
 
   /* HERO */
   header.hero{
@@ -154,7 +195,7 @@
   .work-block.is-small{ order:4 }
   .work{
     position:relative; overflow:hidden;
-    background:#0e0e0e;
+    background:var(--card);
     aspect-ratio: 2/1;
     display:block;
     border-radius: 0;
@@ -309,7 +350,7 @@
   /* floating thumbnail */
   .thumb-follow{
     position:fixed; pointer-events:none; z-index:60;
-    width:260px; height:180px; background:#0e0e0e;
+    width:260px; height:180px; background:var(--card);
     overflow:hidden;
     opacity:0; transform:translate(-50%,-50%) scale(.95);
     transition: opacity .2s, transform .3s cubic-bezier(.7,0,.2,1);
@@ -772,11 +813,15 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="nav-inner">
     <div class="nav-mark">Michael J. Park</div>
     <div class="nav-links">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-      <a class="nav-cta" href="./Resume%202026%20-%20Joongmin%20Park%20(Michael%20Park).pdf" target="_blank" rel="noopener">Résumé</a>
-    </div>
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a class="nav-cta" href="./Resume%202026%20-%20Joongmin%20Park%20(Michael%20Park).pdf" target="_blank" rel="noopener">Résumé</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+        <svg class="tt-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v1"/><path d="M12 20v1"/><path d="M3 12h1"/><path d="M20 12h1"/><path d="m18.364 5.636-.707.707"/><path d="m6.343 17.657-.707.707"/><path d="m5.636 5.636.707.707"/><path d="m17.657 17.657.707.707"/></svg>
+        <svg class="tt-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </button>
   </div>
 </nav>
 
@@ -1300,7 +1345,25 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   })();
 </script>
 
-
+<script>
+  /* Theme toggle: light (default) <-> dark, persisted in localStorage. */
+  (function(){
+    var btn = document.getElementById('themeToggle');
+    if(!btn) return;
+    var root = document.documentElement, animT;
+    btn.addEventListener('click', function(){
+      /* enable color transitions only for the switch, then reflow so they fire */
+      root.classList.add('theme-anim');
+      void root.offsetWidth;
+      var toDark = root.getAttribute('data-theme') !== 'dark';
+      if(toDark) root.setAttribute('data-theme','dark');
+      else       root.removeAttribute('data-theme');
+      try{ localStorage.setItem('theme', toDark ? 'dark' : 'light'); }catch(e){}
+      clearTimeout(animT);
+      animT = setTimeout(function(){ root.classList.remove('theme-anim'); }, 450);
+    });
+  })();
+</script>
 
 </body>
 </html>
