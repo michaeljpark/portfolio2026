@@ -307,58 +307,6 @@
     .more-btn .more-icon svg{ width:18px; height:18px; }
   }
 
-  /* INDEX */
-  .filters{
-    display:flex; gap:24px; flex-wrap:wrap;
-    margin-bottom:24px;
-    border-bottom:1px solid var(--line);
-    padding-bottom:18px;
-  }
-  .filter{
-    font-family:inherit; font-size:13px; letter-spacing:-0.05em;
-    background:none; border:none; padding:0; cursor:pointer;
-    color:var(--muted); transition:color .2s;
-  }
-  .filter:hover{ color:var(--ink); }
-  .filter.on{ color:var(--ink); }
-  .filter .c{ color:var(--muted); margin-left:4px; }
-
-  .row{
-    display:grid;
-    grid-template-columns: 80px 1fr 1.2fr 100px 40px;
-    gap:24px;
-    padding:20px 0;
-    border-bottom:1px solid var(--line);
-    align-items:baseline;
-    cursor:pointer;
-    transition: padding .35s cubic-bezier(.7,0,.2,1);
-  }
-  .row:hover{ padding-left:16px; padding-right:16px; }
-  .row .yr{ font-size:13px; color:var(--muted); }
-  .row .ti{
-    font-size:22px; font-weight:500; line-height:1.15;
-    letter-spacing:-0.05em;
-  }
-  .row .ty{ font-size:13px; color:var(--muted); }
-  .row .du{ font-size:13px; color:var(--muted); }
-  .row .ar{
-    text-align:right; font-size:18px; color:var(--muted);
-    transition: transform .35s, color .25s;
-  }
-  .row:hover .ar{ color:var(--ink); transform:translateX(4px); }
-
-  /* floating thumbnail */
-  .thumb-follow{
-    position:fixed; pointer-events:none; z-index:60;
-    width:260px; height:180px; background:var(--card);
-    overflow:hidden;
-    opacity:0; transform:translate(-50%,-50%) scale(.95);
-    transition: opacity .2s, transform .3s cubic-bezier(.7,0,.2,1);
-    border:1px solid var(--line);
-  }
-  .thumb-follow img{ width:100%; height:100%; object-fit:cover; }
-  .thumb-follow.show{ opacity:1; transform:translate(-50%,-50%) scale(1); }
-
   /* ABOUT */
   .about-grid{
     display:grid; grid-template-columns: 1fr 1.4fr; gap:80px;
@@ -373,7 +321,9 @@
   }
   .about-col .small{
     font-size:14px; color:var(--muted); line-height:1.55;
-    max-width:42ch;
+    /* right edge lines up with the end of the "A short introduction" heading
+       (--about-measure is measured in JS; 42ch is the pre-JS fallback) */
+    max-width: var(--about-measure, 42ch);
   }
   .about-col .small + .small{ margin-top:12px; }
 
@@ -419,9 +369,6 @@
   .contact-inner{
     display:grid; grid-template-columns: 1fr 1fr; gap:80px;
     align-items:end;
-  }
-  .contact .label{
-    font-size:13px; color:var(--muted); margin-bottom:24px;
   }
   .contact h2{
     font-weight:500;
@@ -758,18 +705,14 @@
     .selected{ column-gap:12px; row-gap:36px; }
     /* small pieces: 2 per row on tablet */
     .work-block.is-small{ grid-column:span 3; }
-    .row{ grid-template-columns: 60px 1fr 30px; gap:12px; padding:16px 0; }
-    .row .ty, .row .du{ display:none; }
-    .row .ti{ font-size:18px; }
     .about-grid, .contact-inner{ grid-template-columns:1fr; gap:48px; }
+    .contact{ padding-top:72px; padding-bottom:64px; }
+    .contact .links{ font-size:15px; }
+    .contact .links a{ flex-direction:column; align-items:flex-start; gap:3px; }
     .tools{ grid-template-columns:1fr; gap:32px; }
     .xp{ grid-template-columns: 80px 1fr; }
     .xp .place{ display:none; }
     .nav-links a:not(:last-child){ display:none; }
-    .thumb-follow{ display:none; }
-    .contact{ padding-top:72px; padding-bottom:64px; }
-    .contact .links{ font-size:15px; }
-    .contact .links a{ flex-direction:column; align-items:flex-start; gap:3px; }
   }
   @media (max-width:560px){
     /* small pieces: 1 per row on phones */
@@ -806,8 +749,6 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
 <script src="./lazy-video.js" defer></script>
 
-<div class="thumb-follow" id="thumb"><img decoding="async" loading="lazy" src="" alt="" id="thumbImg" /></div>
-
 
 <nav class="top">
   <div class="nav-inner">
@@ -832,8 +773,9 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
   <div class="hero-row reveal">
     <dl class="hero-side">
-      <div class="pair"><dt>Currently</dt><dd>BDes, OCAD University, 2026</dd></div>
-      <div class="pair"><dt>Focus</dt><dd>Information System, Human-centred, Human-AI Experience</dd></div>
+      <div class="pair"><dt>Degree (EDU)</dt><dd>OCAD University - Industrial Design, May 2026</dd></div>
+      <div class="pair"><dt>Focus</dt><dd>Product design, User experience design</dd></div>
+      <div class="pair"><dt>Interest</dt><dd>Information System, Human-centred, Human-AI Experience</dd></div>
       <div class="pair"><dt>Status</dt><dd>Open to 2026 roles</dd></div>
     </dl>
   </div>
@@ -967,128 +909,6 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
 </section>
 
-<section class="wrap">
-  <div class="sec-head reveal">
-    <div>
-      <div class="label">Project Index</div>
-      <h2>Everything, archived</h2>
-    </div>
-    <p class="desc">Hover any title to preview. All projects are open — feel free to browse case studies and live demos.</p>
-  </div>
-
-  <div class="filters reveal">
-    <button class="filter on" data-cat="all">All<span class="c">17</span></button>
-    <button class="filter" data-cat="thesis">Thesis<span class="c">5</span></button>
-    <button class="filter" data-cat="service">Service<span class="c">1</span></button>
-    <button class="filter" data-cat="product">Product<span class="c">9</span></button>
-    <button class="filter" data-cat="collab">Collaborative<span class="c">3</span></button>
-  </div>
-
-  <div class="index" id="indexList">
-
-    <a class="row" data-cat="product" href="./finboard.html"
-       data-thumb="./posters/finboardprev.jpg">
-      <div class="yr">2026 / Jul</div>
-      <div class="ti">finboard</div>
-      <div class="ty">Native App Design, Personal Finance</div>
-      <div class="du">Prototype</div>
-      <div class="ar">→</div>
-    </a>
-
-    <a class="row" data-cat="product" href="./autoq.html"
-       data-thumb="./posters/AutoQprev.jpg">
-      <div class="yr">2026 / Jul</div>
-      <div class="ti">AutoQ</div>
-      <div class="ty">Product Design, AI Token Tool</div>
-      <div class="du">Concept</div>
-      <div class="ar">→</div>
-    </a>
-
-    <a class="row" data-cat="product" href="./intact-lifolio.html"
-       data-thumb="./knowmedi%20thumb1.png">
-      <div class="yr">2026 / May</div>
-      <div class="ti">intact lifolio</div>
-      <div class="ty">Product Design</div>
-      <div class="du">In Progress</div>
-      <div class="ar">→</div>
-    </a>
-
-    <a class="row" data-cat="thesis" href="./ongenradio.html"
-       data-thumb="./ongenradio2026.png">
-      <div class="yr">2026 / Apr</div>
-      <div class="ti">OnGen Radio 2026</div>
-      <div class="ty">Thesis, Augmented Reality</div>
-      <div class="du">6 Months</div>
-      <div class="ar">→</div>
-    </a>
-
-    <a class="row" data-cat="service collab" href="./tokentrust.html"
-       data-thumb="./1tokentrustthumb1.png">
-      <div class="yr">2026 / Mar</div>
-      <div class="ti">Token Trust</div>
-      <div class="ty">Service Design, Strategic Research</div>
-      <div class="du">3 Weeks</div>
-      <div class="ar">→</div>
-    </a>
-
-    <a class="row" data-cat="collab" href="./proposal-audit.html"
-       data-thumb="./azathumb1.png">
-      <div class="yr">2026 / Feb</div>
-      <div class="ti">Amelia-Rufus 2.0 Amazon Service Proposal</div>
-      <div class="ty">Design Management</div>
-      <div class="du">2 Weeks</div>
-      <div class="ar">→</div>
-    </a>
-
-    <a class="row" data-cat="collab" href="./proposal-audit.html"
-       data-thumb="./aza1thumb1.png">
-      <div class="yr">2026 / Jan</div>
-      <div class="ti">Amelia-Rufus 2.0 Amazon Service Audit</div>
-      <div class="ty">Design Management, Audit</div>
-      <div class="du">2 Weeks</div>
-      <div class="ar">→</div>
-    </a>
-
-    <a class="row" data-cat="product" href="./knowmedi.html"
-       data-thumb="./knowmedi%20thumb1.png">
-      <div class="yr">2026 / Jan</div>
-      <div class="ti">KnowMedi</div>
-      <div class="ty">Patient-Centric Service</div>
-      <div class="du">1 Week</div>
-      <div class="ar">→</div>
-    </a>
-
-    <a class="row" data-cat="product" href="./Trax.html"
-       data-thumb="./Traxthumb1.png">
-      <div class="yr">2026 / Jan</div>
-      <div class="ti">Trax</div>
-      <div class="ty">Subscription Management</div>
-      <div class="du">2 Weeks</div>
-      <div class="ar">→</div>
-    </a>
-
-    <a class="row" data-cat="product" href="./ult.html"
-       data-thumb="./ult%20thumb1.png">
-      <div class="yr">2025 / Dec</div>
-      <div class="ti">ULT</div>
-      <div class="ty">Urban Logistics, Physical UX</div>
-      <div class="du">2 Weeks</div>
-      <div class="ar">→</div>
-    </a>
-
-    <a class="row" data-cat="product" href="https://michaeljpark.github.io/eedu/" target="_blank" rel="noopener"
-       data-thumb="./eedu%20thumb1.png">
-      <div class="yr">2025 / Dec</div>
-      <div class="ti">eedu</div>
-      <div class="ty">Future Educational System</div>
-      <div class="du">1 Week</div>
-      <div class="ar">→</div>
-    </a>
-
-
-  </div>
-</section>
-
 <section id="about" class="wrap">
   <div class="sec-head reveal">
     <div>
@@ -1098,8 +918,9 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
 
   <dl class="hero-info-mobile reveal">
-    <div class="pair"><dt>Currently</dt><dd>BDes, OCAD University, 2026</dd></div>
-    <div class="pair"><dt>Focus</dt><dd>Information System, Human-centred, Human-AI Experience</dd></div>
+    <div class="pair"><dt>Degree (EDU)</dt><dd>OCAD University - Industrial Design, May 2026</dd></div>
+    <div class="pair"><dt>Focus</dt><dd>Product design, User experience design</dd></div>
+    <div class="pair"><dt>Interest</dt><dd>Information System, Human-centred, Human-AI Experience</dd></div>
     <div class="pair"><dt>Status</dt><dd>Open to 2026 roles</dd></div>
   </dl>
 
@@ -1191,8 +1012,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 <section id="contact" class="contact wrap">
   <div class="contact-inner">
     <div class="reveal">
-      <div class="label">Contact</div>
-      <h2>Have a project in mind?</h2>
+      <h2>Contact</h2>
     </div>
     <div class="links reveal">
       <a href="mailto:michaelparkerdesignstudio@gmail.com"><span>Email</span>michaelparkerdesignstudio@gmail.com →</a>
@@ -1215,51 +1035,6 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   }, { threshold: .1, rootMargin: '0px 0px 300px 0px' });
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-  /* filters */
-  const filters = document.querySelectorAll('.filter');
-  const rows    = document.querySelectorAll('#indexList .row');
-  filters.forEach(b=>{
-    b.addEventListener('click', ()=>{
-      filters.forEach(x=>x.classList.remove('on'));
-      b.classList.add('on');
-      const cat = b.dataset.cat;
-      rows.forEach(r=>{
-        const cats = r.dataset.cat.split(' ');
-        const show = cat==='all' || cats.includes(cat);
-        r.style.display = show ? '' : 'none';
-      });
-    });
-  });
-
-  /* cursor-following thumbnail */
-  const thumb = document.getElementById('thumb');
-  const thumbImg = document.getElementById('thumbImg');
-  let raf=null, tx=0, ty=0, cx=0, cy=0;
-
-  function loop(){
-    cx += (tx-cx)*.18;
-    cy += (ty-cy)*.18;
-    thumb.style.left = cx+'px';
-    thumb.style.top  = cy+'px';
-    raf = requestAnimationFrame(loop);
-  }
-
-  rows.forEach(r=>{
-    r.addEventListener('mouseenter', ()=>{
-      const src = r.dataset.thumb;
-      if(!src) return;
-      thumbImg.src = src;
-      thumb.classList.add('show');
-      if(!raf) loop();
-    });
-    r.addEventListener('mouseleave', ()=>{
-      thumb.classList.remove('show');
-    });
-    r.addEventListener('mousemove', (e)=>{
-      tx = e.clientX + 80;
-      ty = e.clientY;
-    });
-  });
 
 
   /* smooth anchor scroll */
@@ -1361,6 +1136,29 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       try{ localStorage.setItem('theme', toDark ? 'dark' : 'light'); }catch(e){}
       clearTimeout(animT);
       animT = setTimeout(function(){ root.classList.remove('theme-anim'); }, 450);
+    });
+  })();
+</script>
+
+<script>
+  /* Match the About body text measure to the "A short introduction" heading text,
+     so both share the same right edge at any viewport width. */
+  (function(){
+    var about = document.getElementById('about');
+    var h2 = about && about.querySelector('.sec-head h2');
+    if(!h2) return;
+    function sync(){
+      /* measure the text itself — the h2 box may be wider than its glyphs */
+      var r = document.createRange();
+      r.selectNodeContents(h2);
+      var w = r.getBoundingClientRect().width;
+      if(w > 0) about.style.setProperty('--about-measure', Math.round(w) + 'px');
+    }
+    sync();
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
+    var t;
+    window.addEventListener('resize', function(){
+      clearTimeout(t); t = setTimeout(sync, 120);
     });
   })();
 </script>
