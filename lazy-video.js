@@ -6,6 +6,8 @@
    <video class="lazy-vid" data-src="./clip.mp4" poster="./posters/clip.jpg"
           loop muted playsinline preload="none"></video>
    Optional: data-src-mobile / data-poster-mobile (max-width:880px variants).
+   Optional: data-hover — don't fetch/play on scroll; load and play only while
+   the pointer is over the card (mouse devices only; touch keeps the default).
    Dynamically created videos: window.observeLazyVid(videoEl). */
 (function () {
   var ASSET_VERSION = '20260716';
@@ -44,6 +46,29 @@
     v.play().catch(function () {});
   }
 
+  /* Hover-to-play: opt in with data-hover on the <video>. The clip is only
+     fetched once the pointer enters the card; leaving restores the poster.
+     Needs a real mouse — touch devices fall back to the viewport behaviour. */
+  var canHover = false;
+  try {
+    canHover = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  } catch (e) {}
+
+  function unmount(v) {
+    if (!v.dataset.mounted) return;
+    delete v.dataset.mounted;
+    try { v.pause(); } catch (e) {}
+    v.removeAttribute('src');
+    /* reset the element so the poster paints again instead of the last frame */
+    v.load();
+  }
+
+  function bindHover(v) {
+    var card = v.parentElement || v;
+    card.addEventListener('mouseenter', function () { mount(v); tryPlay(v); });
+    card.addEventListener('mouseleave', function () { unmount(v); });
+  }
+
   var vio = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       var v = e.target;
@@ -57,7 +82,8 @@
   function init() {
     document.querySelectorAll('video.lazy-vid').forEach(function (v) {
       setPoster(v);
-      vio.observe(v);
+      if (v.dataset.hover !== undefined && canHover) bindHover(v);
+      else vio.observe(v);
     });
   }
   if (document.readyState === 'loading') {
