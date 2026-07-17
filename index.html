@@ -171,8 +171,8 @@
     font-size:14px; color:var(--muted); max-width:38ch; line-height:1.5;
   }
 
-  /* SELECTED — single grid: 3 big full-bleed rows + 6 small (3-per-row).
-     Order is controlled with `order` so the DOM stays untouched. */
+  /* SELECTED — 3 big full-bleed rows, then the 6 small pieces as one
+     scrollable carousel row. `order` keeps the DOM untouched. */
   .selected{
     display:grid;
     grid-template-columns:repeat(6,minmax(0,1fr));
@@ -187,12 +187,25 @@
   .work-block.is-big .work{ aspect-ratio:2/1; }
   .work-block.is-big .w-info{ padding:0 var(--pad); margin-top:18px; }
   .work-block.is-big .w-info .t{ font-size:clamp(20px,2.4vw,32px); }
-  /* SMALL: 2 of 6 columns → 3 per row, 2:1 */
-  .work-block.is-small{ grid-column:span 2; }
-  .work-block.is-small .work{ aspect-ratio:2/1; }
-  /* explicit order: bigs first (ongen→token→finboard), then smalls */
+  /* explicit order: bigs first (ongen→finboard→token), carousel last */
   .work-block.o1{ order:1 } .work-block.o2{ order:2 } .work-block.o3{ order:3 }
-  .work-block.is-small{ order:4 }
+
+  /* SMALL: one-row carousel — 3 cards in view, scroll for the rest */
+  .carousel{
+    grid-column:1 / -1; order:4;
+    display:flex; gap:20px;
+    overflow-x:auto;
+    overscroll-behavior-x:contain;
+    scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;              /* Firefox */
+  }
+  .carousel::-webkit-scrollbar{ display:none; }   /* WebKit */
+  .carousel .work-block{
+    flex:0 0 calc((100% - 40px) / 3);  /* 3 across, minus the two 20px gaps */
+    scroll-snap-align:start;
+  }
+  .carousel .work{ aspect-ratio:2/1; }
   .work{
     position:relative; overflow:hidden;
     background:var(--card);
@@ -703,8 +716,9 @@
     .hero-info-mobile .pair{ display:flex; flex-direction:column; gap:2px; }
     .hero-info-mobile dt{ color:var(--muted); }
     .selected{ column-gap:12px; row-gap:36px; }
-    /* small pieces: 2 per row on tablet */
-    .work-block.is-small{ grid-column:span 3; }
+    /* carousel: 2 cards in view on tablet */
+    .carousel{ gap:14px; }
+    .carousel .work-block{ flex-basis:calc((100% - 14px) / 2); }
     .about-grid, .contact-inner{ grid-template-columns:1fr; gap:48px; }
     .contact{ padding-top:72px; padding-bottom:64px; }
     .contact .links{ font-size:15px; }
@@ -715,8 +729,8 @@
     .nav-links a:not(:last-child){ display:none; }
   }
   @media (max-width:560px){
-    /* small pieces: 1 per row on phones */
-    .work-block.is-small{ grid-column:1 / -1; }
+    /* carousel: one card in view, next one peeking so it reads as swipeable */
+    .carousel .work-block{ flex-basis:82%; }
   }
   video{ -webkit-appearance:none; appearance:none; }
   video::-webkit-media-controls,
@@ -804,6 +818,35 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
+    <div class="work-block reveal is-big o1">
+      <a href="./ongenradio.html">
+        <div class="work ongen-work">
+          <div class="app-icon-ph" style="background:#000;"><div class="app-icon" style="background-image:url('./ongenlogo.svg');filter:brightness(0) invert(1);"></div></div>
+          <div class="ongen-img">
+            <video class="lazy-vid" muted loop playsinline preload="none"
+              poster="./posters/ongenthumb.jpg"
+              data-src="./ongenthumb.mp4"></video>
+          </div>
+        </div>
+        <div class="w-info">
+          <div class="t"><span>OnGen Radio 2026 : Reimagined Radio in Augmented Reality</span><span class="arrow">→</span></div>
+          <div class="w-meta"><div class="m"><span>2026</span><span>Thesis Project</span><span>6 Months</span></div><div class="w-tags"><span class="w-tag">AR</span><span class="w-tag">Web</span><span class="w-tag">Mobile App</span></div></div>
+        </div>
+      </a>
+    </div>
+
+    <div class="work-block reveal is-big o3">
+      <a href="./tokentrust.html">
+        <div class="work"><div class="app-icon-ph"><svg viewBox="574 0 96 96" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M645.148 3.18803L629.96 39.7479L666.706 24.5608L670.27 32.4368L633.336 47.6218L670.27 62.8087L666.706 70.4965L629.96 55.3093L645.148 92.0575L637.458 95.62L622.274 58.6837L607.085 95.62L599.399 92.0575L614.4 55.3093L577.841 70.4965L574.652 62.8087L611.211 47.6218L574.652 32.4368L577.841 24.7491L614.4 39.7479L599.399 3.18803L607.085 0L622.274 36.56L637.458 0L645.148 3.18803Z" fill="#000"/></svg></div><video class="lazy-vid" data-src="./tokentrust169.mp4" poster="./posters/tokentrust169.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
+        <div class="w-info">
+          <div class="t"><span>Token Trust : Use AI tokens wisely, See where my data goes</span><span class="arrow">→</span></div>
+          <div class="w-meta"><div class="m"><span>2026</span><span>Service Design</span><span>3 Weeks</span></div><div class="w-tags"><span class="w-tag">Service Proposal</span><span class="w-tag">Web App</span></div></div>
+        </div>
+      </a>
+    </div>
+
+    <div class="carousel">
+
     <div class="work-block reveal is-small">
       <a href="./autoq.html">
         <div class="work" style="background:#1a1a1a;">
@@ -826,33 +869,6 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
         <div class="w-info">
           <div class="t"><span>GridOne — Tailored Maintenance &amp; Building Consulting Firm</span><span class="arrow">→</span></div>
           <div class="w-meta"><div class="m"><span>2026</span><span>Service Design</span></div><div class="w-tags"><span class="w-tag">Service Proposal</span><span class="w-tag">Mobile App</span></div></div>
-        </div>
-      </a>
-    </div>
-
-    <div class="work-block reveal is-big o1">
-      <a href="./ongenradio.html">
-        <div class="work ongen-work">
-          <div class="app-icon-ph" style="background:#000;"><div class="app-icon" style="background-image:url('./ongenlogo.svg');filter:brightness(0) invert(1);"></div></div>
-          <div class="ongen-img">
-            <video class="lazy-vid" muted loop playsinline preload="none"
-              poster="./posters/ongenthumb.jpg"
-              data-src="./ongenthumb.mp4"></video>
-          </div>
-        </div>
-        <div class="w-info">
-          <div class="t"><span>OnGen Radio 2026 : Reimagined Radio in Augmented Reality</span><span class="arrow">→</span></div>
-          <div class="w-meta"><div class="m"><span>2026</span><span>Thesis Project</span><span>6 Months</span></div><div class="w-tags"><span class="w-tag">AR</span><span class="w-tag">Web</span><span class="w-tag">Mobile App</span></div></div>
-        </div>
-      </a>
-    </div>
-
-    <div class="work-block reveal is-big o3">
-      <a href="./tokentrust.html">
-        <div class="work"><div class="app-icon-ph"><svg viewBox="574 0 96 96" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M645.148 3.18803L629.96 39.7479L666.706 24.5608L670.27 32.4368L633.336 47.6218L670.27 62.8087L666.706 70.4965L629.96 55.3093L645.148 92.0575L637.458 95.62L622.274 58.6837L607.085 95.62L599.399 92.0575L614.4 55.3093L577.841 70.4965L574.652 62.8087L611.211 47.6218L574.652 32.4368L577.841 24.7491L614.4 39.7479L599.399 3.18803L607.085 0L622.274 36.56L637.458 0L645.148 3.18803Z" fill="#000"/></svg></div><video class="lazy-vid" data-src="./tokentrust169.mp4" poster="./posters/tokentrust169.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
-        <div class="w-info">
-          <div class="t"><span>Token Trust : Use AI Token wise, See where my data goes</span><span class="arrow">→</span></div>
-          <div class="w-meta"><div class="m"><span>2026</span><span>Service Design</span><span>3 Weeks</span></div><div class="w-tags"><span class="w-tag">Service Proposal</span><span class="w-tag">Web App</span></div></div>
         </div>
       </a>
     </div>
@@ -906,6 +922,8 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
         </div>
       </a>
     </div>
+
+    </div><!-- /carousel -->
   </div>
 </section>
 
