@@ -158,13 +158,15 @@
     display:flex; align-items:baseline; justify-content:space-between;
     margin-bottom:56px; gap:32px; flex-wrap:wrap;
   }
-  .sec-head h2{
+  .sec-head h2,
+  .carousel-head h2{
     font-weight:500;
     font-size: clamp(32px, 4.5vw, 56px);
     letter-spacing:-0.05em;
     line-height:1;
   }
-  .sec-head .label{
+  .sec-head .label,
+  .carousel-head .label{
     font-size:13px; color:var(--muted); margin-bottom:14px;
   }
   .sec-head .desc{
@@ -190,11 +192,35 @@
   /* explicit order: bigs first (ongen→finboard→token), carousel last */
   .work-block.o1{ order:1 } .work-block.o2{ order:2 } .work-block.o3{ order:3 }
 
-  /* SMALL: one-row carousel — 3 cards in view, scroll for the rest */
-  .carousel{
+  /* SMALL: one-row carousel — 3 cards in view, scroll/arrows for the rest */
+  /* set the carousel apart from the three main pieces above it */
+  .carousel-wrap{
     grid-column:1 / -1; order:4;
+    margin-top:48px; padding-top:64px;
+    border-top:1px solid var(--line);
+  }
+  .carousel-head{ margin-bottom:28px; }
+  .carousel-nav{
+    display:flex; justify-content:flex-end; gap:10px;
+    margin-top:28px;
+  }
+  .cnav{
+    width:44px; height:44px; flex-shrink:0;
+    display:inline-flex; align-items:center; justify-content:center;
+    padding:0; border:none; border-radius:999px; cursor:pointer;
+    background:var(--card); color:var(--ink);
+    transition:background-color .2s, opacity .2s;
+  }
+  .cnav:hover{ background:color-mix(in srgb, var(--ink) 12%, var(--card)); }
+  .cnav:disabled{ opacity:.3; cursor:default; }
+  .cnav:disabled:hover{ background:var(--card); }
+  .cnav svg{ width:18px; height:18px; display:block; }
+  .carousel{
     display:flex; gap:20px;
     overflow-x:auto;
+    /* must be explicit: overflow-x:auto alone computes overflow-y to auto, and the
+       cards' pre-reveal translateY(16px) then makes the row scroll vertically */
+    overflow-y:hidden;
     overscroll-behavior-x:contain;
     scroll-snap-type:x proximity;
     -webkit-overflow-scrolling:touch;
@@ -845,9 +871,15 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
-    <div class="carousel">
+    <div class="carousel-wrap reveal">
+      <div class="carousel-head">
+        <div class="label">More</div>
+        <h2>Other projects</h2>
+      </div>
 
-    <div class="work-block reveal is-small">
+    <div class="carousel" id="carousel">
+
+    <div class="work-block is-small">
       <a href="./autoq.html">
         <div class="work" style="background:#1a1a1a;">
           <div class="app-icon-ph" style="background:#DB6A4E;"><span style="color:#fff;font-size:13px;letter-spacing:-0.01em;line-height:1;white-space:nowrap;"><span style="font-family:var(--font);font-weight:400;">Auto</span><span style="font-family:'anthropicSerif',ui-serif,Georgia,'Times New Roman',serif;font-weight:700;">Q</span></span></div>
@@ -860,7 +892,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
-    <div class="work-block reveal is-small">
+    <div class="work-block is-small">
       <a href="./gridone.html">
         <div class="work">
           <div class="app-icon-ph gridone-mark"><span>GridOne</span></div>
@@ -873,7 +905,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
-    <div class="work-block reveal is-small">
+    <div class="work-block is-small">
       <a href="./proposal-audit.html">
         <div class="work ar-work">
           <div class="app-icon-ph" style="overflow:hidden;padding:0;background:#232f3e;"><object data="./aap.svg" type="image/svg+xml" width="38" height="34" style="display:block;pointer-events:none;"></object></div>
@@ -890,7 +922,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
-    <div class="work-block reveal is-small">
+    <div class="work-block is-small">
       <a href="./intact-lifolio.html">
         <div class="work"><div class="app-icon-ph"><div class="app-icon" style="background-image:url('./lifolio+.svg');"></div></div><video class="lazy-vid" data-hover data-src="./intactlifoliothumb.mp4" poster="./posters/intactlifoliothumb.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
         <div class="w-info">
@@ -900,7 +932,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
-    <div class="work-block reveal is-small">
+    <div class="work-block is-small">
       <a href="./ult.html">
         <div class="work ult-work">
           <div class="app-icon-ph" style="background:#111116;"><svg viewBox="0 0 652 392" style="width:36px;height:auto;" fill="#BABAE6" xmlns="http://www.w3.org/2000/svg"><path d="M86.8094 389.856C69.4476 389.856 54.2179 386.349 41.1203 379.33C28.3274 372.008 18.2757 361.023 10.9654 346.378C3.65514 331.429 0 312.665 0 290.086V157.365H38.3789V285.967C38.3789 309.461 43.4048 327.156 53.4564 339.055C63.508 350.955 77.9763 356.905 96.8613 356.905C109.959 356.905 121.533 353.701 131.585 347.294C141.942 340.886 150.013 331.581 155.8 319.376C161.892 307.173 164.938 292.374 164.938 274.983V157.365H203.317V384.364H169.507L165.852 348.666H164.024C156.409 360.872 146.053 370.788 132.956 378.414C120.163 386.043 104.78 389.856 86.8094 389.856Z"/><path d="M241.939 384.364V64.0018H280.317V384.364H241.939Z"/><path d="M409.083 384.364C395.376 384.364 383.496 382.23 373.445 377.957C363.393 373.686 355.626 366.516 350.144 356.447C344.966 346.075 342.377 332.191 342.377 314.8V184.824H303.084V157.365H342.377L346.946 102.904H380.756V157.365H447.461V184.824H380.756V314.8C380.756 330.666 383.649 341.344 389.437 346.836C395.225 352.024 405.428 354.617 420.048 354.617H443.806V384.364H409.083Z"/><path d="M617.891 15.6749C639.26 10.2065 657.694 31.5136 649.252 51.9221L560.757 265.859C553.138 284.279 528.828 288.223 515.792 273.155L474.951 225.948C464.936 214.371 473.144 196.363 488.439 196.363H516.265C526.122 196.363 534.112 188.358 534.112 178.485V158.776C534.112 148.902 526.122 140.899 516.265 140.899H432.393C422.535 140.899 414.545 132.895 414.545 123.021V81.5992C414.545 73.4301 420.073 66.3001 427.975 64.2781L617.891 15.6749Z"/></svg></div>
@@ -913,7 +945,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       </a>
     </div>
 
-    <div class="work-block reveal is-small">
+    <div class="work-block is-small">
       <a href="./knowmedi.html">
         <div class="work"><div class="app-icon-ph" style="background:#000;"><span class="knowmedi-mark"><b>Know</b>Medi</span></div><video class="lazy-vid" data-hover data-src="./knowmediprev.mp4" poster="./posters/knowmediprev.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
         <div class="w-info">
@@ -924,6 +956,16 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     </div>
 
     </div><!-- /carousel -->
+
+      <div class="carousel-nav">
+        <button class="cnav" id="cPrev" type="button" aria-label="Previous projects">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button class="cnav" id="cNext" type="button" aria-label="Next projects">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div><!-- /carousel-wrap -->
   </div>
 </section>
 
@@ -1178,6 +1220,35 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     window.addEventListener('resize', function(){
       clearTimeout(t); t = setTimeout(sync, 120);
     });
+  })();
+</script>
+
+<script>
+  /* Other-projects carousel: arrows step one card; native scroll/swipe still works. */
+  (function(){
+    var track = document.getElementById('carousel');
+    var prev  = document.getElementById('cPrev');
+    var next  = document.getElementById('cNext');
+    if(!track || !prev || !next) return;
+
+    function step(){
+      var card = track.querySelector('.work-block');
+      if(!card) return track.clientWidth;
+      var cs = getComputedStyle(track);
+      var gap = parseFloat(cs.columnGap || cs.gap) || 0;
+      return card.getBoundingClientRect().width + gap;
+    }
+    function update(){
+      /* 1px slack: scrollLeft can land fractionally short of the true end */
+      var max = track.scrollWidth - track.clientWidth - 1;
+      prev.disabled = track.scrollLeft <= 0;
+      next.disabled = track.scrollLeft >= max;
+    }
+    prev.addEventListener('click', function(){ track.scrollBy({ left:-step(), behavior:'smooth' }); });
+    next.addEventListener('click', function(){ track.scrollBy({ left: step(), behavior:'smooth' }); });
+    track.addEventListener('scroll', update, { passive:true });
+    window.addEventListener('resize', update);
+    update();
   })();
 </script>
 
