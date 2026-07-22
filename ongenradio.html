@@ -50,7 +50,9 @@
     position:relative;
     aspect-ratio:3/1; overflow:hidden;
     margin-bottom:clamp(32px,4vw,56px);
-    background:#f0f0f0;
+    /* transparent, not grey: iOS Safari ignores object-fit on a video's poster
+       and letterboxes it, so any container colour reads as a hairline frame */
+    background:transparent;
   }
   /* bleed 1px past every edge so sub-pixel rounding never exposes the
      video element's default black background as a hairline */
@@ -1615,7 +1617,7 @@
   .phase-note em{ font-style:normal; color:var(--ink); }
   /* two photos + showcase video, equal height, natural widths (near-zero crop) */
   .chapter-media-duo{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(200px,26vw,376px); margin-bottom:clamp(32px,4vw,48px); }
-  .chapter-media-duo .cell{ position:relative; overflow:hidden; background:#f0f0f0; min-width:0; }
+  .chapter-media-duo .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; }
   .chapter-media-duo .cell img, .chapter-media-duo .cell video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
   .chapter-media-duo .m1{ flex:1.777 1 0; }  /* IMG_5507 16:9 */
   .chapter-media-duo .m2{ flex:0.75 1 0; }   /* IMG_5493(1) portrait 3:4 */
@@ -1625,7 +1627,7 @@
   .subsec-title{ font-size:clamp(20px,2vw,30px); font-weight:400; letter-spacing:-0.04em; line-height:1.15; color:var(--ink); }
   .subsec-lead{ margin-top:clamp(14px,1.6vw,20px); font-size:clamp(16px,1.4vw,20px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
   /* 16:9 video container (no rounded edges) */
-  .subsec-video{ position:relative; aspect-ratio:16/9; overflow:hidden; background:#f0f0f0; margin-top:clamp(20px,2.4vw,32px); }
+  .subsec-video{ position:relative; aspect-ratio:16/9; overflow:hidden; background:transparent; margin-top:clamp(20px,2.4vw,32px); }
   .subsec-video video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
   /* full-width image at natural aspect ratio (e.g. logo row) */
   .subsec-img{ display:block; width:100%; height:auto; margin-top:clamp(20px,2.4vw,32px); }
@@ -1636,7 +1638,7 @@
 
   /* GradEX showcase row — video + photos, equal height, natural widths (near-zero crop) */
   .gradex-row{ display:flex; gap:clamp(8px,1vw,14px); height:clamp(150px,20vw,320px); margin-top:clamp(20px,2.4vw,32px); }
-  .gradex-row figure{ margin:0; position:relative; overflow:hidden; background:#f0f0f0; min-width:0; }
+  .gradex-row figure{ margin:0; position:relative; overflow:hidden; background:transparent; min-width:0; }
   .gradex-row img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
   .gradex-row video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
   .gradex-row .v{ flex:1.333 1 0; }
