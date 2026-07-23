@@ -1630,6 +1630,18 @@
   .subsec-video{ position:relative; aspect-ratio:16/9; overflow:hidden; background:transparent; margin-top:clamp(20px,2.4vw,32px); }
   /* wider 2:1 crop for the conceptual MVP walkthrough */
   .subsec-video.wide{ aspect-ratio:2/1; }
+
+  /* iOS Safari will not clip a composited video layer with overflow:hidden alone,
+     so the 1px bleed above leaks past the edge and reads as a faint outline.
+     The mask forces a real clipping layer; white and black are both fully opaque,
+     so the alpha stays 1 throughout and nothing fades. Same fix as .ongen-work. */
+  .hero-video,
+  .subsec-video,
+  .chapter-media-duo .cell{
+    -webkit-mask-image:-webkit-radial-gradient(white,black);
+    mask-image:radial-gradient(white,black);
+    transform:translateZ(0);
+  }
   .subsec-video video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
   /* full-width image at natural aspect ratio (e.g. logo row) */
   .subsec-img{ display:block; width:100%; height:auto; margin-top:clamp(20px,2.4vw,32px); }
