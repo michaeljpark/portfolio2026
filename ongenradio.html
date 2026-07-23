@@ -1628,6 +1628,8 @@
   .subsec-lead{ margin-top:clamp(14px,1.6vw,20px); font-size:clamp(16px,1.4vw,20px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
   /* 16:9 video container (no rounded edges) */
   .subsec-video{ position:relative; aspect-ratio:16/9; overflow:hidden; background:transparent; margin-top:clamp(20px,2.4vw,32px); }
+  /* wider 2:1 crop for the conceptual MVP walkthrough */
+  .subsec-video.wide{ aspect-ratio:2/1; }
   .subsec-video video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
   /* full-width image at natural aspect ratio (e.g. logo row) */
   .subsec-img{ display:block; width:100%; height:auto; margin-top:clamp(20px,2.4vw,32px); }
@@ -1951,7 +1953,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
   <div class="subsec">
     <div class="subsec-title">Low-fidelity Conceptual MVP</div>
-    <div class="subsec-video">
+    <div class="subsec-video wide">
       <video class="snap-vid" src="./ongenprepilotoverview.mp4?v=20260722" poster="./posters/ongenprepilotoverview.jpg?v=20260722" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">I ran a digital showcase of what OnGen AR does, so people could respond to something concrete instead of a description. Each person went through the interaction first and answered the survey afterward. Thirteen of the 22 respondents interacted with the working app directly.</p>
