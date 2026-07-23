@@ -10,7 +10,7 @@
    the pointer is over the card (mouse devices only; touch keeps the default).
    Dynamically created videos: window.observeLazyVid(videoEl). */
 (function () {
-  var ASSET_VERSION = '20260719d';
+  var ASSET_VERSION = '20260722';
   try {
     var scriptVersion = new URL(document.currentScript.src, window.location.href).searchParams.get('v');
     if (scriptVersion) ASSET_VERSION = scriptVersion;
