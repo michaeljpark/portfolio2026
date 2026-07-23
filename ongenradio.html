@@ -1649,6 +1649,8 @@
   /* labelled build/stack breakdown (label | role) */
   .build-list{ list-style:none; padding:0; margin:clamp(20px,2.4vw,32px) 0 0; }
   .build-list li{ display:grid; grid-template-columns:200px 1fr; gap:clamp(16px,3vw,44px); padding:9px 0; }
+  /* wider label column for the longer feature names */
+  .build-list.features li{ grid-template-columns:260px 1fr; }
 
   /* GradEX showcase row — video + photos, equal height, natural widths (near-zero crop) */
   .gradex-row{ display:flex; gap:clamp(8px,1vw,14px); height:clamp(150px,20vw,320px); margin-top:clamp(20px,2.4vw,32px); }
@@ -1685,7 +1687,7 @@
     .phase-desc{ font-size:15px; letter-spacing:-0.015em; line-height:1.45; margin-top:16px; }
     .subsec-lead{ font-size:15px; letter-spacing:-0.015em; line-height:1.45; }
     .phase-note{ font-size:13px; letter-spacing:-0.005em; line-height:1.55; text-align:left; }
-    .build-list li{ grid-template-columns:1fr; gap:4px; padding:14px 0; }
+    .build-list li, .build-list.features li{ grid-template-columns:1fr; gap:4px; padding:14px 0; }
     .build-list .k,.build-list .v{ font-size:13px; }
     /* stack the top media row on phones */
     .chapter-media-duo{ flex-direction:column; height:auto; gap:10px; }
@@ -1958,7 +1960,9 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 <section class="phase-flat">
   <div class="phase-num">03</div>
   <div class="phase-name">Discovery</div>
-  <img class="subsec-img" src="./ongenresearch0.png" alt="User journey and experience strategy" loading="lazy" />
+  <img class="subsec-img" src="./ongenthesisquestions.png" alt="Problem definition: moving AR interaction beyond the smartphone" loading="lazy" />
+  <p class="phase-note">The AR display market is growing quickly, and it points to strong potential demand, yet today's AR glasses still sit as an accessory to the phone. To move past that limit, I set the project's research direction toward maximizing the user's AR experience.</p>
+  <img class="subsec-img" src="./ongenresearch0.png" alt="User journey and experience strategy" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" />
   <p class="phase-note">I mapped the user journey and the possibilities a user might experience, and built a strategy to optimize that experience. Five peers and two supervising faculty, Alexander Manu and Bernard Dietz, critiqued the work, and I used their feedback to design the actual survey, shaping it in line with TCPS 2. Together with existing research, Survey Phase 1 gave a baseline read on user behavior and set up Phase 2.</p>
   <img class="subsec-img" src="./ongensurveyplan.png" alt="Survey plan and MVP prototype context" loading="lazy" />
   <p class="phase-note">Building on the points confirmed in the earlier stage, I ran the hypothesis validation through a Google Form survey with 22 respondents. To ground their answers, I published an MVP prototype that supported basic interaction and provided it as context.</p>
@@ -1969,6 +1973,11 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
       <video class="snap-vid" src="./ongenprepilotoverview.mp4?v=20260722" poster="./posters/ongenprepilotoverview.jpg?v=20260722" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">I ran a digital showcase of what OnGen AR does, so people could respond to something concrete instead of a description. Each person went through the interaction first and answered the survey afterward. Thirteen of the 22 respondents interacted with the working app directly.</p>
+    <ul class="build-list features">
+      <li><span class="k">Recognition Assistance</span><span class="v">Collects the user's digital records and behavior data to sustain and prompt their actions.</span></li>
+      <li><span class="k">Live site dashboard</span><span class="v">Uses the user's location to surface nearby updates, news, and related current information.</span></li>
+      <li><span class="k">Personalized podcast curation</span><span class="v">Draws on what the user experiences as media to automatically deliver digital content and news matched to their interests.</span></li>
+    </ul>
   </div>
 
   <img class="subsec-img" src="./ongensurveyresult.png" alt="Survey results dashboard and qualitative prompts" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" />
