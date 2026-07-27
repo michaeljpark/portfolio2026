@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
+<script>document.documentElement.className += ' reveal-on';</script>
 <style>
   :root{
     --bg:#ffffff; --ink:#0a0a0a; --muted:#6a6a6a; --line:#e6e6e6;
@@ -1886,6 +1887,38 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .canada-canvas-wrap{ position:relative; width:100%; aspect-ratio:1714/560; }
 .canada-canvas-wrap canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; mix-blend-mode:multiply; }
 @media(max-width:680px){ .canada-canvas-wrap{ aspect-ratio:1.7/1; } }
+
+/* ===== scroll reveal: blocks fade (and lift) in as they enter the viewport.
+   Gated on .reveal-on, set by a <head> script before first paint, so if
+   scripting is off nothing is ever hidden. ===== */
+.reveal-on .subsec-img,
+.reveal-on .chapter-media-duo,
+.reveal-on .gradex-row,
+.reveal-on .build-list,
+.reveal-on .phase-desc,
+.reveal-on .phase-note,
+.reveal-on .phase-num,
+.reveal-on .phase-name,
+.reveal-on .phase-sub,
+.reveal-on .subsec-title,
+.reveal-on .subsec-lead,
+.reveal-on .gradex-cap{
+  opacity:0; transform:translateY(16px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.reveal-on .reveal-in{ opacity:1; transform:none; }
+/* .subsec-video carries a translateZ(0) for the iOS mask clip, so fade only */
+.reveal-on .subsec-video{ opacity:0; transition:opacity .6s ease; }
+.reveal-on .subsec-video.reveal-in{ opacity:1; }
+@media(prefers-reduced-motion:reduce){
+  .reveal-on .subsec-img,.reveal-on .chapter-media-duo,.reveal-on .gradex-row,
+  .reveal-on .build-list,.reveal-on .phase-desc,.reveal-on .phase-note,
+  .reveal-on .phase-num,.reveal-on .phase-name,.reveal-on .phase-sub,
+  .reveal-on .subsec-title,.reveal-on .subsec-lead,.reveal-on .gradex-cap{
+    opacity:1; transform:none; transition:none;
+  }
+  .reveal-on .subsec-video{ opacity:1; transition:none; }
+}
 </style>
 </head>
 <body>
@@ -1904,7 +1937,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
 <header class="hero wrap">
   <div class="hero-video">
-    <video class="lazy-vid" data-src="./ongenglassview1.mp4" poster="./posters/ongenglassview1.jpg"
+    <video class="lazy-vid" data-src="./ongenglassview1.mp4" poster="./posters/ongenglassview1.jpg?v=20260723"
            loop muted playsinline preload="none"></video>
   </div>
   <div class="hero-greeting">Thesis Project</div>
@@ -1922,9 +1955,9 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
 <section class="phase-flat">
   <div class="chapter-media-duo">
-    <div class="cell m1"><img src="./IMG_5507.png" alt="" loading="lazy" /></div>
-    <div class="cell m2"><img src="./IMG_5493_1.png" alt="" loading="lazy" /></div>
-    <div class="cell m3"><video class="snap-vid" src="./Showcasingongen1.mp4?v=20260721" poster="./posters/showcasingongen1.jpg?v=20260721" loop muted playsinline preload="none"></video></div>
+    <div class="cell m1"><img src="./IMG_5507.jpg" alt="" loading="lazy" /></div>
+    <div class="cell m2"><img src="./IMG_5493_1.jpg" alt="" loading="lazy" /></div>
+    <div class="cell m3"><video class="snap-vid" src="./Showcasingongen1.mp4?v=20260721" data-poster="./posters/showcasingongen1.jpg?v=20260721" loop muted playsinline preload="none"></video></div>
   </div>
   <div class="phase-num">01</div>
   <div class="phase-name">Overview</div>
@@ -1937,7 +1970,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     <h3 class="subsec-title">Snapshot</h3>
     <p class="subsec-lead">OnGen AR is a geolocation intelligence that reconstructs the city you might miss, or the one you care about, and brings it closer.</p>
     <div class="subsec-video">
-      <video class="snap-vid" src="./ongensnapshot.mp4?v=20260719c" poster="./posters/ongensnapshot.jpg?v=20260719c"
+      <video class="snap-vid" src="./ongensnapshot.mp4?v=20260719c" data-poster="./posters/ongensnapshot.jpg?v=20260719c"
              loop muted playsinline preload="none"></video>
     </div>
   </div>
@@ -1970,7 +2003,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Low-fidelity Conceptual MVP</div>
     <div class="subsec-video wide">
-      <video class="snap-vid" src="./ongenprepilotoverview.mp4?v=20260722" poster="./posters/ongenprepilotoverview.jpg?v=20260722" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" src="./ongenprepilotoverview.mp4?v=20260722" data-poster="./posters/ongenprepilotoverview.jpg?v=20260722" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">I ran a digital showcase of what OnGen AR does, so people could respond to something concrete instead of a description. Each person went through the interaction first and answered the survey afterward. Thirteen of the 22 respondents interacted with the working app directly.</p>
     <ul class="build-list features">
@@ -1986,7 +2019,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Confirmed Concept Direction</div>
     <div class="subsec-video wide">
-      <video class="snap-vid" src="./ongenconceptoverview.mp4?v=20260727" poster="./posters/ongenconceptoverview.jpg?v=20260727" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" src="./ongenconceptoverview.mp4?v=20260727" data-poster="./posters/ongenconceptoverview.jpg?v=20260727" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">After the pre-pilot and the survey, I confirmed the direction. OnGen curates nearby local information and each user's interests, and for the interaction itself it uses the camera to map that content onto the real terrain, so the space around the user becomes the experience.</p>
     <ul class="build-list features">
@@ -2013,7 +2046,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Gate 5 Mid-point Showcase</div>
     <div class="subsec-video">
-      <video class="snap-vid" src="./ongenprototyping1.mp4?v=20260727b" poster="./posters/ongenprototyping1.jpg?v=20260727b" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" src="./ongenprototyping1.mp4?v=20260727b" data-poster="./posters/ongenprototyping1.jpg?v=20260727b" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">Before I published to Firebase, I showed this build as a mid-point check at Gate 5, around February, during the faculty and peer critique. The showcase made clear that the interaction still fell short of the AR premise in many places, and I used that feedback to reset the project's direction.</p>
   </div>
@@ -2042,7 +2075,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Spatial Intelligence</div>
     <div class="subsec-video">
-      <video class="snap-vid" src="./ongenthumb.mp4?v=20260723" poster="./posters/ongenthumb.jpg?v=20260723" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" src="./ongenthumb.mp4?v=20260723" data-poster="./posters/ongenthumb.jpg?v=20260723" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">Building spatial intelligence was the core of the OnGen project. It is a product meant to widen the practical use of AR hardware, and a project that connects the digital and the physical. As AR glasses are expected to gain more capability, it holds real room to grow.</p>
   </div>
@@ -2061,18 +2094,49 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
 <script src="./lazy-video.js"></script>
 <script>
-/* Snapshot video: stays paused (poster only) until the viewer scrolls to it,
-   then plays; pauses again when it leaves the viewport. Loads on demand. */
 (function(){
-  if(!('IntersectionObserver' in window)) return;
-  var io = new IntersectionObserver(function(entries){
+  var supported = 'IntersectionObserver' in window;
+
+  /* ---- reveal on scroll: fade blocks in as they enter view ---- */
+  var revealEls = document.querySelectorAll(
+    '.subsec-img,.subsec-video,.chapter-media-duo,.gradex-row,.build-list,' +
+    '.phase-desc,.phase-note,.phase-num,.phase-name,.phase-sub,' +
+    '.subsec-title,.subsec-lead,.gradex-cap'
+  );
+  if(!supported){
+    revealEls.forEach(function(el){ el.classList.add('reveal-in'); });
+  } else {
+    var rio = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('reveal-in'); rio.unobserve(e.target); }
+      });
+    }, { rootMargin:'0px 0px -8% 0px', threshold:0 });
+    revealEls.forEach(function(el){ rio.observe(el); });
+  }
+
+  if(!supported) return;
+
+  /* ---- snapshot videos: defer the poster until the clip nears the viewport,
+     play once it is in view, pause when it leaves. The mp4 (preload=none)
+     only downloads on play, so nothing below the fold loads up front. ---- */
+  var vids = document.querySelectorAll('.snap-vid');
+  var posterIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var v = e.target;
+      if(e.isIntersecting && v.dataset.poster && !v.getAttribute('poster')){
+        v.setAttribute('poster', v.dataset.poster);
+        posterIO.unobserve(v);
+      }
+    });
+  }, { rootMargin:'300px 0px', threshold:0 });
+  var playIO = new IntersectionObserver(function(entries){
     entries.forEach(function(e){
       var v = e.target;
       if(e.isIntersecting){ v.muted = true; v.play().catch(function(){}); }
       else if(!v.paused){ v.pause(); }
     });
-  }, { threshold: 0.25 });
-  document.querySelectorAll('.snap-vid').forEach(function(v){ io.observe(v); });
+  }, { threshold:0.25 });
+  vids.forEach(function(v){ posterIO.observe(v); playIO.observe(v); });
 })();
 </script>
 </body>
