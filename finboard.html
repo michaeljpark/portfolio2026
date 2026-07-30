@@ -1,34 +1,32 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>finboard — Intuitive Banking App UX — Michael Joongmin Park</title>
+<title>finboard 2026 — Michael Joongmin Park</title>
 <link rel="icon" type="image/svg+xml" href="./mkpk.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
+<script>document.documentElement.className += ' reveal-on';</script>
 <style>
   :root{
-    --bg:#f4f4f2; --ink:#0a0a0a; --muted:#6a6a6a; --line:#dcdcda;
-    --accent:#0FB884; --accent-ink:#0a7a58; --accent-soft:#BEEEDB;
-    --max:1320px; --pad:clamp(20px,4vw,56px);
+    --bg:#ffffff; --ink:#0a0a0a; --muted:#6a6a6a; --line:#e6e6e6;
+    --max:1440px; --pad:clamp(12px,2vw,28px);
     --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
-    --mono:"SF Mono",ui-monospace,"JetBrains Mono","Roboto Mono",Menlo,Consolas,monospace;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
-  html,body{ background:var(--bg); color:var(--ink); scroll-behavior:smooth; }
+  html,body{ background:var(--bg); color:var(--ink); }
   body{
     font-family:var(--font); font-size:14px; line-height:1.5; font-weight:400;
     letter-spacing:-0.05em; -webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility; overflow-x:hidden;
+    text-rendering:optimizeLegibility; overflow-x:clip;
   }
   a{ color:inherit; text-decoration:none; }
   img{ display:block; max-width:100%; }
-  ::selection{ background:var(--accent); color:#fff; }
+  ::selection{ background:var(--ink); color:var(--bg); }
   .wrap{ max-width:var(--max); margin:0 auto; padding-left:var(--pad); padding-right:var(--pad); }
 
-  /* NAV */
   nav.top{
     position:sticky; top:0; z-index:50;
     background:color-mix(in srgb, var(--bg) 88%, transparent);
@@ -43,321 +41,1884 @@
   .nav-links a{ color:var(--muted); transition:color .2s; }
   .nav-links a:hover{ color:var(--ink); }
 
-  /* HERO */
-  header.hero{ padding:64px var(--pad) 56px; }
-  .hero-back{ font-size:13px; color:var(--muted); margin-bottom:32px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
-  .hero-back a:hover{ color:var(--ink); }
-  .hero-greeting{ font-size:15px; color:var(--muted); margin-bottom:8px; letter-spacing:-0.02em; }
-  .hero-name{ font-weight:500; font-size:clamp(30px,5vw,68px); line-height:1.02; letter-spacing:-0.05em; }
-  .hero-name .rd{ color:var(--muted); }
-  .hero-tagline{ font-size:clamp(15px,1.3vw,18px); color:var(--ink); margin-top:18px; line-height:1.5; max-width:44ch; }
-  .hero-tagrow{ display:flex; justify-content:space-between; align-items:flex-start; gap:clamp(24px,5vw,80px); margin-top:18px; }
-  .hero-tagrow .hero-tagline{ margin-top:0; flex:1 1 auto; }
-  .hero-compliance{ font-size:13.5px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; max-width:42ch; text-align:right; flex:0 1 auto; }
-  .hero-compliance strong{ color:var(--accent-ink); font-weight:500; }
-  @media(max-width:880px){
-    .hero-tagrow{ flex-direction:column; gap:12px; }
-    .hero-compliance{ text-align:left; max-width:60ch; }
+  header.hero{
+    padding:0 var(--pad) 64px;
   }
+  .hero-back{ font-size:13px; color:var(--muted); margin-bottom:32px; }
+  .hero-back a:hover{ color:var(--ink); }
+  /* 2:1 hero video, inset to the content padding (no rounded edges) */
+  .hero-video{
+    position:relative;
+    aspect-ratio:3/1; overflow:hidden;
+    margin-bottom:clamp(32px,4vw,56px);
+    /* transparent, not grey: iOS Safari ignores object-fit on a video's poster
+       and letterboxes it, so any container colour reads as a hairline frame */
+    background:transparent;
+  }
+  /* bleed 1px past every edge so sub-pixel rounding never exposes the
+     video element's default black background as a hairline */
+  .hero-video video{
+    position:absolute; inset:-1px;
+    width:calc(100% + 2px); height:calc(100% + 2px);
+    object-fit:cover; display:block;
+  }
+  /* mobile: zoom the 3:1 hero into a taller 16:9 crop (cover trims the sides) */
+  @media(max-width:640px){
+    .hero-video{ aspect-ratio:16/9; }
+  }
+  .hero-greeting{ font-size:17px; color:var(--muted); margin-bottom:6px; }
+  .hero-name{
+    font-weight:400; font-size:clamp(28px,4.5vw,64px);
+    line-height:1.05; letter-spacing:-0.05em;
+  }
+  .hero-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }
   .hero-row{ margin-top:36px; padding-top:24px; border-top:1px solid var(--line); }
-  .hero-side{ display:flex; flex-direction:row; justify-content:space-between; flex-wrap:wrap; font-size:13px; gap:16px; }
+  .hero-side{
+    display:flex; flex-direction:row; justify-content:space-between;
+    flex-wrap:wrap; font-size:13px; gap:16px;
+  }
   .hero-side .pair{ display:flex; flex-direction:column; gap:2px; }
   .hero-side dt{ color:var(--muted); }
+  .view-link{ border-bottom:1px solid var(--ink); transition:opacity .2s; }
+  .view-link:hover{ opacity:0.6; }
   .status-live{ display:inline-flex; align-items:center; gap:7px; }
-  .status-dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+  .status-dot{ width:7px; height:7px; border-radius:50%; background:#22c55e; flex-shrink:0; }
 
-  /* Problem / Opportunity hero cards */
-  .hero-frames{ display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:36px; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--line); }
-  .hero-frame{ padding:clamp(22px,2.6vw,36px); background:var(--bg); display:flex; flex-direction:column; gap:12px; }
-  .hero-frame.opp{ background:var(--ink); color:#fff; }
-  .hero-frame-label{ font-size:11px; letter-spacing:0.06em; color:var(--muted); text-transform:uppercase; }
-  .hero-frame.opp .hero-frame-label{ color:var(--accent); }
-  .hero-frame-strong{ font-size:11px; letter-spacing:0.04em; color:var(--accent-ink); }
-  .hero-frame-body{ font-size:clamp(14px,1.2vw,16px); line-height:1.55; letter-spacing:-0.02em; }
-  .hero-frame.opp .hero-frame-body{ color:rgba(255,255,255,.72); }
-  .hero-frame.opp em{ color:#fff; font-style:normal; }
-  @media(max-width:640px){ .hero-frames{ grid-template-columns:1fr; } }
+  .project-section{ padding-top:48px; padding-bottom:48px; }
+  .project-stage{
+    position:relative; width:100%; aspect-ratio:16/9;
+    background:transparent; border-radius:20px; overflow:hidden;
+    clip-path:inset(0 round 20px);
+    transform:translateZ(0);
+    isolation:isolate;
+  }
+  .project-stage video{
+    position:absolute; top:0; left:0;
+    width:100%; height:100%;
+    object-fit:cover; display:block;
+    transform:scale(1.002); transform-origin:center center;
+  }
+  .stage-pill{ border-radius:200px; clip-path:inset(0 round 200px); }
+  @media(max-width:640px){ .stage-pill{ border-radius:50px; clip-path:inset(0 round 50px); } }
+  .stage-pill video{
+    top:0; left:0;
+    width:100%; height:100%;
+    transform:translateZ(0);
+    will-change:transform;
+  }
+  .ongen-logo{
+    position:absolute; bottom:6%; left:50%;
+    transform:translateX(-50%);
+    width:11%; z-index:2; pointer-events:none;
+  }
+  .stage-caption{
+    position:absolute; top:8%; left:50%;
+    transform:translateX(-50%);
+    z-index:2; pointer-events:none;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight:400;
+    font-size:clamp(14px,1.4vw,20px);
+    letter-spacing:-0.05em;
+    color:#0a0a0a;
+    white-space:nowrap;
+  }
+  .ongen-logo svg{ width:100%; height:auto; display:block; overflow:visible; }
+  .ongen-wave{
+    fill:none; stroke:#0a0a0a; stroke-width:1.2;
+    transform-origin:84.5px 84.5px;
+    opacity:0;
+    animation:ongenPulse 4.8s cubic-bezier(.22,.61,.36,1) infinite;
+  }
+  .ongen-wave.w2{ animation-delay:1.6s; }
+  .ongen-wave.w3{ animation-delay:3.2s; }
+  @keyframes ongenPulse{
+    0%   { transform:scale(1);    opacity:0;    stroke-width:1.4; }
+    8%   { opacity:.45; }
+    100% { transform:scale(2.1);  opacity:0;    stroke-width:.3; }
+  }
 
-  /* PROJECT STAGE */
-  .project-section{ padding-top:8px; padding-bottom:8px; }
-  .project-stage{ width:100%; aspect-ratio:16/9; background:#e0e0e0; border-radius:20px; overflow:hidden; }
-  .project-stage video,
-  .project-stage img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .stage-card{
+    width:100%;
+    background:#f5f5f5; border-radius:20px;
+    color:#000000;
+    display:flex; flex-direction:column;
+    padding:6% 0 16px;
+    position:relative;
+  }
+  .card-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:5%;
+  }
+  .card-title{
+    font-size:clamp(44px,8.5vw,128px); font-weight:300;
+    letter-spacing:-0.05em; line-height:1;
+  }
+  .card-sub{
+    font-size:clamp(14px,1.6vw,24px); font-weight:400;
+    letter-spacing:-0.05em; line-height:1.5;
+    text-align:right; max-width:52%;
+  }
 
-  /* PROCESS PHASES — collapsible, each with a 16:9 media (matches ongenradio / proposal-audit) */
+  .card-logo{
+    position:absolute; top:70%; left:50%;
+    transform:translateX(-50%);
+    width:50%; z-index:2; pointer-events:none;
+    display:none;
+  }
+
+  @media(max-width:640px){
+    .card-title{ font-size:clamp(30px,9vw,44px); }
+    .card-sub{ font-size:clamp(11px,3.2vw,16px); max-width:100%; width:100%; }
+    .card-row{ flex-direction:column; gap:3%; align-items:stretch; }
+    .card-logo{ top:78%; width:80%; }
+    .project-section + .project-section{ padding-top:0; }
+    .card-ticker-track span{ font-size:clamp(14px,3.8vw,18px); }
+    .app-embed-frame iframe{ zoom:0.8; }
+  }
+  .card-logo svg{ width:100%; height:auto; display:block; overflow:visible; }
+  .card-wave{
+    fill:none; stroke:#000000; stroke-width:1.2;
+    transform-origin:84.5px 84.5px;
+    opacity:0;
+    display:none;
+  }
+  .card-wave.cw2{ animation-delay:1.6s; }
+  .card-wave.cw3{ animation-delay:3.2s; }
+  @keyframes cardWave{
+    0%   { transform:scale(1);   opacity:0;   stroke-width:1.4; }
+    8%   { opacity:.5; }
+    100% { transform:scale(2.6); opacity:0;   stroke-width:.3; }
+  }
+
+  .card-ticker{
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .card-ticker-track{
+    display:inline-flex;
+    gap:3em;
+    white-space:nowrap;
+    animation:ticker 30s linear infinite;
+  }
+  .card-ticker-track span{
+    font-size:clamp(12px,1.3vw,18px);
+    font-weight:300;
+    letter-spacing:-0.03em;
+    color:rgba(0,0,0,0.45);
+  }
+  @keyframes ticker{
+    0%  { transform:translateX(0); }
+    100%{ transform:translateX(-50%); }
+  }
+
+  /* Image marquee around iframe */
+  .img-marquee{
+    overflow:hidden;
+    width:100%;
+    pointer-events:none;
+    padding:48px 0;
+    -webkit-mask-image:linear-gradient(90deg, transparent 0, #ffffff 8%, #ffffff 92%, transparent 100%);
+            mask-image:linear-gradient(90deg, transparent 0, #ffffff 8%, #ffffff 92%, transparent 100%);
+  }
+  .img-marquee-track{
+    display:flex;
+    width:max-content;
+    gap:64px;
+    align-items:center;
+    animation:imgMarqueeLeft 40s linear infinite;
+    will-change:transform;
+  }
+  .img-marquee.reverse .img-marquee-track{
+    animation-name:imgMarqueeRight;
+  }
+  .img-marquee-track img{
+    height:48px;
+    width:auto;
+    object-fit:contain;
+    opacity:0.55;
+    flex-shrink:0;
+    display:block;
+  }
+  @keyframes imgMarqueeLeft{
+    0%  { transform:translateX(0); }
+    100%{ transform:translateX(-50%); }
+  }
+  @keyframes imgMarqueeRight{
+    0%  { transform:translateX(-50%); }
+    100%{ transform:translateX(0); }
+  }
+  @media(max-width:880px){
+    .img-marquee-track{ gap:40px; }
+    .img-marquee-track img{ height:32px; }
+  }
+
+  .app-embed-row{
+    display:flex;
+    gap:56px;
+    align-items:stretch;
+  }
+  .app-embed-frame{
+    flex:0 0 36%;
+    aspect-ratio:3/4;
+    border-radius:24px;
+    overflow:hidden;
+    background:#eeeeee;
+  }
+  .app-embed-frame iframe{
+    width:100%; height:100%;
+    border:none; display:block;
+  }
+  .app-embed-info{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  .app-embed-logo{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  .app-embed-logo svg{ width:55%; height:auto; overflow:visible; display:block; }
+  .embed-wave{
+    fill:none; stroke:#000000; stroke-width:1.2;
+    transform-origin:84.5px 84.5px;
+    opacity:0;
+    animation:embedWave 4.8s cubic-bezier(.22,.61,.36,1) infinite;
+  }
+  .embed-wave.ew2{ animation-delay:1.6s; }
+  .embed-wave.ew3{ animation-delay:3.2s; }
+  @keyframes embedWave{
+    0%  { transform:scale(1);   opacity:0;   stroke-width:1.4; }
+    8%  { opacity:.4; }
+    100%{ transform:scale(2.6); opacity:0;   stroke-width:.3; }
+  }
+  @media(max-width:640px){
+    .app-embed-row{ flex-direction:column; gap:32px; }
+    .app-embed-frame{ flex:none; width:100%; }
+    .app-embed-info{ padding-top:16px; }
+    .app-embed-logo svg{ width:50%; }
+  }
+
+  /* Seek section */
+  .seek-section{
+    padding-top:120px; padding-bottom:120px;
+  }
+  .seek-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:clamp(24px,4vw,64px);
+    align-items:center;
+  }
+  .seek-grid-reverse .seek-word{
+    font-size:clamp(40px,7.2vw,120px);
+    letter-spacing:-0.05em;
+  }
+  .seek-left{
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+    min-height:clamp(280px,32vw,460px);
+  }
+  .seek-word{
+    position:relative;
+    font-size:clamp(72px,12vw,200px);
+    font-weight:400;
+    letter-spacing:-0.06em;
+    line-height:1;
+    color:var(--ink);
+    z-index:2;
+    animation:seekBreath 3.6s ease-in-out infinite;
+  }
+  @keyframes seekBreath{
+    0%, 100% {
+      opacity:0.78;
+      text-shadow:0 0 0 rgba(0,0,0,0);
+      transform:scale(1);
+    }
+    50% {
+      opacity:1;
+      text-shadow:0 0 48px rgba(0,0,0,0.32);
+      transform:scale(1.025);
+    }
+  }
+  .seek-wave{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:clamp(160px,18vw,260px);
+    height:clamp(160px,18vw,260px);
+    border-radius:50%;
+    border:1px solid var(--ink);
+    opacity:0;
+    pointer-events:none;
+    z-index:1;
+  }
+  .seek-wave.w1{ animation:seekWave 3.6s cubic-bezier(.22,.61,.36,1) infinite; }
+  .seek-wave.w2{ animation:seekWave 3.6s cubic-bezier(.22,.61,.36,1) infinite; animation-delay:1.2s; }
+  .seek-wave.w3{ animation:seekWave 3.6s cubic-bezier(.22,.61,.36,1) infinite; animation-delay:2.4s; }
+  @keyframes seekWave{
+    0%   { transform:translate(-50%,-50%) scale(0.4); opacity:0.45; }
+    70%  { opacity:0; }
+    100% { transform:translate(-50%,-50%) scale(2.4);  opacity:0; }
+  }
+  .seek-right{
+    position:relative;
+    width:100%;
+    border-radius:20px;
+    overflow:hidden;
+    background:#ededed;
+    aspect-ratio:3/4;
+  }
+  .seek-right video{
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center 45%;
+    display:block;
+  }
+
+  @media(max-width:880px){
+    .seek-section{ padding-top:72px; padding-bottom:72px; overflow:hidden; }
+    /* On mobile, overlay text+waves centered on the video */
+    .seek-grid{
+      display:block; position:relative;
+      max-width:min(420px, 100%);
+      margin:0 auto;
+      overflow:hidden;
+      border-radius:20px;
+    }
+    .seek-right{
+      width:100%; max-width:none; margin:0;
+      border-radius:0;
+    }
+    .seek-left{
+      position:absolute; inset:0;
+      min-height:0; padding:0;
+      display:flex; align-items:center; justify-content:center;
+      z-index:2;
+      pointer-events:none;
+      overflow:hidden;
+      text-shadow:0 2px 24px rgba(255,255,255,0.55);
+    }
+    .seek-grid-reverse .seek-right,
+    .seek-grid-reverse .seek-left{ order:initial; }
+    .seek-word{
+      font-size:clamp(40px,14vw,88px);
+      max-width:90%;
+      text-align:center;
+      word-break:keep-all;
+    }
+    .seek-grid-reverse .seek-word{ font-size:clamp(24px,7.5vw,46px); }
+    .seek-wave{
+      width:clamp(120px,36vw,200px);
+      height:clamp(120px,36vw,200px);
+      border-color:rgba(0,0,0,0.85);
+    }
+  }
+
+  .kpi-section{ padding-top:120px; padding-bottom:120px; }
+  .kpi-head{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    margin-bottom:48px; gap:24px;
+  }
+  .kpi-title-wrap{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .kpi-title{
+    font-size:clamp(32px,4vw,56px); font-weight:400;
+    letter-spacing:-0.05em; line-height:1;
+  }
+  .kpi-title-meta{
+    font-size:clamp(11px,0.9vw,14px); color:var(--muted);
+    letter-spacing:-0.03em;
+  }
+  .kpi-hero{ display:flex; align-items:baseline; gap:10px; }
+  .kpi-hero-num{
+    font-size:clamp(32px,4vw,56px); font-weight:400;
+    letter-spacing:-0.05em; line-height:1;
+  }
+  .kpi-hero-label{
+    font-size:clamp(13px,1.1vw,16px); color:var(--ink);
+    letter-spacing:-0.03em;
+  }
+
+  .kpi-grid{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    gap:24px; flex-wrap:wrap;
+  }
+  .kpi-item{ display:flex; flex-direction:column; gap:8px; }
+  .kpi-num{
+    font-size:clamp(28px,3.2vw,44px); font-weight:400;
+    letter-spacing:-0.05em; line-height:1; color:var(--muted);
+    display:flex; align-items:baseline; gap:6px;
+  }
+  .kpi-num .unit{
+    font-size:clamp(11px,0.9vw,14px); color:var(--muted); font-weight:400;
+    letter-spacing:-0.03em;
+  }
+  .kpi-label{
+    font-size:clamp(12px,0.95vw,14px); color:var(--muted); line-height:1.4;
+    letter-spacing:-0.03em;
+  }
+
+  @media(max-width:880px){
+    .hero-name{ font-size:clamp(24px,7vw,48px); }
+    .stage-caption{ font-size:clamp(10px,2.4vw,14px); }
+    .kpi-section{ padding-top:80px; padding-bottom:80px; }
+    .kpi-head{ margin-bottom:40px; }
+    .kpi-grid{
+      display:grid; grid-template-columns:1fr 1fr; gap:32px 24px;
+      justify-content:initial;
+    }
+    .kpi-item:nth-child(2),
+    .kpi-item:nth-child(4){ align-items:flex-end; text-align:right; }
+  }
+
+  /* Timeline */
+  .tl-section{ padding-top:clamp(48px,7vw,96px); padding-bottom:clamp(48px,7vw,96px); }
+  .tl-phase + .tl-phase{ margin-top:48px; }
+  .tl-head{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    margin-bottom:24px; gap:24px;
+  }
+  .tl-phase-title{
+    font-size:clamp(28px,3.4vw,44px); font-weight:400;
+    letter-spacing:-0.05em; line-height:1;
+  }
+  .tl-phase-meta{
+    text-align:right;
+    font-size:clamp(12px,1vw,14px); color:var(--muted);
+    letter-spacing:-0.03em; line-height:1.5;
+  }
+  .tl-phase-meta .strong{ color:var(--ink); }
+
+  /* Scroll-driven desktop sticky wrapper */
+  .tl-scroll{
+    position:relative;
+    height:600vh;
+    padding:30vh 0 0;
+  }
+  .tl-board{
+    display:block;
+    position:sticky;
+    top:50vh;
+    transform:translateY(-50%);
+  }
+
+  /* Card stage — fixed-height frame; cards are absolutely positioned and cross-fade */
+  .tl-stage{
+    position:relative;
+    min-height:320px;
+  }
+  .tl-card{
+    position:absolute;
+    inset:0;
+    background:#ededed;
+    border-radius:20px;
+    padding:clamp(20px,2vw,28px);
+    display:flex; flex-direction:column;
+    gap:14px;
+    opacity:0; visibility:hidden;
+    transform:translateY(10px);
+    transition:opacity .45s cubic-bezier(.22,.61,.36,1),
+               transform .45s cubic-bezier(.22,.61,.36,1),
+               visibility 0s linear .45s;
+    pointer-events:none;
+  }
+  .tl-card.is-active{
+    opacity:1; visibility:visible;
+    transform:translateY(0);
+    transition-delay:0s;
+    pointer-events:auto;
+  }
+
+  .tl-card-head{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:12px;
+  }
+  .tl-gate-id{
+    font-size:clamp(11px,0.85vw,12px);
+    font-weight:500; letter-spacing:-0.02em;
+    color:var(--muted);
+  }
+  .tl-gate-tag{
+    font-size:11px; color:var(--muted);
+    letter-spacing:-0.02em;
+    padding:4px 10px;
+    border:1px solid #d1d1d1;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .tl-card-title{
+    font-size:clamp(18px,1.6vw,24px);
+    font-weight:500; letter-spacing:-0.04em;
+    line-height:1.25; color:var(--ink);
+  }
+  .tl-card-sub{
+    font-size:clamp(12px,0.95vw,14px);
+    color:var(--muted); letter-spacing:-0.03em;
+    line-height:1.4; margin-top:-6px;
+  }
+  .tl-card-list{
+    list-style:none; padding:14px 0 0; margin:0;
+    display:flex; flex-direction:column; gap:8px;
+    border-top:1px solid #d9d9d9;
+  }
+  .tl-card-list li{
+    font-size:clamp(12px,0.9vw,13px);
+    color:#303030; letter-spacing:-0.03em;
+    line-height:1.45;
+  }
+  .tl-card-list li .dim{ color:var(--muted); }
+
+  /* Track + nodes (desktop horizontal) */
+  .tl-track{
+    position:relative;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:32px 0 4px;
+    margin-top:clamp(20px,2.4vw,32px);
+  }
+  .tl-track::before{
+    content:'';
+    position:absolute;
+    left:4%; right:4%;
+    top:calc(32px + 9px);
+    height:1px;
+    background:#d9d9d9;
+  }
+  .tl-node{
+    position:relative;
+    flex:1 1 0;
+    display:flex; flex-direction:column;
+    align-items:center; gap:12px;
+    background:transparent; border:0;
+    cursor:default;
+    color:var(--muted);
+    padding:0; font:inherit;
+    z-index:1;
+    pointer-events:none;
+  }
+  .tl-node-dot{
+    position:relative;
+    width:18px; height:18px;
+    border-radius:50%;
+    background:var(--bg);
+    border:1px solid #c5c5c5;
+    transition:transform .35s cubic-bezier(.22,.61,.36,1),
+               background-color .35s, border-color .35s,
+               box-shadow .35s;
+  }
+  .tl-node-dot::before,
+  .tl-node-dot::after{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    border-radius:50%;
+    border:1px solid var(--ink);
+    opacity:0;
+    pointer-events:none;
+    transform:scale(1);
+  }
+  .tl-node-meta{
+    display:flex; flex-direction:column;
+    align-items:center; gap:4px;
+  }
+  .tl-node-label{
+    font-size:12px; letter-spacing:-0.02em;
+    color:var(--muted);
+    transition:color .35s;
+  }
+  .tl-node-tag{
+    font-size:10.5px; letter-spacing:-0.02em;
+    color:#a5a5a5;
+    transition:color .35s;
+  }
+  .tl-node.is-active .tl-node-dot{
+    background:var(--ink);
+    border-color:var(--ink);
+    transform:scale(1.35);
+    box-shadow:0 0 0 6px rgba(0,0,0,0.06);
+  }
+  .tl-node.is-active .tl-node-dot::before{
+    animation:tlPulse 2.2s cubic-bezier(.22,.61,.36,1) infinite;
+  }
+  .tl-node.is-active .tl-node-dot::after{
+    animation:tlPulse 2.2s cubic-bezier(.22,.61,.36,1) infinite;
+    animation-delay:1.1s;
+  }
+  @keyframes tlPulse{
+    0%   { transform:scale(1);   opacity:0.55; }
+    70%  { transform:scale(3.2); opacity:0;    }
+    100% { transform:scale(3.2); opacity:0;    }
+  }
+  .tl-node.is-active .tl-node-label{ color:var(--ink); }
+  .tl-node.is-active .tl-node-tag{ color:#424242; }
+
+  /* Phase divider removed */
+
+  @media(max-width:880px){
+    .tl-section{ padding-top:48px; padding-bottom:48px; }
+    .tl-head{ margin-bottom:16px; flex-direction:column; gap:6px; }
+    .tl-phase-meta{ text-align:left; }
+
+    .tl-scroll{ height:auto; padding:0; }
+    .tl-board{
+      position:static;
+      transform:none;
+      display:grid;
+      grid-template-columns:64px 1fr;
+      column-gap:14px;
+      align-items:start;
+    }
+    .tl-stage{
+      grid-column:2;
+      grid-row:1;
+      position:sticky;
+      top:calc((100vh - 60vh) / 2);
+      align-self:start;
+      min-height:60vh;
+      background:var(--bg);
+    }
+    .tl-track{
+      grid-column:1;
+      grid-row:1;
+      flex-direction:column;
+      justify-content:space-between;
+      align-items:center;
+      padding:24px 0 48vh;
+      margin-top:0;
+      min-height:240vh;
+    }
+    .tl-track::before{
+      left:50%;
+      right:auto;
+      top:24px; bottom:24px;
+      width:1px; height:auto;
+      background:#d9d9d9;
+      transform:translateX(-0.5px);
+    }
+    /* progress fill on left indicator */
+    .tl-track::after{
+      content:'';
+      position:absolute;
+      left:50%;
+      top:24px;
+      width:1px;
+      height:var(--tl-progress, 0%);
+      background:var(--ink);
+      transform:translateX(-0.5px);
+      transition:height .4s cubic-bezier(.22,.61,.36,1);
+      pointer-events:none;
+    }
+    .tl-node{
+      flex:none;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+      padding:0;
+      width:100%;
+    }
+    .tl-node-dot{
+      width:12px; height:12px;
+    }
+    .tl-node-meta{ display:none; }
+    .tl-node[data-gate="4"]::before{ display:none; }
+  }
+
+  /* === Departure section === */
+  .dep-section{
+    padding-top:64px;
+    padding-bottom:120px;
+  }
+  .dep-block{
+    font-size:clamp(28px,4vw,64px);
+    font-weight:400;
+    letter-spacing:-0.05em;
+    line-height:1.08;
+    color:var(--ink);
+  }
+  /* Alternating white/grey glow */
+  .dep-block .a,
+  .dep-block .b{
+    transition:color 1.6s ease, text-shadow 1.6s ease;
+  }
+  .dep-block .a{
+    color:var(--ink);
+    animation:depPulseA 4s ease-in-out infinite;
+  }
+  .dep-block .b{
+    color:var(--muted);
+    animation:depPulseB 4s ease-in-out infinite;
+  }
+  @keyframes depPulseA{
+    0%,100%   { color:var(--ink);   text-shadow:0 0 24px rgba(0,0,0,0.18); }
+    50%       { color:#c5c5c5;      text-shadow:0 0 0 rgba(0,0,0,0); }
+  }
+  @keyframes depPulseB{
+    0%,100%   { color:#c5c5c5;      text-shadow:0 0 0 rgba(0,0,0,0); }
+    50%       { color:var(--ink);   text-shadow:0 0 24px rgba(0,0,0,0.18); }
+  }
+  .dep-block + .dep-block{
+    margin-top:clamp(80px,12vw,180px);
+    text-align:right;
+  }
+  @media(max-width:880px){
+    .dep-section{ padding-top:48px; padding-bottom:80px; }
+    .dep-block + .dep-block{ margin-top:64px; }
+  }
+
+  /* === Value Shift section === */
+  .vs-section{
+    padding-top:96px;
+    padding-bottom:120px;
+  }
+  .vs-head{ margin-bottom:64px; }
+  .vs-stage{
+    position:relative;
+    width:100%;
+    overflow:hidden;
+  }
+  .vs-stage-large{ min-height:clamp(220px,26vw,360px); }
+  .vs-stage-small{
+    min-height:clamp(96px,9vw,140px);
+    margin-top:clamp(32px,4vw,56px);
+  }
+  .vs-text{
+    position:absolute; top:0; left:0; right:0;
+    font-weight:400;
+    letter-spacing:-0.05em;
+    line-height:1.05;
+    will-change:color;
+    color:#c5c5c5;
+  }
+  .vs-line{
+    white-space:nowrap;
+    display:block;
+    width:-moz-fit-content;
+    width:fit-content;
+    max-width:100%;
+    position:relative;
+    will-change:left,transform;
+  }
+  .vs-stage-large .vs-text{
+    font-size:clamp(40px,6.4vw,96px);
+  }
+  .vs-stage-small .vs-text{
+    font-size:clamp(15px,1.4vw,22px);
+    line-height:1.55;
+    letter-spacing:-0.03em;
+  }
+
+  @media(max-width:880px){
+    .vs-section{ padding-top:64px; padding-bottom:80px; }
+    .vs-head{ margin-bottom:40px; }
+    .vs-stage-large{ min-height:clamp(140px,32vw,220px); }
+    .vs-stage-small{ min-height:clamp(70px,14vw,110px); margin-top:28px; }
+    .vs-stage-large .vs-text{ font-size:clamp(28px,7vw,52px); }
+    .vs-stage-small .vs-text{ font-size:clamp(13px,3.2vw,18px); line-height:1.5; }
+  }
+
+  /* Value Mapping (under Value Shift) — stadium pill */
+  .vm-block{
+    margin-top:clamp(48px, 6vw, 96px);
+    width:100%;
+    display:flex;
+    justify-content:center;
+  }
+  .vm-chart{
+    width:100%;
+    aspect-ratio: 16 / 10;
+    position:relative;
+  }
+  .vm-chart svg{ width:100%; height:100%; display:block; overflow:visible; }
+  .vm-chart .vm-ring{ fill:none; stroke:rgba(0,0,0,0.16); stroke-width:0.8; stroke-dasharray:2 3; }
+  .vm-chart .vm-ring-outer{ stroke:rgba(0,0,0,0.28); stroke-dasharray:none; stroke-width:1; }
+  .vm-chart .vm-pulse-inward{
+    fill:none;
+    stroke:#000000;
+    stroke-width:1.2;
+    opacity:0;
+    pointer-events:none;
+  }
+  .vm-chart .vm-sector-line{ stroke:rgba(0,0,0,0.10); stroke-width:0.6; stroke-dasharray:2 3; }
+  .vm-chart .vm-stakeholder-label{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight:400;
+    fill:#000000;
+    letter-spacing:0;
+  }
+  .vm-chart .vm-item-text{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight:400;
+    fill:rgba(0,0,0,0.65);
+    letter-spacing:0;
+  }
+  .vm-chart .vm-ring-label{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight:400;
+    fill:#000000;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    paint-order:stroke;
+    stroke:#f5f5f5;
+    stroke-width:4px;
+    stroke-linejoin:round;
+  }
+  .vm-chart .vm-center-text{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight:400;
+    fill:#000000;
+    letter-spacing:0;
+  }
+  @media(max-width:880px){
+    .vm-chart{ aspect-ratio: 7 / 16; }
+    .vm-chart .vm-ring{ stroke-width:0.7; }
+    .vm-chart .vm-ring-outer{ stroke-width:0.9; }
+    .vm-chart .vm-sector-line{ stroke-width:0.5; }
+  }
+
+  /* Tier scrollytelling */
+  .tier-scroll{
+    position:relative;
+    width:100%;
+    background:var(--bg);
+    color:var(--ink);
+    /* 5 step panels + 1 exit panel × 100vh, so the sticky iframe remains
+       pinned the entire time tier 5's text is on screen. */
+    --tier-panels: 6;
+    height: calc(var(--tier-panels) * 100vh);
+  }
+  .tier-scroll-inner{ position:relative; height:100%; }
+  .tier-sticky{
+    position:sticky;
+    top:0;
+    height:100vh;
+    width:100%;
+    overflow:hidden;
+    z-index:1;
+  }
+  .tier-sticky iframe{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    border:0;
+    background:transparent;
+    display:block;
+    /* Iframe content shouldn't capture wheel/touch — parent scroll wins. */
+    pointer-events:none;
+  }
+  .tier-readout{ display:none; }
+  .tier-steps{
+    position:relative;
+    z-index:2;
+    pointer-events:none;
+    width:100%;
+    /* Pull steps up so step 1 overlaps the sticky iframe from the very top
+       of the section, instead of starting one viewport later. */
+    margin-top:-100vh;
+  }
+  .tier-step{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    align-items:flex-start;
+    padding:0 32px 64px clamp(40px, 8vw, 140px);
+    box-sizing:border-box;
+    color:#fff;
+    max-width:620px;
+    pointer-events:none;
+  }
+  .tier-step-num{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:12px;
+    letter-spacing:0.14em;
+    opacity:0.45;
+    margin-bottom:10px;
+  }
+  .tier-step-title{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:28px;
+    font-weight:400;
+    letter-spacing:-0.01em;
+    margin-bottom:10px;
+  }
+  .tier-step-body{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:14px;
+    line-height:1.55;
+    color:rgba(255,255,255,0.7);
+    max-width:420px;
+  }
+  @media(max-width:880px){
+    .tier-step{ padding:0 18px 36px; }
+    .tier-step-title{ font-size:22px; }
+    .tier-step-body{ font-size:13px; }
+  }
+
+  /* Features section */
+  .ft-section{
+    padding-top:120px;
+    padding-bottom:140px;
+  }
+  .ft-head{ margin-bottom:56px; }
+  .ft-grid{
+    list-style:none; padding:0; margin:0;
+    display:flex;
+    gap:20px;
+  }
+  .ft-card{
+    background:#ededed;
+    border-radius:20px;
+    padding:clamp(28px,2.4vw,40px);
+    display:flex; flex-direction:column;
+    justify-content:space-between;
+    min-height:clamp(220px,22vw,300px);
+    gap:48px;
+    flex:1 1 0;
+    min-width:0;
+    transition:flex-grow .5s cubic-bezier(.22,.61,.36,1),
+               background-color .4s ease;
+  }
+  @media(min-width:881px){
+    .ft-grid:hover .ft-card{ flex-grow:0.7; }
+    .ft-grid .ft-card:hover{ flex-grow:1.9; background:#e9e9e9; }
+  }
+  .ft-title{
+    font-size:clamp(18px,1.55vw,24px);
+    font-weight:400;
+    letter-spacing:-0.03em;
+    line-height:1.2;
+    margin:0 0 6px;
+    color:var(--ink);
+  }
+  .ft-sub{
+    font-size:clamp(12px,0.9vw,14px);
+    color:var(--muted);
+    letter-spacing:-0.01em;
+    line-height:1.45;
+    margin:0;
+  }
+  .ft-tag{
+    font-size:clamp(11px,0.8vw,13px);
+    color:var(--muted);
+    letter-spacing:-0.01em;
+    align-self:flex-end;
+    text-align:right;
+  }
+
+  @media(max-width:880px){
+    .ft-section{ padding-top:72px; padding-bottom:80px; }
+    .ft-head{ margin-bottom:36px; }
+    .ft-grid{ flex-direction:column; gap:14px; }
+    .ft-card{ flex:0 0 auto; min-height:0; gap:24px; padding:24px; }
+    .ft-title{ font-size:clamp(18px,5vw,22px); }
+    .ft-sub{ font-size:clamp(12px,3.4vw,14px); }
+    .ft-tag{ font-size:clamp(11px,3vw,13px); }
+  }
+
+  /* SAM section */
+  .sam-section{
+    padding-top:120px; padding-bottom:140px;
+  }
+  /* When used as a panel inside the market stack, neutralize padding/border */
+  .market-panel.sam-section{
+    padding:clamp(40px,6vh,80px) 0;
+    border-top:0;
+    overflow:hidden;
+  }
+  .market-panel .wrap{ width:100%; max-height:100%; }
+  .sam-grid{
+    display:grid;
+    grid-template-columns:1.5fr 1fr;
+    column-gap:clamp(48px,8vw,140px);
+    row-gap:clamp(48px,6vw,96px);
+    align-items:start;
+  }
+  .sam-main{ position:relative; display:flex; flex-direction:column; }
+  .sam-side{
+    display:flex; flex-direction:column;
+    gap:clamp(56px,7vw,96px);
+    padding-top:clamp(8px,1vw,24px);
+    text-align:right;
+    align-items:flex-end;
+  }
+  .sam-eyebrow{
+    font-size:clamp(18px,1.6vw,24px);
+    font-weight:400;
+    letter-spacing:-0.02em;
+    color:var(--ink);
+    line-height:1.1;
+  }
+  .sam-eyebrow-sub{
+    font-size:clamp(12px,0.95vw,14px);
+    color:var(--muted);
+    margin-top:6px;
+    letter-spacing:-0.01em;
+    line-height:1.4;
+  }
+  .sam-big{
+    margin-top:clamp(16px,1.8vw,32px);
+    display:flex; align-items:flex-end;
+    line-height:0.9;
+  }
+  .sam-big .sam-count{
+    font-size:clamp(96px,13vw,180px);
+    font-weight:400;
+    letter-spacing:-0.06em;
+    line-height:0.88;
+  }
+  .sam-big .sam-unit{
+    font-size:clamp(36px,5vw,72px);
+    line-height:1;
+    letter-spacing:-0.04em;
+    margin-left:0.04em;
+    padding-bottom:0.12em;
+    color:var(--ink);
+  }
+  .sam-foot{
+    margin-top:clamp(20px,2.5vw,36px);
+    font-size:clamp(20px,2vw,30px);
+    letter-spacing:-0.03em;
+    line-height:1.1;
+  }
+  .sam-stat{ display:flex; flex-direction:column; align-items:flex-end; }
+  .sam-mid{
+    margin-top:clamp(10px,1.2vw,18px);
+    display:flex; align-items:flex-end;
+    justify-content:flex-end;
+    line-height:0.9;
+  }
+  .sam-mid .sam-count{
+    font-size:clamp(44px,6vw,86px);
+    font-weight:400;
+    letter-spacing:-0.05em;
+    line-height:0.9;
+  }
+  .sam-mid .sam-unit{
+    font-size:clamp(20px,2.4vw,36px);
+    letter-spacing:-0.03em;
+    line-height:1;
+    margin-left:0.05em;
+    padding-bottom:0.1em;
+  }
+  .sam-mid .sam-unit-pre{ margin-left:0; margin-right:0.02em; padding-bottom:0; align-self:flex-end; }
+  .sam-cap{
+    margin-top:12px;
+    font-size:clamp(12px,0.95vw,14px);
+    color:var(--muted);
+    letter-spacing:-0.01em;
+    line-height:1.45;
+  }
+  .sam-blurb{
+    margin:clamp(20px,2.4vw,32px) 0 0;
+    max-width:none;
+    text-align:left;
+    font-size:clamp(13px,0.95vw,15px);
+    color:var(--ink);
+    letter-spacing:-0.01em;
+    line-height:1.45;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .sam-sources{
+    margin-top:clamp(10px,1.2vw,16px);
+    display:flex; flex-direction:column; gap:4px;
+    font-size:clamp(10px,0.75vw,11px);
+    color:#959595;
+    letter-spacing:-0.01em;
+    line-height:1.5;
+  }
+
+  /* SAM reveal */
+  /* (handled by .market-panel.is-active opacity transition) */
+
+  @media(max-width:880px){
+    .sam-section{ padding-top:72px; padding-bottom:80px; }
+    .sam-grid{ grid-template-columns:1fr; gap:48px; }
+    .sam-side{ flex-direction:column; gap:40px; padding-top:0; }
+    .sam-big .sam-count{ font-size:clamp(96px,32vw,180px); }
+    .sam-big .sam-unit{ font-size:clamp(40px,12vw,72px); }
+    .sam-mid .sam-count{ font-size:clamp(60px,18vw,110px); }
+    .sam-mid .sam-unit{ font-size:clamp(26px,7vw,42px); }
+    .sam-foot{ font-size:clamp(22px,6.5vw,32px); margin-top:32px; }
+    .sam-blurb{ font-size:clamp(14px,4vw,17px); white-space:normal; }
+  }
+
+  /* TAM → SAM → SOM scroll stack */
+  .market-stack{
+    position:relative;
+    height:300vh; /* 3 panels × 100vh of scroll */
+  }
+  .market-stack::before{ display:none; }
+  .market-stage{
+    position:sticky; top:0;
+    height:100vh;
+    overflow:hidden;
+  }
+  .market-panel{
+    position:absolute; inset:0;
+    display:flex; align-items:center;
+    padding:0;
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity .6s ease, transform .6s cubic-bezier(.22,.61,.36,1);
+    pointer-events:none;
+    border-top:0;
+  }
+  .market-panel.is-active{
+    opacity:1; transform:translateY(0);
+    pointer-events:auto;
+  }
+  .market-panel .wrap{ width:100%; }
+  .market-kicker{
+    display:none;
+  }
+  .market-sub{
+    margin-top:10px;
+    font-size:clamp(14px,1.1vw,18px);
+    color:var(--muted);
+    letter-spacing:-0.01em;
+    line-height:1.4;
+  }
+  .market-panel .ft-head{ margin-bottom:clamp(20px,2.4vw,36px); }
+
+  /* Step indicator */
+  .market-nav{
+    display:none;
+  }
+
+  @media(max-width:880px){
+    .market-stack{ height:auto; }
+    .market-stack::before{ display:none; }
+    .market-stage{ position:relative; height:auto; overflow:visible; }
+    .market-panel{
+      position:relative; inset:auto;
+      opacity:1; transform:none;
+      pointer-events:auto;
+      border-top:1px solid var(--line);
+    }
+    .market-panel:first-of-type{ border-top:0; }
+    .market-nav{ display:none; }
+  }
+
+  .hyp-section{ padding-top:64px; padding-bottom:64px; }
+  .hyp-head{ margin-bottom:48px; }
+  .hyp-title{
+    font-size:clamp(32px,4vw,56px); font-weight:400;
+    letter-spacing:-0.05em; line-height:1;
+  }
+  .hyp-list{
+    list-style:none; padding:0; margin:0;
+    display:flex; flex-direction:column;
+  }
+  .hyp-list li{
+    display:flex; gap:32px; align-items:baseline;
+    padding:24px 0;
+    border-top:1px solid var(--line);
+  }
+  .hyp-list li:last-child{ border-bottom:1px solid var(--line); }
+  .hyp-num{
+    font-size:clamp(18px,1.8vw,28px); color:var(--muted);
+    letter-spacing:-0.04em; line-height:1.35; flex-shrink:0;
+    min-width:48px;
+  }
+  .hyp-text{
+    font-size:clamp(18px,1.8vw,28px); font-weight:400;
+    letter-spacing:-0.04em; line-height:1.35;
+    color:var(--ink);
+  }
+  @media(max-width:880px){
+    .hyp-section{ padding-top:48px; padding-bottom:48px; }
+    .hyp-head{ margin-bottom:32px; }
+    .hyp-list li{ gap:20px; padding:20px 0; }
+    .hyp-num{ min-width:28px; }
+  }
+
+  /* ============================================================
+     Entity Diagram (after Stakeholder mapping)
+     Two layouts: desktop SVG (1664×723) & mobile vertical list.
+     ============================================================ */
+  .entity-section{
+    padding:120px 0 100px;
+    background:var(--bg); color:var(--ink);
+    position:relative;
+  }
+  .entity-section::before{ display:none; }
+  .entity-head{
+    max-width:var(--max);
+    margin:0 auto 56px;
+    padding-left:var(--pad); padding-right:var(--pad);
+    display:grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "title meta"
+      "sub   meta";
+    column-gap:48px;
+    row-gap:16px;
+    align-items:end;
+  }
+  .entity-eyebrow{
+    font-size:clamp(11px,0.85vw,13px);
+    color:var(--muted);
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    margin:0;
+  }
+  .entity-footnote{
+    max-width:var(--max);
+    margin:48px auto 0;
+    padding-left:var(--pad); padding-right:var(--pad);
+    color:var(--muted);
+    font-size:clamp(11px,0.85vw,13px);
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+  }
+  .entity-title{
+    grid-area:title;
+    font-size:clamp(32px,4vw,56px);
+    font-weight:400;
+    letter-spacing:-0.05em;
+    line-height:1;
+    color:var(--ink);
+    margin:0;
+  }
+  .entity-sub{
+    grid-area:sub;
+    margin:0;
+    font-size:clamp(14px,1.1vw,18px);
+    color:var(--muted);
+    letter-spacing:-0.01em;
+    line-height:1.45;
+    max-width:640px;
+  }
+  .entity-meta{
+    grid-area:meta;
+    display:flex; gap:10px; flex-wrap:wrap;
+    justify-content:flex-end;
+    margin:0;
+  }
+  .entity-meta .em-stat{
+    display:inline-flex; align-items:baseline; gap:8px;
+    padding:10px 14px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    font-size:11px;
+    color:var(--muted);
+    letter-spacing:-0.01em;
+    white-space:nowrap;
+  }
+  .entity-meta .em-stat b{
+    color:var(--ink); font-weight:500;
+    font-size:13px; letter-spacing:-0.02em;
+  }
+
+  /* Desktop SVG canvas */
+  .entity-canvas-wrap{
+    max-width:var(--max); margin:0 auto;
+    padding-left:var(--pad); padding-right:var(--pad);
+    display:flex; justify-content:center;
+  }
+  .entity-canvas{
+    width:100%;
+    aspect-ratio:1664 / 723;
+    position:relative;
+    background:transparent;
+    margin:0 auto;
+  }
+  .entity-canvas svg{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    display:block;
+  }
+
+  /* Relationship paths — quiet, static structural lines */
+  .er-rel{
+    fill:none; stroke:#000000; stroke-width:0.6;
+    opacity:0.18;
+  }
+  .er-rel.is-dashed{ stroke-dasharray:3 5; opacity:0.12; }
+  .er-rel-label{
+    fill:#000000; opacity:0.32; font-size:8px;
+    letter-spacing:-0.02em;
+  }
+
+  /* Box-sequence pulse — each entity fades in to white, holds briefly,
+     then fades out. Registered custom properties make color/number
+     transitions actually interpolate (otherwise they snap). */
+  @property --erc { syntax:'<color>'; inherits:true; initial-value:#e5e5e5; }
+  @property --ert { syntax:'<color>'; inherits:true; initial-value:#000000; }
+  @property --ers { syntax:'<color>'; inherits:true; initial-value:#000000; }
+  @property --erso { syntax:'<number>'; inherits:true; initial-value:0; }
+  @property --erg { syntax:'<number>'; inherits:true; initial-value:0; }
+
+  .er-entity{
+    --erc:#e5e5e5;
+    --ert:#000000;
+    --ers:#000000;
+    --erso:0;
+    --erg:0;
+    filter:drop-shadow(0 0 calc(var(--erg) * 14px) rgba(0,0,0,calc(var(--erg) * 0.55)));
+    transition: --erc .35s ease, --ert .35s ease, --erg .35s ease;
+    cursor:default;
+  }
+  .er-entity.is-lit{ --erc:#000000; --ert:#ffffff; --erg:1; }
+  .er-entity rect{
+    fill:var(--erc); stroke:var(--ers); stroke-width:0;
+    stroke-opacity:var(--erso);
+  }
+  .er-entity text{ fill:var(--ert); }
+  .er-entity-title{ font-size:11px; letter-spacing:-0.03em; }
+  .er-entity-tag{ font-size:8px; opacity:0.45; }
+  .er-entity-rule{ stroke:var(--ert); stroke-width:0.4; opacity:0.22; }
+  .er-attr{ font-size:9px; letter-spacing:-0.02em; opacity:0.85; }
+  .er-attr.is-key{ opacity:1; }
+  .er-dim{ opacity:0.55; }
+
+  @keyframes erBoxPulse{
+    /* dim rest — dark gray box, no border */
+    0%, 94%, 100% {
+      --erc:#e5e5e5; --ert:#000000; --erso:0; --erg:0;
+    }
+    /* warm-up */
+    3% {
+      --erc:#d5d5d5; --ert:#000000; --erso:0; --erg:0.35;
+    }
+    /* rising */
+    6% {
+      --erc:#a5a5a5; --ert:#000000; --erso:0; --erg:0.7;
+    }
+    /* peak — full white */
+    9%, 15% {
+      --erc:#000000; --ert:#ffffff; --erso:0; --erg:1;
+    }
+    /* easing down */
+    18% {
+      --erc:#a5a5a5; --ert:#000000; --erso:0; --erg:0.7;
+    }
+    22% {
+      --erc:#d5d5d5; --ert:#000000; --erso:0; --erg:0.3;
+    }
+    /* settled */
+    28% {
+      --erc:#e5e5e5; --ert:#000000; --erso:0; --erg:0;
+    }
+  }
+
+  /* Hide the old line-pulse overlay layer (we keep the markup harmless) */
+  .er-flow{ display:none; }
+
+  /* Zone separators & labels — pure structural cues */
+  .er-band-line{ stroke:#000000; stroke-width:0.4; opacity:0.12; stroke-dasharray:3 5; }
+  .er-band-label{
+    fill:#000000; opacity:0.45; font-size:10px;
+    letter-spacing:0.14em; text-transform:uppercase;
+  }
+  .er-zone-glow{ display:none; }
+
+  /* Legend — restyled to portfolio typography */
+  .entity-legend{
+    max-width:var(--max); margin:40px auto 0;
+    padding-left:var(--pad); padding-right:var(--pad);
+    display:flex; flex-wrap:wrap; gap:14px 28px;
+    font-size:11px; color:var(--muted);
+    letter-spacing:-0.02em;
+  }
+  .entity-legend .lg-key{ display:inline-flex; align-items:center; gap:8px; }
+  .entity-legend .lg-mark{
+    display:inline-block; width:18px; height:1px; background:var(--ink); opacity:0.6;
+  }
+  .entity-legend .lg-mark.dashed{ background:transparent; border-top:1px dashed var(--ink); opacity:0.5; }
+  .entity-legend .lg-mark.box{
+    width:14px; height:10px; background:transparent;
+    border:1px solid var(--ink); border-radius:2px; opacity:0.7;
+    animation:erLegendBox 3.6s ease-in-out infinite;
+    box-shadow:0 0 0 rgba(0,0,0,0);
+  }
+  @keyframes erLegendBox{
+    0%, 100% { background:transparent; box-shadow:0 0 0 rgba(0,0,0,0); }
+    30%, 60% { background:var(--ink); box-shadow:0 0 8px rgba(0,0,0,0.45); }
+  }
+  .entity-legend .lg-glyph{ color:var(--ink); font-weight:500; }
+
+  /* ============================================================
+     Mobile vertical view (replaces SVG canvas on narrow screens).
+     ============================================================ */
+  @property --emc { syntax:'<color>'; inherits:true; initial-value:#f5f5f5; }
+  @property --emt { syntax:'<color>'; inherits:true; initial-value:#000000; }
+  @property --emb { syntax:'<color>'; inherits:true; initial-value:rgba(0,0,0,0.18); }
+  @property --emg { syntax:'<number>'; inherits:true; initial-value:0; }
+
+  .entity-mobile{ display:none; }
+  @media (max-width:768px){
+    .entity-section{ padding:80px 0 64px; }
+    .entity-head{
+      grid-template-columns:1fr;
+      grid-template-areas:
+        "title"
+        "sub"
+        "meta";
+      row-gap:14px;
+      margin-bottom:36px;
+    }
+    .entity-title{ font-size:clamp(28px,8vw,40px); }
+    .entity-sub{ font-size:14px; line-height:1.55; }
+    .entity-meta{ justify-content:flex-start; gap:8px; margin-top:6px; }
+    .entity-meta .em-stat{ padding:8px 12px; font-size:10.5px; }
+    .entity-meta .em-stat b{ font-size:12px; }
+    .entity-canvas-wrap{ display:none; }
+    .entity-legend{ gap:8px 16px; font-size:10px; margin-top:22px;
+      max-width:var(--max); padding-left:var(--pad); padding-right:var(--pad);
+    }
+    .entity-legend .lg-mark{ width:14px; }
+
+    .entity-mobile{
+      display:block;
+      max-width:var(--max); margin:0 auto;
+      padding-left:var(--pad); padding-right:var(--pad);
+    }
+    .em-zone{
+      position:relative;
+      border-radius:14px;
+      padding:14px 14px 12px;
+      margin-bottom:10px;
+      background:#eeeeee;
+    }
+    .em-zone-label{
+      font-size:9.5px; color:var(--muted);
+      letter-spacing:0.18em; text-transform:uppercase;
+      margin-bottom:12px;
+      padding-bottom:10px;
+      border-bottom:1px solid rgba(0,0,0,0.06);
+    }
+    .em-entities{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:6px;
+    }
+    .em-entity{
+      --emc:#e5e5e5;
+      --emt:#000000;
+      --emg:0;
+      border:0;
+      border-radius:8px;
+      padding:9px 11px;
+      font-size:11px;
+      letter-spacing:-0.02em;
+      background:var(--emc);
+      color:var(--emt);
+      display:flex; flex-direction:column; gap:3px;
+      min-height:44px;
+      box-shadow:0 0 calc(var(--emg) * 18px) rgba(0,0,0,calc(var(--emg) * 0.45));
+      transition: --emc .35s ease, --emt .35s ease, --emg .35s ease;
+    }
+    .em-entity.is-lit{ --emc:#000000; --emt:#ffffff; --emg:1; }
+    .em-entity .em-name{
+      font-weight:500; color:inherit;
+      font-size:11.5px; letter-spacing:-0.025em;
+    }
+    .em-entity .em-tag{
+      font-size:9px; opacity:0.6; color:inherit;
+      letter-spacing:0; line-height:1.3;
+    }
+    @keyframes emBoxPulse{
+      0%, 94%, 100% {
+        --emc:#e5e5e5; --emt:#000000; --emg:0;
+      }
+      3% {
+        --emc:#d5d5d5; --emt:#000000; --emg:0.35;
+      }
+      6% {
+        --emc:#a5a5a5; --emt:#000000; --emg:0.7;
+      }
+      9%, 15% {
+        --emc:#000000; --emt:#ffffff; --emg:1;
+      }
+      18% {
+        --emc:#a5a5a5; --emt:#000000; --emg:0.7;
+      }
+      22% {
+        --emc:#d5d5d5; --emt:#000000; --emg:0.3;
+      }
+      28% {
+        --emc:#e5e5e5; --emt:#000000; --emg:0;
+      }
+    }
+
+    /* Loop indicator note between zones (no traveling dot — boxes carry the pulse) */
+    .em-flow{ display:none; }
+    .em-loop-note{
+      text-align:center;
+      font-size:9.5px; color:var(--muted);
+      letter-spacing:0.16em; text-transform:uppercase;
+      margin-top:14px;
+      padding-top:14px;
+      border-top:1px dashed var(--line);
+    }
+  }
+
+  /* Very narrow phones: single column, smaller padding */
+  @media (max-width:420px){
+    .em-zone{ padding:12px 12px 10px; border-radius:12px; }
+    .em-entities{ grid-template-columns:1fr; gap:5px; }
+    .em-entity{ padding:8px 10px; min-height:0; flex-direction:row; align-items:baseline; gap:8px; }
+    .em-entity .em-name{ font-size:11.5px; }
+    .em-entity .em-tag{ font-size:9px; opacity:0.55; margin-left:auto; text-align:right; }
+  }
+
+  .interaction-overview-section{
+    padding-top:clamp(56px,8vw,120px);
+    padding-bottom:clamp(56px,8vw,120px);
+  }
+  .vimeo-section{
+    padding-top:clamp(56px,8vw,120px);
+    padding-bottom:clamp(56px,8vw,120px);
+  }
+  .vimeo-frame{
+    width:100%;
+    line-height:0;
+  }
+  .vimeo-frame iframe{
+    width:100%;
+    height:auto;
+    aspect-ratio:16/9;
+    border:0;
+    display:block;
+  }
+
+  /* PHASE COLLAPSIBLE */
+  .phase-media-wrap{ max-width:var(--max); margin:0 auto; padding:clamp(28px,4vw,48px) var(--pad) clamp(40px,6vw,80px); cursor:pointer; }
   .phase-toggle{
     display:block; width:100%; border:none; cursor:pointer;
     font-family:var(--font); color:var(--ink);
-    padding:clamp(20px,2.6vw,32px) 0 clamp(18px,2.4vw,28px);
-    position:sticky; top:calc(var(--nav-h,57px) - 1px); z-index:40;
+    padding:2px 0 clamp(20px,3vw,32px);
+    position:sticky; top:calc(var(--nav-h,57px) - 2px); z-index:40;
+    background:var(--bg);
     background:color-mix(in srgb, var(--bg) 94%, transparent);
     backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
-    border-top:1px solid var(--line);
   }
   .phase-toggle-inner{
     display:flex; align-items:center; justify-content:space-between;
     gap:24px; max-width:var(--max); margin:0 auto; text-align:left;
     padding-left:var(--pad); padding-right:var(--pad);
   }
-  .phase-num{ font-family:var(--mono); font-size:11px; color:var(--accent-ink); letter-spacing:0.08em; margin-bottom:6px; text-transform:uppercase; }
-  .phase-name{ font-size:clamp(22px,3vw,42px); font-weight:500; letter-spacing:-0.045em; line-height:1.08; transition:opacity .2s; margin-bottom:6px; }
-  .phase-sub{ font-size:13.5px; color:var(--muted); letter-spacing:-0.02em; line-height:1.45; max-width:64ch; }
+  .phase-num{ font-size:11px; color:var(--muted); letter-spacing:0.07em; margin-bottom:4px; }
+  .phase-name{ font-size:clamp(22px,3vw,42px); font-weight:400; letter-spacing:-0.04em; line-height:1.1; transition:opacity .2s; margin-bottom:4px; }
+  .phase-sub{ font-size:13px; color:var(--muted); letter-spacing:-0.02em; line-height:1.4; }
+  /* Flat chapter headers (content rebuilt from scratch) */
+  .phase-flat{ max-width:var(--max); margin:0 auto; padding:clamp(56px,8vw,110px) var(--pad) clamp(28px,3.5vw,44px); border-top:1px solid var(--line); }
+  .phase-flat .phase-num{ margin-bottom:10px; }
+  .phase-flat .phase-name{ margin-bottom:8px; }
+  .phase-desc{ margin-top:clamp(20px,2.2vw,30px); font-size:clamp(16px,1.5vw,22px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
+  .phase-note{ margin-top:clamp(16px,1.8vw,24px); font-size:clamp(14px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.65; max-width:none; text-align:justify; }
+  .phase-note em{ font-style:normal; color:var(--ink); }
+  /* two photos + showcase video, equal height, natural widths (near-zero crop) */
+  .chapter-media-duo{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(200px,26vw,376px); margin-bottom:clamp(32px,4vw,48px); }
+  .chapter-media-duo .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; }
+  .chapter-media-duo .cell img, .chapter-media-duo .cell video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
+  .chapter-media-duo .m1{ flex:1.777 1 0; }  /* IMG_5507 16:9 */
+  .chapter-media-duo .m2{ flex:0.75 1 0; }   /* IMG_5493(1) portrait 3:4 */
+  .chapter-media-duo .m3{ flex:1.2 1 0; }    /* showcase video 6:5 */
+  /* subsection within a chapter (e.g. Snapshot inside Overview) */
+  .subsec{ margin-top:clamp(48px,6vw,88px); }
+  .subsec-title{ font-size:clamp(20px,2vw,30px); font-weight:400; letter-spacing:-0.04em; line-height:1.15; color:var(--ink); }
+  .subsec-lead{ margin-top:clamp(14px,1.6vw,20px); font-size:clamp(16px,1.4vw,20px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
+  /* 16:9 video container (no rounded edges) */
+  .subsec-video{ position:relative; aspect-ratio:16/9; overflow:hidden; background:transparent; margin-top:clamp(20px,2.4vw,32px); }
+  /* wider 2:1 crop for the conceptual MVP walkthrough */
+  .subsec-video.wide{ aspect-ratio:2/1; }
+
+  /* iOS Safari will not clip a composited video layer with overflow:hidden alone,
+     so the 1px bleed above leaks past the edge and reads as a faint outline.
+     The mask forces a real clipping layer; white and black are both fully opaque,
+     so the alpha stays 1 throughout and nothing fades. Same fix as .ongen-work. */
+  .hero-video,
+  .subsec-video,
+  .chapter-media-duo .cell{
+    -webkit-mask-image:-webkit-radial-gradient(white,black);
+    mask-image:radial-gradient(white,black);
+    transform:translateZ(0);
+  }
+  .subsec-video video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
+  /* full-width image at natural aspect ratio (e.g. logo row) */
+  .subsec-img{ display:block; width:100%; height:auto; margin-top:clamp(20px,2.4vw,32px); }
+
+  /* labelled build/stack breakdown (label | role) */
+  .build-list{ list-style:none; padding:0; margin:clamp(20px,2.4vw,32px) 0 0; }
+  .build-list li{ display:grid; grid-template-columns:200px 1fr; gap:clamp(16px,3vw,44px); padding:9px 0; }
+  /* wider label column for the longer feature names */
+  .build-list.features li{ grid-template-columns:260px 1fr; }
+
+  /* GradEX showcase row — video + photos, equal height, natural widths (near-zero crop) */
+  .gradex-row{ display:flex; gap:clamp(8px,1vw,14px); height:clamp(150px,20vw,320px); margin-top:clamp(20px,2.4vw,32px); }
+  .gradex-row figure{ margin:0; position:relative; overflow:hidden; background:transparent; min-width:0; }
+  .gradex-row img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .gradex-row video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
+  .gradex-row .v{ flex:1.333 1 0; }
+  .gradex-row .a{ flex:1.333 1 0; }
+  .gradex-row .b{ flex:0.749 1 0; }
+  .gradex-row .c{ flex:1.333 1 0; }
+  .gradex-cap{ margin-top:12px; font-size:clamp(11px,0.85vw,13px); color:var(--muted); letter-spacing:-0.01em; }
+  .build-list .k{ font-size:clamp(13px,1.05vw,16px); color:var(--ink); letter-spacing:-0.02em; }
+  .build-list .v{ font-size:clamp(13px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.5; }
+
+  /* ============ mobile refinements ============ */
+  @media(max-width:640px){
+    /* fit nav on a phone */
+    .nav-inner{ font-size:12px; padding:14px var(--pad); }
+    .nav-links{ gap:15px; }
+
+    /* meta stacks so long values wrap instead of forcing horizontal overflow */
+    .hero-side{ flex-direction:column; gap:13px; }
+    .hero-side .pair{ width:100%; }
+
+    /* smaller, tighter display type */
+    .hero-name{ font-size:clamp(22px,6.5vw,30px); letter-spacing:-0.035em; }
+    .hero-tagline{ font-size:14px; margin-top:12px; }
+    .phase-flat .phase-name{ font-size:clamp(19px,6vw,26px); }
+    .subsec-title{ font-size:clamp(17px,5vw,22px); }
+    .subsec{ margin-top:clamp(36px,9vw,56px); }
+
+    /* body copy: smaller, looser tracking, left-aligned
+       (justify leaves ugly word-gaps in a narrow column) */
+    .phase-desc{ font-size:15px; letter-spacing:-0.015em; line-height:1.45; margin-top:16px; }
+    .subsec-lead{ font-size:15px; letter-spacing:-0.015em; line-height:1.45; }
+    .phase-note{ font-size:13px; letter-spacing:-0.005em; line-height:1.55; text-align:left; }
+    .build-list li, .build-list.features li{ grid-template-columns:1fr; gap:4px; padding:14px 0; }
+    .build-list .k,.build-list .v{ font-size:13px; }
+    /* stack the top media row on phones */
+    .chapter-media-duo{ flex-direction:column; height:auto; gap:10px; }
+    .chapter-media-duo .cell{ flex:none; }
+    .chapter-media-duo .m1{ aspect-ratio:16/9; }
+    .chapter-media-duo .m2{ aspect-ratio:3/4; }
+    .chapter-media-duo .m3{ aspect-ratio:6/5; }
+    /* stack the GradEX photos on phones */
+    .gradex-row{ flex-direction:column; height:auto; gap:10px; }
+    .gradex-row figure{ flex:none; }
+    .gradex-row .v{ aspect-ratio:4/3; }
+    .gradex-row .a, .gradex-row .c{ aspect-ratio:4/3; }
+    .gradex-row .b{ aspect-ratio:3/4; }
+  }
+  @media(max-width:880px){ .phase-flat{ padding-top:clamp(40px,10vw,64px); } }
   .phase-toggle:hover .phase-name{ opacity:0.6; }
   .phase-arrow{ flex-shrink:0; color:var(--muted); transition:transform 0.38s ease; }
   .phase-block[data-open] .phase-arrow{ transform:rotate(180deg); }
-  .phase-block[data-open] .phase-num{ color:var(--accent); }
-  .phase-media-wrap{ max-width:var(--max); margin:0 auto; padding:clamp(24px,3.2vw,40px) var(--pad) clamp(32px,4.5vw,64px); cursor:pointer; }
+  .phase-body{ display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.45s ease; }
+  .phase-block[data-open] .phase-body{ grid-template-rows:1fr; }
+  .phase-body-inner{ overflow:hidden; }
+  /* Market Analysis: sticky-safe — no overflow:hidden so market-stage sticky works */
+  .phase-block[data-market-phase] .phase-body{ display:none; }
+  .phase-block[data-market-phase][data-open] .phase-body{ display:block; }
+  .phase-block[data-market-phase] .phase-body-inner{ overflow:visible; }
   .phase-media{
     width:100%; height:0; padding-top:56.25%;   /* 16:9 viewport */
     border-radius:16px; overflow:hidden;
-    background:#e3e3e1; position:relative;
+    background:#ffffff; position:relative;
     transition:padding-top .45s ease;
   }
+  /* Expanded: viewport height halves (center-cropped); inner content keeps its size */
   .phase-block[data-open] .phase-media{ padding-top:28.125%; }
   .phase-media > *{
     position:absolute; top:50%; left:0;
     width:100%; height:auto !important; aspect-ratio:16/9;
     transform:translateY(-50%);
   }
-  .phase-ph{ display:flex; align-items:center; justify-content:center; background:#e3e3e1; }
-  .phase-ph span{ font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#a2a09c; }
-  .phase-body{ display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.45s ease; }
-  .phase-block[data-open] .phase-body{ grid-template-rows:1fr; }
-  .phase-body-inner{ overflow:hidden; }
-  .phase-body-inner > .tt-section:first-child,
-  .phase-body-inner > .jm-section:first-child{ border-top:0; }
-  .phase-body-inner > .tt-section:first-child{ padding-top:0; }
-
-  /* SECTION COMMON */
-  .tt-section{ padding-top:clamp(64px,8vw,128px); padding-bottom:clamp(64px,8vw,128px); border-top:1px solid var(--line); }
-  .section-label{ font-size:12px; color:var(--accent-ink); margin-bottom:12px; letter-spacing:0.04em; text-transform:uppercase; }
-  .section-title{ font-size:clamp(26px,3.4vw,50px); font-weight:500; letter-spacing:-0.05em; line-height:1.05; margin-bottom:clamp(14px,1.5vw,22px); }
-  .section-sub{ font-size:clamp(14px,1vw,17px); color:var(--muted); line-height:1.6; letter-spacing:-0.02em; max-width:720px; }
-  .section-head{ margin-bottom:clamp(40px,5vw,72px); }
-  .section-note{ font-size:13px; color:var(--muted); line-height:1.7; letter-spacing:-0.02em; margin-top:28px; max-width:820px; }
-  .section-note + .section-note{ margin-top:12px; }
-  .section-note strong{ color:var(--ink); font-weight:500; }
-
-  /* DOC STRUCTURE — numbered list */
-  .toc-list{ display:flex; flex-direction:column; }
-  .toc-item{ padding:clamp(20px,2.4vw,32px) 0; border-top:1px solid var(--line); display:grid; grid-template-columns:56px 1fr; gap:28px; align-items:baseline; }
-  .toc-item:last-child{ border-bottom:1px solid var(--line); }
-  .toc-num{ font-size:11px; color:var(--muted); letter-spacing:0.04em; }
-  .toc-text{ font-size:clamp(16px,1.6vw,24px); font-weight:400; line-height:1.3; letter-spacing:-0.03em; }
-  .toc-text span{ display:block; font-size:13px; color:var(--muted); margin-top:6px; letter-spacing:-0.02em; }
-  @media(max-width:640px){ .toc-item{ grid-template-columns:1fr; gap:8px; } }
-
-  /* TREND STATS */
-  .trend-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(20px,2.5vw,40px); margin-top:clamp(36px,4vw,64px); }
-  .trend-stat{ display:flex; flex-direction:column; gap:8px; }
-  .trend-num{ font-size:clamp(34px,4.6vw,68px); font-weight:500; letter-spacing:-0.05em; line-height:1; }
-  .trend-num .u{ font-size:0.42em; color:var(--muted); letter-spacing:-0.02em; margin-left:2px; }
-  .trend-desc{ font-size:13px; color:var(--muted); line-height:1.5; letter-spacing:-0.02em; }
-  .trend-source{ font-size:11px; color:var(--muted); opacity:0.55; margin-top:2px; }
-  @media(max-width:768px){ .trend-stats{ grid-template-columns:1fr 1fr; gap:28px; } }
-
-  /* DATA TABLE */
-  .dtable-wrap{ overflow-x:auto; margin-top:clamp(36px,4vw,64px); }
-  .dtable{ width:100%; border-collapse:collapse; min-width:560px; }
-  .dtable th{ text-align:left; font-size:11px; font-weight:500; color:var(--muted); letter-spacing:0.04em; text-transform:uppercase; padding:0 24px 12px 0; border-bottom:1px solid var(--line); }
-  .dtable td{ font-size:clamp(13px,1vw,15px); padding:16px 24px 16px 0; border-bottom:1px solid var(--line); vertical-align:top; line-height:1.4; letter-spacing:-0.02em; }
-  .dtable td.k{ font-weight:500; }
-  .dtable td.v{ color:var(--ink); font-weight:500; white-space:nowrap; }
-  .dtable td.s{ color:var(--muted); font-size:12px; }
-  .dtable tr:last-child td{ border-bottom:0; }
-  .dtable td.map{ color:var(--accent-ink); font-size:12px; letter-spacing:0.02em; white-space:nowrap; }
-
-  /* SIGNALS (insights) */
-  .signals-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:clamp(36px,4vw,64px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
-  .signal{ padding:clamp(24px,3vw,40px); background:var(--bg); display:flex; flex-direction:column; gap:14px; }
-  .signal-top{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
-  .signal-tag{ font-size:11px; color:var(--muted); letter-spacing:0.03em; }
-  .signal-strength{ display:inline-block; padding:3px 9px; border-radius:100px; font-size:10px; letter-spacing:0.03em; font-weight:600; text-transform:uppercase; }
-  .signal-strength.strong{ background:var(--ink); color:var(--accent); }
-  .signal-strength.core{ background:var(--accent); color:#04231a; }
-  .signal-strength.support{ background:var(--line); color:var(--muted); }
-  .signal-title{ font-size:clamp(16px,1.5vw,22px); font-weight:500; letter-spacing:-0.04em; line-height:1.2; }
-  .signal-body{ font-size:13px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; }
-  .signal-body cite{ font-style:normal; color:var(--accent-ink); font-size:12px; }
-  @media(max-width:720px){ .signals-grid{ grid-template-columns:1fr; } }
-
-  /* DARK CALLOUT */
-  .callout{ margin-top:clamp(36px,4vw,64px); padding:clamp(30px,4vw,60px); background:var(--ink); color:#fff; border-radius:18px; }
-  .callout-label{ font-size:11px; color:var(--accent); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:18px; }
-  .callout-text{ font-size:clamp(19px,2.3vw,34px); font-weight:400; letter-spacing:-0.04em; line-height:1.32; }
-  .callout-text em{ font-style:normal; color:var(--accent); }
-  .callout-attr{ margin-top:20px; font-size:12px; color:rgba(255,255,255,.4); letter-spacing:-0.01em; }
-
-  /* MONO DIAGRAM */
-  .mono-block{ margin-top:clamp(28px,3vw,44px); }
-  .mono-h{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:6px; }
-  .mono-h-title{ font-size:clamp(16px,1.5vw,21px); font-weight:500; letter-spacing:-0.03em; }
-  .mono-h-goal{ font-size:12px; color:var(--accent-ink); letter-spacing:-0.01em; }
-  .mono-note{ font-size:13px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; margin-bottom:18px; max-width:760px; }
-  .mono-diagram{
-    background:var(--ink); color:rgba(255,255,255,.82); border-radius:14px;
-    padding:clamp(20px,2.6vw,34px); overflow-x:auto;
-    font-family:var(--mono); font-size:clamp(11px,1vw,13.5px); line-height:1.7;
-    letter-spacing:0; white-space:pre; -webkit-font-smoothing:auto;
+  #ascii-stage, #valu-stage, #market-stage, #stakeholder-stage{ position:relative; }
+  #ascii-pre, #valu-pre, #market-pre, #stakeholder-pre{
+    position:absolute; top:0; left:0; margin:0; padding:0;
+    font-family:'Courier New',Courier,monospace;
+    font-size:12px; line-height:1.15;
+    white-space:pre;
+    color:#000000;
+    transform-origin:top left;
+    pointer-events:none;
+    user-select:none;
+    -webkit-user-select:none;
   }
-  .mono-diagram b{ color:var(--accent); font-weight:600; }
-  .mono-diagram .dim{ color:rgba(255,255,255,.4); }
-
-  /* ENTITY-STYLE DIAGRAM (SVG node + connector) */
-  .dgm-canvas{ background:#0d0d0d; border-radius:14px; padding:clamp(18px,2.4vw,32px); overflow-x:auto; }
-  .dgm-canvas svg{ width:100%; height:auto; display:block; min-width:640px; }
-  .dgm-node rect{ fill:#161616; stroke:rgba(255,255,255,.16); stroke-width:1; }
-  .dgm-node .np{ fill:#fff; font-weight:500; letter-spacing:-0.02em; }
-  .dgm-node .ns{ fill:rgba(255,255,255,.45); letter-spacing:-0.01em; }
-  .dgm-node .nrule{ stroke:rgba(255,255,255,.14); stroke-width:.8; }
-  .dgm-node.key rect{ fill:var(--accent); stroke:none; }
-  .dgm-node.key .np{ fill:#04231a; }
-  .dgm-node.key .ns{ fill:rgba(4,35,26,.7); }
-  .dgm-node.hub rect{ fill:#1c1c1c; stroke:rgba(15,184,132,.55); stroke-width:1.4; }
-  .dgm-node.ghost rect{ fill:none; stroke:rgba(255,255,255,.22); stroke-dasharray:4 4; }
-  .dgm-node.ghost .np{ fill:rgba(255,255,255,.6); font-weight:400; }
-  .dgm-link{ fill:none; stroke:rgba(255,255,255,.3); stroke-width:1.4; }
-  .dgm-link.dash{ stroke-dasharray:5 5; stroke:rgba(255,255,255,.22); }
-  .dgm-link.mint{ stroke:var(--accent); stroke-width:1.6; }
-  .dgm-lbl{ fill:rgba(255,255,255,.5); font-size:11px; letter-spacing:-0.01em; }
-  .dgm-lbl.mint{ fill:var(--accent); }
-  .dgm-zone{ fill:rgba(255,255,255,.025); stroke:rgba(255,255,255,.08); stroke-width:1; }
-  .dgm-zone-lbl{ fill:var(--accent); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; }
-  .dgm-attr{ fill:rgba(255,255,255,.72); letter-spacing:-0.01em; }
-  .dgm-attr .k{ fill:var(--accent); }
-  .dgm-attr .d{ fill:rgba(255,255,255,.38); }
-
-  /* METRICS */
-  .metric-cols{ display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:clamp(36px,4vw,64px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
-  .metric-cell{ padding:clamp(24px,3vw,40px); background:var(--bg); }
-  .metric-cell-label{ font-size:11px; color:var(--muted); letter-spacing:0.04em; text-transform:uppercase; margin-bottom:18px; }
-  .metric-item{ padding:14px 0; border-top:1px solid var(--line); }
-  .metric-item:first-of-type{ border-top:0; padding-top:0; }
-  .metric-name{ font-size:14px; font-weight:500; letter-spacing:-0.03em; }
-  .metric-desc{ font-size:12px; color:var(--muted); line-height:1.55; margin-top:4px; letter-spacing:-0.02em; }
-  @media(max-width:720px){ .metric-cols{ grid-template-columns:1fr; } }
-
-  /* SOURCES */
-  .src-groups{ display:grid; grid-template-columns:repeat(2,1fr); gap:1px; margin-top:clamp(36px,4vw,64px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
-  .src-group{ padding:clamp(22px,2.6vw,36px); background:var(--bg); }
-  .src-group-label{ font-size:11px; color:var(--accent-ink); letter-spacing:0.04em; text-transform:uppercase; margin-bottom:18px; }
-  .src-item{ font-size:12.5px; color:var(--muted); line-height:1.55; letter-spacing:-0.02em; padding:10px 0; border-top:1px solid var(--line); }
-  .src-item:first-of-type{ border-top:0; }
-  .src-item b{ color:var(--ink); font-weight:500; }
-  @media(max-width:720px){ .src-groups{ grid-template-columns:1fr; } }
-
-  /* CONCLUSION */
-  .conclusion-block{ margin-top:clamp(40px,5vw,72px); padding:clamp(36px,5vw,72px); border:1px solid var(--line); border-radius:16px; }
-  .conclusion-quote{ font-size:clamp(20px,2.5vw,36px); font-weight:400; letter-spacing:-0.04em; line-height:1.35; max-width:900px; }
-  .conclusion-quote em{ font-style:normal; color:var(--accent-ink); }
-  .conclusion-attr{ margin-top:24px; font-size:13px; color:var(--muted); letter-spacing:-0.02em; }
-
-  .disclaimer{ font-size:11.5px; color:var(--muted); line-height:1.6; letter-spacing:-0.01em; max-width:900px; margin-top:clamp(40px,5vw,64px); opacity:0.8; }
-
-  /* ============ JOURNEY MAP (dark, tabbed) ============ */
-  .jm-section{ background:#0d0d0d; color:#fff; padding:clamp(64px,8vw,128px) 0; }
-  .jm-head{ margin-bottom:clamp(28px,3vw,44px); }
-  .jm-section .section-label{ color:var(--accent); }
-  .jm-section .section-title{ color:#fff; }
-  .jm-sub{ margin-top:14px; max-width:800px; color:rgba(255,255,255,.5); font-size:clamp(14px,1.05vw,17px); line-height:1.6; letter-spacing:-0.01em; }
-  .jm-tabs{ display:flex; flex-wrap:wrap; gap:0; margin:clamp(28px,3vw,48px) 0 clamp(36px,4vw,56px); border-top:1px solid rgba(255,255,255,.12); border-bottom:1px solid rgba(255,255,255,.12); }
-  .jm-tab{ flex:1 1 0; min-width:0; background:transparent; border:0; border-left:1px solid rgba(255,255,255,.12); color:rgba(255,255,255,.4); text-align:left; padding:22px clamp(16px,1.8vw,32px); font-family:inherit; font-weight:400; cursor:pointer; letter-spacing:-0.02em; position:relative; transition:color .2s ease, background-color .2s ease; }
-  .jm-tab::after{ content:''; position:absolute; bottom:-1px; left:0; right:0; height:2px; background:var(--accent); opacity:0; transition:opacity .2s ease; }
-  .jm-tab:first-child{ border-left:0; }
-  .jm-tab:hover{ color:rgba(255,255,255,.75); }
-  .jm-tab.is-active{ color:#fff; }
-  .jm-tab.is-active::after{ opacity:1; }
-  .jm-tab-num{ display:block; font-size:11px; letter-spacing:.02em; color:rgba(255,255,255,.3); margin-bottom:8px; }
-  .jm-tab.is-active .jm-tab-num{ color:var(--accent); }
-  .jm-tab-name{ display:block; font-size:clamp(15px,1.3vw,20px); font-weight:400; letter-spacing:-0.03em; }
-  .jm-tab-role{ display:block; margin-top:5px; font-size:12px; color:rgba(255,255,255,.35); letter-spacing:.01em; }
-  .jm-tab.is-active .jm-tab-role{ color:rgba(255,255,255,.5); }
-
-  .jm-panel{ display:none; opacity:0; transition:opacity .25s ease; }
-  .jm-panel.is-active{ display:block; opacity:1; }
-
-  .jm-persona-head{ display:flex; align-items:baseline; justify-content:space-between; gap:24px; margin-bottom:clamp(18px,2vw,28px); flex-wrap:wrap; }
-  .jm-persona-title{ font-size:clamp(20px,2.2vw,32px); font-weight:400; letter-spacing:-0.04em; line-height:1.15; max-width:700px; }
-  .jm-persona-meta{ font-size:13px; color:rgba(255,255,255,.35); letter-spacing:-0.01em; white-space:nowrap; }
-  .jm-persona-desc{ color:rgba(255,255,255,.5); font-size:clamp(13px,0.95vw,15px); line-height:1.6; max-width:760px; margin-bottom:clamp(28px,3vw,44px); }
-
-  /* persona attribute strip */
-  .jm-attrs{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; margin-bottom:clamp(30px,3.5vw,50px); border:1px solid rgba(255,255,255,.1); border-radius:10px; overflow:hidden; background:rgba(255,255,255,.1); }
-  .jm-attr{ background:#0d0d0d; padding:18px clamp(14px,1.6vw,24px); }
-  .jm-attr-k{ font-size:10.5px; color:rgba(255,255,255,.35); letter-spacing:0.04em; text-transform:uppercase; margin-bottom:7px; }
-  .jm-attr-v{ font-size:12.5px; color:rgba(255,255,255,.82); line-height:1.5; letter-spacing:-0.01em; }
-  @media(max-width:880px){ .jm-attrs{ grid-template-columns:1fr 1fr; } }
-
-  /* jtbd block */
-  .jm-jtbd{ margin-bottom:clamp(30px,3.5vw,50px); padding:clamp(22px,2.6vw,36px); border:1px solid rgba(255,255,255,.12); border-radius:12px; }
-  .jm-jtbd-label{ font-size:11px; color:var(--accent); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:14px; }
-  .jm-jtbd-text{ font-size:clamp(15px,1.5vw,21px); line-height:1.5; letter-spacing:-0.03em; color:rgba(255,255,255,.92); }
-  .jm-jtbd-text b{ color:var(--accent); font-weight:500; }
-
-  .jm-grid{ display:grid; grid-template-columns:150px repeat(5,1fr); border-top:1px solid rgba(255,255,255,.12); }
-  .jm-grid > *{ border-bottom:1px solid rgba(255,255,255,.08); padding:15px clamp(12px,1.2vw,20px); font-weight:400; }
-  .jm-stage-h{ border-left:1px solid rgba(255,255,255,.08); font-size:clamp(12px,1vw,15px); font-weight:500; color:#fff; letter-spacing:-0.03em; padding-top:20px; padding-bottom:20px; background:rgba(255,255,255,.03); }
-  .jm-row-label{ font-size:12px; color:rgba(255,255,255,.4); letter-spacing:-0.01em; padding-top:18px; border-right:1px solid rgba(255,255,255,.08); }
-  .jm-row-label.dim{ color:rgba(255,255,255,.24); }
-  .jm-cell{ border-left:1px solid rgba(255,255,255,.08); font-size:clamp(11.5px,0.86vw,13.5px); line-height:1.55; color:rgba(255,255,255,.72); letter-spacing:-0.01em; }
-  .jm-cell.feel{ color:#fff; font-size:clamp(12px,1vw,15px); }
-  .jm-cell.think{ color:rgba(255,255,255,.62); font-style:italic; }
-  .jm-cell.ctx{ color:rgba(255,255,255,.32); font-size:11.5px; }
-  .jm-cell.opp{ color:var(--accent); }
-  .jm-stage-corner{ border-left:0; border-right:0; }
-
-  .jm-arc{ margin-top:clamp(36px,4vw,60px); padding-top:clamp(22px,2.4vw,34px); border-top:1px solid rgba(255,255,255,.12); }
-  .jm-arc-head{ display:flex; justify-content:space-between; align-items:center; gap:24px; margin-bottom:20px; flex-wrap:wrap; }
-  .jm-arc-title{ font-size:13px; letter-spacing:-0.02em; color:rgba(255,255,255,.45); }
-  .jm-arc-legend{ display:flex; gap:20px; font-size:12px; color:rgba(255,255,255,.35); letter-spacing:-0.01em; }
-  .jm-arc-legend i{ display:inline-block; width:24px; height:2px; vertical-align:middle; margin-right:7px; background:var(--accent); }
-  .jm-arc-legend .proj i{ height:0; background:transparent; border-top:1px dashed rgba(255,255,255,.5); }
-  .jm-arc-svg{ width:100%; height:auto; display:block; aspect-ratio:1400/360; border:1px solid rgba(255,255,255,.07); border-radius:6px; }
-
-  .jm-key{ margin-top:clamp(24px,2.6vw,38px); padding:clamp(20px,2.4vw,32px); background:rgba(255,255,255,.04); border-left:2px solid var(--accent); border-radius:0 10px 10px 0; }
-  .jm-key-label{ font-size:11px; color:var(--accent); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:10px; }
-  .jm-key-text{ font-size:clamp(14px,1.2vw,17px); line-height:1.55; color:rgba(255,255,255,.85); letter-spacing:-0.02em; }
-  .jm-key-text b{ color:#fff; font-weight:500; }
-
-  /* persona compare table inside jm section */
-  .jm-compare-wrap{ overflow-x:auto; margin-top:clamp(44px,5vw,72px); padding-top:clamp(36px,4vw,56px); border-top:1px solid rgba(255,255,255,.12); }
-  .jm-compare{ width:100%; border-collapse:collapse; min-width:640px; }
-  .jm-compare th{ text-align:left; font-size:12px; font-weight:500; color:#fff; letter-spacing:-0.02em; padding:0 20px 16px 0; border-bottom:1px solid rgba(255,255,255,.15); }
-  .jm-compare th.k{ color:rgba(255,255,255,.4); font-weight:400; font-size:11px; text-transform:uppercase; letter-spacing:0.03em; }
-  .jm-compare td{ font-size:13px; padding:15px 20px 15px 0; border-bottom:1px solid rgba(255,255,255,.08); vertical-align:top; line-height:1.45; letter-spacing:-0.02em; color:rgba(255,255,255,.75); }
-  .jm-compare td.k{ color:rgba(255,255,255,.4); font-size:11.5px; letter-spacing:0.02em; text-transform:uppercase; }
-  .jm-compare tr:last-child td{ border-bottom:0; }
-
-  @media(max-width:880px){
-    .jm-tabs{ flex-direction:column; }
-    .jm-tab{ border-left:0; border-top:1px solid rgba(255,255,255,.12); }
-    .jm-tab:first-child{ border-top:0; }
-    .jm-grid{ grid-template-columns:1fr; border-top:0; }
-    .jm-grid > *{ border-left:0 !important; padding:13px 0; }
-    .jm-stage-corner{ display:none; }
-    .jm-stage-h{ padding-top:26px; border-top:1px dashed rgba(255,255,255,.24); font-size:17px; }
-    .jm-row-label{ padding-top:14px; padding-bottom:0; border-bottom:0; }
-    .jm-cell{ padding-top:5px; }
-    .jm-arc-svg{ aspect-ratio:1400/560; }
-  }
-
-  /* VIDEO controls off */
-  video{ -webkit-appearance:none; appearance:none; }
-  video::-webkit-media-controls,
-  video::-webkit-media-controls-enclosure,
-  video::-webkit-media-controls-panel,
-  video::-webkit-media-controls-overlay-play-button,
-  video::-webkit-media-controls-play-button,
-  video::-webkit-media-controls-start-playback-button{ display:none !important; opacity:0 !important; }
-
-  @media(max-width:880px){ .hero-name{ font-size:clamp(26px,7vw,50px); } }
-
-  /* part nav link */
-  .pt-nav-link{ display:inline-flex; align-items:center; gap:8px; font-size:13px; letter-spacing:-0.02em; color:var(--ink); border-bottom:1px solid currentColor; padding-bottom:2px; transition:opacity .2s; }
-  .pt-nav-link:hover{ opacity:.45; }
 </style>
 <style>
+/* ===== iOS design language (SF Pro Display + antialiasing + accent) ===== */
+:root{ --accent:#007aff; }
 html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection{ background:#007aff; color:#ffffff; }
+</style>
+<style>
+/* ===== Hypothesis · Theoretical Grounding — animated concept icons ===== */
+.ctx-section{ padding-top:24px; padding-bottom:72px; }
+.ctx-eyebrow{ font-size:12px; color:var(--muted); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:16px; }
+.ctx-section .hyp-title{ margin-bottom:18px; }
+.ctx-lede{ font-size:clamp(15px,1.25vw,18px); color:var(--muted); line-height:1.6; letter-spacing:-0.02em; max-width:64ch; }
+.ctx-list{ margin-top:28px; }
+.ctx-item{ display:grid; grid-template-columns:84px 1fr; gap:clamp(20px,3vw,48px); align-items:start; padding:38px 0; border-top:1px solid var(--line); }
+.ctx-item:last-child{ border-bottom:1px solid var(--line); }
+.ctx-ico{ width:72px; height:72px; color:var(--ink); }
+.ctx-ico svg{ width:100%; height:100%; overflow:visible; display:block; }
+.ctx-tag{ font-size:12px; color:var(--muted); letter-spacing:0.04em; text-transform:uppercase; margin-bottom:10px; }
+.ctx-item.is-frame .ctx-tag{ color:var(--accent,#007aff); }
+.ctx-name{ font-size:clamp(20px,2vw,30px); font-weight:400; letter-spacing:-0.04em; line-height:1.15; margin:0 0 14px; color:var(--ink); }
+.ctx-desc{ font-size:clamp(14px,1.05vw,16px); color:var(--muted); line-height:1.62; letter-spacing:-0.01em; max-width:66ch; }
+.ctx-vision{ font-size:clamp(14px,1.05vw,16px); color:var(--ink); line-height:1.5; letter-spacing:-0.01em; margin-top:16px; padding-left:16px; border-left:2px solid var(--line); font-style:italic; opacity:.9; max-width:60ch; }
+.ctx-cite{ display:block; font-size:12px; color:var(--muted); line-height:1.55; margin-top:16px; font-style:normal; }
+.ctx-cite i{ font-style:italic; }
+.ctx-cite a{ color:var(--muted); text-decoration:underline; text-underline-offset:2px; word-break:break-word; }
+@media(max-width:760px){
+  .ctx-item{ grid-template-columns:1fr; gap:16px; padding:28px 0; }
+  .ctx-ico{ width:56px; height:56px; }
+}
+/* icon palette (white on dark) */
+.ctx-ico .st{ fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+.ctx-ico .fl{ fill:currentColor; }
+.ctx-ico .dim{ fill:none; stroke:currentColor; stroke-width:2; opacity:.28; }
+/* 1) spark — machine-gathered data */
+.ctx-spark .sp{ transform-box:fill-box; transform-origin:center; animation:cxspark 3s ease-in-out infinite; }
+.ctx-spark .dot{ transform-box:fill-box; transform-origin:center; animation:cxtwinkle 2.4s ease-in-out infinite; }
+.ctx-spark .dot.d2{ animation-delay:.6s } .ctx-spark .dot.d3{ animation-delay:1.2s }
+@keyframes cxspark{ 0%,100%{ transform:scale(.9) rotate(0deg); opacity:.85 } 50%{ transform:scale(1.05) rotate(18deg); opacity:1 } }
+@keyframes cxtwinkle{ 0%,100%{ transform:scale(.45); opacity:.2 } 50%{ transform:scale(1); opacity:.95 } }
+/* 2) radar — context-aware */
+.ctx-radar .rg{ transform-box:fill-box; transform-origin:center; animation:cxripple 2.8s ease-out infinite; }
+.ctx-radar .rg.r2{ animation-delay:.9s } .ctx-radar .rg.r3{ animation-delay:1.8s }
+@keyframes cxripple{ 0%{ transform:scale(.18); opacity:0 } 22%{ opacity:.9 } 100%{ transform:scale(1); opacity:0 } }
+/* 3) detect — object detection */
+.ctx-detect .scan{ animation:cxscan 2.6s ease-in-out infinite; }
+.ctx-detect .tgt{ transform-box:fill-box; transform-origin:center; animation:cxtwinkle 2s ease-in-out infinite; }
+@keyframes cxscan{ 0%,100%{ transform:translateY(-11px); opacity:.25 } 50%{ transform:translateY(11px); opacity:1 } }
+/* 4) glasses — hybrid multimodal */
+.ctx-glass .sig{ transform-box:fill-box; transform-origin:center; animation:cxsignal 2.2s ease-out infinite; }
+.ctx-glass .sig.s2{ animation-delay:.7s }
+@keyframes cxsignal{ 0%{ transform:scale(.4); opacity:0 } 30%{ opacity:.9 } 100%{ transform:scale(1.15); opacity:0 } }
+/* 5) window — context engineering */
+.ctx-window .bar{ transform-box:fill-box; transform-origin:bottom; animation:cxfill 3s ease-in-out infinite; }
+.ctx-window .bar.b2{ animation-delay:.35s } .ctx-window .bar.b3{ animation-delay:.7s } .ctx-window .bar.b4{ animation-delay:1.05s }
+@keyframes cxfill{ 0%,12%{ transform:scaleY(0); opacity:.25 } 42%,78%{ transform:scaleY(1); opacity:1 } 100%{ transform:scaleY(0); opacity:.25 } }
+/* 6) adapt — contextual design */
+.ctx-adapt .inr{ transform-box:fill-box; transform-origin:center; animation:cxadapt 3.4s ease-in-out infinite; }
+@keyframes cxadapt{ 0%,100%{ transform:scale(.5) } 50%{ transform:scale(1) } }
+@media (prefers-reduced-motion:reduce){ .ctx-ico *{ animation:none !important; } }
+
+/* ===== Hypothesis · paradigm — thesis, animated diagrams, AI-use stats ===== */
+.para-section{ padding-top:8px; padding-bottom:8px; }
+.para-thesis{ font-size:clamp(22px,2.6vw,40px); font-weight:400; letter-spacing:-0.04em; line-height:1.3; color:var(--ink); max-width:24ch; }
+.para-thesis{ max-width:none; }
+.para-thesis em{ font-style:normal; color:var(--accent,#007aff); }
+.para-fig{ margin:clamp(44px,5.5vw,80px) 0 0; }
+.dgm-svg{ width:100%; height:auto; display:block; overflow:visible; }
+.dgm-svg text{ font-family:var(--font); }
+.dgm-big{ fill:#000000; font-weight:400; font-size:72px; letter-spacing:-2px; }
+.dgm-big2{ fill:#000000; font-weight:400; font-size:60px; letter-spacing:-1.5px; }
+.dgm-mid{ fill:#000000; font-weight:400; font-size:52px; letter-spacing:-1px; }
+.dgm-sub{ fill:#000000; font-weight:400; font-size:24px; }
+.dgm-lbl{ fill:var(--muted); font-size:22px; }
+.dgm-ln,.dgm-tick{ stroke:#000000; stroke-width:1.5; }
+.dgm-ar{ fill:none; stroke:#000000; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.dgm-br{ fill:none; stroke:var(--muted); stroke-width:1.5; stroke-dasharray:4 6; opacity:.6; }
+.dgm-dot{ stroke:var(--muted); stroke-width:2; stroke-dasharray:2 7; stroke-linecap:round; opacity:.8; }
+.dgm-flow-top{ stroke-dasharray:7 7; animation:dgmflowR 1.6s linear infinite; }
+.dgm-flow-bot{ stroke-dasharray:7 7; animation:dgmflowL 1.6s linear infinite; }
+@keyframes dgmflowR{ to{ stroke-dashoffset:-28; } }
+@keyframes dgmflowL{ to{ stroke-dashoffset:28; } }
+.dgm-core{ fill:#000000; transform-box:fill-box; transform-origin:center; animation:dgmcore 2s ease-in-out infinite; }
+.dgm-wave{ fill:none; stroke:#000000; stroke-width:6; stroke-linecap:round; }
+.dgm-wave.w1{ animation:dgmwave 2s ease-out infinite; }
+.dgm-wave.w2{ animation:dgmwave 2s ease-out infinite .55s; }
+@keyframes dgmwave{ 0%{ opacity:.12 } 45%{ opacity:1 } 100%{ opacity:.12 } }
+@keyframes dgmcore{ 0%,100%{ transform:scale(.85) } 50%{ transform:scale(1.12) } }
+.para-cap{ margin-top:18px; font-size:clamp(13px,1vw,15px); color:var(--muted); line-height:1.5; letter-spacing:-0.01em; }
+.para-cap b{ color:var(--ink); font-weight:500; }
+.para-stats{ margin-top:clamp(48px,6vw,88px); }
+.para-stats-head{ font-size:13px; color:var(--muted); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:24px; }
+.stat-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:18px; }
+.stat-row{ display:grid; grid-template-columns:minmax(150px,1.1fr) 3fr auto; gap:20px; align-items:center; }
+.stat-name{ font-size:clamp(14px,1.1vw,17px); color:var(--ink); letter-spacing:-0.01em; }
+.stat-track{ height:6px; background:var(--line); border-radius:999px; overflow:hidden; }
+.stat-track i{ display:block; height:100%; background:var(--ink); border-radius:999px; transform-origin:left; animation:statgrow 1.2s cubic-bezier(.7,0,.2,1) both; }
+.stat-pct{ font-size:clamp(14px,1.1vw,17px); color:var(--ink); font-variant-numeric:tabular-nums; min-width:54px; text-align:right; }
+@keyframes statgrow{ from{ transform:scaleX(0) } to{ transform:scaleX(1) } }
+@media(max-width:680px){ .stat-row{ grid-template-columns:1fr auto; } .stat-track{ grid-column:1 / -1; order:3; } }
+@media (prefers-reduced-motion:reduce){ .dgm-flow-top,.dgm-flow-bot,.dgm-core,.dgm-wave,.stat-track i{ animation:none !important; } }
+
+/* ===== Value Architecture · Propositional Model, manifesto, On-Air ===== */
+.prop-section{ padding-top:8px; padding-bottom:8px; }
+.prop-lede{ font-size:clamp(18px,1.9vw,28px); font-weight:400; letter-spacing:-0.03em; line-height:1.4; color:var(--ink); max-width:62ch; }
+.prop-model{ display:grid; grid-template-columns:96px 1fr; gap:clamp(24px,3.5vw,56px); align-items:start; margin-top:clamp(40px,5vw,72px); padding-top:clamp(32px,4vw,48px); border-top:1px solid var(--line); }
+.prop-ico{ width:80px; height:80px; color:var(--ink); }
+.prop-ico svg{ width:100%; height:100%; display:block; overflow:visible; }
+.prop-title{ font-size:clamp(22px,2.4vw,38px); font-weight:400; letter-spacing:-0.04em; line-height:1.12; color:var(--ink); margin:0 0 20px; }
+.prop-body{ font-size:clamp(14px,1.1vw,17px); color:var(--muted); line-height:1.65; letter-spacing:-0.01em; max-width:62ch; }
+.prop-body + .prop-body{ margin-top:16px; }
+@media(max-width:760px){ .prop-model{ grid-template-columns:1fr; gap:20px; } .prop-ico{ width:60px; height:60px; } }
+.prop-ico .eq{ fill:currentColor; transform-box:fill-box; transform-origin:center; }
+.prop-ico .eq.b1{ animation:eqbar 1.1s ease-in-out infinite }
+.prop-ico .eq.b2{ animation:eqbar 1.1s ease-in-out infinite .14s }
+.prop-ico .eq.b3{ animation:eqbar 1.1s ease-in-out infinite .28s }
+.prop-ico .eq.b4{ animation:eqbar 1.1s ease-in-out infinite .42s }
+.prop-ico .eq.b5{ animation:eqbar 1.1s ease-in-out infinite .56s }
+@keyframes eqbar{ 0%,100%{ transform:scaleY(.3) } 50%{ transform:scaleY(1) } }
+.manifesto{ padding-top:clamp(64px,8vw,120px); padding-bottom:clamp(40px,5vw,72px); }
+.manifesto-p{ font-size:clamp(22px,2.8vw,42px); font-weight:400; letter-spacing:-0.04em; line-height:1.34; color:var(--muted); }
+.manifesto-p b{ color:var(--ink); font-weight:400; }
+.manifesto-p + .manifesto-p{ margin-top:clamp(28px,3.5vw,56px); }
+.onair{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(56px,7vw,110px); border-top:1px solid var(--line); text-align:center; }
+.onair-badge{ display:inline-flex; align-items:center; gap:10px; margin-bottom:22px; }
+.onair-dot{ width:11px; height:11px; border-radius:50%; background:var(--accent,#007aff); animation:onairpulse 1.7s ease-in-out infinite; }
+.onair-live{ font-size:12px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
+.onair-title{ font-size:clamp(34px,5vw,72px); font-weight:400; letter-spacing:-0.05em; line-height:1; color:var(--ink); }
+.onair-sub{ font-size:clamp(14px,1.2vw,18px); color:var(--muted); letter-spacing:-0.01em; margin-top:16px; }
+@keyframes onairpulse{ 0%,100%{ opacity:.45; transform:scale(.8); box-shadow:0 0 0 0 rgba(0,122,255,0) } 50%{ opacity:1; transform:scale(1); box-shadow:0 0 0 7px rgba(0,122,255,.12) } }
+@media (prefers-reduced-motion:reduce){ .prop-ico .eq,.onair-dot{ animation:none !important; } }
+
+/* ===== Hypothesis · data-flow diagrams (animated canvas) ===== */
+.flow-section{ padding-top:8px; padding-bottom:8px; margin-top:clamp(56px,7vw,104px); }
+.flow-fig{ margin-top:clamp(40px,5vw,76px); }
+.flow-fig:first-child{ margin-top:0; }
+.flow-canvas-wrap{ position:relative; width:100%; aspect-ratio:1740/580; }
+.flow-canvas-wrap[data-flow="waves"]{ aspect-ratio:1740/520; }
+.flow-canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+@media(max-width:680px){
+  .flow-canvas-wrap, .flow-canvas-wrap[data-flow="waves"]{ aspect-ratio:2/1; }
+}
+
+/* ===== Market Analysis · National/Provincial/Regional radio map (animated waves) ===== */
+.canada-hero{ padding-top:8px; padding-bottom:8px; margin-bottom:clamp(40px,5vw,72px); }
+.canada-canvas-wrap{ position:relative; width:100%; aspect-ratio:1714/560; }
+.canada-canvas-wrap canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; mix-blend-mode:multiply; }
+@media(max-width:680px){ .canada-canvas-wrap{ aspect-ratio:1.7/1; } }
+
+/* ===== scroll reveal: blocks fade (and lift) in as they enter the viewport.
+   Gated on .reveal-on, set by a <head> script before first paint, so if
+   scripting is off nothing is ever hidden. ===== */
+.reveal-on .subsec-img,
+.reveal-on .chapter-media-duo,
+.reveal-on .gradex-row,
+.reveal-on .build-list,
+.reveal-on .phase-desc,
+.reveal-on .phase-note,
+.reveal-on .phase-num,
+.reveal-on .phase-name,
+.reveal-on .phase-sub,
+.reveal-on .subsec-title,
+.reveal-on .subsec-lead,
+.reveal-on .gradex-cap{
+  opacity:0; transform:translateY(16px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.reveal-on .reveal-in{ opacity:1; transform:none; }
+/* .subsec-video carries a translateZ(0) for the iOS mask clip, so fade only */
+.reveal-on .subsec-video{ opacity:0; transition:opacity .6s ease; }
+.reveal-on .subsec-video.reveal-in{ opacity:1; }
+@media(prefers-reduced-motion:reduce){
+  .reveal-on .subsec-img,.reveal-on .chapter-media-duo,.reveal-on .gradex-row,
+  .reveal-on .build-list,.reveal-on .phase-desc,.reveal-on .phase-note,
+  .reveal-on .phase-num,.reveal-on .phase-name,.reveal-on .phase-sub,
+  .reveal-on .subsec-title,.reveal-on .subsec-lead,.reveal-on .gradex-cap{
+    opacity:1; transform:none; transition:none;
+  }
+  .reveal-on .subsec-video{ opacity:1; transition:none; }
+}
 </style>
 </head>
 <body>
@@ -374,1164 +1935,126 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   </div>
 </nav>
 
-<header class="hero wrap" id="top">
-  <div class="hero-back">
-    <a href="./index.html">← Back to Work</a>
-    <a href="#cases" class="pt-nav-link">Jump to Case Studies ↓</a>
+<header class="hero wrap">
+  <div class="hero-video">
+    <video class="lazy-vid" data-src="./finboardprev.mp4" poster="./posters/finboardprev.jpg?v=20260723"
+           loop muted playsinline preload="none"></video>
   </div>
-  <div class="hero-greeting">Native App Design · Intuitive Banking App UX</div>
-  <h1 class="hero-name">finboard <span class="rd">— Intuitive Banking App UX</span></h1>
-  <div class="hero-tagrow">
-    <p class="hero-tagline">An iOS-native app that lets you explore your own spending habits — intuitively and fast.</p>
-    <p class="hero-compliance">Designed to <strong>WCAG 2.1 AA</strong> and the Accessible Canada Act, and built within Canada's financial-data rules — <strong>OSFI · FCAC · PIPEDA</strong> aligned by design. See §06.</p>
-  </div>
-
-  <div class="hero-frames">
-    <div class="hero-frame">
-      <div class="hero-frame-label">Problem Statement</div>
-      <div class="hero-frame-body">There is no service that lets people understand their spending habits intuitively and quickly. Today's budgeting apps are excellent at collecting data, but they never turn it into <em>self-understanding</em>.</div>
-    </div>
-    <div class="hero-frame opp">
-      <div class="hero-frame-label">Opportunity · Strong Signal</div>
-      <div class="hero-frame-body">As cashless payment becomes universal, the very <em>sensation of spending money</em> is disappearing. finboard reframes spending as something to <em>explore</em> — a guilt-free, fast, iOS-native mirror that shows you "who you are" through your own spending data.</div>
-    </div>
-  </div>
-
+  <div class="hero-greeting">Native App Design</div>
+  <h1 class="hero-name">finboard 2026</h1>
+  <p class="hero-tagline">Banking accessibility for early-career adults, built on iOS-native widgets</p>
   <div class="hero-row">
     <dl class="hero-side">
       <div class="pair"><dt>Year</dt><dd>2026 / Jul</dd></div>
-      <div class="pair"><dt>Type</dt><dd>Native App Design, UX Research</dd></div>
+      <div class="pair"><dt>Type</dt><dd>Native App, UX Research</dd></div>
       <div class="pair"><dt>Platform</dt><dd>iOS · Widgets · Live Activity</dd></div>
-      <div class="pair"><dt>Status</dt><dd class="status-live"><span class="status-dot"></span>Research → Product Strategy</dd></div>
+      <div class="pair"><dt>Skills</dt><dd>Product Design, Interaction Design, iOS Design, Prototyping, Usability Testing</dd></div>
     </dl>
   </div>
 </header>
 
-<!-- ===== PROCESS PHASES (16:9 media + collapsible body) ===== -->
-<div class="phase-wrap">
+<section class="phase-flat">
+  <div class="phase-num">01</div>
+  <div class="phase-name">Overview</div>
+  <div class="phase-sub">A widget-first banking dashboard for financial cognition</div>
+  <p class="phase-desc">finboard is an iOS-native app that lets early-career adults read their own spending at a glance.</p>
+  <p class="phase-note">As payments go cashless, the felt sense of spending money fades, and budgeting apps that are good at collecting data rarely turn it into self-understanding. finboard reframes spending as something to explore rather than track, and puts it where this group already looks, on the Home Screen, the Lock Screen, and the Dynamic Island. I treated native widgets as new interaction points and designed them to optimize financial cognition, so a person can understand their money without opening an app or logging in.</p>
+</section>
 
-<div class="phase-block" data-open>
-  <button class="phase-toggle" onclick="togglePhase(this)">
-    <div class="phase-toggle-inner">
-      <div>
-        <div class="phase-num">00</div>
-        <div class="phase-name">Overview</div>
-        <div class="phase-sub">What finboard is, at a glance — and how this document is built.</div>
-      </div>
-      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </div>
-  </button>
-  <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media">
-      <video class="lazy-vid" data-src="./finboardprev.mp4" poster="./posters/finboardprev.jpg" loop muted playsinline webkit-playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-    </div>
-  </div>
-  <div class="phase-body">
-    <div class="phase-body-inner">
+<section class="phase-flat">
+  <div class="phase-num">02</div>
+  <div class="phase-name">Problem Definition</div>
+  <p class="phase-desc">There is no simple way to understand your spending quickly. Banking apps collect the data but keep it behind a login, so it never becomes self-understanding.</p>
+  <p class="phase-note">Canadian bank apps already ship personal-finance tools, but they sit deep inside the app and go unused, and no major bank surfaces spending across institutions. I framed the problem around access rather than features: how do you put a person's own financial picture in front of them, at the moment and place they would actually glance at it?</p>
+</section>
 
-<!-- ============ 0 · DOCUMENT STRUCTURE ============ -->
-<section class="tt-section wrap" style="border-top:0;">
-  <div class="section-head">
-    <div class="section-label">00 · How this document is built</div>
-    <h2 class="section-title">A research-to-product paper trail</h2>
-    <p class="section-sub">This document moves from market evidence to behavioral synthesis, from principles to three concrete case studies, and finally to information architecture and success metrics — each decision traceable to a source.</p>
+<section class="phase-flat">
+  <div class="phase-num">03</div>
+  <div class="phase-name">Discovery</div>
+  <img class="subsec-img" src="./finboardresearch1.png" alt="Framing: an iOS-native widget dashboard hypothesis for early-career adults" loading="lazy" />
+  <p class="phase-note">I opened the research by fixing the target and the bet. finboard would be an iOS-native widget dashboard for students and early-career adults in the Canadian banking context, and the working hypothesis was that surfacing bank data as a widget, outside the login, would improve how people see their own spending.</p>
+  <img class="subsec-img" src="./finboardresearch2.png" alt="Pain board synthesizing market, in-app behavior, and Canadian regulation" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" />
+  <p class="phase-note">From there I mapped the pain across three fronts at once, the market, in-app behavior, and Canada's banking rules. It showed me that the weak link is not the tools themselves but their adoption, and that the incoming Consumer-Driven Banking Act shapes what a cross-institution product is allowed to do.</p>
+  <img class="subsec-img" src="./finboardresearch3.png" alt="Illustrative data and user-behavior research" loading="lazy" />
+  <p class="phase-note">I grounded the direction in data and existing behavioral research, reading what actually lifts app satisfaction, who adopts new in-app surfaces first, and how glanceable feedback changes spending. One pattern held throughout: information beats features, and the users who struggle most gain the most from low-effort, always-visible cues.</p>
+  <img class="subsec-img" src="./finboardresearch4.png" alt="AS-IS versus TO-BE user flow diagram" loading="lazy" />
+  <p class="phase-note">Then I redrew the flow. Today, checking your spending means logging into each bank, digging past a balance-only view, and doing the math yourself, and most people drop off along the way. finboard intercepts that drop-off point and replaces the whole routine with a glanceable widget backed by a single consent-based connection.</p>
+</section>
+
+<section class="phase-flat">
+  <div class="phase-num">04</div>
+  <div class="phase-name">Prototyping</div>
+  <p class="phase-desc">I prototyped in two passes, first to settle the structure, then to make it feel like a real iOS product.</p>
+
+  <div class="subsec">
+    <div class="subsec-title">Low-fidelity Prototype</div>
+    <img class="subsec-img" src="./finboardlowfidelityprototype.png" alt="Low-fidelity wireframes of the widget system and in-app navigation" loading="lazy" />
+    <p class="phase-note">The low-fidelity pass laid out the widget system and the app behind it: a daily transaction glance, a weekly goal, an AI report summary, an interactive controls widget, and five in-app destinations that each pay off a widget the user installed. Working in grayscale let me test the information hierarchy before committing to any visual style.</p>
   </div>
-  <div class="toc-list">
-    <div class="toc-item"><div class="toc-num">01</div><div class="toc-text">Market size &amp; opportunity<span>Verified, up-to-date figures — where the value is moving.</span></div></div>
-    <div class="toc-item"><div class="toc-num">02</div><div class="toc-text">Research synthesis — why existing apps fail<span>Five core insights from behavior, behavioral economics, and churn literature.</span></div></div>
-    <div class="toc-item"><div class="toc-num">03</div><div class="toc-text">Design principles<span>Research → principle mapping.</span></div></div>
-    <div class="toc-item"><div class="toc-num">04</div><div class="toc-text">Three case studies — persona + user journey mapping<span>Three segments, three trajectories, three emotional arcs.</span></div></div>
-    <div class="toc-item"><div class="toc-num">05</div><div class="toc-text">UX flows — information architecture &amp; four core flows<span>What the product actually does, screen to screen.</span></div></div>
-    <div class="toc-item"><div class="toc-num">06</div><div class="toc-text">Compliance &amp; regulatory strategy<span>Canadian financial regulators, electronic-data governance, and accessibility standards.</span></div></div>
-    <div class="toc-item"><div class="toc-num">07</div><div class="toc-text">Stakeholder map<span>The system's actors, in primary / secondary / tertiary rings.</span></div></div>
-    <div class="toc-item"><div class="toc-num">08</div><div class="toc-text">Success metrics<span>North Star &amp; guardrails.</span></div></div>
-    <div class="toc-item"><div class="toc-num">09</div><div class="toc-text">Sources<span>Every figure and insight, cited.</span></div></div>
+
+  <div class="subsec">
+    <div class="subsec-title">High-fidelity Prototype</div>
+    <img class="subsec-img" src="./finboardhighfidelityprototype.png" alt="High-fidelity iOS widgets, Dynamic Island states, in-app screens, and components" loading="lazy" />
+    <p class="phase-note">The high-fidelity pass brought it onto the real surfaces. Widgets stack on the Home Screen, the Lock Screen carries a glance with no unlock, and the Dynamic Island animates each transaction, the weekly pace, and the AI summary. Inside, five screens, Home, AI Forecast, Bills, Cards, and Settings, turn the glance into detail, and a shared component set keeps the widgets, Dynamic Island, and bank tokens consistent.</p>
   </div>
 </section>
 
-    </div>
-  </div>
-</div><!-- /phase 00 Overview -->
-
-<div class="phase-block">
-  <button class="phase-toggle" onclick="togglePhase(this)">
-    <div class="phase-toggle-inner">
-      <div>
-        <div class="phase-num">01</div>
-        <div class="phase-name">Discovery — market, research &amp; principles</div>
-        <div class="phase-sub">The opportunity, what people actually need, and the design principles that follow.</div>
-      </div>
-      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </div>
-  </button>
-  <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media">
-      <div class="phase-ph"><span>Market &amp; research · 16:9</span></div>
-    </div>
-  </div>
-  <div class="phase-body">
-    <div class="phase-body-inner">
-
-<!-- ============ 1 · MARKET ============ -->
-<section class="tt-section wrap">
-  <div class="section-head">
-    <div class="section-label">01 · Market size &amp; opportunity</div>
-    <h2 class="section-title">The market grows — but value is moving from tracking to insight</h2>
-    <p class="section-sub">Personal finance is a large, fast-growing category. Tracking itself has become table stakes; the differentiation has shifted to interpretation and exploration.</p>
-  </div>
-
-  <div class="trend-stats">
-    <div class="trend-stat">
-      <div class="trend-num">$173.6<span class="u">B</span></div>
-      <div class="trend-desc">Projected personal-finance app market by 2035 (from $31.7B in 2025).</div>
-      <div class="trend-source">Research Nester, 2025.12</div>
-    </div>
-    <div class="trend-stat">
-      <div class="trend-num">20.8<span class="u">%</span></div>
-      <div class="trend-desc">Category CAGR through 2035 — sustained double-digit growth.</div>
-      <div class="trend-source">Research Nester, 2025.12</div>
-    </div>
-    <div class="trend-stat">
-      <div class="trend-num">40.6<span class="u">%</span></div>
-      <div class="trend-desc">Revenue share held by the "budgeting &amp; expense-tracking" segment.</div>
-      <div class="trend-source">Mordor Intelligence, 2026.01</div>
-    </div>
-    <div class="trend-stat">
-      <div class="trend-num">+42<span class="u">%</span></div>
-      <div class="trend-desc">Retention advantage of AI-recommendation apps over passive trackers.</div>
-      <div class="trend-source">CoinLaw, 2026.03</div>
-    </div>
-  </div>
-
-  <div class="dtable-wrap">
-    <table class="dtable">
-      <thead><tr><th>Item</th><th>Figure</th><th>Source</th></tr></thead>
-      <tbody>
-        <tr><td class="k">Personal finance app market (2025 → 2026)</td><td class="v">$31.7B → $38.2B</td><td class="s">Research Nester (2025.12)</td></tr>
-        <tr><td class="k">2035 forecast / CAGR</td><td class="v">$173.6B / 20.8%</td><td class="s">Research Nester</td></tr>
-        <tr><td class="k">"Budgeting &amp; expense-tracking" revenue share (2025)</td><td class="v">40.6%</td><td class="s">Mordor Intelligence (2026.01)</td></tr>
-        <tr><td class="k">Asia-Pacific growth (2026–)</td><td class="v">Fastest-growing region</td><td class="s">Mordor / Research Nester</td></tr>
-        <tr><td class="k">AI-recommendation retention edge</td><td class="v">+42%</td><td class="s">CoinLaw (2026.03)</td></tr>
-        <tr><td class="k">iOS preferred paid tier</td><td class="v">$99–109 / yr</td><td class="s">Luminix competitive analysis (2026.03)</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <p class="section-note"><strong>Value is shifting.</strong> The market keeps expanding, but the center of gravity is moving from the "simple tracker" toward an "AI-based financial OS / insight layer." Tracking has levelled up across the board; the differentiator is now interpretation and exploration.</p>
-  <p class="section-note"><strong>iOS is where premium works.</strong> iOS shows a higher paid-conversion rate, making a subscription/premium model viable — the rationale for a native-iOS-first strategy.</p>
-  <p class="section-note"><strong>The open axis.</strong> Competitors cluster around control (YNAB), automation (Monarch, Copilot), subscription-cutting (Rocket Money), and net-worth dashboards (Empower). The axis of "fast, intuitive exploration of one's spending habits" is comparatively empty.</p>
+<section class="phase-flat">
+  <div class="phase-num">05</div>
+  <div class="phase-name">Conclusion</div>
+  <p class="phase-note">finboard treats the widget as the product, not a shortcut into an app. By moving a person's financial picture onto the surfaces they already glance at, and tuning it for quick reading, the project makes banking data legible to people who never opened the tools built for them. As open banking rolls out in Canada, the same widget-first approach has room to grow into a genuine cross-institution view.</p>
 </section>
 
-<!-- ============ 2 · RESEARCH SYNTHESIS ============ -->
-<section class="tt-section wrap">
-  <div class="section-head">
-    <div class="section-label">02 · Research synthesis</div>
-    <h2 class="section-title">Why budgeting apps fail</h2>
-    <p class="section-sub">These five insights come not from market reports but from user behavior, behavioral economics, and the literature on churn. finboard's reason to exist starts here.</p>
-  </div>
-
-  <div class="signals-grid">
-    <div class="signal">
-      <div class="signal-top"><span class="signal-tag">Insight 01 · Awareness ≠ action</span><span class="signal-strength strong">Strong</span></div>
-      <div class="signal-title">Tracking is passive — it produces awareness, not behavior.</div>
-      <div class="signal-body">Knowing you overspent on dining last month doesn't change this month's spending. Most apps are excellent at recording failure (red bars, over-budget warnings) but never address <em>why</em> you spent that way. <cite>huntervault; econbrew, 2025</cite></div>
-    </div>
-    <div class="signal">
-      <div class="signal-top"><span class="signal-tag">Insight 02 · The automation paradox</span><span class="signal-strength strong">Strong</span></div>
-      <div class="signal-title">"Accurate data" is not "behavior change."</div>
-      <div class="signal-body">Apps that auto-parse bank SMS and auto-categorize are technically flawless, yet users say they "got a pretty monthly report, a vague sense of knowing, and changed nothing." The real reason people track is not data accuracy — it's to spend intentionally. <cite>Indie Hackers, 2026.04</cite></div>
-    </div>
-    <div class="signal">
-      <div class="signal-top"><span class="signal-tag">Insight 03 · Pain of paying</span><span class="signal-strength core">Core</span></div>
-      <div class="signal-title">Cashless payment erases the pain of paying.</div>
-      <div class="signal-body">The "pain of paying" is the loss-averse negative feeling at the moment of payment — a psychological brake on spending (Zellermayer 1996; Prelec &amp; Loewenstein 1998). Contactless and mobile payment reduce it to near zero: heavy contactless users (a) notice spending less, (b) spend more, and (c) feel less in control. Qualitative work names this the <em>micro-spend trap</em> and the <em>realisation gap</em>. <cite>Pain of paying (Wikipedia/HandWiki); Psychopedia Journals, 2026.05</cite></div>
-    </div>
-    <div class="signal">
-      <div class="signal-top"><span class="signal-tag">Insight 04 · Emotion drives spending</span><span class="signal-strength strong">Strong</span></div>
-      <div class="signal-title">Emotion moves money — but apps only speak logic.</div>
-      <div class="signal-body">People spend under stress, boredom, celebration, and social pressure. An "over budget" flag never addresses the <em>why</em>, so the pattern repeats — compounded by mental accounting, optimism bias, and decision fatigue. <cite>econbrew, 2025</cite></div>
-    </div>
-    <div class="signal">
-      <div class="signal-top"><span class="signal-tag">Insight 05 · Churn = lost utility</span><span class="signal-strength strong">Strong</span></div>
-      <div class="signal-title">Abandonment isn't low motivation — it's lost usefulness.</div>
-      <div class="signal-body">Most budget apps are dropped within weeks. Not from lack of discipline, but the moment the app feels like <em>maintenance</em> rather than <em>momentum</em>. Onboarding overload (link accounts + categories + goals + budgets, all at once) and guilt-framing are the finishing blows. <cite>Origin; Onething Design, 2025</cite></div>
-    </div>
-    <div class="signal">
-      <div class="signal-top"><span class="signal-tag">Generational signal</span><span class="signal-strength support">Context</span></div>
-      <div class="signal-title">The emotional terrain, in data.</div>
-      <div class="signal-body">The target doesn't fail for lack of data. They fail because it is emotionally heavy, because cashless erased the sensation, and because apps are joyless and guilt-inducing.</div>
-    </div>
-  </div>
-
-  <div class="callout">
-    <div class="callout-label">finboard's core hypothesis (from Insight 03)</div>
-    <div class="callout-text">Real-time feedback plus a <em>visual depletion cue</em> can restore the psychological <em>salience</em> that cashless payment erased.</div>
-    <div class="callout-attr">Grounded in IJRASET and the behavioral-economics literature on cashless spending.</div>
-  </div>
-
-  <div class="trend-stats" style="margin-top:clamp(48px,6vw,88px);">
-    <div class="trend-stat">
-      <div class="trend-num">33<span class="u">%</span></div>
-      <div class="trend-desc">of Gen Z feel financial stress; under stress, 33% avoid their finances and 30% spend <em>on themselves</em> instead.</div>
-      <div class="trend-source">BofA Better Money Habits, 2025</div>
-    </div>
-    <div class="trend-stat">
-      <div class="trend-num">53<span class="u">%</span></div>
-      <div class="trend-desc">of Gen Z &amp; Millennials worry they can't even afford a small "treat day" for themselves.</div>
-      <div class="trend-source">YouGov, 2025</div>
-    </div>
-    <div class="trend-stat">
-      <div class="trend-num">90<span class="u">%</span></div>
-      <div class="trend-desc">of Gen Z do take an action (e.g. checking balance) when stressed — avoidance and action coexist.</div>
-      <div class="trend-source">BofA Better Money Habits, 2025</div>
-    </div>
-    <div class="trend-stat">
-      <div class="trend-num">58<span class="u">%</span></div>
-      <div class="trend-desc">of 18–35s fold money management into a self-care routine; 55% tie financial to mental/physical wellness.</div>
-      <div class="trend-source">Intuit, 2026.01</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 3 · DESIGN PRINCIPLES ============ -->
-<section class="tt-section wrap">
-  <div class="section-head">
-    <div class="section-label">03 · Design principles</div>
-    <h2 class="section-title">Research → principle</h2>
-    <p class="section-sub">Each principle is traceable to the insight that produced it. Together they define what finboard is — and refuses to be.</p>
-  </div>
-
-  <div class="dtable-wrap">
-    <table class="dtable">
-      <thead><tr><th>#</th><th>Principle</th><th>Rationale</th><th>From</th></tr></thead>
-      <tbody>
-        <tr><td class="v">P1</td><td class="k">Explore, don't audit — spark curiosity, never judge.</td><td class="s">Make spending an object of exploration, not a verdict.</td><td class="map">I1 · I4 · I5</td></tr>
-        <tr><td class="v">P2</td><td class="k">Restore salience — make "I spent money" felt, live &amp; visual.</td><td class="s">Rebuild the psychological brake cashless removed.</td><td class="map">I3</td></tr>
-        <tr><td class="v">P3</td><td class="k">One insight in one sentence, in 3 seconds.</td><td class="s">Intuition and speed <em>are</em> the product's identity.</td><td class="map">I1 · I2</td></tr>
-        <tr><td class="v">P4</td><td class="k">Turn emotion into data — capture "why," judgment-free.</td><td class="s">Reflect the feeling behind the spend, lightly.</td><td class="map">I4</td></tr>
-        <tr><td class="v">P5</td><td class="k">Zero-friction onboarding — first insight in 60s, link later.</td><td class="s">Defend against the onboarding-overload drop-off.</td><td class="map">I5</td></tr>
-        <tr><td class="v">P6</td><td class="k">No guilt, no red bars — failure becomes discovery.</td><td class="s">Reframe "you failed" into "here's what you found."</td><td class="map">I4 · I5</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-    </div>
-  </div>
-</div><!-- /phase 01 -->
-
-<div class="phase-block">
-  <button class="phase-toggle" onclick="togglePhase(this)">
-    <div class="phase-toggle-inner">
-      <div>
-        <div class="phase-num">02</div>
-        <div class="phase-name">Users — case studies</div>
-        <div class="phase-sub">Three Canadians, three journeys, mapped end to end with emotional arcs.</div>
-      </div>
-      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </div>
-  </button>
-  <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media">
-      <div class="phase-ph"><span>Persona journeys · 16:9</span></div>
-    </div>
-  </div>
-  <div class="phase-body">
-    <div class="phase-body-inner">
-
-<!-- ============ 4 · CASE STUDIES (journey maps) ============ -->
-<section class="jm-section" id="cases">
-  <div class="wrap">
-    <div class="jm-head">
-      <div class="section-label">04 · Case studies</div>
-      <h2 class="section-title">Three people, three trajectories</h2>
-      <p class="jm-sub">Each case represents a different segment surfaced by the research — (A) comfortable but numb, (B) anxious and avoidant, (C) precise but burned out. Each is a persona + JTBD + behavioral triggers + a user journey map with its emotional arc.</p>
-    </div>
-
-    <div class="jm-tabs" role="tablist">
-      <button class="jm-tab is-active" data-jm="A" role="tab" aria-selected="true">
-        <span class="jm-tab-num">Case A</span>
-        <span class="jm-tab-name">Maya Bennett, 28</span>
-        <span class="jm-tab-role">The Realisation-Gap Spender</span>
-      </button>
-      <button class="jm-tab" data-jm="B" role="tab" aria-selected="false">
-        <span class="jm-tab-num">Case B</span>
-        <span class="jm-tab-name">Chloé Roy, 23</span>
-        <span class="jm-tab-role">The Anxious Avoider</span>
-      </button>
-      <button class="jm-tab" data-jm="C" role="tab" aria-selected="false">
-        <span class="jm-tab-num">Case C</span>
-        <span class="jm-tab-name">Daniel Osei, 34</span>
-        <span class="jm-tab-role">The Burned-out Optimizer</span>
-      </button>
-    </div>
-
-    <!-- ===== CASE A ===== -->
-    <div class="jm-panel is-active" data-jm-panel="A">
-      <div class="jm-persona-head">
-        <div class="jm-persona-title">Uses Apple Pay for everything. Income is fine — but has no sense of where the money went.</div>
-        <div class="jm-persona-meta">Maya Bennett · Product Marketer · Toronto</div>
-      </div>
-      <p class="jm-persona-desc">The textbook realisation-gap spender: stable finances, no "problem" — just no sense of control or awareness. The job isn't to budget; it's to be handed a mirror.</p>
-
-      <div class="jm-attrs">
-        <div class="jm-attr"><div class="jm-attr-k">Tech stance</div><div class="jm-attr-v">Heavy iOS user; loves widget &amp; lock-screen customization. Low barrier to trying new apps.</div></div>
-        <div class="jm-attr"><div class="jm-attr-k">Payment habit</div><div class="jm-attr-v">90%+ contactless / one-tap pay. Almost no cash. 6–7 subscriptions.</div></div>
-        <div class="jm-attr"><div class="jm-attr-k">Financial state</div><div class="jm-attr-v">Stable. No "problem," but no sense of control or awareness — the I3 archetype.</div></div>
-        <div class="jm-attr"><div class="jm-attr-k">Emotion</div><div class="jm-attr-v">Vagueness more than anxiety. "Shouldn't there be more left, earning this much?"</div></div>
-      </div>
-
-      <div class="jm-jtbd">
-        <div class="jm-jtbd-label">Jobs To Be Done</div>
-        <div class="jm-jtbd-text"><b>When</b> a card statement makes me flinch, <b>I want to</b> grasp the character of my spending in 3 seconds, <b>so I can</b> make my next purchase a little more consciously — without guilt.</div>
-      </div>
-
-      <div class="jm-grid">
-        <div class="jm-row-label dim jm-stage-corner"></div>
-        <div class="jm-stage-h">① Trigger</div>
-        <div class="jm-stage-h">② First open · 60s</div>
-        <div class="jm-stage-h">③ First insight</div>
-        <div class="jm-stage-h">④ Habit loop</div>
-        <div class="jm-stage-h">⑤ Retention</div>
-
-        <div class="jm-row-label">Doing</div>
-        <div class="jm-cell">Sees the card-bill alert, "whoa" → searches the App Store.</div>
-        <div class="jm-cell">Starts on sample data / a quick scan of recent cards instead of linking accounts.</div>
-        <div class="jm-cell">One card: "Last 30 days — 62 micro-payments, delivery is #1."</div>
-        <div class="jm-cell">Right after paying, a widget / Live Activity shows "today $32"; one tap adds a "why?" reason.</div>
-        <div class="jm-cell">Weekly recap push: "This week = comfort spender."</div>
-
-        <div class="jm-row-label dim">Thinking</div>
-        <div class="jm-cell think">"It slipped away again without me noticing."</div>
-        <div class="jm-cell think">"If setup takes long, I'm out immediately."</div>
-        <div class="jm-cell think">"Ah — it was delivery. More than I thought."</div>
-        <div class="jm-cell think">"One tap, no pressure."</div>
-        <div class="jm-cell think">"I actually get curious enough to open it."</div>
-
-        <div class="jm-row-label">Feeling</div>
-        <div class="jm-cell feel">vague · annoyed</div>
-        <div class="jm-cell feel">wary · impatient</div>
-        <div class="jm-cell feel">surprise → interest</div>
-        <div class="jm-cell feel">control restored</div>
-        <div class="jm-cell feel">habitual · small delight</div>
-
-        <div class="jm-row-label dim">Touchpoint</div>
-        <div class="jm-cell ctx">App Store · push</div>
-        <div class="jm-cell ctx">Onboarding scan</div>
-        <div class="jm-cell ctx">Insight card</div>
-        <div class="jm-cell ctx">Home widget · Live Activity · post-pay tag</div>
-        <div class="jm-cell ctx">Weekly recap · lock-screen widget</div>
-
-        <div class="jm-row-label">Pain</div>
-        <div class="jm-cell">A statement of numbers is meaningless.</div>
-        <div class="jm-cell">Onboarding friction risk.</div>
-        <div class="jm-cell">Churns if the insight is obvious.</div>
-        <div class="jm-cell">Collapses if tagging is a chore.</div>
-        <div class="jm-cell">Churns if the recap nags.</div>
-
-        <div class="jm-row-label dim">Opportunity</div>
-        <div class="jm-cell opp">"3-second diagnosis" hook.</div>
-        <div class="jm-cell opp">Deferred onboarding (P5).</div>
-        <div class="jm-cell opp">Character label sparks exploration (P1).</div>
-        <div class="jm-cell opp">Live Activity restores salience (P2·P3).</div>
-        <div class="jm-cell opp">Character recap = a Wrapped-style share hook.</div>
-      </div>
-
-      <div class="jm-arc">
-        <div class="jm-arc-head">
-          <div class="jm-arc-title">Emotional arc · vagueness → surprise → control → habit</div>
-          <div class="jm-arc-legend"><span class="proj"><i></i>Projection</span><span><i></i>Actual</span></div>
-        </div>
-        <svg class="jm-arc-svg" viewBox="0 0 1400 360" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="340" x2="1400" y2="340" stroke="#fff" stroke-opacity="0.08"/>
-          <line x1="280" y1="0" x2="280" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
-          <line x1="560" y1="0" x2="560" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
-          <line x1="840" y1="0" x2="840" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
-          <line x1="1120" y1="0" x2="1120" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
-          <path d="M 0,250 C 120,240 200,225 280,215 C 400,200 480,185 560,170 C 680,150 760,135 840,125 C 960,112 1040,105 1120,100 C 1240,94 1320,90 1400,88" stroke="#fff" stroke-opacity="0.5" stroke-width="1.2" fill="none" stroke-dasharray="9 6"/>
-          <path d="M 0,280 C 100,282 190,286 280,300 C 370,312 450,318 560,150 C 640,70 720,58 840,120 C 940,168 1020,150 1120,110 C 1220,74 1320,60 1400,54" stroke="#0FB884" stroke-width="1.8" fill="none"/>
-          <circle cx="560" cy="150" r="4" fill="#0FB884"/><circle cx="560" cy="150" r="9" fill="#0FB884" fill-opacity="0.14"/>
-        </svg>
-      </div>
-
-      <div class="jm-key">
-        <div class="jm-key-label">Key design decision · A</div>
-        <div class="jm-key-text">You must not sell this user a budget. You sell a <b>mirror</b> — "this is the kind of spender you are." Fun and self-awareness create the retention.</div>
-      </div>
-    </div>
-
-    <!-- ===== CASE B ===== -->
-    <div class="jm-panel" data-jm-panel="B">
-      <div class="jm-persona-head">
-        <div class="jm-persona-title">Deleted the app because thinking about money makes her anxious. Under stress, she spends on herself.</div>
-        <div class="jm-persona-meta">Chloé Roy · Final-year student · Ottawa</div>
-      </div>
-      <p class="jm-persona-desc">For this user, precise numbers are not a weapon but a threat. Receive the emotion first; reveal data gently, with context. This is where finboard becomes an "emotion-aware finance app."</p>
-
-      <div class="jm-attrs">
-        <div class="jm-attr"><div class="jm-attr-k">Tech stance</div><div class="jm-attr-v">Prefers emotion-based apps (mood trackers). Repelled by rigid financial UI.</div></div>
-        <div class="jm-attr"><div class="jm-attr-k">Payment habit</div><div class="jm-attr-v">Frequent small spends, occasional BNPL. Afraid to look at the account balance.</div></div>
-        <div class="jm-attr"><div class="jm-attr-k">Financial state</div><div class="jm-attr-v">Perceived instability — feels worse than reality (emotion &gt; facts).</div></div>
-        <div class="jm-attr"><div class="jm-attr-k">Emotion</div><div class="jm-attr-v">A loop of avoidance ↔ impulse. Highly sensitive to guilt.</div></div>
-      </div>
-
-      <div class="jm-jtbd">
-        <div class="jm-jtbd-label">Jobs To Be Done</div>
-        <div class="jm-jtbd-text"><b>When</b> I'm hesitating over whether to even open the app, <b>I want to</b> face my situation gently — no judgment, no lecture — <b>so I can</b> stop avoiding and gain one small sense of control.</div>
-      </div>
-
-      <div class="jm-grid">
-        <div class="jm-row-label dim jm-stage-corner"></div>
-        <div class="jm-stage-h">① Avoidance</div>
-        <div class="jm-stage-h">② Gentle entry</div>
-        <div class="jm-stage-h">③ Reframe moment</div>
-        <div class="jm-stage-h">④ Emotional loop</div>
-        <div class="jm-stage-h">⑤ Re-engagement</div>
-
-        <div class="jm-row-label">Doing</div>
-        <div class="jm-cell">Hesitates to open; avoids checking the balance.</div>
-        <div class="jm-cell">"Start without numbers" — asks mood / intent first.</div>
-        <div class="jm-cell">Context message: "Total rose, but from essentials; discretionary is actually −12%."</div>
-        <div class="jm-cell">After paying, a light optional "how do you feel?" emoji capture.</div>
-        <div class="jm-cell">Weekly "warm summary" — wins first.</div>
-
-        <div class="jm-row-label dim">Thinking</div>
-        <div class="jm-cell think">"Looking will only make me more depressed."</div>
-        <div class="jm-cell think">"Oh — this isn't scary."</div>
-        <div class="jm-cell think">"I didn't actually spend recklessly."</div>
-        <div class="jm-cell think">"Tagging a mood is quietly comforting."</div>
-        <div class="jm-cell think">"This feels like encouragement, not nagging."</div>
-
-        <div class="jm-row-label">Feeling</div>
-        <div class="jm-cell feel">anxious · avoidant</div>
-        <div class="jm-cell feel">reassured</div>
-        <div class="jm-cell feel">relief · release</div>
-        <div class="jm-cell feel">self-acceptance</div>
-        <div class="jm-cell feel">motivated to return</div>
-
-        <div class="jm-row-label dim">Touchpoint</div>
-        <div class="jm-cell ctx">(app unopened)</div>
-        <div class="jm-cell ctx">Emotion-first onboarding</div>
-        <div class="jm-cell ctx">Context insight card</div>
-        <div class="jm-cell ctx">Post-pay mood tag</div>
-        <div class="jm-cell ctx">Weekly recap push (supportive tone)</div>
-
-        <div class="jm-row-label">Pain</div>
-        <div class="jm-cell">Entry itself is a wall.</div>
-        <div class="jm-cell">Financial jargon repels.</div>
-        <div class="jm-cell">Hollow comfort breeds distrust.</div>
-        <div class="jm-cell">Obligatory tagging burdens.</div>
-        <div class="jm-cell">Too many alerts add stress.</div>
-
-        <div class="jm-row-label dim">Opportunity</div>
-        <div class="jm-cell opp">Mood-based entry point.</div>
-        <div class="jm-cell opp">Emotion before amount (P4).</div>
-        <div class="jm-cell opp">Reframe "failure" as "discovery" (P6).</div>
-        <div class="jm-cell opp">Emotion × spend correlation ("stress days → delivery ↑").</div>
-        <div class="jm-cell opp">Self-care framing fits the Intuit trend.</div>
-      </div>
-
-      <div class="jm-arc">
-        <div class="jm-arc-head">
-          <div class="jm-arc-title">Emotional arc · anxiety → reassurance → relief → acceptance</div>
-          <div class="jm-arc-legend"><span class="proj"><i></i>Projection</span><span><i></i>Actual</span></div>
-        </div>
-        <svg class="jm-arc-svg" viewBox="0 0 1400 360" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="340" x2="1400" y2="340" stroke="#fff" stroke-opacity="0.08"/>
-          <line x1="280" y1="0" x2="280" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
-          <line x1="560" y1="0" x2="560" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
-          <line x1="840" y1="0" x2="840" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
-          <line x1="1120" y1="0" x2="1120" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
-          <path d="M 0,300 C 140,302 200,305 280,308 C 420,312 500,314 560,315 C 700,317 780,318 840,318 C 980,319 1060,320 1120,320 C 1260,321 1340,322 1400,322" stroke="#fff" stroke-opacity="0.5" stroke-width="1.2" fill="none" stroke-dasharray="9 6"/>
-          <path d="M 0,320 C 120,322 200,320 280,270 C 360,222 460,205 560,150 C 660,96 740,80 840,88 C 940,96 1020,88 1120,80 C 1220,72 1320,66 1400,62" stroke="#0FB884" stroke-width="1.8" fill="none"/>
-          <circle cx="560" cy="150" r="4" fill="#0FB884"/><circle cx="560" cy="150" r="9" fill="#0FB884" fill-opacity="0.14"/>
-        </svg>
-      </div>
-
-      <div class="jm-key">
-        <div class="jm-key-label">Key design decision · B</div>
-        <div class="jm-key-text">Accurate numbers are a <b>threat, not a weapon</b>. Take the emotion first; expose data gently, always with context. This is the point where finboard becomes an emotion-aware finance app.</div>
-      </div>
-    </div>
-
-    <!-- ===== CASE C ===== -->
-    <div class="jm-panel" data-jm-panel="C">
-      <div class="jm-persona-head">
-        <div class="jm-persona-title">Tried YNAB and Monarch. Burned out on manual entry and dropped them all.</div>
-        <div class="jm-persona-meta">Daniel Osei · Senior Developer · Mississauga</div>
-      </div>
-      <p class="jm-persona-desc">This user doesn't need more input — he needs deeper tools to explore. Hide automation (collection) as the default; put the questioning, drill-down analysis up front. finboard's "pro" layer.</p>
-
-      <div class="jm-attrs">
-        <div class="jm-attr"><div class="jm-attr-k">Tech stance</div><div class="jm-attr-v">Power user. Loves data, charts, CSVs — but cold to "maintenance labor."</div></div>
-        <div class="jm-attr"><div class="jm-attr-k">Payment habit</div><div class="jm-attr-v">Many cards &amp; auto-payments. 10+ subscriptions. Shared family spending.</div></div>
-        <div class="jm-attr"><div class="jm-attr-k">Financial state</div><div class="jm-attr-v">Healthy, invests too. The problem is time and sustainability.</div></div>
-        <div class="jm-attr"><div class="jm-attr-k">Emotion</div><div class="jm-attr-v">Cynical about apps ("this'll turn into a chore again").</div></div>
-      </div>
-
-      <div class="jm-jtbd">
-        <div class="jm-jtbd-label">Jobs To Be Done</div>
-        <div class="jm-jtbd-text"><b>When</b> I want to check quarterly "where is our money leaking," <b>I want to</b> get analysis I can explore hands-free, <b>so I can</b> make decisions (cut subscriptions, adjust discretionary) without maintenance labor.</div>
-      </div>
-
-      <div class="jm-grid">
-        <div class="jm-row-label dim jm-stage-corner"></div>
-        <div class="jm-stage-h">① Skeptical return</div>
-        <div class="jm-stage-h">② Frictionless setup</div>
-        <div class="jm-stage-h">③ Exploratory query</div>
-        <div class="jm-stage-h">④ Decision</div>
-        <div class="jm-stage-h">⑤ Advocacy</div>
-
-        <div class="jm-row-label">Doing</div>
-        <div class="jm-cell">Reinstalls warily — "one chore and I'm done."</div>
-        <div class="jm-cell">Auto-links accounts (Plaid-style); categories auto + learned.</div>
-        <div class="jm-cell">Asks in natural language: "subscriptions vs delivery, 6-month trend."</div>
-        <div class="jm-cell">Cancels 2 subscriptions; sets a discretionary cap.</div>
-        <div class="jm-cell">Shares the recap with his spouse and community.</div>
-
-        <div class="jm-row-label dim">Thinking</div>
-        <div class="jm-cell think">"Prove it."</div>
-        <div class="jm-cell think">"Oh — no manual input."</div>
-        <div class="jm-cell think">"This replaces what I dug out of CSVs."</div>
-        <div class="jm-cell think">"Cleaning up saves $40 / month."</div>
-        <div class="jm-cell think">"Worth recommending."</div>
-
-        <div class="jm-row-label">Feeling</div>
-        <div class="jm-cell feel">cynical</div>
-        <div class="jm-cell feel">relieved</div>
-        <div class="jm-cell feel">immersed (exploration is fun)</div>
-        <div class="jm-cell feel">control · achievement</div>
-        <div class="jm-cell feel">satisfied · evangelist</div>
-
-        <div class="jm-row-label dim">Touchpoint</div>
-        <div class="jm-cell ctx">App Store re-visit</div>
-        <div class="jm-cell ctx">Auto-link onboarding</div>
-        <div class="jm-cell ctx">NL query / interactive charts</div>
-        <div class="jm-cell ctx">Action card (subscription-cancel deep link)</div>
-        <div class="jm-cell ctx">Share recap · widget</div>
-
-        <div class="jm-row-label">Pain</div>
-        <div class="jm-cell">Trust must be rebuilt.</div>
-        <div class="jm-cell">A link failure = instant churn.</div>
-        <div class="jm-cell">Shallow analysis = "knew it."</div>
-        <div class="jm-cell">Action outside the app = friction.</div>
-        <div class="jm-cell">A bland share = he won't do it.</div>
-
-        <div class="jm-row-label dim">Opportunity</div>
-        <div class="jm-cell opp">Prove "no labor" on the first screen.</div>
-        <div class="jm-cell opp">Auto-classify + user-correction learning.</div>
-        <div class="jm-cell opp">Exploratory analysis (NL, drill-down) is the differentiator (P1).</div>
-        <div class="jm-cell opp">In-app execution (cancel subs) closes the loop.</div>
-        <div class="jm-cell opp">A shareable asset for data lovers.</div>
-      </div>
-
-      <div class="jm-arc">
-        <div class="jm-arc-head">
-          <div class="jm-arc-title">Emotional arc · cynicism → relief → immersion → satisfaction</div>
-          <div class="jm-arc-legend"><span class="proj"><i></i>Projection</span><span><i></i>Actual</span></div>
-        </div>
-        <svg class="jm-arc-svg" viewBox="0 0 1400 360" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="340" x2="1400" y2="340" stroke="#fff" stroke-opacity="0.08"/>
-          <line x1="280" y1="0" x2="280" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
-          <line x1="560" y1="0" x2="560" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
-          <line x1="840" y1="0" x2="840" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
-          <line x1="1120" y1="0" x2="1120" y2="360" stroke="#fff" stroke-opacity="0.12" stroke-dasharray="4 4"/>
-          <path d="M 0,270 C 140,268 200,262 280,255 C 420,244 500,238 560,232 C 700,220 780,214 840,210 C 980,202 1060,198 1120,196 C 1260,192 1340,190 1400,188" stroke="#fff" stroke-opacity="0.5" stroke-width="1.2" fill="none" stroke-dasharray="9 6"/>
-          <path d="M 0,300 C 100,302 200,300 280,250 C 360,200 460,180 560,140 C 660,102 740,78 840,66 C 940,56 1020,52 1120,48 C 1220,44 1320,42 1400,40" stroke="#0FB884" stroke-width="1.8" fill="none"/>
-          <circle cx="560" cy="140" r="4" fill="#0FB884"/><circle cx="560" cy="140" r="9" fill="#0FB884" fill-opacity="0.14"/>
-        </svg>
-      </div>
-
-      <div class="jm-key">
-        <div class="jm-key-label">Key design decision · C</div>
-        <div class="jm-key-text">Give this user <b>deeper exploration tools, not more input</b>. Automation (collection) hides as the default; the questioning, drill-down analysis takes the front.</div>
-      </div>
-    </div>
-
-    <!-- comparison -->
-    <div class="jm-compare-wrap">
-      <table class="jm-compare">
-        <thead><tr><th class="k">&nbsp;</th><th>A · Maya</th><th>B · Chloé</th><th>C · Daniel</th></tr></thead>
-        <tbody>
-          <tr><td class="k">Core problem</td><td>Numbness (realisation gap)</td><td>Anxiety · avoidance</td><td>Burnout · cynicism</td></tr>
-          <tr><td class="k">What to sell</td><td>A mirror (character label)</td><td>Reassurance (emotional reframe)</td><td>Exploration tools (analysis)</td></tr>
-          <tr><td class="k">Onboarding</td><td>Deferred link + sample</td><td>Emotion first</td><td>Auto-link</td></tr>
-          <tr><td class="k">Salience device</td><td>Live Activity · widget</td><td>Mood tag</td><td>Natural-language query</td></tr>
-          <tr><td class="k">Retention hook</td><td>Wrapped-style recap</td><td>Supportive weekly summary</td><td>Return-to analysis dashboard</td></tr>
-          <tr><td class="k">Lead principle</td><td>P2 · P3</td><td>P4 · P6</td><td>P1</td></tr>
-        </tbody>
-      </table>
-      <div class="jm-key" style="margin-top:clamp(32px,4vw,52px);">
-        <div class="jm-key-label">The common core</div>
-        <div class="jm-key-text">None of the three want an app that "keeps them on budget." All three want an app that <b>lets them understand themselves through their spending.</b> That is finboard's shared core.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-    </div>
-  </div>
-</div><!-- /phase 02 -->
-
-<div class="phase-block">
-  <button class="phase-toggle" onclick="togglePhase(this)">
-    <div class="phase-toggle-inner">
-      <div>
-        <div class="phase-num">03</div>
-        <div class="phase-name">Solution — flows &amp; compliance</div>
-        <div class="phase-sub">The information architecture, the key UX flows, and the Canadian regulatory strategy.</div>
-      </div>
-      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </div>
-  </button>
-  <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media">
-      <div class="phase-ph"><span>Core flows &amp; IA · 16:9</span></div>
-    </div>
-  </div>
-  <div class="phase-body">
-    <div class="phase-body-inner">
-
-<!-- ============ 5 · UX FLOWS ============ -->
-<section class="tt-section wrap">
-  <div class="section-head">
-    <div class="section-label">05 · UX flows</div>
-    <h2 class="section-title">Information architecture &amp; four core flows</h2>
-    <p class="section-sub">In most apps the first-class citizen is Budget. In finboard it's <em>Explore</em>. Budgets are demoted to a feature; exploration, awareness, and emotion take the front.</p>
-  </div>
-
-  <!-- shared arrow markers -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-    <marker id="fbar" viewBox="0 0 10 10" refX="8.4" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#8a8a8a"/></marker>
-    <marker id="fbarm" viewBox="0 0 10 10" refX="8.4" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0FB884"/></marker>
-  </defs></svg>
-
-  <!-- 5.1 · IA — entity boxes -->
-  <div class="mono-block">
-    <div class="mono-h"><span class="mono-h-title">5.1 · Information architecture</span><span class="mono-h-goal">Entity map · Explore is the first-class citizen</span></div>
-    <div class="dgm-canvas">
-      <svg viewBox="0 0 940 600" xmlns="http://www.w3.org/2000/svg">
-        <!-- root -->
-        <g class="dgm-node hub"><rect x="14" y="262" width="196" height="76" rx="10"/>
-          <text class="np" x="34" y="296" font-size="17">finboard</text>
-          <text class="ns" x="34" y="316" font-size="11.5">iOS · native app</text>
-        </g>
-        <!-- connectors root → sections -->
-        <path class="dgm-link" d="M210 300 C 300 300 320 58 420 58"   marker-end="url(#fbar)"/>
-        <path class="dgm-link mint" d="M210 300 C 300 300 320 205 420 205" marker-end="url(#fbarm)"/>
-        <path class="dgm-link" d="M210 300 C 300 300 320 352 420 352"  marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M210 300 C 300 300 320 452 420 452"  marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M210 300 C 300 300 320 540 420 540"  marker-end="url(#fbar)"/>
-
-        <!-- Home -->
-        <g class="dgm-node"><rect x="420" y="14" width="500" height="118" rx="10"/>
-          <text class="np" x="440" y="44" font-size="14.5">Home (Today)</text>
-          <text class="ns" x="906" y="44" font-size="10" text-anchor="end">screen</text>
-          <line class="nrule" x1="420" y1="56" x2="920" y2="56"/>
-          <text class="dgm-attr" x="440" y="78" font-size="12.5">• Real-time depletion cue <tspan class="d">today / week spent, visual</tspan></text>
-          <text class="dgm-attr" x="440" y="100" font-size="12.5">• "3-second insight" card <tspan class="d">refreshed daily</tspan></text>
-          <text class="dgm-attr" x="440" y="122" font-size="12.5">• Quick entry <tspan class="d">→ Explore · Mood check-in</tspan></text>
-        </g>
-        <!-- Explore (heart) -->
-        <g class="dgm-node hub"><rect x="420" y="146" width="500" height="140" rx="10"/>
-          <text class="np" x="440" y="176" font-size="14.5">Explore</text>
-          <text class="ns" x="906" y="176" font-size="10" text-anchor="end" fill="#0FB884">★ the heart</text>
-          <line class="nrule" x1="420" y1="188" x2="920" y2="188"/>
-          <text class="dgm-attr" x="440" y="210" font-size="12.5"><tspan class="k">◆</tspan> Spending-character (persona) view</text>
-          <text class="dgm-attr" x="440" y="232" font-size="12.5"><tspan class="k">◆</tspan> Category drill-down</text>
-          <text class="dgm-attr" x="440" y="254" font-size="12.5"><tspan class="k">◆</tspan> Emotion × spending view</text>
-          <text class="dgm-attr" x="440" y="276" font-size="12.5"><tspan class="k">◆</tspan> Natural-language query <tspan class="d">"why did March spike?"</tspan></text>
-        </g>
-        <!-- Recap -->
-        <g class="dgm-node"><rect x="420" y="300" width="500" height="96" rx="10"/>
-          <text class="np" x="440" y="330" font-size="14.5">Recap <tspan class="ns" font-size="11">weekly / monthly</tspan></text>
-          <line class="nrule" x1="420" y1="342" x2="920" y2="342"/>
-          <text class="dgm-attr" x="440" y="364" font-size="12.5">• Wrapped-style story slides</text>
-          <text class="dgm-attr" x="440" y="386" font-size="12.5">• Share card <tspan class="d">character &amp; ratios only</tspan></text>
-        </g>
-        <!-- Moments -->
-        <g class="dgm-node"><rect x="420" y="410" width="500" height="84" rx="10"/>
-          <text class="np" x="440" y="440" font-size="14.5">Moments <tspan class="ns" font-size="11">post-payment trigger</tspan></text>
-          <line class="nrule" x1="420" y1="452" x2="920" y2="452"/>
-          <text class="dgm-attr" x="440" y="476" font-size="12.5">• "Why did you spend?" emotion tag <tspan class="d">optional, 5s</tspan></text>
-        </g>
-        <!-- Settings -->
-        <g class="dgm-node"><rect x="420" y="508" width="500" height="84" rx="10"/>
-          <text class="np" x="440" y="536" font-size="14.5">Settings</text>
-          <line class="nrule" x1="420" y1="548" x2="920" y2="548"/>
-          <text class="dgm-attr" x="440" y="572" font-size="12.5">• Account linking <tspan class="d">deferrable</tspan>&#160;&#160; • Alert tone <tspan class="d">supportive / minimal</tspan></text>
-          <text class="dgm-attr" x="440" y="588" font-size="12.5">• Widget · Live Activity config</text>
-        </g>
-      </svg>
-    </div>
-  </div>
-
-  <!-- 5.2 · Onboarding -->
-  <div class="mono-block">
-    <div class="mono-h"><span class="mono-h-title">5.2 · Flow ① — Zero-friction onboarding</span><span class="mono-h-goal">Goal: first insight in 60s</span></div>
-    <p class="mono-note">Deliver the first insight <em>before</em> account linking — the drop-off defense (P5). Dismantle onboarding overload; place the first dopamine hit ahead of the account connection.</p>
-    <div class="dgm-canvas">
-      <svg viewBox="0 0 1240 340" xmlns="http://www.w3.org/2000/svg">
-        <g class="dgm-node"><rect x="8" y="142" width="150" height="54" rx="9"/><text class="np" x="83" y="174" font-size="13.5" text-anchor="middle">First launch</text></g>
-        <g class="dgm-node"><rect x="196" y="142" width="176" height="54" rx="9"/><text class="np" x="284" y="174" font-size="13.5" text-anchor="middle">One-line value</text></g>
-        <g class="dgm-node"><rect x="410" y="142" width="150" height="54" rx="9"/><text class="np" x="485" y="174" font-size="13.5" text-anchor="middle">Choose entry</text></g>
-        <!-- fan -->
-        <g class="dgm-node"><rect x="600" y="32" width="196" height="54" rx="9"/><text class="np" x="698" y="54" font-size="13" text-anchor="middle">Quick skim</text><text class="ns" x="698" y="72" font-size="10.5" text-anchor="middle">A · scan / sample</text></g>
-        <g class="dgm-node"><rect x="600" y="143" width="196" height="54" rx="9"/><text class="np" x="698" y="165" font-size="13" text-anchor="middle">Mood first</text><text class="ns" x="698" y="183" font-size="10.5" text-anchor="middle">B · 2 emotion Qs</text></g>
-        <g class="dgm-node"><rect x="600" y="254" width="196" height="54" rx="9"/><text class="np" x="698" y="276" font-size="13" text-anchor="middle">Link account</text><text class="ns" x="698" y="294" font-size="10.5" text-anchor="middle">C · auto-connect</text></g>
-        <!-- first insight (key) -->
-        <g class="dgm-node key"><rect x="844" y="140" width="196" height="58" rx="9"/><text class="np" x="942" y="165" font-size="13.5" text-anchor="middle">First insight</text><text class="ns" x="942" y="184" font-size="11" text-anchor="middle">≤ 60s · no account yet</text></g>
-        <g class="dgm-node"><rect x="1078" y="142" width="154" height="54" rx="9"/><text class="np" x="1155" y="174" font-size="13.5" text-anchor="middle">Land on Home</text></g>
-        <!-- links -->
-        <path class="dgm-link" d="M158 169 L196 169" marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M372 169 L410 169" marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M560 169 C 580 169 580 59 600 59"  marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M560 169 L600 169" marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M560 169 C 580 169 580 281 600 281" marker-end="url(#fbar)"/>
-        <path class="dgm-link mint" d="M796 59 C 820 59 820 169 844 169"  marker-end="url(#fbarm)"/>
-        <path class="dgm-link mint" d="M796 169 L844 169" marker-end="url(#fbarm)"/>
-        <path class="dgm-link mint" d="M796 281 C 820 281 820 169 844 169" marker-end="url(#fbarm)"/>
-        <path class="dgm-link" d="M1040 169 L1078 169" marker-end="url(#fbar)"/>
-        <text class="dgm-lbl mint" x="942" y="234" text-anchor="middle">"62 micro-payments · #1 delivery · comfort spender"</text>
-        <text class="dgm-lbl" x="1155" y="222" text-anchor="middle">optional · never forced</text>
-      </svg>
-    </div>
-  </div>
-
-  <!-- 5.3 · Salience -->
-  <div class="mono-block">
-    <div class="mono-h"><span class="mono-h-title">5.3 · Flow ② — Real-time salience</span><span class="mono-h-goal">Goal: restore the "I spent" sensation</span></div>
-    <p class="mono-note">Revive, visually and in real time, the sense of spending that cashless erased (P2, I3). Alerts are neutral facts plus curiosity — never a red bar. Not "Over budget!" but "Pace +18% — why?" (P6).</p>
-    <div class="dgm-canvas">
-      <svg viewBox="0 0 1040 300" xmlns="http://www.w3.org/2000/svg">
-        <g class="dgm-node"><rect x="8" y="96" width="184" height="56" rx="9"/><text class="np" x="100" y="121" font-size="13.5" text-anchor="middle">Apple Pay</text><text class="ns" x="100" y="140" font-size="11" text-anchor="middle">payment</text></g>
-        <g class="dgm-node key"><rect x="252" y="96" width="230" height="56" rx="9"/><text class="np" x="367" y="121" font-size="13.5" text-anchor="middle">Live Activity / widget</text><text class="ns" x="367" y="140" font-size="11" text-anchor="middle">"Today $32.40 · pace +18%"</text></g>
-        <g class="dgm-node hub"><rect x="560" y="96" width="240" height="56" rx="9"/><text class="np" x="680" y="121" font-size="13.5" text-anchor="middle">Explore</text><text class="ns" x="680" y="140" font-size="11" text-anchor="middle">emotion × spending view</text></g>
-        <g class="dgm-node ghost"><rect x="252" y="214" width="230" height="52" rx="9"/><text class="np" x="367" y="238" font-size="13" text-anchor="middle">Moments · "why?" tag</text><text class="ns" x="367" y="256" font-size="11" text-anchor="middle">optional · 5s · tap a reason</text></g>
-        <path class="dgm-link" d="M192 124 L252 124" marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M482 124 L560 124" marker-end="url(#fbar)"/>
-        <path class="dgm-link dash" d="M367 152 L367 214" marker-end="url(#fbar)"/>
-        <path class="dgm-link dash" d="M482 240 C 620 240 660 175 680 152" marker-end="url(#fbar)"/>
-        <text class="dgm-lbl" x="378" y="188">optional, no pressure</text>
-        <text class="dgm-lbl mint" x="560" y="196">"on stress-tagged days, delivery is 2.3×"</text>
-      </svg>
-    </div>
-  </div>
-
-  <!-- 5.4 · Explore -->
-  <div class="mono-block">
-    <div class="mono-h"><span class="mono-h-title">5.4 · Flow ③ — Explore</span><span class="mono-h-goal">Goal: exploration, not audit — the heart</span></div>
-    <p class="mono-note">Not an audit but an exploration (P1, P3): a 3-second insight that opens into drill-down. Character lens hooks A, natural-language drill-down is C's killer feature, the emotion lens is B's safe entry.</p>
-    <div class="dgm-canvas">
-      <svg viewBox="0 0 1240 340" xmlns="http://www.w3.org/2000/svg">
-        <g class="dgm-node"><rect x="8" y="145" width="160" height="52" rx="9"/><text class="np" x="88" y="176" font-size="13" text-anchor="middle">Insight card tap</text></g>
-        <g class="dgm-node hub"><rect x="206" y="145" width="176" height="52" rx="9"/><text class="np" x="294" y="176" font-size="13" text-anchor="middle">Explore · 3 lenses</text></g>
-        <g class="dgm-node"><rect x="420" y="38" width="200" height="48" rx="9"/><text class="np" x="520" y="67" font-size="12.5" text-anchor="middle">Character lens</text></g>
-        <g class="dgm-node"><rect x="420" y="147" width="200" height="48" rx="9"/><text class="np" x="520" y="176" font-size="12.5" text-anchor="middle">Category lens</text></g>
-        <g class="dgm-node"><rect x="420" y="256" width="200" height="48" rx="9"/><text class="np" x="520" y="285" font-size="12.5" text-anchor="middle">Emotion lens</text></g>
-        <text class="dgm-lbl" x="630" y="66">"weekend-evening · comfort spender"</text>
-        <text class="dgm-lbl" x="520" y="222" text-anchor="middle">drill: delivery → hour → weekday</text>
-        <text class="dgm-lbl" x="630" y="284">mood tag × spend correlation</text>
-        <g class="dgm-node"><rect x="660" y="145" width="170" height="52" rx="9"/><text class="np" x="745" y="176" font-size="13" text-anchor="middle">NL query bar</text></g>
-        <g class="dgm-node"><rect x="866" y="145" width="170" height="52" rx="9"/><text class="np" x="951" y="176" font-size="13" text-anchor="middle">Answer card</text></g>
-        <g class="dgm-node ghost"><rect x="1072" y="145" width="160" height="52" rx="9"/><text class="np" x="1152" y="176" font-size="13" text-anchor="middle">Optional action</text></g>
-        <path class="dgm-link" d="M168 171 L206 171" marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M382 171 C 401 171 401 62 420 62"  marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M382 171 L420 171" marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M382 171 C 401 171 401 280 420 280" marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M632 171 L660 171" marker-end="url(#fbar)" opacity="0"/>
-        <path class="dgm-link" d="M620 171 L660 171" marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M830 171 L866 171" marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M1036 171 L1072 171" marker-end="url(#fbar)"/>
-        <text class="dgm-lbl mint" x="866" y="228">"March: 2 life events + a flight — discretionary below average"</text>
-      </svg>
-    </div>
-  </div>
-
-  <!-- 5.5 · Recap -->
-  <div class="mono-block">
-    <div class="mono-h"><span class="mono-h-title">5.5 · Flow ④ — Recap &amp; share</span><span class="mono-h-goal">Goal: retention &amp; organic reach</span></div>
-    <p class="mono-note">Turn weekly / monthly into a story, not a lecture. No failure framing (P6): not "you went over" but "here's who you were." Share cards expose character &amp; patterns only — no amounts — for psychological safety and Wrapped-style spread.</p>
-    <div class="dgm-canvas">
-      <svg viewBox="0 0 1120 320" xmlns="http://www.w3.org/2000/svg">
-        <g class="dgm-node"><rect x="8" y="110" width="150" height="56" rx="9"/><text class="np" x="83" y="135" font-size="13" text-anchor="middle">Weekly push</text><text class="ns" x="83" y="154" font-size="11" text-anchor="middle">"recap is ready"</text></g>
-        <g class="dgm-node"><rect x="196" y="44" width="308" height="196" rx="10"/>
-          <text class="np" x="216" y="74" font-size="14">Wrapped-style story slides</text>
-          <line class="nrule" x1="196" y1="88" x2="504" y2="88"/>
-          <text class="dgm-attr" x="216" y="112" font-size="12.5"><tspan class="k">1</tspan>&#160; Character: "social spender"</text>
-          <text class="dgm-attr" x="216" y="140" font-size="12.5"><tspan class="k">2</tspan>&#160; Wins first: discretionary −12%</text>
-          <text class="dgm-attr" x="216" y="168" font-size="12.5"><tspan class="k">3</tspan>&#160; Discovery: Tuesday delivery spikes</text>
-          <text class="dgm-attr" x="216" y="196" font-size="12.5"><tspan class="k">4</tspan>&#160; Curiosity: "will this hold?"</text>
-          <text class="dgm-attr d" x="216" y="222" font-size="11.5">wins first — never a failure frame (P6)</text>
-        </g>
-        <g class="dgm-node key"><rect x="548" y="114" width="170" height="56" rx="9"/><text class="np" x="633" y="139" font-size="13" text-anchor="middle">Share card</text><text class="ns" x="633" y="158" font-size="11" text-anchor="middle">character only · no amounts</text></g>
-        <g class="dgm-node"><rect x="762" y="114" width="230" height="56" rx="9"/><text class="np" x="877" y="139" font-size="13" text-anchor="middle">Organic reach</text><text class="ns" x="877" y="158" font-size="11" text-anchor="middle">→ new Trigger</text></g>
-        <path class="dgm-link" d="M158 140 L196 140" marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M504 142 L548 142" marker-end="url(#fbar)"/>
-        <path class="dgm-link mint" d="M718 142 L762 142" marker-end="url(#fbarm)"/>
-        <path class="dgm-link dash" d="M877 170 C 877 250 83 250 83 166" marker-end="url(#fbar)"/>
-        <text class="dgm-lbl" x="360" y="284">loops back into a new trigger</text>
-      </svg>
-    </div>
-  </div>
-
-  <!-- 5.6 · Overall -->
-  <div class="mono-block">
-    <div class="mono-h"><span class="mono-h-title">5.6 · The whole flow at a glance</span></div>
-    <div class="dgm-canvas">
-      <svg viewBox="0 0 1200 340" xmlns="http://www.w3.org/2000/svg">
-        <g class="dgm-node"><rect x="8" y="140" width="140" height="52" rx="9"/><text class="np" x="78" y="164" font-size="12.5" text-anchor="middle">Trigger</text><text class="ns" x="78" y="182" font-size="10.5" text-anchor="middle">bill / stress / review</text></g>
-        <g class="dgm-node"><rect x="188" y="140" width="150" height="52" rx="9"/><text class="np" x="263" y="164" font-size="12.5" text-anchor="middle">Onboarding</text><text class="ns" x="263" y="182" font-size="10.5" text-anchor="middle">≤ 60s, link later</text></g>
-        <g class="dgm-node hub"><rect x="378" y="140" width="150" height="52" rx="9"/><text class="np" x="453" y="171" font-size="13.5" text-anchor="middle">Home (Today)</text></g>
-        <g class="dgm-node hub"><rect x="568" y="46" width="150" height="52" rx="9"/><text class="np" x="643" y="77" font-size="13.5" text-anchor="middle">Explore</text></g>
-        <g class="dgm-node"><rect x="568" y="234" width="150" height="52" rx="9"/><text class="np" x="643" y="258" font-size="12.5" text-anchor="middle">Moments</text><text class="ns" x="643" y="276" font-size="10.5" text-anchor="middle">post-pay tag</text></g>
-        <g class="dgm-node"><rect x="772" y="140" width="150" height="52" rx="9"/><text class="np" x="847" y="171" font-size="13.5" text-anchor="middle">Recap</text></g>
-        <g class="dgm-node key"><rect x="962" y="140" width="170" height="52" rx="9"/><text class="np" x="1047" y="164" font-size="12.5" text-anchor="middle">Share card</text><text class="ns" x="1047" y="182" font-size="10.5" text-anchor="middle">character only</text></g>
-        <path class="dgm-link" d="M148 166 L188 166" marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M338 166 L378 166" marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M528 166 C 548 166 548 72 568 72"   marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M528 166 C 548 166 548 260 568 260"  marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M718 72 C 745 72 752 166 772 166"    marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M718 260 C 745 260 752 166 772 166"  marker-end="url(#fbar)"/>
-        <path class="dgm-link" d="M922 166 L962 166" marker-end="url(#fbar)"/>
-        <path class="dgm-link dash" d="M1047 192 C 1047 314 78 314 78 192" marker-end="url(#fbar)"/>
-        <text class="dgm-lbl" x="600" y="300">share (character only) → organic reach → new Trigger</text>
-        <text class="dgm-lbl mint" x="740" y="238">emotion × spending accrues</text>
-      </svg>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 6 · COMPLIANCE & REGULATORY STRATEGY ============ -->
-<section class="tt-section wrap">
-  <div class="section-head">
-    <div class="section-label">06 · Compliance &amp; regulatory strategy</div>
-    <h2 class="section-title">Built for Canada's rules — and for everyone</h2>
-    <p class="section-sub">finboard handles Canadians' electronic financial information, so regulatory posture and accessibility aren't features — they're preconditions. Both are designed in from the first screen, not bolted on before launch.</p>
-  </div>
-
-  <div class="dtable-wrap">
-    <table class="dtable">
-      <thead><tr><th>Regulator / framework</th><th>What it governs</th><th>finboard's strategy</th></tr></thead>
-      <tbody>
-        <tr><td class="k">OSFI</td><td class="s">Federal prudential oversight of banks; security expectations for data sharing.</td><td>finboard never holds or moves funds — strictly <strong>read-only</strong> aggregation through regulated providers. Nothing to prudentially regulate.</td></tr>
-        <tr><td class="k">FCAC · Consumer-Driven Banking</td><td class="s">Canada's federal open-banking framework &amp; consumer financial protection.</td><td>Consume only <strong>accredited open-banking APIs</strong>. The consumer grants access, sees exactly what is shared, and can revoke it instantly.</td></tr>
-        <tr><td class="k">PIPEDA</td><td class="s">Electronic personal information — consent, purpose limitation, safeguards.</td><td>Explicit, granular, purpose-bound consent; <strong>data minimization</strong>; on-device processing where feasible; data is never sold or used for ads.</td></tr>
-        <tr><td class="k">Québec Law 25 · provincial privacy</td><td class="s">Enhanced consent, privacy-by-default, portability &amp; deletion.</td><td><strong>Privacy-by-default</strong> settings out of the box; one-tap data export and account deletion.</td></tr>
-        <tr><td class="k">Advice boundary</td><td class="s">Financial / investment advice requires registration (securities &amp; advisory law).</td><td>finboard <strong>reflects patterns, it doesn't recommend products</strong> — insight framed as self-understanding, never as regulated advice.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="callout">
-    <div class="callout-label">Strategic posture</div>
-    <div class="callout-text">Stay a <em>mirror</em>, not a bank. By never holding funds and never giving regulated advice, finboard sits inside <em>consumer-data and privacy law</em> — not inside the far heavier prudential and advisory regimes.</div>
-    <div class="callout-attr">Electronic financial information is treated as the regulated asset it is: consented, minimized, and revocable.</div>
-  </div>
-
-  <p class="section-note" style="margin-top:clamp(48px,6vw,88px);"><strong>Accessibility — banking-grade, barrier-free.</strong> A finance app that excludes people is a failed finance app. finboard targets the standards Canada's banks are held to, and treats emotional accessibility as first-class.</p>
-
-  <div class="signals-grid">
-    <div class="signal">
-      <div class="signal-top"><span class="signal-tag">Accessible Canada Act · WCAG 2.1 AA</span><span class="signal-strength core">Target AA</span></div>
-      <div class="signal-title">Barrier-free to the ACA mandate.</div>
-      <div class="signal-body">Conformance targeted at <em>WCAG 2.1 Level AA</em> across the app, in line with the Accessible Canada Act's barrier-free direction — colour-independent status, 4.5:1 text contrast, focus order, and labelled controls.</div>
-    </div>
-    <div class="signal">
-      <div class="signal-top"><span class="signal-tag">iOS accessibility</span><span class="signal-strength strong">Native</span></div>
-      <div class="signal-title">VoiceOver, Dynamic Type, Reduce Motion.</div>
-      <div class="signal-body">Every surface — Home, widgets, Live Activity — carries VoiceOver labels, scales with Dynamic Type, honours Reduce Motion, and keeps tap targets ≥ 44pt, per Apple's Human Interface Guidelines.</div>
-    </div>
-    <div class="signal">
-      <div class="signal-top"><span class="signal-tag">Cognitive &amp; anxiety load</span><span class="signal-strength strong">By design</span></div>
-      <div class="signal-title">No guilt is an accessibility decision.</div>
-      <div class="signal-body">The no-red-bar, no-shame framing (P6) isn't just tone — it lowers the cognitive and emotional load that pushes anxious users (Persona B · Chloé) to disengage. Emotional accessibility is treated as real accessibility.</div>
-    </div>
-    <div class="signal">
-      <div class="signal-top"><span class="signal-tag">Banking-sector alignment</span><span class="signal-strength support">Sector</span></div>
-      <div class="signal-title">Held to the banks' own standards.</div>
-      <div class="signal-body">Meets the accessibility commitments Canada's major banks publish — RBC, TD, BMO, Scotiabank — and the EN 301 549 / CSA-style expectations their apps are measured against.</div>
-    </div>
-  </div>
-</section>
-
-    </div>
-  </div>
-</div><!-- /phase 03 -->
-
-<div class="phase-block">
-  <button class="phase-toggle" onclick="togglePhase(this)">
-    <div class="phase-toggle-inner">
-      <div>
-        <div class="phase-num">04</div>
-        <div class="phase-name">System &amp; validation</div>
-        <div class="phase-sub">The stakeholder map, the success metrics that prove it, and the sources.</div>
-      </div>
-      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </div>
-  </button>
-  <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media">
-      <div class="phase-ph"><span>Stakeholders &amp; metrics · 16:9</span></div>
-    </div>
-  </div>
-  <div class="phase-body">
-    <div class="phase-body-inner">
-
-<!-- ============ 07 · STAKEHOLDER MAP ============ -->
-<section class="tt-section wrap">
-  <style>
-    .sk-wrap{ max-width:780px; margin:0 auto; }
-    .sk-svg{ width:100%; height:auto; display:block; font-family:var(--font); overflow:visible; }
-    .sk-core{ fill:#fff; font-size:16px; font-weight:600; letter-spacing:-0.03em; }
-    .sk-core-sub{ fill:rgba(255,255,255,.78); font-size:9px; letter-spacing:0.02em; }
-    .sk-cat{ fill:var(--ink); font-size:13px; font-weight:500; letter-spacing:-0.02em; }
-    .sk-tier{ fill:var(--muted); font-size:8.5px; letter-spacing:0.05em; text-transform:uppercase; }
-    .sk-lbl{ fill:var(--ink); font-size:9.5px; letter-spacing:-0.01em; }
-    .sk-legend{ display:flex; gap:14px 30px; flex-wrap:wrap; margin-top:clamp(24px,3vw,40px); justify-content:center; }
-    .sk-legend .lg{ display:inline-flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); letter-spacing:-0.01em; }
-    .sk-legend .d{ width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-  </style>
-  <div class="section-head">
-    <div class="section-label">07 · Stakeholder map</div>
-    <h2 class="section-title">Who's in the system</h2>
-    <p class="section-sub">Concentric rings by proximity to the money-exploration loop: <strong>primary</strong> actors touch it directly; <strong>secondary</strong> are the accounts, rails, and platform surfaces it depends on; <strong>tertiary</strong> are the standards and context around it. Four categories divide the field.</p>
-  </div>
-  <div class="sk-wrap">
-        <svg viewBox="0 0 720 720" xmlns="http://www.w3.org/2000/svg" class="sk-svg">
-        <circle cx="360" cy="360" r="248" fill="none" stroke="var(--line)" stroke-width="1" stroke-dasharray="2 6"/>
-        <circle cx="360" cy="360" r="170" fill="none" stroke="var(--line)" stroke-width="1"/>
-        <circle cx="360" cy="360" r="95" fill="none" stroke="var(--line)" stroke-width="1"/>
-        <text x="360.0" y="259.0" class="sk-tier" text-anchor="middle">1 · Primary</text>
-        <text x="360.0" y="184.0" class="sk-tier" text-anchor="middle">2 · Secondary</text>
-        <text x="360.0" y="106.0" class="sk-tier" text-anchor="middle">3 · Tertiary</text>
-        <text x="556.6" y="163.4" class="sk-cat" text-anchor="middle" dominant-baseline="central">Users &amp; Household</text>
-        <text x="556.6" y="556.6" class="sk-cat" text-anchor="middle" dominant-baseline="central">Financial institutions</text>
-        <text x="163.4" y="556.6" class="sk-cat" text-anchor="middle" dominant-baseline="central">Platform &amp; Tech</text>
-        <text x="163.4" y="163.4" class="sk-cat" text-anchor="middle" dominant-baseline="central">Regulators &amp; Standards</text>
-        <line x1="400.3" y1="319.7" x2="427.2" y2="292.8" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="427.2" cy="292.8" r="5" fill="var(--accent)"/>
-        <text x="436.2" y="296.0" class="sk-lbl" text-anchor="start">The individual</text>
-        <line x1="400.3" y1="319.7" x2="480.2" y2="239.8" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="480.2" cy="239.8" r="4" fill="#333333"/>
-        <text x="489.2" y="243.0" class="sk-lbl" text-anchor="start">Household / family</text>
-        <line x1="400.3" y1="319.7" x2="535.4" y2="184.6" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="535.4" cy="184.6" r="3.4" fill="#8a8a8a"/>
-        <text x="544.4" y="187.8" class="sk-lbl" text-anchor="start">Financial educators</text>
-        <line x1="400.3" y1="400.3" x2="427.2" y2="427.2" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="427.2" cy="427.2" r="5" fill="var(--accent)"/>
-        <text x="436.2" y="430.4" class="sk-lbl" text-anchor="start">Connected bank</text>
-        <line x1="415.1" y1="374.8" x2="524.2" y2="404.0" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="524.2" cy="404.0" r="4" fill="#333333"/>
-        <text x="533.2" y="407.2" class="sk-lbl" text-anchor="start">Scotiabank</text>
-        <line x1="406.7" y1="392.7" x2="499.3" y2="457.5" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="499.3" cy="457.5" r="4" fill="#333333"/>
-        <text x="508.3" y="460.7" class="sk-lbl" text-anchor="start">TD</text>
-        <line x1="392.7" y1="406.7" x2="457.5" y2="499.3" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="457.5" cy="499.3" r="4" fill="#333333"/>
-        <text x="466.5" y="502.5" class="sk-lbl" text-anchor="start">BMO</text>
-        <line x1="374.8" y1="415.1" x2="404.0" y2="524.2" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="404.0" cy="524.2" r="4" fill="#333333"/>
-        <text x="413.0" y="527.4" class="sk-lbl" text-anchor="start">RBC</text>
-        <line x1="415.1" y1="374.8" x2="599.5" y2="424.2" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="599.5" cy="424.2" r="3.4" fill="#8a8a8a"/>
-        <text x="608.5" y="427.4" class="sk-lbl" text-anchor="start">Flinks / Plaid</text>
-        <line x1="400.3" y1="400.3" x2="535.4" y2="535.4" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="535.4" cy="535.4" r="3.4" fill="#8a8a8a"/>
-        <text x="544.4" y="538.6" class="sk-lbl" text-anchor="start">Visa · networks</text>
-        <line x1="374.8" y1="415.1" x2="424.2" y2="599.5" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="424.2" cy="599.5" r="3.4" fill="#8a8a8a"/>
-        <text x="433.2" y="602.7" class="sk-lbl" text-anchor="start">CDIC</text>
-        <line x1="319.7" y1="400.3" x2="292.8" y2="427.2" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="292.8" cy="427.2" r="5" fill="var(--accent)"/>
-        <text x="283.8" y="430.4" class="sk-lbl" text-anchor="end">Apple · iOS</text>
-        <line x1="345.2" y1="415.1" x2="316.0" y2="524.2" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="316.0" cy="524.2" r="4" fill="#333333"/>
-        <text x="307.0" y="527.4" class="sk-lbl" text-anchor="end">Widgets · Live Activity</text>
-        <line x1="304.9" y1="374.8" x2="195.8" y2="404.0" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="195.8" cy="404.0" r="4" fill="#333333"/>
-        <text x="186.8" y="407.2" class="sk-lbl" text-anchor="end">App Store</text>
-        <line x1="345.2" y1="415.1" x2="295.8" y2="599.5" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="295.8" cy="599.5" r="3.4" fill="#8a8a8a"/>
-        <text x="286.8" y="602.7" class="sk-lbl" text-anchor="end">VoiceOver · a11y APIs</text>
-        <line x1="304.9" y1="374.8" x2="120.5" y2="424.2" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="120.5" cy="424.2" r="3.4" fill="#8a8a8a"/>
-        <text x="111.5" y="427.4" class="sk-lbl" text-anchor="end">Device makers</text>
-        <line x1="304.9" y1="345.2" x2="195.8" y2="316.0" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="195.8" cy="316.0" r="4" fill="#333333"/>
-        <text x="186.8" y="319.2" class="sk-lbl" text-anchor="end">FCAC · Open Banking</text>
-        <line x1="345.2" y1="304.9" x2="316.0" y2="195.8" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="316.0" cy="195.8" r="4" fill="#333333"/>
-        <text x="307.0" y="199.0" class="sk-lbl" text-anchor="end">OSFI</text>
-        <line x1="304.9" y1="345.2" x2="120.5" y2="295.8" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="120.5" cy="295.8" r="3.4" fill="#8a8a8a"/>
-        <text x="111.5" y="299.0" class="sk-lbl" text-anchor="end">PIPEDA · OPC</text>
-        <line x1="319.7" y1="319.7" x2="184.6" y2="184.6" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="184.6" cy="184.6" r="3.4" fill="#8a8a8a"/>
-        <text x="175.6" y="187.8" class="sk-lbl" text-anchor="end">Québec Law 25</text>
-        <line x1="345.2" y1="304.9" x2="295.8" y2="120.5" stroke="var(--line)" stroke-width="0.6" opacity="0.5"/>
-        <circle cx="295.8" cy="120.5" r="3.4" fill="#8a8a8a"/>
-        <text x="286.8" y="123.7" class="sk-lbl" text-anchor="end">ACA · WCAG</text>
-        <circle cx="360" cy="360" r="48" fill="var(--accent)"/>
-        <text x="360" y="356" class="sk-core" text-anchor="middle">finboard</text>
-        <text x="360" y="372" class="sk-core-sub" text-anchor="middle">iOS finance</text>
-        </svg>
-  </div>
-  <div class="sk-legend"><span class="lg"><span class="d" style="background:var(--accent)"></span>1 · Primary — direct value exchange</span><span class="lg"><span class="d" style="background:#333333"></span>2 · Secondary — ecosystem &amp; dependencies</span><span class="lg"><span class="d" style="background:#8a8a8a"></span>3 · Tertiary — context &amp; governance</span></div>
-  <p class="section-note" style="margin-top:clamp(28px,3vw,44px);"><strong>Categories.</strong> Users &amp; Household, Financial institutions (the connected accounts and payment rails), Platform &amp; Tech (Apple / iOS surfaces), and Regulators &amp; Standards (the frameworks finboard is built within). The individual, their connected bank, and Apple sit at the core; card networks, privacy regulators, and accessibility bodies sit at the edge.</p>
-</section>
-
-<!-- ============ 8 · SUCCESS METRICS ============ -->
-<section class="tt-section wrap">
-  <div class="section-head">
-    <div class="section-label">08 · Success metrics</div>
-    <h2 class="section-title">North Star &amp; guardrails</h2>
-    <p class="section-sub">Opens don't count. The metric that matters is whether people actually <em>explore</em>.</p>
-  </div>
-
-  <div class="callout">
-    <div class="callout-label">North Star Metric</div>
-    <div class="callout-text"><em>Weekly Exploring Users</em> — the share of users who perform at least one drill-down or query in Explore each week, not merely open the app.</div>
-    <div class="callout-attr">Deliberately excludes the tracker's trap: "opens it, does nothing."</div>
-  </div>
-
-  <div class="metric-cols">
-    <div class="metric-cell">
-      <div class="metric-cell-label">Input (leading) metrics</div>
-      <div class="metric-item"><div class="metric-name">First-insight reach rate</div><div class="metric-desc">Instead of "onboarding completion" — target ≥ 80% within 60 seconds.</div></div>
-      <div class="metric-item"><div class="metric-name">Post-pay mood-tag participation</div><div class="metric-desc">Never forced — a health signal for the salience loop.</div></div>
-      <div class="metric-item"><div class="metric-name">Week-3 retention</div><div class="metric-desc">A direct rebuttal to I5 (drop-off within weeks).</div></div>
-    </div>
-    <div class="metric-cell">
-      <div class="metric-cell-label">Guardrails (against backfire)</div>
-      <div class="metric-item"><div class="metric-name">Notification fatigue / opt-out rate</div><div class="metric-desc">Protects Persona B from over-alerting.</div></div>
-      <div class="metric-item"><div class="metric-name">"Guilt" negative feedback / churn events</div><div class="metric-desc">Monitored explicitly — guilt is a design failure here.</div></div>
-      <div class="metric-item"><div class="metric-name">Auto-categorization correction frequency</div><div class="metric-desc">Keeps Persona C's trust in the automation.</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 9 · SOURCES ============ -->
-<section class="tt-section wrap">
-  <div class="section-head">
-    <div class="section-label">09 · Sources</div>
-    <h2 class="section-title">Verified, current references</h2>
-  </div>
-
-  <div class="src-groups">
-    <div class="src-group">
-      <div class="src-group-label">Market size</div>
-      <div class="src-item"><b>Research Nester</b> — Personal Finance Apps Market (2025.12): $31.7B (2025) → $173.6B (2035), CAGR 20.8%.</div>
-      <div class="src-item"><b>Mordor Intelligence</b> — Personal Finance Tools Market (2026.01): budgeting &amp; expense-tracking 40.6% share.</div>
-      <div class="src-item"><b>Luminix</b> — Competitive Landscape: Personal Finance &amp; Budgeting Apps 2026 (2026.03): iOS pricing &amp; competitive map.</div>
-      <div class="src-item"><b>CoinLaw</b> — Personal Finance App Industry Statistics 2026 (2026.03): AI-recommendation +42% retention.</div>
-    </div>
-    <div class="src-group">
-      <div class="src-group-label">Churn &amp; pain points</div>
-      <div class="src-item"><b>huntervault</b> — Why Budgeting Apps Don't Work (2026).</div>
-      <div class="src-item"><b>Origin</b> — Why Budgeting Apps Fail Most People (2026).</div>
-      <div class="src-item"><b>Onething Design</b> — Budget App Design &amp; Retention (2025.12).</div>
-      <div class="src-item"><b>Indie Hackers</b> — Intentional friction in expense tracking (2026.04).</div>
-      <div class="src-item"><b>econbrew</b> — Why Budgeting Apps Fail: Behavioral Aspects (2025.08).</div>
-    </div>
-    <div class="src-group">
-      <div class="src-group-label">Behavioral economics · pain of paying / cashless effect</div>
-      <div class="src-item"><b>Zellermayer (1996); Prelec &amp; Loewenstein (1998)</b> — origin of "pain of paying" (via Wikipedia / HandWiki).</div>
-      <div class="src-item"><b>Psychopedia Journals</b> — Cashless Spending &amp; the Pain of Paying: Qualitative Study (2026.05): micro-spend trap, realisation gap.</div>
-      <div class="src-item"><b>ScienceDirect</b> — A meta-analysis on the cashless effect (2024).</div>
-      <div class="src-item"><b>IJRASET</b> — The Psychology of Spending in Cashless Societies: restoring salience via real-time &amp; visual cues.</div>
-    </div>
-    <div class="src-group">
-      <div class="src-group-label">Generational &amp; emotional data</div>
-      <div class="src-item"><b>Bank of America</b> — Better Money Habits Study (2025): Gen Z 33% avoid / 30% self-spend under stress.</div>
-      <div class="src-item"><b>YouGov</b> — What Americans think about saving, budgeting, debt (2025).</div>
-      <div class="src-item"><b>The Harris Poll for Cash App</b> — Cash Is Cringe (2025): awareness vs perception gap.</div>
-      <div class="src-item"><b>Intuit</b> — Beyond the Budget (2026.01): 58% treat money management as self-care.</div>
-    </div>
-    <div class="src-group">
-      <div class="src-group-label">Regulatory &amp; accessibility frameworks</div>
-      <div class="src-item"><b>OSFI</b> — Office of the Superintendent of Financial Institutions: federal bank oversight &amp; technology/data-security guidance.</div>
-      <div class="src-item"><b>FCAC</b> — Financial Consumer Agency of Canada: Consumer-Driven Banking (open-banking) framework &amp; consumer protection.</div>
-      <div class="src-item"><b>PIPEDA</b> — Personal Information Protection and Electronic Documents Act: consent, purpose limitation, safeguards.</div>
-      <div class="src-item"><b>Québec Law 25</b> — Act to modernize legislative provisions respecting the protection of personal information.</div>
-      <div class="src-item"><b>Accessible Canada Act</b> (2019) &amp; <b>WCAG 2.1 AA</b> (W3C); <b>EN 301 549</b> — accessibility conformance targets.</div>
-      <div class="src-item"><b>Apple</b> — Human Interface Guidelines: Accessibility (VoiceOver, Dynamic Type, contrast, Reduce Motion).</div>
-    </div>
-  </div>
-
-  <div class="conclusion-block">
-    <p class="conclusion-quote">The target isn't failing for lack of data. They're failing because it's <em>emotionally heavy</em>, because cashless <em>erased the sensation</em>, and because the apps are <em>joyless and guilt-inducing</em>. finboard's job is to make spending something you explore — fast, native, and without shame.</p>
-    <div class="conclusion-attr">finboard — Intuitive Banking App UX · Native App Design, iOS</div>
-  </div>
-
-  <p class="disclaimer">This document is a UX-research-based product-strategy artifact. Market figures are each research firm's estimates/forecasts and vary by source. Personas are composite profiles synthesized from research insights and do not represent real individuals.</p>
-</section>
-
-    </div>
-  </div>
-</div><!-- /phase 04 -->
-
-</div><!-- /phase-wrap -->
-
-<footer style="padding:clamp(48px,6vw,88px) var(--pad) clamp(48px,6vw,80px); text-align:center; border-top:1px solid var(--line);">
+<footer style="padding:clamp(64px,8vw,120px) var(--pad) clamp(48px,6vw,80px); text-align:center;">
   <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
 </footer>
 
+<script src="./lazy-video.js"></script>
 <script>
-/* Journey-map persona tab switcher — cross-fade */
 (function(){
-  var tabs = document.querySelectorAll('.jm-tab');
-  var panels = document.querySelectorAll('[data-jm-panel]');
-  var busy = false;
-  tabs.forEach(function(t){
-    t.addEventListener('click', function(){
-      if(busy) return;
-      var k = t.getAttribute('data-jm');
-      var curr = document.querySelector('.jm-panel.is-active');
-      var next = document.querySelector('[data-jm-panel="'+k+'"]');
-      if(!next || next === curr) return;
-      busy = true;
-      tabs.forEach(function(x){
-        var on = x === t;
-        x.classList.toggle('is-active', on);
-        x.setAttribute('aria-selected', on ? 'true' : 'false');
+  var supported = 'IntersectionObserver' in window;
+
+  /* ---- reveal on scroll: fade blocks in as they enter view ---- */
+  var revealEls = document.querySelectorAll(
+    '.subsec-img,.subsec-video,.chapter-media-duo,.gradex-row,.build-list,' +
+    '.phase-desc,.phase-note,.phase-num,.phase-name,.phase-sub,' +
+    '.subsec-title,.subsec-lead,.gradex-cap'
+  );
+  if(!supported){
+    revealEls.forEach(function(el){ el.classList.add('reveal-in'); });
+  } else {
+    var rio = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('reveal-in'); rio.unobserve(e.target); }
       });
-      if(curr){
-        curr.style.opacity = '0';
-        setTimeout(function(){
-          curr.classList.remove('is-active');
-          curr.style.display = 'none';
-          curr.style.opacity = '';
-          next.style.display = 'block';
-          next.style.opacity = '0';
-          requestAnimationFrame(function(){
-            requestAnimationFrame(function(){
-              next.classList.add('is-active');
-              next.style.opacity = '';
-              setTimeout(function(){ busy = false; }, 260);
-            });
-          });
-        }, 240);
+    }, { rootMargin:'0px 0px -8% 0px', threshold:0 });
+    revealEls.forEach(function(el){ rio.observe(el); });
+  }
+
+  if(!supported) return;
+
+  /* ---- snapshot videos: defer the poster until the clip nears the viewport,
+     play once it is in view, pause when it leaves. The mp4 (preload=none)
+     only downloads on play, so nothing below the fold loads up front. ---- */
+  var vids = document.querySelectorAll('.snap-vid');
+  var posterIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var v = e.target;
+      if(e.isIntersecting && v.dataset.poster && !v.getAttribute('poster')){
+        v.setAttribute('poster', v.dataset.poster);
+        posterIO.unobserve(v);
       }
     });
-  });
+  }, { rootMargin:'300px 0px', threshold:0 });
+  var playIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var v = e.target;
+      if(e.isIntersecting){ v.muted = true; v.play().catch(function(){}); }
+      else if(!v.paused){ v.pause(); }
+    });
+  }, { threshold:0.25 });
+  vids.forEach(function(v){ posterIO.observe(v); playIO.observe(v); });
 })();
 </script>
-<script>
-function togglePhase(el){
-  var block = el.closest('.phase-block');
-  if(block.hasAttribute('data-open')){
-    var nav = document.querySelector('nav.top');
-    var navH = nav ? nav.offsetHeight : 57;
-    var blockTop = block.getBoundingClientRect().top + window.scrollY;
-    if(window.scrollY > blockTop){ window.scrollTo({ top: blockTop - navH, behavior:'instant' }); }
-    block.removeAttribute('data-open');
-  } else {
-    block.setAttribute('data-open','');
-  }
-}
-(function(){ var n=document.querySelector('nav.top'); if(n) document.documentElement.style.setProperty('--nav-h', n.offsetHeight+'px'); })();
-</script>
-<script src="./lazy-video.js"></script>
 </body>
 </html>
