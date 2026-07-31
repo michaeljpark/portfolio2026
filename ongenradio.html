@@ -1631,6 +1631,8 @@
   .subsec-video{ position:relative; aspect-ratio:16/9; overflow:hidden; background:transparent; margin-top:clamp(20px,2.4vw,32px); }
   /* wider 2:1 crop for the conceptual MVP walkthrough */
   .subsec-video.wide{ aspect-ratio:2/1; }
+  /* native 8:5 for full-bleed dashboard demos, so edge content is never cropped */
+  .subsec-video.native{ aspect-ratio:8/5; }
 
   /* iOS Safari will not clip a composited video layer with overflow:hidden alone,
      so the 1px bleed above leaks past the edge and reads as a faint outline.
@@ -1969,8 +1971,8 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <h3 class="subsec-title">Snapshot</h3>
     <p class="subsec-lead">OnGen AR is a geolocation intelligence that reconstructs the city you might miss, or the one you care about, and brings it closer.</p>
-    <div class="subsec-video">
-      <video class="snap-vid" src="./ongensnapshot.mp4?v=20260719c" data-poster="./posters/ongensnapshot.jpg?v=20260719c"
+    <div class="subsec-video native">
+      <video class="snap-vid" src="./ongensnapshot.mp4?v=20260731" data-poster="./posters/ongensnapshot.jpg?v=20260731"
              loop muted playsinline preload="none"></video>
     </div>
   </div>
