@@ -1631,6 +1631,8 @@
   .subsec-video{ position:relative; aspect-ratio:16/9; overflow:hidden; background:transparent; margin-top:clamp(20px,2.4vw,32px); }
   /* wider 2:1 crop for the conceptual MVP walkthrough */
   .subsec-video.wide{ aspect-ratio:2/1; }
+  /* native 8:5 for phone-mockup demos, so the status bar and nav are never cropped */
+  .subsec-video.native{ aspect-ratio:8/5; }
 
   /* iOS Safari will not clip a composited video layer with overflow:hidden alone,
      so the 1px bleed above leaks past the edge and reads as a faint outline.
@@ -1996,6 +1998,30 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     <div class="subsec-title">High-fidelity Prototype</div>
     <img class="subsec-img" src="./finboardhighfidelityprototype.png" alt="High-fidelity iOS widgets, Dynamic Island states, in-app screens, and components" loading="lazy" />
     <p class="phase-note">The high-fidelity pass brought it onto the real surfaces. Widgets stack on the Home Screen, the Lock Screen carries a glance with no unlock, and the Dynamic Island animates each transaction, the weekly pace, and the AI summary. Inside, five screens, Home, AI Forecast, Bills, Cards, and Settings, turn the glance into detail, and a shared component set keeps the widgets, Dynamic Island, and bank tokens consistent.</p>
+  </div>
+
+  <div class="subsec">
+    <div class="subsec-title">Widget</div>
+    <div class="subsec-video native">
+      <video class="snap-vid" src="./finboardanimation1.mp4?v=20260728" data-poster="./posters/finboardanimation1.jpg?v=20260728" loop muted playsinline preload="none"></video>
+    </div>
+    <p class="phase-note">The widgets update on their own on the Home Screen, so one glance is enough to read the day's spending, the weekly pace, and the AI note, without opening the app.</p>
+  </div>
+
+  <div class="subsec">
+    <div class="subsec-title">Widget Controls</div>
+    <div class="subsec-video native">
+      <video class="snap-vid" src="./finboardanimation2.mp4?v=20260728" data-poster="./posters/finboardanimation2.jpg?v=20260728" loop muted playsinline preload="none"></video>
+    </div>
+    <p class="phase-note">The controls widget is interactive on the Home Screen itself. A person sets the daily limit and toggles alerts in place, so the widget is a surface to act on, not only to read.</p>
+  </div>
+
+  <div class="subsec">
+    <div class="subsec-title">In-app</div>
+    <div class="subsec-video native">
+      <video class="snap-vid" src="./finboardanimation3.mp4?v=20260728" data-poster="./posters/finboardanimation3.jpg?v=20260728" loop muted playsinline preload="none"></video>
+    </div>
+    <p class="phase-note">Opening finboard turns the glance into detail, moving across Home, AI Forecast, Bills, Cards, and Settings, where the widgets the user installed are managed and explained.</p>
   </div>
 </section>
 
