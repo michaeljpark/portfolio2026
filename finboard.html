@@ -1939,7 +1939,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
 <header class="hero wrap">
   <div class="hero-video">
-    <video class="lazy-vid" data-src="./finboardprev.mp4" poster="./posters/finboardprev.jpg?v=20260723"
+    <video class="lazy-vid" data-src="./finboardprev.mp4" data-poster="./posters/finboardprev.jpg?v=20260723"
            loop muted playsinline preload="none"></video>
   </div>
   <div class="hero-greeting">Native App Design</div>
@@ -1973,13 +1973,13 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 <section class="phase-flat">
   <div class="phase-num">03</div>
   <div class="phase-name">Discovery</div>
-  <img class="subsec-img" src="./finboardresearch1.png" alt="Framing: an iOS-native widget dashboard hypothesis for early-career adults" loading="lazy" />
+  <img class="subsec-img" src="./finboardresearch1.png" alt="Framing: an iOS-native widget dashboard hypothesis for early-career adults" loading="lazy" srcset="./light/finboardresearch1.webp 1440w, ./finboardresearch1.png 2750w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">I opened the research by fixing the target and the bet. finboard would be an iOS-native widget dashboard for students and early-career adults in the Canadian banking context, and the working hypothesis was that surfacing bank data as a widget, outside the login, would improve how people see their own spending.</p>
-  <img class="subsec-img" src="./finboardresearch2.png" alt="Pain board synthesizing market, in-app behavior, and Canadian regulation" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" />
+  <img class="subsec-img" src="./finboardresearch2.png" alt="Pain board synthesizing market, in-app behavior, and Canadian regulation" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/finboardresearch2.webp 1440w, ./finboardresearch2.png 2750w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">From there I mapped the pain across three fronts at once, the market, in-app behavior, and Canada's banking rules. It showed me that the weak link is not the tools themselves but their adoption, and that the incoming Consumer-Driven Banking Act shapes what a cross-institution product is allowed to do.</p>
-  <img class="subsec-img" src="./finboardresearch3.png" alt="Illustrative data and user-behavior research" loading="lazy" />
+  <img class="subsec-img" src="./finboardresearch3.png" alt="Illustrative data and user-behavior research" loading="lazy" srcset="./light/finboardresearch3.webp 1440w, ./finboardresearch3.png 2750w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">I grounded the direction in data and existing behavioral research, reading what actually lifts app satisfaction, who adopts new in-app surfaces first, and how glanceable feedback changes spending. One pattern held throughout: information beats features, and the users who struggle most gain the most from low-effort, always-visible cues.</p>
-  <img class="subsec-img" src="./finboardresearch4.png" alt="AS-IS versus TO-BE user flow diagram" loading="lazy" />
+  <img class="subsec-img" src="./finboardresearch4.png" alt="AS-IS versus TO-BE user flow diagram" loading="lazy" srcset="./light/finboardresearch4.webp 1440w, ./finboardresearch4.png 2750w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">Then I redrew the flow. Today, checking your spending means logging into each bank, digging past a balance-only view, and doing the math yourself, and most people drop off along the way. finboard intercepts that drop-off point and replaces the whole routine with a glanceable widget backed by a single consent-based connection.</p>
 </section>
 
@@ -1990,13 +1990,13 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
   <div class="subsec">
     <div class="subsec-title">Low-fidelity Prototype</div>
-    <img class="subsec-img" src="./finboardlowfidelityprototype.png" alt="Low-fidelity wireframes of the widget system and in-app navigation" loading="lazy" />
+    <img class="subsec-img" src="./finboardlowfidelityprototype.png" alt="Low-fidelity wireframes of the widget system and in-app navigation" loading="lazy" srcset="./light/finboardlowfidelityprototype.webp 1440w, ./finboardlowfidelityprototype.png 2750w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">The low-fidelity pass laid out the widget system and the app behind it: a daily transaction glance, a weekly goal, an AI report summary, an interactive controls widget, and five in-app destinations that each pay off a widget the user installed. Working in grayscale let me test the information hierarchy before committing to any visual style.</p>
   </div>
 
   <div class="subsec">
     <div class="subsec-title">High-fidelity Prototype</div>
-    <img class="subsec-img" src="./finboardhighfidelityprototype.png" alt="High-fidelity iOS widgets, Dynamic Island states, in-app screens, and components" loading="lazy" />
+    <img class="subsec-img" src="./finboardhighfidelityprototype.png" alt="High-fidelity iOS widgets, Dynamic Island states, in-app screens, and components" loading="lazy" srcset="./light/finboardhighfidelityprototype.webp 1440w, ./finboardhighfidelityprototype.png 2800w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">The high-fidelity pass brought it onto the real surfaces. Widgets stack on the Home Screen, the Lock Screen carries a glance with no unlock, and the Dynamic Island animates each transaction, the weekly pace, and the AI summary. Inside, five screens, Home, AI Forecast, Bills, Cards, and Settings, turn the glance into detail, and a shared component set keeps the widgets, Dynamic Island, and bank tokens consistent.</p>
   </div>
 
@@ -2057,29 +2057,8 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     revealEls.forEach(function(el){ rio.observe(el); });
   }
 
-  if(!supported) return;
-
-  /* ---- snapshot videos: defer the poster until the clip nears the viewport,
-     play once it is in view, pause when it leaves. The mp4 (preload=none)
-     only downloads on play, so nothing below the fold loads up front. ---- */
-  var vids = document.querySelectorAll('.snap-vid');
-  var posterIO = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      var v = e.target;
-      if(e.isIntersecting && v.dataset.poster && !v.getAttribute('poster')){
-        v.setAttribute('poster', v.dataset.poster);
-        posterIO.unobserve(v);
-      }
-    });
-  }, { rootMargin:'300px 0px', threshold:0 });
-  var playIO = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      var v = e.target;
-      if(e.isIntersecting){ v.muted = true; v.play().catch(function(){}); }
-      else if(!v.paused){ v.pause(); }
-    });
-  }, { threshold:0.25 });
-  vids.forEach(function(v){ posterIO.observe(v); playIO.observe(v); });
+  /* Posters, clip fetching, playback and buffer release are all handled
+     by the media governor in lazy-video.js. */
 })();
 </script>
 </body>

@@ -1,0 +1,8 @@
+# Backups taken while optimizing media (originals before the faststart remux
+# and before the oversized stills were capped). Not needed to serve the site.
+.bak_faststart/
+.bak_images/
+
+# Build logs from generating the light/ and mid/ variants
+light/_build.log
+mid/_build.log

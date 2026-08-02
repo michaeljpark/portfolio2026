@@ -1939,7 +1939,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
 <header class="hero wrap">
   <div class="hero-video">
-    <video class="lazy-vid" data-src="./ongenthumb.mp4" poster="./posters/ongenthumb.jpg?v=20260723"
+    <video class="lazy-vid" data-src="./ongenthumb.mp4" data-poster="./posters/ongenthumb.jpg?v=20260723"
            loop muted playsinline preload="none"></video>
   </div>
   <div class="hero-greeting">Thesis Project</div>
@@ -1957,7 +1957,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
 <section class="phase-flat">
   <div class="chapter-media-duo">
-    <div class="cell m1"><img src="./IMG_5507.jpg" alt="" loading="lazy" /></div>
+    <div class="cell m1"><img src="./IMG_5507.jpg" alt="" loading="lazy" srcset="./light/IMG_5507.webp 1440w, ./IMG_5507.jpg 2250w" sizes="(max-width: 880px) 95vw, 46vw" /></div>
     <div class="cell m2"><img src="./IMG_5493_1.jpg" alt="" loading="lazy" /></div>
     <div class="cell m3"><video class="snap-vid" src="./Showcasingongen1.mp4?v=20260721" data-poster="./posters/showcasingongen1.jpg?v=20260721" loop muted playsinline preload="none"></video></div>
   </div>
@@ -1987,7 +1987,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <h3 class="subsec-title">Potential Clients</h3>
     <p class="phase-note">The OS providers OnGen AR could realistically run on.</p>
-    <img class="subsec-img" src="./Client.png" alt="Potential OS providers: Meta, Rokid, and Apple" loading="lazy" />
+    <img class="subsec-img" src="./Client.png" alt="Potential OS providers: Meta, Rokid, and Apple" loading="lazy" srcset="./light/Client.webp 1440w, ./Client.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">Meta, Rokid, and Apple's upcoming glasses are potential service providers, and a basic precondition for scaling OnGen AR. The field is still experimental, and since most experiences today rely on mobile and laptop interaction models, I found that AR itself is not yet effective. This pointed to the need for interaction built on the growing adoption of AR devices.</p>
   </div>
 </section>
@@ -1995,11 +1995,11 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 <section class="phase-flat">
   <div class="phase-num">03</div>
   <div class="phase-name">Discovery</div>
-  <img class="subsec-img" src="./ongenthesisquestions.png" alt="Problem definition: moving AR interaction beyond the smartphone" loading="lazy" />
+  <img class="subsec-img" src="./ongenthesisquestions.png" alt="Problem definition: moving AR interaction beyond the smartphone" loading="lazy" srcset="./light/ongenthesisquestions.webp 1440w, ./ongenthesisquestions.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">The AR display market is growing quickly, and it points to strong potential demand, yet today's AR glasses still sit as an accessory to the phone. To move past that limit, I set the project's research direction toward maximizing the user's AR experience.</p>
-  <img class="subsec-img" src="./ongenresearch0.png" alt="User journey and experience strategy" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" />
+  <img class="subsec-img" src="./ongenresearch0.png" alt="User journey and experience strategy" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/ongenresearch0.webp 1440w, ./ongenresearch0.png 2808w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">I mapped the user journey and the possibilities a user might experience, and built a strategy to optimize that experience. Five peers and two supervising faculty, Alexander Manu and Bernard Dietz, critiqued the work, and I used their feedback to design the actual survey, shaping it in line with TCPS 2. Together with existing research, Survey Phase 1 gave a baseline read on user behavior and set up Phase 2.</p>
-  <img class="subsec-img" src="./ongensurveyplan.png" alt="Survey plan and MVP prototype context" loading="lazy" />
+  <img class="subsec-img" src="./ongensurveyplan.png" alt="Survey plan and MVP prototype context" loading="lazy" srcset="./light/ongensurveyplan.webp 1440w, ./ongensurveyplan.png 2808w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">Building on the points confirmed in the earlier stage, I ran the hypothesis validation through a Google Form survey with 22 respondents. To ground their answers, I published an MVP prototype that supported basic interaction and provided it as context.</p>
 
   <div class="subsec">
@@ -2017,7 +2017,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
   <div class="subsec">
     <div class="subsec-title">Survey Result - Phase 1</div>
-    <img class="subsec-img" src="./ongensurveyresult.png" alt="Survey results dashboard and qualitative prompts" loading="lazy" />
+    <img class="subsec-img" src="./ongensurveyresult.png" alt="Survey results dashboard and qualitative prompts" loading="lazy" srcset="./light/ongensurveyresult.webp 1440w, ./ongensurveyresult.png 2808w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">I built statistics and a dashboard to gauge how ready real users are for AR experiences and how they feel about AI being part of them. As part of the qualitative research, I collected a range of user prompts that surfaced concrete excitement and concerns.</p>
   </div>
 
@@ -2039,7 +2039,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="phase-num">04</div>
   <div class="phase-name">Prototyping</div>
   <p class="phase-desc">The prototype was built from computer-science components. Because the service runs on AI, I set up an environment that connects to AI APIs and runs a local AI, and carried out the experiments there.</p>
-  <img class="subsec-img" src="./ongenresearch2.png" alt="VS Code build of the OnGen AR prototype" loading="lazy" />
+  <img class="subsec-img" src="./ongenresearch2.png" alt="VS Code build of the OnGen AR prototype" loading="lazy" srcset="./light/ongenresearch2.webp 1440w, ./ongenresearch2.png 2372w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">Built entirely in VS Code, the prototype runs as a small full-stack app.</p>
   <ul class="build-list">
     <li><span class="k">Python</span><span class="v">Server for the local AI and the backend.</span></li>
@@ -2050,7 +2050,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
   <div class="subsec">
     <div class="subsec-title">Figma Design System</div>
-    <img class="subsec-img" src="./ongenprototype2.png" alt="Figma design system: dashboard, components, type ramp, and the downtown Toronto map" loading="lazy" />
+    <img class="subsec-img" src="./ongenprototype2.png" alt="Figma design system: dashboard, components, type ramp, and the downtown Toronto map" loading="lazy" srcset="./light/ongenprototype2.webp 1440w, ./ongenprototype2.png 2800w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">I built the OnGen interface as a design system in Figma, a web-based resource that gathers the dashboard, components, type ramp, and the downtown map in one place. It cannot run inside an actual AR device, but it let me design the whole interface as a single coherent concept and use it as the visual reference for the build. Along the way, I took critique at Gate 5 and Gate 6, which let me refine the finer interaction details.</p>
   </div>
 
@@ -2064,7 +2064,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
   <div class="subsec">
     <div class="subsec-title">Firebase Data Pipeline</div>
-    <img class="subsec-img" src="./ongenfirebaseoverview.png" alt="Firestore collections holding AR interaction sessions and community radio data" loading="lazy" />
+    <img class="subsec-img" src="./ongenfirebaseoverview.png" alt="Firestore collections holding AR interaction sessions and community radio data" loading="lazy" srcset="./light/ongenfirebaseoverview.webp 1440w, ./ongenfirebaseoverview.png 2836w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">Through Firebase, I captured user interaction data in detail, from micro-interactions to retention and how users responded, and set the project up to update itself recursively from that data. I designed it to parse and extract the data as well, so the interactions could be analyzed directly.</p>
   </div>
 
@@ -2106,13 +2106,13 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="phase-name">Conclusion</div>
   <div class="phase-sub">GradEX 111 Showcase</div>
   <div class="gradex-row">
-    <figure class="v"><img src="./IMG_5357.png" alt="OnGen AR on show at GradEX 111" loading="lazy" /></figure>
+    <figure class="v"><img src="./IMG_5357.png" alt="OnGen AR on show at GradEX 111" loading="lazy" srcset="./light/IMG_5357.webp 1440w, ./IMG_5357.png 1792w" sizes="(max-width: 1500px) 95vw, 1425px" /></figure>
     <figure class="a"><img src="./gradex1.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" /></figure>
-    <figure class="b"><img src="./gradex2.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" /></figure>
-    <figure class="c"><img src="./gradex3.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" /></figure>
+    <figure class="b"><img src="./gradex2.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" srcset="./light/gradex2.webp 1440w, ./gradex2.jpg 2054w" sizes="(max-width: 880px) 95vw, 33vw" /></figure>
+    <figure class="c"><img src="./gradex3.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" srcset="./light/gradex3.webp 1440w, ./gradex3.jpg 2696w" sizes="(max-width: 880px) 95vw, 33vw" /></figure>
   </div>
   <p class="gradex-cap">OnGen AR on show at GradEX 111, OCAD University.</p>
-  <img class="subsec-img" src="./ongenresearch1.png" alt="Final research: system value and analysis" loading="lazy" style="margin-top:clamp(48px,7vw,90px);" />
+  <img class="subsec-img" src="./ongenresearch1.png" alt="Final research: system value and analysis" loading="lazy" style="margin-top:clamp(48px,7vw,90px);" srcset="./light/ongenresearch1.webp 1440w, ./ongenresearch1.png 2538w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">This board brings together the internal research methods and results I used to build the project. I designed the final academic research for realizing Audio Augmented Reality, and secured the data that follow-up research will need. Establishing a new user flow for AR interaction let me confirm this as a market from a new product-design perspective.</p>
 
   <div class="subsec">
@@ -2126,7 +2126,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Limitations</div>
     <p class="phase-note">SDK access to AR display hardware during the project period.</p>
-    <img class="subsec-img" src="./metaraybansdk.png" alt="Meta Ray-Ban Display SDK availability" loading="lazy" />
+    <img class="subsec-img" src="./metaraybansdk.png" alt="Meta Ray-Ban Display SDK availability" loading="lazy" srcset="./light/metaraybansdk.webp 1440w, ./metaraybansdk.png 2788w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">At the time of this project, Meta had not opened the Ray-Ban Display SDK to developers, so I could not build OnGen onto the device it was designed for. This was the main constraint on the project and the one dependency I could not design around. I therefore ran the showcase on a web app I built myself with HTML and Python, which means what visitors experienced may not have matched the intended AR interaction exactly. Once the SDK is released to developers, OnGen can run on the actual hardware and the project moves into full development.</p>
   </div>
 </section>
@@ -2157,29 +2157,8 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     revealEls.forEach(function(el){ rio.observe(el); });
   }
 
-  if(!supported) return;
-
-  /* ---- snapshot videos: defer the poster until the clip nears the viewport,
-     play once it is in view, pause when it leaves. The mp4 (preload=none)
-     only downloads on play, so nothing below the fold loads up front. ---- */
-  var vids = document.querySelectorAll('.snap-vid');
-  var posterIO = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      var v = e.target;
-      if(e.isIntersecting && v.dataset.poster && !v.getAttribute('poster')){
-        v.setAttribute('poster', v.dataset.poster);
-        posterIO.unobserve(v);
-      }
-    });
-  }, { rootMargin:'300px 0px', threshold:0 });
-  var playIO = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      var v = e.target;
-      if(e.isIntersecting){ v.muted = true; v.play().catch(function(){}); }
-      else if(!v.paused){ v.pause(); }
-    });
-  }, { threshold:0.25 });
-  vids.forEach(function(v){ posterIO.observe(v); playIO.observe(v); });
+  /* Posters, clip fetching, playback and buffer release are all handled
+     by the media governor in lazy-video.js. */
 })();
 </script>
 </body>
