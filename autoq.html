@@ -359,6 +359,14 @@
 <style>
 html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 </style>
+<script>/* Mark touch devices before first paint and drop the live blur behind the
+   sticky bars: phones recompute it on every scrolled frame. */
+try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
+  document.documentElement.className+=" touch-ui";
+  var s=document.createElement("style");
+  s.textContent="html.touch-ui nav.top,html.touch-ui .phase-toggle{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--bg)!important}";
+  document.head.appendChild(s);
+}}catch(e){}</script>
 </head>
 <body>
 <style>
@@ -1156,6 +1164,6 @@ function togglePhase(el){
 }
 (function(){ var n=document.querySelector('nav.top'); if(n) document.documentElement.style.setProperty('--nav-h', n.offsetHeight+'px'); })();
 </script>
-<script src="./lazy-video.js"></script>
+<script src="./lazy-video.js?v=20260805"></script>
 </body>
 </html>

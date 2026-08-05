@@ -32,15 +32,18 @@
   } catch (e) {}
 
   var root = document.documentElement;
-  var isMobile = false, canHover = false, reduceMotion = false;
+  var isMobile = false, canHover = false, reduceMotion = false, isTouch = false;
   try { isMobile = matchMedia('(max-width:880px)').matches; } catch (e) {}
   try { canHover = matchMedia('(hover:hover) and (pointer:fine)').matches; } catch (e) {}
   try { reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  try { isTouch = matchMedia('(hover:none) and (pointer:coarse)').matches; } catch (e) {}
+  if (isTouch) root.classList.add('touch-ui');
 
   /* ---------------- visitor profile ---------------- */
 
   var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
   var P = {};
+  var holdVideo = false;          /* true only when the visitor asked to save data */
 
   function readProfile() {
     var et = (conn && conn.effectiveType) || '4g';
@@ -48,9 +51,16 @@
     var mem = navigator.deviceMemory || 4;
     var cores = navigator.hardwareConcurrency || 4;
 
-    /* tier 0 keeps every clip as a still until it is asked for */
+    /* Only an explicit Save-Data request holds video back entirely. A slow
+       link still plays the clip being looked at, one at a time and from the
+       smallest copy, because a page of stills with play buttons on them
+       reads as broken rather than as considerate. A reduced-motion
+       preference is likewise not a reason to stop the clips: here they are
+       the case study itself, not decoration (see .anim-hold below). */
+    holdVideo = save;
+
     var tier;
-    if (save || et === 'slow-2g' || et === '2g' || reduceMotion) tier = 0;
+    if (save || et === 'slow-2g' || et === '2g') tier = 0;
     else if (et === '3g' || mem <= 2 || cores <= 2) tier = 1;
     else if (mem <= 4 || cores <= 4) tier = 2;
     else tier = 3;
@@ -62,7 +72,7 @@
       memory: mem,
       cores: cores,
       /* how many clips may hold a buffer and run at once */
-      budget: [0, 1, 2, 3][tier],
+      budget: holdVideo ? 0 : [1, 1, 2, 3][tier],
       /* px outside the viewport at which a poster is fetched */
       posterMargin: [120, 300, 600, 900][tier],
       /* viewport heights outside the viewport at which a clip is released */
@@ -70,7 +80,7 @@
     };
 
     root.classList.toggle('low-power', tier <= 1);
-    root.classList.toggle('no-autovid', tier === 0);
+    root.classList.toggle('no-autovid', holdVideo);
     return P;
   }
   readProfile();
@@ -112,25 +122,28 @@
 
   function applyTier(t, kbps) {
     P.tier = t;
-    P.budget = [0, 1, 2, 3][t];
+    P.budget = holdVideo ? 0 : [1, 1, 2, 3][t];
     P.posterMargin = [120, 300, 600, 900][t];
     P.releaseAt = [0.35, 0.6, 1.2, 2][t];
     P.measuredKbps = Math.round(kbps);
     root.classList.toggle('low-power', t <= 1);
-    root.classList.toggle('no-autovid', t === 0);
+    root.classList.toggle('no-autovid', holdVideo);
     if (document.body) { trimImageCandidates(); markTapTargets(); }
     schedule();
   }
 
-  /* Badge the clips that are waiting on a tap: everything when autoplay is
-     off, nothing otherwise. */
+  /* Badge only the clips that really are waiting on a tap: one the browser
+     refused to start, or all of them when Save-Data is on. A slow connection
+     alone never puts a play button on the page. */
   function markTapTargets() {
     if (!vids) return;                               /* called before setup */
     for (var i = 0; i < vids.length; i++) {
       var v = vids[i];
       var host = v.parentElement;
       if (!host || v._hover) continue;
-      var wants = P.tier === 0 && !v._mounted;
+      /* Must be a real boolean: classList.toggle treats undefined as
+         "no preference" and flips the class instead of clearing it. */
+      var wants = !!((holdVideo || v._blocked) && (!v._mounted || v.paused));
       if (wants === !!v._tapMarked) continue;
       v._tapMarked = wants;
       host.classList.toggle('gov-tap', wants);
@@ -147,7 +160,7 @@
   function refineTier() {
     var kbps = observedKbps();
     if (!kbps) return;
-    var capped = kbps < 700 ? 0 : kbps < 2500 ? 1 : kbps < 8000 ? 2 : 3;
+    var capped = kbps < 500 ? 0 : kbps < 2500 ? 1 : kbps < 8000 ? 2 : 3;
     var next = Math.min(floorTier, capped);
     if (next === P.tier) { pendingUp = -1; return; }
     if (next > P.tier && pendingUp !== next) { pendingUp = next; return; }
@@ -165,6 +178,13 @@
         'backdrop-filter:none!important;-webkit-backdrop-filter:none!important;' +
         'will-change:auto!important}' +
       'html.low-power nav.top,html.low-power .phase-toggle{background:var(--bg)!important}' +
+      /* A live blur behind a sticky bar is recomputed on every scrolled frame.
+         Phones feel that; pointer devices do not, so only they keep it. */
+      'html.touch-ui nav.top,html.touch-ui .phase-toggle{' +
+        'backdrop-filter:none!important;-webkit-backdrop-filter:none!important;' +
+        'background:var(--bg)!important}' +
+      '.anim-hold,.anim-hold *,.anim-hold::before,.anim-hold::after{' +
+        'animation-play-state:paused!important}' +
       /* Nothing plays by itself at this point, so say so rather than
          leaving what looks like a broken still. */
       '.gov-tap{position:relative}' +
@@ -233,7 +253,7 @@
     if (P.tier <= 1 || v._forceLight) return 'light';
     var need = boxWidth(v) * Math.min(window.devicePixelRatio || 1, 1.5);
     if (!need) return 'mid';
-    if (need <= 1450) return 'light';
+    if (need <= 1300) return 'light';
     if (need <= 2600 || P.tier <= 2) return 'mid';
     return null;                                     /* original */
   }
@@ -265,7 +285,9 @@
 
   function mount(v) {
     showPoster(v);
-    if (!opened || v._mounted) return;
+    /* Whatever is already on screen is the reason the visitor is here, so it
+       does not wait behind the rest of the page. */
+    if ((!opened && !v._aboveFold) || v._mounted) return;
     var s = srcFor(v);
     if (!s) return;
     v._mounted = 1;
@@ -283,6 +305,7 @@
     if (!v._mounted) return;
     v._mounted = 0;
     v._forced = 0;
+    v._blocked = 0;
     v._loadedSrc = '';
     try { v.pause(); } catch (e) {}
     v.removeAttribute('src');
@@ -290,12 +313,27 @@
     try { v.load(); } catch (e) {}
   }
 
+  /* Autoplay can be refused for reasons the page cannot see: Low Power Mode
+     on iOS, a per-site setting, a policy that wants a gesture first. When
+     that happens the clip must not just sit there looking broken, so it gets
+     a play control and starts on the next tap. */
   function play(v) {
     v.muted = true;
     v.setAttribute('playsinline', '');
     v.setAttribute('webkit-playsinline', '');
     var pr = v.play();
-    if (pr && pr.catch) pr.catch(function () {});
+    if (pr && pr.then) {
+      pr.then(function () {
+        if (v._blocked) { v._blocked = 0; markTapTargets(); }
+      }, function (err) {
+        /* The governor interrupts its own play() calls all the time: handing
+           the slot to a nearer clip pauses this one, and scrolling away
+           releases it. Both reject with AbortError and mean nothing is
+           wrong. Only an outright refusal deserves a play control. */
+        if (!err || err.name !== 'NotAllowedError') return;
+        if (!v._blocked) { v._blocked = 1; markTapTargets(); }
+      });
+    }
   }
 
   function pause(v) { if (!v.paused) { try { v.pause(); } catch (e) {} } }
@@ -314,6 +352,7 @@
     if (document.hidden) { for (var h = 0; h < vids.length; h++) pause(vids[h]); return; }
 
     var vh = window.innerHeight || 1;
+    var vw = window.innerWidth || 1;
     var live = [];
 
     for (var i = 0; i < vids.length; i++) {
@@ -321,20 +360,26 @@
       var r = v.getBoundingClientRect();
       if (!r.width && !r.height) continue;          /* not laid out */
 
-      /* px between the element and the nearest viewport edge */
-      var gap = r.top > vh ? r.top - vh : (r.bottom < 0 ? -r.bottom : 0);
+      /* A card carousel slides its clips sideways while leaving them at the
+         same height, so both axes have to decide what is really on screen.
+         Judging by height alone would run the clip that sits off to the
+         left and leave the one being looked at frozen on its still. */
+      var gapY = r.top > vh ? r.top - vh : (r.bottom < 0 ? -r.bottom : 0);
+      var gapX = r.left > vw ? r.left - vw : (r.right < 0 ? -r.right : 0);
 
       /* every card earns its still, hover-driven ones included */
-      if (gap <= P.posterMargin) showPoster(v);
+      if (Math.max(gapY, gapX) <= P.posterMargin) showPoster(v);
 
       if (v._hover) continue;                       /* pointer drives the rest */
 
-      if (gap > P.releaseAt * vh) { unmount(v); continue; }
+      if (gapY > P.releaseAt * vh || gapX > P.releaseAt * vw) { unmount(v); continue; }
 
-      if (r.bottom > 0 && r.top < vh) {
+      if (r.bottom > 0 && r.top < vh && r.right > 0 && r.left < vw) {
+        var dx = (r.left + r.width / 2) - vw / 2;
+        var dy = (r.top + r.height / 2) - vh / 2;
         live.push({
           v: v,
-          d: Math.abs((r.top + r.height / 2) - vh / 2),
+          d: Math.sqrt(dx * dx + dy * dy),
           big: r.height > vh * 0.55
         });
       } else {
@@ -348,6 +393,8 @@
        gets the page to itself; a grid of small cards may share. */
     var budget = P.budget;
     if (live.length && live[0].big) budget = Math.min(budget, 1);
+    /* Phones pay far more per decoding video than desktops do. */
+    if (isTouch) budget = Math.min(budget, 1);
 
     for (var j = 0; j < live.length; j++) {
       var e = live[j];
@@ -430,14 +477,16 @@
     for (var j = 0; j < vids.length; j++) {
       var r = vids[j].getBoundingClientRect();
       if (r.bottom > -200 && r.top < vh + 200) showPoster(vids[j]);
+      if (r.bottom > 0 && r.top < vh) vids[j]._aboveFold = 1;
     }
     runPass();
 
     if (document.readyState === 'complete') openGate();
     else {
       window.addEventListener('load', openGate, { once: true });
-      setTimeout(openGate, 3000);                    /* never stall on a slow asset */
+      setTimeout(openGate, 1500);                    /* never stall on a slow asset */
     }
+    setTimeout(holdOffscreenAnimations, 0);
   }
 
   function openGate() {
@@ -493,6 +542,53 @@
     }
   }
 
+  /* The decorative loops on these pages are declared `infinite`, so they keep
+     the compositor working even while they are far off screen. That is barely
+     noticeable on a desktop and very noticeable on a phone. Read the
+     stylesheets to find what animates, then let each one run only while it is
+     somewhere near the viewport. */
+  function collectAnimated(rules, out) {
+    for (var i = 0; i < rules.length; i++) {
+      var r = rules[i];
+      if (r.name) continue;                          /* @keyframes body */
+      if (r.cssRules) { collectAnimated(r.cssRules, out); continue; }
+      if (!r.selectorText || !r.style) continue;
+      var name = r.style.animationName || r.style.webkitAnimationName;
+      if (!name || name === 'none') continue;
+      /* A pseudo-element cannot be observed, so watch the element that owns it. */
+      var parts = r.selectorText.replace(/::?(before|after|marker|placeholder|selection)\b/g, '').split(',');
+      for (var k = 0; k < parts.length; k++) {
+        var sel = parts[k].trim();
+        if (sel && out.indexOf(sel) === -1) out.push(sel);
+      }
+    }
+  }
+
+  function holdOffscreenAnimations() {
+    if (!('IntersectionObserver' in window)) return;
+    var selectors = [];
+    for (var i = 0; i < document.styleSheets.length; i++) {
+      var rules;
+      try { rules = document.styleSheets[i].cssRules; } catch (e) { continue; }
+      if (rules) collectAnimated(rules, selectors);
+    }
+    if (!selectors.length) return;
+
+    var targets;
+    try { targets = document.querySelectorAll(selectors.join(',')); } catch (e) { return; }
+    if (!targets.length) return;
+
+    var aio = new IntersectionObserver(function (entries) {
+      for (var k = 0; k < entries.length; k++) {
+        entries[k].target.classList.toggle('anim-hold', !entries[k].isIntersecting);
+      }
+    }, { rootMargin: '200px 0px' });
+    for (var j = 0; j < targets.length; j++) {
+      if (reduceMotion) targets[j].classList.add('anim-hold');   /* held for good */
+      else aio.observe(targets[j]);
+    }
+  }
+
   /* Tap a still to start it when autoplay is off (tier 0) or when the
      concurrency budget is already spoken for. */
   document.addEventListener('click', function (ev) {
@@ -515,7 +611,9 @@
     });
   }
 
-  window.addEventListener('scroll', schedule, { passive: true });
+  /* Capture phase, because a carousel scrolling inside the page does not
+     bubble its scroll events up to the window. */
+  document.addEventListener('scroll', schedule, { passive: true, capture: true });
   window.addEventListener('resize', function () {
     try { isMobile = matchMedia('(max-width:880px)').matches; } catch (e) {}
     schedule();
@@ -528,12 +626,12 @@
     else schedule();
   });
 
-  /* Autoplay stays blocked until the first gesture on some browsers. */
-  ['touchend', 'pointerdown', 'click'].forEach(function (name) {
-    document.addEventListener(name, function once() {
-      document.removeEventListener(name, once);
-      schedule();
-    }, { once: true, passive: true });
+  /* Some browsers only allow playback once the visitor has interacted, and
+     the refusal can come back after a tab switch, so keep retrying on every
+     gesture rather than just the first. The pass is rAF-coalesced, so this
+     costs nothing when there is nothing to do. */
+  ['touchend', 'pointerdown'].forEach(function (name) {
+    document.addEventListener(name, schedule, { passive: true });
   });
 
   /* Keep looping even where the loop attribute is missing. */

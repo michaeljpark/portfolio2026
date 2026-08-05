@@ -1922,6 +1922,14 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   .reveal-on .subsec-video{ opacity:1; transition:none; }
 }
 </style>
+<script>/* Mark touch devices before first paint and drop the live blur behind the
+   sticky bars: phones recompute it on every scrolled frame. */
+try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
+  document.documentElement.className+=" touch-ui";
+  var s=document.createElement("style");
+  s.textContent="html.touch-ui nav.top,html.touch-ui .phase-toggle{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--bg)!important}";
+  document.head.appendChild(s);
+}}catch(e){}</script>
 </head>
 <body>
 
@@ -1959,7 +1967,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="chapter-media-duo">
     <div class="cell m1"><img src="./IMG_5507.jpg" alt="" loading="lazy" srcset="./light/IMG_5507.webp 1440w, ./IMG_5507.jpg 2250w" sizes="(max-width: 880px) 95vw, 46vw" /></div>
     <div class="cell m2"><img src="./IMG_5493_1.jpg" alt="" loading="lazy" /></div>
-    <div class="cell m3"><video class="snap-vid" src="./Showcasingongen1.mp4?v=20260721" data-poster="./posters/showcasingongen1.jpg?v=20260721" loop muted playsinline preload="none"></video></div>
+    <div class="cell m3"><video class="snap-vid" data-src="./Showcasingongen1.mp4?v=20260721" data-poster="./posters/showcasingongen1.jpg?v=20260721" loop muted playsinline preload="none"></video></div>
   </div>
   <div class="phase-num">01</div>
   <div class="phase-name">Overview</div>
@@ -1972,7 +1980,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     <h3 class="subsec-title">Snapshot</h3>
     <p class="subsec-lead">OnGen AR is a geolocation intelligence that reconstructs the city you might miss, or the one you care about, and brings it closer.</p>
     <div class="subsec-video">
-      <video class="snap-vid" src="./ongensnapshot.mp4?v=20260731b" data-poster="./posters/ongensnapshot.jpg?v=20260731b"
+      <video class="snap-vid" data-src="./ongensnapshot.mp4?v=20260731b" data-poster="./posters/ongensnapshot.jpg?v=20260731b"
              loop muted playsinline preload="none"></video>
     </div>
   </div>
@@ -2005,7 +2013,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Low-fidelity Conceptual MVP</div>
     <div class="subsec-video wide">
-      <video class="snap-vid" src="./ongenprepilotoverview.mp4?v=20260722" data-poster="./posters/ongenprepilotoverview.jpg?v=20260722" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" data-src="./ongenprepilotoverview.mp4?v=20260722" data-poster="./posters/ongenprepilotoverview.jpg?v=20260722" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">I ran a digital showcase of what OnGen AR does, so people could respond to something concrete instead of a description. Each person went through the interaction first and answered the survey afterward. Thirteen of the 22 respondents interacted with the working app directly.</p>
     <ul class="build-list features">
@@ -2024,7 +2032,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Confirmed Concept Direction</div>
     <div class="subsec-video wide">
-      <video class="snap-vid" src="./ongenconceptoverview.mp4?v=20260727" data-poster="./posters/ongenconceptoverview.jpg?v=20260728" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" data-src="./ongenconceptoverview.mp4?v=20260727" data-poster="./posters/ongenconceptoverview.jpg?v=20260728" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">After the pre-pilot and the survey, I confirmed the direction. OnGen curates nearby local information and each user's interests, and for the interaction itself it uses the camera to map that content onto the real terrain, so the space around the user becomes the experience.</p>
     <ul class="build-list features">
@@ -2057,7 +2065,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Gate 5 Mid-point Showcase</div>
     <div class="subsec-video">
-      <video class="snap-vid" src="./ongenprototyping1.mp4?v=20260727b" data-poster="./posters/ongenprototyping1.jpg?v=20260727b" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" data-src="./ongenprototyping1.mp4?v=20260727b" data-poster="./posters/ongenprototyping1.jpg?v=20260727b" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">Before I published to Firebase, I showed this build as a mid-point check at Gate 5, around February, during the faculty and peer critique. The showcase made clear that the interaction still fell short of the AR premise in many places, and I used that feedback to reset the project's direction.</p>
   </div>
@@ -2071,7 +2079,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Tracking Process</div>
     <div class="subsec-video">
-      <video class="snap-vid" src="./ongentrackingprocess.mp4?v=20260802" data-poster="./posters/ongentrackingprocess.jpg?v=20260802" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" data-src="./ongentrackingprocess.mp4?v=20260802" data-poster="./posters/ongentrackingprocess.jpg?v=20260802" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">This breaks the overlay into its steps. I start from the raw scene, scan the site into a rough 3D model, build the digital layer against that model, and composite it back into the viewpoint, so the content lines up with the real buildings.</p>
   </div>
@@ -2079,7 +2087,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Spatial Feed</div>
     <div class="subsec-video">
-      <video class="snap-vid" src="./ongenprototyping3.mp4?v=20260802" data-poster="./posters/ongenprototyping3.jpg?v=20260802" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" data-src="./ongenprototyping3.mp4?v=20260802" data-poster="./posters/ongenprototyping3.jpg?v=20260802" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">The feed lives in space rather than in a list. Each post is pinned to where it happened, carrying its bearing, distance, and how many people are listening nearby, so the city itself becomes the timeline.</p>
   </div>
@@ -2087,7 +2095,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Daytime Preview</div>
     <div class="subsec-video wide">
-      <video class="snap-vid" src="./ongendaytime.mp4?v=20260727" data-poster="./posters/ongendaytime.jpg?v=20260727" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" data-src="./ongendaytime.mp4?v=20260727" data-poster="./posters/ongendaytime.jpg?v=20260727" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">On the display of an actual AR device, the digital layer overlays the physical layer to create a sense of immersion.</p>
   </div>
@@ -2095,7 +2103,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Nighttime Preview</div>
     <div class="subsec-video wide">
-      <video class="snap-vid" src="./ongennighttime.mp4?v=20260728" data-poster="./posters/ongennighttime.jpg?v=20260728" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" data-src="./ongennighttime.mp4?v=20260728" data-poster="./posters/ongennighttime.jpg?v=20260728" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">At night the same overlay holds, with the digital layer mapping onto the lit-up street to keep the space immersive.</p>
   </div>
@@ -2118,7 +2126,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Spatial Intelligence</div>
     <div class="subsec-video">
-      <video class="snap-vid" src="./ongenglassview1.mp4?v=20260723" data-poster="./posters/ongenglassview1.jpg?v=20260723" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" data-src="./ongenglassview1.mp4?v=20260723" data-poster="./posters/ongenglassview1.jpg?v=20260723" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">Building spatial intelligence was the core of the OnGen project. It is a product meant to widen the practical use of AR hardware, and a project that connects the digital and the physical. As AR glasses are expected to gain more capability, it holds real room to grow.</p>
   </div>
@@ -2135,7 +2143,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
 </footer>
 
-<script src="./lazy-video.js"></script>
+<script src="./lazy-video.js?v=20260805"></script>
 <script>
 (function(){
   var supported = 'IntersectionObserver' in window;

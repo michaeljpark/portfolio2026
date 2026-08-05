@@ -1922,6 +1922,14 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   .reveal-on .subsec-video{ opacity:1; transition:none; }
 }
 </style>
+<script>/* Mark touch devices before first paint and drop the live blur behind the
+   sticky bars: phones recompute it on every scrolled frame. */
+try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
+  document.documentElement.className+=" touch-ui";
+  var s=document.createElement("style");
+  s.textContent="html.touch-ui nav.top,html.touch-ui .phase-toggle{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--bg)!important}";
+  document.head.appendChild(s);
+}}catch(e){}</script>
 </head>
 <body>
 
@@ -2003,7 +2011,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Widget</div>
     <div class="subsec-video native">
-      <video class="snap-vid" src="./finboardanimation1.mp4?v=20260728" data-poster="./posters/finboardanimation1.jpg?v=20260728" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" data-src="./finboardanimation1.mp4?v=20260728" data-poster="./posters/finboardanimation1.jpg?v=20260728" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">The widgets update on their own on the Home Screen, so one glance is enough to read the day's spending, the weekly pace, and the AI note, without opening the app.</p>
   </div>
@@ -2011,7 +2019,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">Widget Controls</div>
     <div class="subsec-video native">
-      <video class="snap-vid" src="./finboardanimation2.mp4?v=20260728" data-poster="./posters/finboardanimation2.jpg?v=20260728" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" data-src="./finboardanimation2.mp4?v=20260728" data-poster="./posters/finboardanimation2.jpg?v=20260728" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">The controls widget is interactive on the Home Screen itself. A person sets the daily limit and toggles alerts in place, so the widget is a surface to act on, not only to read.</p>
   </div>
@@ -2019,7 +2027,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <div class="subsec">
     <div class="subsec-title">In-app</div>
     <div class="subsec-video native">
-      <video class="snap-vid" src="./finboardanimation3.mp4?v=20260728" data-poster="./posters/finboardanimation3.jpg?v=20260728" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" data-src="./finboardanimation3.mp4?v=20260728" data-poster="./posters/finboardanimation3.jpg?v=20260728" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">Opening finboard turns the glance into detail, moving across Home, AI Forecast, Bills, Cards, and Settings, where the widgets the user installed are managed and explained.</p>
   </div>
@@ -2035,7 +2043,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
 </footer>
 
-<script src="./lazy-video.js"></script>
+<script src="./lazy-video.js?v=20260805"></script>
 <script>
 (function(){
   var supported = 'IntersectionObserver' in window;
