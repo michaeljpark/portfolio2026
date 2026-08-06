@@ -1700,7 +1700,9 @@
     .chapter-media-duo .m3{ aspect-ratio:6/5; }
     /* stack the GradEX photos on phones */
     .gradex-row{ flex-direction:column; height:auto; gap:10px; }
-    .gradex-row figure{ flex:none; }
+    /* must match the .gradex-row .v/.a/.b/.c specificity, or flex-basis:0
+       stays in force and every stacked figure collapses to zero height */
+    .gradex-row .v, .gradex-row .a, .gradex-row .b, .gradex-row .c{ flex:none; }
     .gradex-row .v{ aspect-ratio:4/3; }
     .gradex-row .a, .gradex-row .c{ aspect-ratio:4/3; }
     .gradex-row .b{ aspect-ratio:3/4; }
@@ -2114,7 +2116,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="phase-name">Conclusion</div>
   <div class="phase-sub">GradEX 111 Showcase</div>
   <div class="gradex-row">
-    <figure class="v"><img src="./IMG_5357.png" alt="OnGen AR on show at GradEX 111" loading="lazy" srcset="./light/IMG_5357.webp 1440w, ./IMG_5357.png 1792w" sizes="(max-width: 1500px) 95vw, 1425px" /></figure>
+    <figure class="v"><img src="./ongenrad1.png" alt="OnGen AR on show at GradEX 111, with the Reimagined Radio in AR board and the ON AIR sign" loading="lazy" srcset="./light/ongenrad1.webp 1024w, ./ongenrad1.png 1024w" sizes="(max-width: 880px) 95vw, 28vw" /></figure>
     <figure class="a"><img src="./gradex1.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" /></figure>
     <figure class="b"><img src="./gradex2.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" srcset="./light/gradex2.webp 1440w, ./gradex2.jpg 2054w" sizes="(max-width: 880px) 95vw, 33vw" /></figure>
     <figure class="c"><img src="./gradex3.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" srcset="./light/gradex3.webp 1440w, ./gradex3.jpg 2696w" sizes="(max-width: 880px) 95vw, 33vw" /></figure>
