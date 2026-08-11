@@ -1623,6 +1623,16 @@
   .chapter-media-duo .m1{ flex:1.777 1 0; }  /* IMG_5507 16:9 */
   .chapter-media-duo .m2{ flex:0.75 1 0; }   /* IMG_5493(1) portrait 3:4 */
   .chapter-media-duo .m3{ flex:1.2 1 0; }    /* showcase video 6:5 */
+  /* four-up preview row. Each weight is the image's own aspect ratio, and the
+     row height is set so the four widths add up to the content measure, which
+     is what keeps the cover crop at zero instead of trimming the sides. */
+  .chapter-media-quad{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(150px,19.7vw,284px); margin-bottom:clamp(32px,4vw,48px); }
+  .chapter-media-quad .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; }
+  .chapter-media-quad .cell img{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
+  .chapter-media-quad .q1{ flex:0.667 1 0; } /* 3000x4500, 2:3  */
+  .chapter-media-quad .q2{ flex:1.335 1 0; } /* 1800x1348, 4:3  */
+  .chapter-media-quad .q3{ flex:1.335 1 0; } /* 1449x1085, 4:3  */
+  .chapter-media-quad .q4{ flex:1.333 1 0; } /* 1448x1086, 4:3  */
   /* subsection within a chapter (e.g. Snapshot inside Overview) */
   .subsec{ margin-top:clamp(48px,6vw,88px); }
   .subsec-title{ font-size:clamp(20px,2vw,30px); font-weight:400; letter-spacing:-0.04em; line-height:1.15; color:var(--ink); }
@@ -1640,6 +1650,7 @@
      so the alpha stays 1 throughout and nothing fades. Same fix as .ongen-work. */
   .hero-video,
   .subsec-video,
+  .chapter-media-quad .cell,
   .chapter-media-duo .cell{
     -webkit-mask-image:-webkit-radial-gradient(white,black);
     mask-image:radial-gradient(white,black);
@@ -1698,6 +1709,13 @@
     .chapter-media-duo .m1{ aspect-ratio:16/9; }
     .chapter-media-duo .m2{ aspect-ratio:3/4; }
     .chapter-media-duo .m3{ aspect-ratio:6/5; }
+    /* stack the preview row too. Class selectors, not `.cell`, so these beat
+       the .q1-.q4 flex weights on specificity rather than losing to them. */
+    .chapter-media-quad{ flex-direction:column; height:auto; gap:10px; }
+    .chapter-media-quad .q1,.chapter-media-quad .q2,
+    .chapter-media-quad .q3,.chapter-media-quad .q4{ flex:none; }
+    .chapter-media-quad .q1{ aspect-ratio:2/3; }
+    .chapter-media-quad .q2,.chapter-media-quad .q3,.chapter-media-quad .q4{ aspect-ratio:4/3; }
     /* stack the GradEX photos on phones */
     .gradex-row{ flex-direction:column; height:auto; gap:10px; }
     .gradex-row figure{ flex:none; }
@@ -1895,6 +1913,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
    scripting is off nothing is ever hidden. ===== */
 .reveal-on .subsec-img,
 .reveal-on .chapter-media-duo,
+.reveal-on .chapter-media-quad,
 .reveal-on .gradex-row,
 .reveal-on .build-list,
 .reveal-on .phase-desc,
@@ -1913,7 +1932,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .reveal-on .subsec-video{ opacity:0; transition:opacity .6s ease; }
 .reveal-on .subsec-video.reveal-in{ opacity:1; }
 @media(prefers-reduced-motion:reduce){
-  .reveal-on .subsec-img,.reveal-on .chapter-media-duo,.reveal-on .gradex-row,
+  .reveal-on .subsec-img,.reveal-on .chapter-media-duo,.reveal-on .chapter-media-quad,.reveal-on .gradex-row,
   .reveal-on .build-list,.reveal-on .phase-desc,.reveal-on .phase-note,
   .reveal-on .phase-num,.reveal-on .phase-name,.reveal-on .phase-sub,
   .reveal-on .subsec-title,.reveal-on .subsec-lead,.reveal-on .gradex-cap{
@@ -1964,6 +1983,12 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </header>
 
 <section class="phase-flat">
+  <div class="chapter-media-quad">
+    <div class="cell q1"><img src="./finboardprev1.png" alt="" loading="lazy" srcset="./light/finboardprev1.webp 1440w, ./finboardprev1.png 3000w" sizes="(max-width: 640px) 95vw, 14vw" /></div>
+    <div class="cell q2"><img src="./finboardprev2.png" alt="" loading="lazy" srcset="./light/finboardprev2.webp 1440w, ./finboardprev2.png 1800w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
+    <div class="cell q3"><img src="./finboardprev3.png" alt="" loading="lazy" srcset="./light/finboardprev3.webp 1440w, ./finboardprev3.png 1449w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
+    <div class="cell q4"><img src="./finboardprev4.png" alt="" loading="lazy" srcset="./light/finboardprev4.webp 1440w, ./finboardprev4.png 1448w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
+  </div>
   <div class="phase-num">01</div>
   <div class="phase-name">Overview</div>
   <div class="phase-sub">A widget-first banking dashboard for financial cognition</div>
@@ -2063,7 +2088,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
   /* ---- reveal on scroll: fade blocks in as they enter view ---- */
   var revealEls = document.querySelectorAll(
-    '.subsec-img,.subsec-video,.chapter-media-duo,.gradex-row,.build-list,' +
+    '.subsec-img,.subsec-video,.chapter-media-duo,.chapter-media-quad,.gradex-row,.build-list,' +
     '.phase-desc,.phase-note,.phase-num,.phase-name,.phase-sub,' +
     '.subsec-title,.subsec-lead,.gradex-cap'
   );
