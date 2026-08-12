@@ -22,7 +22,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@600&text=ULT-QQ-382-175-924-CAM2&display=swap" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&text=GridOne&display=swap" />
 
 <meta property="og:title" content="Michael Joongmin Park — Designer" />
 <meta property="og:description" content="Digital product designer. HAX · Product · Industrial. Toronto, ON. Portfolio 2026." />
@@ -237,24 +236,6 @@
     aspect-ratio: 2/1;
     display:block;
     border-radius: 0;
-  }
-  .app-icon-ph{
-    position:absolute; top:16px; right:16px; z-index:2;
-    width:52px; height:52px;
-    background:#fff;
-    border-radius:18px;
-    box-shadow:0 4px 16px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.10);
-    display:flex; align-items:center; justify-content:center;
-  }
-  .app-icon{
-    display:block; width:34px; height:34px;
-    background-size:contain; background-repeat:no-repeat; background-position:center;
-  }
-  .gridone-mark span{
-    font-family:'Michroma',sans-serif; color:#2a1ed8;
-    font-size:6.5px; line-height:1; text-align:center;
-    letter-spacing:-0.02em; white-space:nowrap; font-weight:400;
-    -webkit-text-stroke:0.3px #2a1ed8; paint-order:stroke fill;
   }
   .work img{
     width:100%; height:100%; object-fit:cover;
@@ -721,13 +702,38 @@
     display:block; width:100%; height:100%;
     position:relative;
   }
-  .ongen-img img,
-  .ongen-img video{
+  /* child combinator on purpose: the badge below also holds an <img>, and it
+     must not inherit the full-bleed positioning meant for the clip itself */
+  .ongen-img > img,
+  .ongen-img > video{
     position:absolute; top:-1px; left:-1px;
     width:calc(100% + 2px); height:calc(100% + 2px);
     object-fit:cover; display:block;
     filter:brightness(0.9);
   }
+  /* GradEX 111 credit, pinned inside the clip as a small card. Width is a
+     share of the card so it scales with the 100vw bleed, with a floor so it
+     stays legible once the card is phone-width. */
+  .gradex-badge{
+    position:absolute; z-index:2;
+    top:clamp(10px,1.15vw,20px); right:clamp(10px,1.15vw,20px);
+    width:clamp(100px,13.5%,208px);
+    aspect-ratio:1225/419;
+    overflow:hidden;
+    /* the lockup is knocked out of an opaque black plate, so the letterforms
+       are transparent: white behind it is what makes them read as white */
+    background:#fff;
+    border:1px solid rgba(255,255,255,0.22);
+    border-radius:5px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.35);
+    pointer-events:none;
+  }
+  .gradex-badge img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  /* opt the badge out of the card-wide hover zoom, which otherwise wins on
+     specificity and pushes the lockup around inside its own frame */
+  a:hover .work .gradex-badge img{ transform:none; }
 
   /* Resume animations when work-block enters viewport */
   .work-block.in-view .ar-bubble-shape,
@@ -855,7 +861,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <div class="work-block reveal is-big o3">
       <a href="./finboard.html">
         <div class="work" style="background:#0a0a0a;">
-          <div class="app-icon-ph"><img src="./finboard.svg" alt="finboard" style="width:40px;height:auto;filter:invert(20%);" /></div>
           <video class="lazy-vid" data-src="./finboardprev.mp4?v=20260805f" data-poster="./posters/finboardprev.jpg?v=20260805f" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
         </div>
         <div class="w-info">
@@ -868,11 +873,15 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <div class="work-block reveal is-big o1">
       <a href="./ongenradio.html">
         <div class="work ongen-work">
-          <div class="app-icon-ph" style="background:#000;"><div class="app-icon" style="background-image:url('./ongenlogo.svg');filter:brightness(0) invert(1);"></div></div>
           <div class="ongen-img">
             <video class="lazy-vid" muted loop playsinline preload="none"
               data-poster="./posters/ongenglassview1.jpg"
               data-src="./ongenglassview1.mp4"></video>
+            <div class="gradex-badge">
+              <img src="./light/gradex111.webp" alt="GradEX 111, OCAD University" loading="lazy" decoding="async"
+                srcset="./light/gradex111.webp 512w, ./gradex111.png 1225w"
+                sizes="(max-width: 880px) 100px, 13.5vw" />
+            </div>
           </div>
         </div>
         <div class="w-info">
@@ -884,7 +893,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
     <div class="work-block reveal is-big o2">
       <a href="./tokentrust.html">
-        <div class="work"><div class="app-icon-ph"><svg viewBox="574 0 96 96" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M645.148 3.18803L629.96 39.7479L666.706 24.5608L670.27 32.4368L633.336 47.6218L670.27 62.8087L666.706 70.4965L629.96 55.3093L645.148 92.0575L637.458 95.62L622.274 58.6837L607.085 95.62L599.399 92.0575L614.4 55.3093L577.841 70.4965L574.652 62.8087L611.211 47.6218L574.652 32.4368L577.841 24.7491L614.4 39.7479L599.399 3.18803L607.085 0L622.274 36.56L637.458 0L645.148 3.18803Z" fill="#000"/></svg></div><video class="lazy-vid" data-src="./tokentrust169.mp4?v=20260805b" data-poster="./posters/tokentrust169.jpg?v=20260805b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
+        <div class="work"><video class="lazy-vid" data-src="./tokentrust169.mp4?v=20260805b" data-poster="./posters/tokentrust169.jpg?v=20260805b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
         <div class="w-info">
           <div class="t"><span>Token Trust : Use AI tokens wisely, See where my data goes</span><span class="arrow">→</span></div>
           <div class="w-meta"><div class="m"><span>2026</span><span>Service Design</span><span>3 Weeks</span></div><div class="w-tags"><span class="w-tag">Service Proposal</span><span class="w-tag">Web App</span></div></div>
@@ -905,7 +914,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <div class="work-block is-small">
       <a href="./gridone.html">
         <div class="work">
-          <div class="app-icon-ph gridone-mark"><span>GridOne</span></div>
           <video class="lazy-vid" data-hover data-src="./gridoneprev.mp4" data-poster="./posters/gridoneprev.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
         </div>
         <div class="w-info">
@@ -918,7 +926,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <div class="work-block is-small">
       <a href="./proposal-audit.html">
         <div class="work ar-work">
-          <div class="app-icon-ph" style="overflow:hidden;padding:0;background:#232f3e;"><object data="./aap.svg" type="image/svg+xml" width="38" height="34" style="display:block;pointer-events:none;"></object></div>
           <video id="promo-vid" class="lazy-vid" data-hover
             data-src="./amazonproposalthumb.mp4"
             data-poster="./posters/amazonproposalthumb.jpg"
@@ -934,7 +941,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
     <div class="work-block is-small">
       <a href="./intact-lifolio.html">
-        <div class="work"><div class="app-icon-ph"><div class="app-icon" style="background-image:url('./lifolio+.svg');"></div></div><video class="lazy-vid" data-hover data-src="./intactlifoliothumb.mp4" data-poster="./posters/intactlifoliothumb.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
+        <div class="work"><video class="lazy-vid" data-hover data-src="./intactlifoliothumb.mp4" data-poster="./posters/intactlifoliothumb.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
         <div class="w-info">
           <div class="t"><span>intact lifolio</span><span class="arrow">→</span></div>
           <div class="w-meta"><div class="m"><span>2026</span><span>Product Design</span></div><div class="w-tags"><span class="w-tag">Service Proposal</span><span class="w-tag">Web App</span></div></div>
@@ -945,7 +952,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <div class="work-block is-small">
       <a href="./ult.html">
         <div class="work ult-work">
-          <div class="app-icon-ph" style="background:#111116;"><svg viewBox="0 0 652 392" style="width:36px;height:auto;" fill="#BABAE6" xmlns="http://www.w3.org/2000/svg"><path d="M86.8094 389.856C69.4476 389.856 54.2179 386.349 41.1203 379.33C28.3274 372.008 18.2757 361.023 10.9654 346.378C3.65514 331.429 0 312.665 0 290.086V157.365H38.3789V285.967C38.3789 309.461 43.4048 327.156 53.4564 339.055C63.508 350.955 77.9763 356.905 96.8613 356.905C109.959 356.905 121.533 353.701 131.585 347.294C141.942 340.886 150.013 331.581 155.8 319.376C161.892 307.173 164.938 292.374 164.938 274.983V157.365H203.317V384.364H169.507L165.852 348.666H164.024C156.409 360.872 146.053 370.788 132.956 378.414C120.163 386.043 104.78 389.856 86.8094 389.856Z"/><path d="M241.939 384.364V64.0018H280.317V384.364H241.939Z"/><path d="M409.083 384.364C395.376 384.364 383.496 382.23 373.445 377.957C363.393 373.686 355.626 366.516 350.144 356.447C344.966 346.075 342.377 332.191 342.377 314.8V184.824H303.084V157.365H342.377L346.946 102.904H380.756V157.365H447.461V184.824H380.756V314.8C380.756 330.666 383.649 341.344 389.437 346.836C395.225 352.024 405.428 354.617 420.048 354.617H443.806V384.364H409.083Z"/><path d="M617.891 15.6749C639.26 10.2065 657.694 31.5136 649.252 51.9221L560.757 265.859C553.138 284.279 528.828 288.223 515.792 273.155L474.951 225.948C464.936 214.371 473.144 196.363 488.439 196.363H516.265C526.122 196.363 534.112 188.358 534.112 178.485V158.776C534.112 148.902 526.122 140.899 516.265 140.899H432.393C422.535 140.899 414.545 132.895 414.545 123.021V81.5992C414.545 73.4301 420.073 66.3001 427.975 64.2781L617.891 15.6749Z"/></svg></div>
           <video class="lazy-vid ult-vid" data-hover data-src="./ultvid.mp4" data-poster="./posters/ultvid.jpg" muted loop playsinline preload="none"></video>
         </div>
         <div class="w-info">
