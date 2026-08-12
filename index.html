@@ -340,7 +340,27 @@
   }
 
   /* ABOUT */
-  .about-grid{
+  .about-media{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(150px,20.9vw,301px);
+  margin:clamp(28px,3.5vw,44px) 0 clamp(32px,4vw,48px); }
+.about-media .cell{ position:relative; overflow:hidden; background:transparent; min-width:0;
+  -webkit-mask-image:-webkit-radial-gradient(white,black); mask-image:radial-gradient(white,black); }
+.about-media .cell img{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px);
+  object-fit:cover; display:block; }
+/* each weight is the photo's own aspect ratio, and the row height is set so the
+   four widths add up to the content measure, which keeps the cover crop at zero */
+.about-media .a1{ flex:1.125 1 0; } /*  918x816   */
+.about-media .a2{ flex:0.750 1 0; } /* 3024x4032  */
+.about-media .a3{ flex:0.753 1 0; } /*  964x1280  */
+.about-media .a4{ flex:1.777 1 0; } /* 2250x1266  */
+@media(max-width:640px){
+  .about-media{ flex-direction:column; height:auto; gap:10px; }
+  .about-media .a1,.about-media .a2,
+  .about-media .a3,.about-media .a4{ flex:none; }
+  .about-media .a1{ aspect-ratio:9/8; }
+  .about-media .a2,.about-media .a3{ aspect-ratio:3/4; }
+  .about-media .a4{ aspect-ratio:16/9; }
+}
+.about-grid{
     display:grid; grid-template-columns: 1fr 1.4fr; gap:80px;
   }
   .about-col h3{
@@ -955,8 +975,15 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="sec-head reveal">
     <div>
       <div class="label">About</div>
-      <h2>A short introduction</h2>
+      <h2>Hi, I’m Michael</h2>
     </div>
+  </div>
+
+  <div class="about-media reveal">
+    <div class="cell a1"><img src="./mike1.jpg" alt="" loading="lazy" srcset="./light/mike1.webp 918w, ./mike1.jpg 918w" sizes="(max-width: 640px) 95vw, 25vw" /></div>
+    <div class="cell a4"><img src="./IMG_5507.jpg" alt="" loading="lazy" srcset="./light/IMG_5507.webp 1440w, ./IMG_5507.jpg 2250w" sizes="(max-width: 640px) 95vw, 39vw" /></div>
+    <div class="cell a2"><img src="./mike2.png" alt="" loading="lazy" srcset="./light/mike2.webp 1440w, ./mike2.png 3024w" sizes="(max-width: 640px) 95vw, 17vw" /></div>
+    <div class="cell a3"><img src="./mike3.png" alt="" loading="lazy" srcset="./light/mike3.webp 964w, ./mike3.png 964w" sizes="(max-width: 640px) 95vw, 17vw" /></div>
   </div>
 
   <dl class="hero-info-mobile reveal">
