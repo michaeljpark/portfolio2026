@@ -3,20 +3,24 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Amelia-Rufus 2.0 Amazon Service Proposal — Michael Joongmin Park</title>
+<title>Rufus-Amelia 2.0 — Michael Joongmin Park</title>
 <link rel="icon" type="image/svg+xml" href="./mkpk.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
+<script>document.documentElement.className += ' reveal-on';</script>
 <style>
   :root{
-    --bg:#E6E6E6; --ink:#000000; --muted:#444444; --line:#9a9a9a;
-    --max:1320px; --pad:clamp(20px,4vw,56px);
+    --bg:#ffffff; --ink:#0a0a0a; --muted:#6a6a6a; --line:#e6e6e6;
+    --max:1440px; --pad:clamp(12px,2vw,28px);
     --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
-  html,body{ background:var(--bg); color:var(--ink); scroll-behavior:smooth; }
+  html,body{ background:var(--bg); color:var(--ink); }
   body{
     font-family:var(--font); font-size:14px; line-height:1.5; font-weight:400;
     letter-spacing:-0.05em; -webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility; overflow-x:hidden;
+    text-rendering:optimizeLegibility; overflow-x:clip;
   }
   a{ color:inherit; text-decoration:none; }
   img{ display:block; max-width:100%; }
@@ -38,210 +42,1553 @@
   .nav-links a:hover{ color:var(--ink); }
 
   header.hero{
-    padding:64px var(--pad) 64px;
+    padding:0 var(--pad) 64px;
   }
-  .hero-back{ font-size:13px; color:var(--muted); margin-bottom:32px; display:flex; align-items:center; justify-content:space-between; }
+  .hero-back{ font-size:13px; color:var(--muted); margin-bottom:32px; }
   .hero-back a:hover{ color:var(--ink); }
-  .tagline-row{ display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-top:32px; }
-  .tagline-row > p{ margin:0; }
-  .hero-team-inline{ margin:0; padding:0; border:0; font-size:10px; line-height:1.4; display:flex; align-items:baseline; gap:10px; flex-wrap:nowrap; min-width:0; }
-  dl.hero-team.hero-team-inline{ margin:0; padding:0; border-top:0; }
-  .hero-team-inline > dt{ margin:0; color:var(--muted); flex-shrink:0; }
-  .hero-team-inline .hero-team-list{ display:flex; flex-direction:row; flex-wrap:nowrap; gap:12px; grid-template-columns:none; min-width:0; }
-  .hero-team-inline .hero-team-member,
-  .hero-team-inline .hero-team-member:nth-child(2),
-  .hero-team-inline .hero-team-member:nth-child(3){ justify-content:flex-start; text-align:left; gap:4px; flex-wrap:nowrap; white-space:nowrap; }
+  /* 2:1 hero video, inset to the content padding (no rounded edges) */
+  .hero-video{
+    position:relative;
+    aspect-ratio:3/1; overflow:hidden;
+    margin-bottom:clamp(32px,4vw,56px);
+    /* transparent, not grey: iOS Safari ignores object-fit on a video's poster
+       and letterboxes it, so any container colour reads as a hairline frame */
+    background:transparent;
+  }
+  /* bleed 1px past every edge so sub-pixel rounding never exposes the
+     video element's default black background as a hairline */
+  .hero-video video{
+    position:absolute; inset:-1px;
+    width:calc(100% + 2px); height:calc(100% + 2px);
+    object-fit:cover; display:block;
+  }
+  /* mobile: zoom the 3:1 hero into a taller 16:9 crop (cover trims the sides) */
   @media(max-width:640px){
-    .tagline-row{ flex-direction:column; gap:12px; align-items:flex-start; }
-    .hero-team-inline{ flex-direction:column; gap:6px; align-items:flex-start; }
-    .hero-team-inline .hero-team-list{ flex-wrap:wrap; gap:6px 14px; }
-    .hero-team-inline .hero-team-member,
-    .hero-team-inline .hero-team-member:nth-child(2),
-    .hero-team-inline .hero-team-member:nth-child(3){ white-space:normal; }
+    .hero-video{ aspect-ratio:16/9; }
   }
   .hero-greeting{ font-size:17px; color:var(--muted); margin-bottom:6px; }
-  .hero-name{ font-weight:500; font-size:clamp(28px,4.5vw,64px); line-height:1.05; letter-spacing:-0.05em; }
+  .hero-name{
+    font-weight:400; font-size:clamp(28px,4.5vw,64px);
+    line-height:1.05; letter-spacing:-0.05em;
+  }
   .hero-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }
-  .scroll-link{ color:var(--ink); border-bottom:1px solid var(--ink); transition:opacity .2s; }
-  .scroll-link:hover{ opacity:0.6; }
-  .pt-nav-link{ display:inline-flex; align-items:center; gap:8px; font-size:13px; letter-spacing:-0.02em; color:var(--ink); border-bottom:1px solid currentColor; padding-bottom:2px; transition:opacity .2s; }
-  .pt-nav-link:hover{ opacity:.45; }
   .hero-row{ margin-top:36px; padding-top:24px; border-top:1px solid var(--line); }
-  .hero-side{ display:flex; flex-direction:row; justify-content:space-between; flex-wrap:wrap; font-size:13px; gap:16px; }
+  .hero-side{
+    display:flex; flex-direction:row; justify-content:space-between;
+    flex-wrap:wrap; font-size:13px; gap:16px;
+  }
   .hero-side .pair{ display:flex; flex-direction:column; gap:2px; }
   .hero-side dt{ color:var(--muted); }
+  .view-link{ border-bottom:1px solid var(--ink); transition:opacity .2s; }
+  .view-link:hover{ opacity:0.6; }
   .status-live{ display:inline-flex; align-items:center; gap:7px; }
   .status-dot{ width:7px; height:7px; border-radius:50%; background:#22c55e; flex-shrink:0; }
 
   .project-section{ padding-top:48px; padding-bottom:48px; }
-  .project-stage{ width:100%; aspect-ratio:16/9; background:#ffffff; border-radius:20px; overflow:hidden; }
-  .project-stage video{ width:100%; height:100%; object-fit:cover; display:block; }
-
-  .kpi-section{ padding-bottom:64px; }
-  .kpi-row{ display:grid; grid-template-columns:1fr 1fr 1fr; border-bottom:1px solid var(--line); padding:32px 0; }
-  .kpi{ display:flex; flex-direction:column; gap:6px; padding:0 40px; }
-  .kpi:first-child{ padding-left:0; }
-  .kpi:last-child{ padding-right:0; }
-  .kpi + .kpi{ border-left:1px solid var(--line); }
-  .kpi-num{ font-size:clamp(28px,3.5vw,48px); font-weight:500; letter-spacing:-0.05em; line-height:1; }
-  .kpi-label{ font-size:13px; color:var(--muted); }
-
-  /* REPORT 1 SECONDARY HEADER */
-  .report-header{ padding:64px var(--pad) 64px; border-bottom:1px solid var(--line); }
-  .report-label{ font-size:17px; color:var(--muted); margin-bottom:6px; }
-  .report-name{ font-weight:500; font-size:clamp(24px,3.5vw,52px); line-height:1.05; letter-spacing:-0.05em; }
-  .report-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }
-  .report-meta{ margin-top:36px; padding-top:24px; border-top:1px solid var(--line); display:flex; flex-direction:row; justify-content:space-between; flex-wrap:wrap; font-size:13px; gap:16px; }
-  .report-meta .pair{ display:flex; flex-direction:column; gap:2px; }
-  .report-meta dt{ color:var(--muted); }
-
-  /* CONTENT SECTIONS */
-  .pt-section{ padding-top:clamp(72px,9vw,140px); padding-bottom:clamp(72px,9vw,140px); }
-  .section-label{ font-size:12px; color:var(--muted); margin-bottom:10px; letter-spacing:0.02em; }
-  .section-title{ font-size:clamp(28px,3.5vw,52px); font-weight:500; letter-spacing:-0.05em; line-height:1.05; margin-bottom:clamp(14px,1.5vw,22px); }
-  .section-sub{ font-size:clamp(14px,1vw,16px); color:var(--muted); line-height:1.6; letter-spacing:-0.02em; max-width:680px; }
-  .section-head{ margin-bottom:clamp(40px,5vw,80px); }
-
-  /* INTRO QUESTIONS */
-  .intro-questions{ display:flex; flex-direction:column; }
-  .intro-q{ padding:clamp(28px,3vw,48px) 0; border-top:1px solid var(--line); display:grid; grid-template-columns:120px 1fr; gap:40px; align-items:start; }
-  .intro-q:last-child{ border-bottom:1px solid var(--line); }
-  .intro-q-num{ font-size:11px; color:var(--muted); padding-top:5px; letter-spacing:0.02em; }
-  .intro-q-text{ font-size:clamp(18px,2vw,28px); font-weight:400; line-height:1.3; letter-spacing:-0.04em; }
-  .intro-q-body{ font-size:14px; color:var(--muted); line-height:1.6; margin-top:12px; letter-spacing:-0.02em; }
-  @media(max-width:640px){ .intro-q{ grid-template-columns:1fr; gap:10px; } }
-
-  /* 3-COL GRID */
-  .three-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:clamp(40px,5vw,80px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
-  .three-cell{ padding:clamp(24px,3vw,40px); background:var(--bg); display:flex; flex-direction:column; gap:14px; }
-  .three-cell-tag{ font-size:10px; letter-spacing:0.06em; color:var(--muted); }
-  .three-cell-title{ font-size:clamp(18px,2vw,26px); font-weight:500; letter-spacing:-0.04em; line-height:1.1; }
-  .three-cell-sub{ font-size:13px; color:var(--muted); letter-spacing:-0.02em; }
-  .three-cell-body{ font-size:13px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; }
-  .three-cell-stat{ font-size:clamp(28px,3vw,42px); font-weight:500; letter-spacing:-0.05em; line-height:1; }
-  .three-cell-items{ display:flex; flex-direction:column; gap:0; margin-top:auto; }
-  .three-cell-item{ padding:10px 0; border-bottom:1px solid var(--line); font-size:12px; color:var(--muted); line-height:1.5; letter-spacing:-0.01em; position:relative; padding-left:14px; }
-  .three-cell-item::before{ content:'—'; position:absolute; left:0; color:var(--line); font-size:10px; top:12px; }
-  .three-cell-item:last-child{ border-bottom:0; }
-  @media(max-width:880px){ .three-grid{ grid-template-columns:1fr; } }
-
-  /* 2-COL GRID */
-  .two-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:clamp(40px,5vw,80px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
-  .two-cell{ padding:clamp(24px,3vw,40px); background:var(--bg); display:flex; flex-direction:column; gap:14px; }
-  .two-cell-tag{ font-size:11px; color:var(--muted); letter-spacing:0.02em; display:inline-flex; align-items:center; gap:8px; }
-  .two-cell-badge{ display:inline-block; padding:2px 8px; border-radius:100px; font-size:10px; letter-spacing:0.02em; font-weight:500; }
-  .badge-pos{ background:var(--ink); color:var(--bg); }
-  .badge-neg{ background:var(--line); color:var(--muted); }
-  .two-cell-title{ font-size:clamp(15px,1.4vw,20px); font-weight:500; letter-spacing:-0.04em; line-height:1.2; }
-  .two-cell-body{ font-size:13px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; }
-  @media(max-width:640px){ .two-grid{ grid-template-columns:1fr; } }
-
-  /* STAT ROW */
-  .trend-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(24px,3vw,48px); margin-top:clamp(40px,5vw,80px); }
-  .trend-stat{ display:flex; flex-direction:column; gap:10px; }
-  .trend-num{ font-size:clamp(48px,7vw,96px); font-weight:500; letter-spacing:-0.05em; line-height:1; }
-  .trend-desc{ font-size:14px; color:var(--muted); line-height:1.55; letter-spacing:-0.02em; }
-  .trend-source{ font-size:11px; color:var(--muted); opacity:0.5; margin-top:4px; letter-spacing:-0.01em; }
-  @media(max-width:768px){ .trend-stats{ grid-template-columns:1fr 1fr; gap:24px; } }
-  @media(max-width:480px){ .trend-stats{ grid-template-columns:1fr; } }
-
-  /* DARK CALLOUT */
-  .hmw-block{ margin-top:clamp(40px,5vw,80px); padding:clamp(32px,4vw,64px); background:var(--ink); color:#ffffff; border-radius:16px; }
-  .hmw-label{ font-size:11px; color:rgba(255,255,255,.4); letter-spacing:0.06em; margin-bottom:16px; }
-  .hmw-text{ font-size:clamp(20px,2.5vw,36px); font-weight:400; letter-spacing:-0.04em; line-height:1.3; }
-  .opp-dims{ display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:clamp(24px,3vw,40px); border-top:1px solid rgba(255,255,255,.12); padding-top:clamp(24px,3vw,40px); }
-  .opp-dim{ padding:0 24px; }
-  .opp-dim:first-child{ padding-left:0; }
-  .opp-dim:last-child{ padding-right:0; }
-  .opp-dim + .opp-dim{ border-left:1px solid rgba(255,255,255,.12); }
-  .opp-dim-title{ font-size:13px; font-weight:500; color:rgba(255,255,255,.9); margin-bottom:8px; }
-  .opp-dim-body{ font-size:12px; color:rgba(255,255,255,.45); line-height:1.6; letter-spacing:-0.01em; }
-  @media(max-width:640px){
-    .opp-dims{ grid-template-columns:1fr; }
-    .opp-dim{ padding:0; }
-    .opp-dim + .opp-dim{ border-left:0; border-top:1px solid rgba(255,255,255,.12); padding-top:16px; margin-top:16px; }
+  .project-stage{
+    position:relative; width:100%; aspect-ratio:16/9;
+    background:transparent; border-radius:20px; overflow:hidden;
+    clip-path:inset(0 round 20px);
+    transform:translateZ(0);
+    isolation:isolate;
+  }
+  .project-stage video{
+    position:absolute; top:0; left:0;
+    width:100%; height:100%;
+    object-fit:cover; display:block;
+    transform:scale(1.002); transform-origin:center center;
+  }
+  .stage-pill{ border-radius:200px; clip-path:inset(0 round 200px); }
+  @media(max-width:640px){ .stage-pill{ border-radius:50px; clip-path:inset(0 round 50px); } }
+  .stage-pill video{
+    top:0; left:0;
+    width:100%; height:100%;
+    transform:translateZ(0);
+    will-change:transform;
+  }
+  .ongen-logo{
+    position:absolute; bottom:6%; left:50%;
+    transform:translateX(-50%);
+    width:11%; z-index:2; pointer-events:none;
+  }
+  .stage-caption{
+    position:absolute; top:8%; left:50%;
+    transform:translateX(-50%);
+    z-index:2; pointer-events:none;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight:400;
+    font-size:clamp(14px,1.4vw,20px);
+    letter-spacing:-0.05em;
+    color:#0a0a0a;
+    white-space:nowrap;
+  }
+  .ongen-logo svg{ width:100%; height:auto; display:block; overflow:visible; }
+  .ongen-wave{
+    fill:none; stroke:#0a0a0a; stroke-width:1.2;
+    transform-origin:84.5px 84.5px;
+    opacity:0;
+    animation:ongenPulse 4.8s cubic-bezier(.22,.61,.36,1) infinite;
+  }
+  .ongen-wave.w2{ animation-delay:1.6s; }
+  .ongen-wave.w3{ animation-delay:3.2s; }
+  @keyframes ongenPulse{
+    0%   { transform:scale(1);    opacity:0;    stroke-width:1.4; }
+    8%   { opacity:.45; }
+    100% { transform:scale(2.1);  opacity:0;    stroke-width:.3; }
   }
 
-  /* ROADMAP */
-  .roadmap-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:clamp(40px,5vw,80px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
-  .horizon{ padding:clamp(24px,3vw,40px); background:var(--bg); display:flex; flex-direction:column; gap:0; }
-  .horizon:last-child{ background:var(--ink); color:#fff; }
-  .horizon-tag{ font-size:10px; letter-spacing:0.06em; color:var(--muted); margin-bottom:12px; }
-  .horizon:last-child .horizon-tag{ color:rgba(255,255,255,.4); }
-  .horizon-title{ font-size:clamp(15px,1.3vw,20px); font-weight:500; letter-spacing:-0.03em; margin-bottom:6px; }
-  .horizon-range{ font-size:12px; color:var(--muted); letter-spacing:-0.01em; margin-bottom:24px; padding-bottom:24px; border-bottom:1px solid var(--line); }
-  .horizon:last-child .horizon-range{ color:rgba(255,255,255,.4); border-bottom-color:rgba(255,255,255,.12); }
-  .horizon-items{ display:flex; flex-direction:column; gap:10px; }
-  .horizon-item{ font-size:12px; color:var(--muted); line-height:1.5; letter-spacing:-0.02em; padding-left:14px; position:relative; }
-  .horizon-item::before{ content:'—'; position:absolute; left:0; color:var(--line); font-size:10px; top:3px; }
-  .horizon:last-child .horizon-item{ color:rgba(255,255,255,.55); }
-  .horizon:last-child .horizon-item::before{ color:rgba(255,255,255,.2); }
-  @media(max-width:768px){ .roadmap-grid{ grid-template-columns:1fr; } }
-
-  /* VALUE SHIFT TABLE */
-  .shift-block{ margin-top:clamp(40px,5vw,80px); }
-  .shift-label{ font-size:12px; font-weight:500; color:var(--muted); margin-bottom:16px; letter-spacing:0.02em; }
-  .shift-table{ width:100%; border-collapse:collapse; margin-bottom:clamp(32px,4vw,64px); }
-  .shift-table th{ text-align:left; font-size:11px; font-weight:500; color:var(--muted); letter-spacing:0.04em; padding:0 0 12px 0; border-bottom:1px solid var(--line); }
-  .shift-table th:not(:first-child){ padding-left:24px; }
-  .shift-table td{ font-size:clamp(13px,1vw,15px); padding:14px 0; border-bottom:1px solid var(--line); vertical-align:top; line-height:1.4; letter-spacing:-0.02em; }
-  .shift-table td:not(:first-child){ padding-left:24px; }
-  .shift-table td:nth-child(2){ color:var(--muted); }
-  .shift-table tr:last-child td{ border-bottom:0; }
-  @media(max-width:640px){
-    .shift-table th:nth-child(3), .shift-table td:nth-child(3){ display:none; }
+  .stage-card{
+    width:100%;
+    background:#f5f5f5; border-radius:20px;
+    color:#000000;
+    display:flex; flex-direction:column;
+    padding:6% 0 16px;
+    position:relative;
+  }
+  .card-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:5%;
+  }
+  .card-title{
+    font-size:clamp(44px,8.5vw,128px); font-weight:300;
+    letter-spacing:-0.05em; line-height:1;
+  }
+  .card-sub{
+    font-size:clamp(14px,1.6vw,24px); font-weight:400;
+    letter-spacing:-0.05em; line-height:1.5;
+    text-align:right; max-width:52%;
   }
 
-  /* FLOW DIAGRAM */
-  .flow-row{ display:grid; grid-template-columns:repeat(6,1fr); gap:1px; margin-top:clamp(40px,5vw,80px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
-  .flow-cell{ padding:clamp(20px,2.5vw,32px); background:var(--bg); display:flex; flex-direction:column; gap:8px; }
-  .flow-cell:last-child{ background:var(--ink); color:#fff; }
-  .flow-num{ font-size:10px; color:var(--muted); letter-spacing:0.04em; }
-  .flow-cell:last-child .flow-num{ color:rgba(255,255,255,.4); }
-  .flow-title{ font-size:clamp(12px,1.1vw,15px); font-weight:500; letter-spacing:-0.03em; line-height:1.2; }
-  .flow-body{ font-size:11px; color:var(--muted); line-height:1.5; letter-spacing:-0.01em; }
-  .flow-cell:last-child .flow-body{ color:rgba(255,255,255,.5); }
-  @media(max-width:880px){ .flow-row{ grid-template-columns:repeat(3,1fr); } }
-  @media(max-width:480px){ .flow-row{ grid-template-columns:1fr 1fr; } }
+  .card-logo{
+    position:absolute; top:70%; left:50%;
+    transform:translateX(-50%);
+    width:50%; z-index:2; pointer-events:none;
+    display:none;
+  }
 
-  /* CONCLUSION */
-  .conclusion-block{ margin-top:clamp(40px,5vw,80px); padding:clamp(40px,5vw,80px); border:1px solid var(--line); border-radius:16px; }
-  .conclusion-quote{ font-size:clamp(20px,2.5vw,36px); font-weight:400; letter-spacing:-0.04em; line-height:1.35; max-width:900px; }
-  .conclusion-attr{ margin-top:24px; font-size:13px; color:var(--muted); letter-spacing:-0.02em; }
+  @media(max-width:640px){
+    .card-title{ font-size:clamp(30px,9vw,44px); }
+    .card-sub{ font-size:clamp(11px,3.2vw,16px); max-width:100%; width:100%; }
+    .card-row{ flex-direction:column; gap:3%; align-items:stretch; }
+    .card-logo{ top:78%; width:80%; }
+    .project-section + .project-section{ padding-top:0; }
+    .card-ticker-track span{ font-size:clamp(14px,3.8vw,18px); }
+    .app-embed-frame iframe{ zoom:0.8; }
+  }
+  .card-logo svg{ width:100%; height:auto; display:block; overflow:visible; }
+  .card-wave{
+    fill:none; stroke:#000000; stroke-width:1.2;
+    transform-origin:84.5px 84.5px;
+    opacity:0;
+    display:none;
+  }
+  .card-wave.cw2{ animation-delay:1.6s; }
+  .card-wave.cw3{ animation-delay:3.2s; }
+  @keyframes cardWave{
+    0%   { transform:scale(1);   opacity:0;   stroke-width:1.4; }
+    8%   { opacity:.5; }
+    100% { transform:scale(2.6); opacity:0;   stroke-width:.3; }
+  }
 
-  /* BRANCH DETAILS */
-  .branch-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; margin-top:clamp(40px,5vw,80px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
-  .branch-cell{ padding:clamp(24px,3vw,40px); background:var(--bg); display:flex; flex-direction:column; gap:0; }
-  .branch-label{ font-size:10px; letter-spacing:0.06em; color:var(--muted); margin-bottom:16px; }
-  .branch-name{ font-size:clamp(16px,1.5vw,22px); font-weight:500; letter-spacing:-0.04em; margin-bottom:6px; }
-  .branch-sub{ font-size:12px; color:var(--muted); letter-spacing:-0.02em; margin-bottom:24px; padding-bottom:24px; border-bottom:1px solid var(--line); }
-  .branch-steps{ display:flex; flex-direction:column; gap:0; }
-  .branch-step{ padding:10px 0; border-bottom:1px solid var(--line); display:grid; grid-template-columns:20px 1fr; gap:10px; align-items:start; }
-  .branch-step:last-child{ border-bottom:0; }
-  .branch-step-num{ font-size:10px; color:var(--muted); padding-top:2px; }
-  .branch-step-title{ font-size:13px; font-weight:500; letter-spacing:-0.03em; }
-  .branch-step-text{ font-size:12px; color:var(--muted); line-height:1.5; letter-spacing:-0.01em; }
-  .branch-outcome{ font-size:12px; color:var(--muted); line-height:1.5; border-left:2px solid var(--line); padding-left:12px; margin-top:16px; letter-spacing:-0.01em; }
-  @media(max-width:880px){ .branch-grid{ grid-template-columns:1fr; } }
+  .card-ticker{
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .card-ticker-track{
+    display:inline-flex;
+    gap:3em;
+    white-space:nowrap;
+    animation:ticker 30s linear infinite;
+  }
+  .card-ticker-track span{
+    font-size:clamp(12px,1.3vw,18px);
+    font-weight:300;
+    letter-spacing:-0.03em;
+    color:rgba(0,0,0,0.45);
+  }
+  @keyframes ticker{
+    0%  { transform:translateX(0); }
+    100%{ transform:translateX(-50%); }
+  }
 
-  /* IMPACT SCENARIOS */
-  .scenario-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:clamp(40px,5vw,80px); border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); }
-  .scenario{ padding:clamp(24px,3vw,40px); background:var(--bg); display:flex; flex-direction:column; gap:14px; }
-  .scenario:nth-child(2){ background:var(--ink); color:#fff; }
-  .scenario-tag{ font-size:11px; letter-spacing:0.04em; color:var(--muted); }
-  .scenario:nth-child(2) .scenario-tag{ color:rgba(255,255,255,.4); }
-  .scenario-title{ font-size:clamp(16px,1.5vw,22px); font-weight:500; letter-spacing:-0.04em; }
-  .scenario-body{ font-size:13px; color:var(--muted); line-height:1.6; letter-spacing:-0.02em; }
-  .scenario:nth-child(2) .scenario-body{ color:rgba(255,255,255,.55); }
-  @media(max-width:768px){ .scenario-grid{ grid-template-columns:1fr; } }
+  /* Image marquee around iframe */
+  .img-marquee{
+    overflow:hidden;
+    width:100%;
+    pointer-events:none;
+    padding:48px 0;
+    -webkit-mask-image:linear-gradient(90deg, transparent 0, #ffffff 8%, #ffffff 92%, transparent 100%);
+            mask-image:linear-gradient(90deg, transparent 0, #ffffff 8%, #ffffff 92%, transparent 100%);
+  }
+  .img-marquee-track{
+    display:flex;
+    width:max-content;
+    gap:64px;
+    align-items:center;
+    animation:imgMarqueeLeft 40s linear infinite;
+    will-change:transform;
+  }
+  .img-marquee.reverse .img-marquee-track{
+    animation-name:imgMarqueeRight;
+  }
+  .img-marquee-track img{
+    height:48px;
+    width:auto;
+    object-fit:contain;
+    opacity:0.55;
+    flex-shrink:0;
+    display:block;
+  }
+  @keyframes imgMarqueeLeft{
+    0%  { transform:translateX(0); }
+    100%{ transform:translateX(-50%); }
+  }
+  @keyframes imgMarqueeRight{
+    0%  { transform:translateX(-50%); }
+    100%{ transform:translateX(0); }
+  }
+  @media(max-width:880px){
+    .img-marquee-track{ gap:40px; }
+    .img-marquee-track img{ height:32px; }
+  }
 
-  video{ -webkit-appearance:none; appearance:none; }
-  video::-webkit-media-controls,
-  video::-webkit-media-controls-enclosure,
-  video::-webkit-media-controls-panel,
-  video::-webkit-media-controls-overlay-play-button,
-  video::-webkit-media-controls-play-button,
-  video::-webkit-media-controls-start-playback-button{ display:none !important; opacity:0 !important; }
+  .app-embed-row{
+    display:flex;
+    gap:56px;
+    align-items:stretch;
+  }
+  .app-embed-frame{
+    flex:0 0 36%;
+    aspect-ratio:3/4;
+    border-radius:24px;
+    overflow:hidden;
+    background:#eeeeee;
+  }
+  .app-embed-frame iframe{
+    width:100%; height:100%;
+    border:none; display:block;
+  }
+  .app-embed-info{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  .app-embed-logo{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  .app-embed-logo svg{ width:55%; height:auto; overflow:visible; display:block; }
+  .embed-wave{
+    fill:none; stroke:#000000; stroke-width:1.2;
+    transform-origin:84.5px 84.5px;
+    opacity:0;
+    animation:embedWave 4.8s cubic-bezier(.22,.61,.36,1) infinite;
+  }
+  .embed-wave.ew2{ animation-delay:1.6s; }
+  .embed-wave.ew3{ animation-delay:3.2s; }
+  @keyframes embedWave{
+    0%  { transform:scale(1);   opacity:0;   stroke-width:1.4; }
+    8%  { opacity:.4; }
+    100%{ transform:scale(2.6); opacity:0;   stroke-width:.3; }
+  }
+  @media(max-width:640px){
+    .app-embed-row{ flex-direction:column; gap:32px; }
+    .app-embed-frame{ flex:none; width:100%; }
+    .app-embed-info{ padding-top:16px; }
+    .app-embed-logo svg{ width:50%; }
+  }
+
+  /* Seek section */
+  .seek-section{
+    padding-top:120px; padding-bottom:120px;
+  }
+  .seek-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:clamp(24px,4vw,64px);
+    align-items:center;
+  }
+  .seek-grid-reverse .seek-word{
+    font-size:clamp(40px,7.2vw,120px);
+    letter-spacing:-0.05em;
+  }
+  .seek-left{
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+    min-height:clamp(280px,32vw,460px);
+  }
+  .seek-word{
+    position:relative;
+    font-size:clamp(72px,12vw,200px);
+    font-weight:400;
+    letter-spacing:-0.06em;
+    line-height:1;
+    color:var(--ink);
+    z-index:2;
+    animation:seekBreath 3.6s ease-in-out infinite;
+  }
+  @keyframes seekBreath{
+    0%, 100% {
+      opacity:0.78;
+      text-shadow:0 0 0 rgba(0,0,0,0);
+      transform:scale(1);
+    }
+    50% {
+      opacity:1;
+      text-shadow:0 0 48px rgba(0,0,0,0.32);
+      transform:scale(1.025);
+    }
+  }
+  .seek-wave{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:clamp(160px,18vw,260px);
+    height:clamp(160px,18vw,260px);
+    border-radius:50%;
+    border:1px solid var(--ink);
+    opacity:0;
+    pointer-events:none;
+    z-index:1;
+  }
+  .seek-wave.w1{ animation:seekWave 3.6s cubic-bezier(.22,.61,.36,1) infinite; }
+  .seek-wave.w2{ animation:seekWave 3.6s cubic-bezier(.22,.61,.36,1) infinite; animation-delay:1.2s; }
+  .seek-wave.w3{ animation:seekWave 3.6s cubic-bezier(.22,.61,.36,1) infinite; animation-delay:2.4s; }
+  @keyframes seekWave{
+    0%   { transform:translate(-50%,-50%) scale(0.4); opacity:0.45; }
+    70%  { opacity:0; }
+    100% { transform:translate(-50%,-50%) scale(2.4);  opacity:0; }
+  }
+  .seek-right{
+    position:relative;
+    width:100%;
+    border-radius:20px;
+    overflow:hidden;
+    background:#ededed;
+    aspect-ratio:3/4;
+  }
+  .seek-right video{
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center 45%;
+    display:block;
+  }
+
+  @media(max-width:880px){
+    .seek-section{ padding-top:72px; padding-bottom:72px; overflow:hidden; }
+    /* On mobile, overlay text+waves centered on the video */
+    .seek-grid{
+      display:block; position:relative;
+      max-width:min(420px, 100%);
+      margin:0 auto;
+      overflow:hidden;
+      border-radius:20px;
+    }
+    .seek-right{
+      width:100%; max-width:none; margin:0;
+      border-radius:0;
+    }
+    .seek-left{
+      position:absolute; inset:0;
+      min-height:0; padding:0;
+      display:flex; align-items:center; justify-content:center;
+      z-index:2;
+      pointer-events:none;
+      overflow:hidden;
+      text-shadow:0 2px 24px rgba(255,255,255,0.55);
+    }
+    .seek-grid-reverse .seek-right,
+    .seek-grid-reverse .seek-left{ order:initial; }
+    .seek-word{
+      font-size:clamp(40px,14vw,88px);
+      max-width:90%;
+      text-align:center;
+      word-break:keep-all;
+    }
+    .seek-grid-reverse .seek-word{ font-size:clamp(24px,7.5vw,46px); }
+    .seek-wave{
+      width:clamp(120px,36vw,200px);
+      height:clamp(120px,36vw,200px);
+      border-color:rgba(0,0,0,0.85);
+    }
+  }
+
+  .kpi-section{ padding-top:120px; padding-bottom:120px; }
+  .kpi-head{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    margin-bottom:48px; gap:24px;
+  }
+  .kpi-title-wrap{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .kpi-title{
+    font-size:clamp(32px,4vw,56px); font-weight:400;
+    letter-spacing:-0.05em; line-height:1;
+  }
+  .kpi-title-meta{
+    font-size:clamp(11px,0.9vw,14px); color:var(--muted);
+    letter-spacing:-0.03em;
+  }
+  .kpi-hero{ display:flex; align-items:baseline; gap:10px; }
+  .kpi-hero-num{
+    font-size:clamp(32px,4vw,56px); font-weight:400;
+    letter-spacing:-0.05em; line-height:1;
+  }
+  .kpi-hero-label{
+    font-size:clamp(13px,1.1vw,16px); color:var(--ink);
+    letter-spacing:-0.03em;
+  }
+
+  .kpi-grid{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    gap:24px; flex-wrap:wrap;
+  }
+  .kpi-item{ display:flex; flex-direction:column; gap:8px; }
+  .kpi-num{
+    font-size:clamp(28px,3.2vw,44px); font-weight:400;
+    letter-spacing:-0.05em; line-height:1; color:var(--muted);
+    display:flex; align-items:baseline; gap:6px;
+  }
+  .kpi-num .unit{
+    font-size:clamp(11px,0.9vw,14px); color:var(--muted); font-weight:400;
+    letter-spacing:-0.03em;
+  }
+  .kpi-label{
+    font-size:clamp(12px,0.95vw,14px); color:var(--muted); line-height:1.4;
+    letter-spacing:-0.03em;
+  }
+
+  @media(max-width:880px){
+    .hero-name{ font-size:clamp(24px,7vw,48px); }
+    .stage-caption{ font-size:clamp(10px,2.4vw,14px); }
+    .kpi-section{ padding-top:80px; padding-bottom:80px; }
+    .kpi-head{ margin-bottom:40px; }
+    .kpi-grid{
+      display:grid; grid-template-columns:1fr 1fr; gap:32px 24px;
+      justify-content:initial;
+    }
+    .kpi-item:nth-child(2),
+    .kpi-item:nth-child(4){ align-items:flex-end; text-align:right; }
+  }
+
+  /* Timeline */
+  .tl-section{ padding-top:clamp(48px,7vw,96px); padding-bottom:clamp(48px,7vw,96px); }
+  .tl-phase + .tl-phase{ margin-top:48px; }
+  .tl-head{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    margin-bottom:24px; gap:24px;
+  }
+  .tl-phase-title{
+    font-size:clamp(28px,3.4vw,44px); font-weight:400;
+    letter-spacing:-0.05em; line-height:1;
+  }
+  .tl-phase-meta{
+    text-align:right;
+    font-size:clamp(12px,1vw,14px); color:var(--muted);
+    letter-spacing:-0.03em; line-height:1.5;
+  }
+  .tl-phase-meta .strong{ color:var(--ink); }
+
+  /* Scroll-driven desktop sticky wrapper */
+  .tl-scroll{
+    position:relative;
+    height:600vh;
+    padding:30vh 0 0;
+  }
+  .tl-board{
+    display:block;
+    position:sticky;
+    top:50vh;
+    transform:translateY(-50%);
+  }
+
+  /* Card stage — fixed-height frame; cards are absolutely positioned and cross-fade */
+  .tl-stage{
+    position:relative;
+    min-height:320px;
+  }
+  .tl-card{
+    position:absolute;
+    inset:0;
+    background:#ededed;
+    border-radius:20px;
+    padding:clamp(20px,2vw,28px);
+    display:flex; flex-direction:column;
+    gap:14px;
+    opacity:0; visibility:hidden;
+    transform:translateY(10px);
+    transition:opacity .45s cubic-bezier(.22,.61,.36,1),
+               transform .45s cubic-bezier(.22,.61,.36,1),
+               visibility 0s linear .45s;
+    pointer-events:none;
+  }
+  .tl-card.is-active{
+    opacity:1; visibility:visible;
+    transform:translateY(0);
+    transition-delay:0s;
+    pointer-events:auto;
+  }
+
+  .tl-card-head{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:12px;
+  }
+  .tl-gate-id{
+    font-size:clamp(11px,0.85vw,12px);
+    font-weight:500; letter-spacing:-0.02em;
+    color:var(--muted);
+  }
+  .tl-gate-tag{
+    font-size:11px; color:var(--muted);
+    letter-spacing:-0.02em;
+    padding:4px 10px;
+    border:1px solid #d1d1d1;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .tl-card-title{
+    font-size:clamp(18px,1.6vw,24px);
+    font-weight:500; letter-spacing:-0.04em;
+    line-height:1.25; color:var(--ink);
+  }
+  .tl-card-sub{
+    font-size:clamp(12px,0.95vw,14px);
+    color:var(--muted); letter-spacing:-0.03em;
+    line-height:1.4; margin-top:-6px;
+  }
+  .tl-card-list{
+    list-style:none; padding:14px 0 0; margin:0;
+    display:flex; flex-direction:column; gap:8px;
+    border-top:1px solid #d9d9d9;
+  }
+  .tl-card-list li{
+    font-size:clamp(12px,0.9vw,13px);
+    color:#303030; letter-spacing:-0.03em;
+    line-height:1.45;
+  }
+  .tl-card-list li .dim{ color:var(--muted); }
+
+  /* Track + nodes (desktop horizontal) */
+  .tl-track{
+    position:relative;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:32px 0 4px;
+    margin-top:clamp(20px,2.4vw,32px);
+  }
+  .tl-track::before{
+    content:'';
+    position:absolute;
+    left:4%; right:4%;
+    top:calc(32px + 9px);
+    height:1px;
+    background:#d9d9d9;
+  }
+  .tl-node{
+    position:relative;
+    flex:1 1 0;
+    display:flex; flex-direction:column;
+    align-items:center; gap:12px;
+    background:transparent; border:0;
+    cursor:default;
+    color:var(--muted);
+    padding:0; font:inherit;
+    z-index:1;
+    pointer-events:none;
+  }
+  .tl-node-dot{
+    position:relative;
+    width:18px; height:18px;
+    border-radius:50%;
+    background:var(--bg);
+    border:1px solid #c5c5c5;
+    transition:transform .35s cubic-bezier(.22,.61,.36,1),
+               background-color .35s, border-color .35s,
+               box-shadow .35s;
+  }
+  .tl-node-dot::before,
+  .tl-node-dot::after{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    border-radius:50%;
+    border:1px solid var(--ink);
+    opacity:0;
+    pointer-events:none;
+    transform:scale(1);
+  }
+  .tl-node-meta{
+    display:flex; flex-direction:column;
+    align-items:center; gap:4px;
+  }
+  .tl-node-label{
+    font-size:12px; letter-spacing:-0.02em;
+    color:var(--muted);
+    transition:color .35s;
+  }
+  .tl-node-tag{
+    font-size:10.5px; letter-spacing:-0.02em;
+    color:#a5a5a5;
+    transition:color .35s;
+  }
+  .tl-node.is-active .tl-node-dot{
+    background:var(--ink);
+    border-color:var(--ink);
+    transform:scale(1.35);
+    box-shadow:0 0 0 6px rgba(0,0,0,0.06);
+  }
+  .tl-node.is-active .tl-node-dot::before{
+    animation:tlPulse 2.2s cubic-bezier(.22,.61,.36,1) infinite;
+  }
+  .tl-node.is-active .tl-node-dot::after{
+    animation:tlPulse 2.2s cubic-bezier(.22,.61,.36,1) infinite;
+    animation-delay:1.1s;
+  }
+  @keyframes tlPulse{
+    0%   { transform:scale(1);   opacity:0.55; }
+    70%  { transform:scale(3.2); opacity:0;    }
+    100% { transform:scale(3.2); opacity:0;    }
+  }
+  .tl-node.is-active .tl-node-label{ color:var(--ink); }
+  .tl-node.is-active .tl-node-tag{ color:#424242; }
+
+  /* Phase divider removed */
+
+  @media(max-width:880px){
+    .tl-section{ padding-top:48px; padding-bottom:48px; }
+    .tl-head{ margin-bottom:16px; flex-direction:column; gap:6px; }
+    .tl-phase-meta{ text-align:left; }
+
+    .tl-scroll{ height:auto; padding:0; }
+    .tl-board{
+      position:static;
+      transform:none;
+      display:grid;
+      grid-template-columns:64px 1fr;
+      column-gap:14px;
+      align-items:start;
+    }
+    .tl-stage{
+      grid-column:2;
+      grid-row:1;
+      position:sticky;
+      top:calc((100vh - 60vh) / 2);
+      align-self:start;
+      min-height:60vh;
+      background:var(--bg);
+    }
+    .tl-track{
+      grid-column:1;
+      grid-row:1;
+      flex-direction:column;
+      justify-content:space-between;
+      align-items:center;
+      padding:24px 0 48vh;
+      margin-top:0;
+      min-height:240vh;
+    }
+    .tl-track::before{
+      left:50%;
+      right:auto;
+      top:24px; bottom:24px;
+      width:1px; height:auto;
+      background:#d9d9d9;
+      transform:translateX(-0.5px);
+    }
+    /* progress fill on left indicator */
+    .tl-track::after{
+      content:'';
+      position:absolute;
+      left:50%;
+      top:24px;
+      width:1px;
+      height:var(--tl-progress, 0%);
+      background:var(--ink);
+      transform:translateX(-0.5px);
+      transition:height .4s cubic-bezier(.22,.61,.36,1);
+      pointer-events:none;
+    }
+    .tl-node{
+      flex:none;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+      padding:0;
+      width:100%;
+    }
+    .tl-node-dot{
+      width:12px; height:12px;
+    }
+    .tl-node-meta{ display:none; }
+    .tl-node[data-gate="4"]::before{ display:none; }
+  }
+
+  /* === Departure section === */
+  .dep-section{
+    padding-top:64px;
+    padding-bottom:120px;
+  }
+  .dep-block{
+    font-size:clamp(28px,4vw,64px);
+    font-weight:400;
+    letter-spacing:-0.05em;
+    line-height:1.08;
+    color:var(--ink);
+  }
+  /* Alternating white/grey glow */
+  .dep-block .a,
+  .dep-block .b{
+    transition:color 1.6s ease, text-shadow 1.6s ease;
+  }
+  .dep-block .a{
+    color:var(--ink);
+    animation:depPulseA 4s ease-in-out infinite;
+  }
+  .dep-block .b{
+    color:var(--muted);
+    animation:depPulseB 4s ease-in-out infinite;
+  }
+  @keyframes depPulseA{
+    0%,100%   { color:var(--ink);   text-shadow:0 0 24px rgba(0,0,0,0.18); }
+    50%       { color:#c5c5c5;      text-shadow:0 0 0 rgba(0,0,0,0); }
+  }
+  @keyframes depPulseB{
+    0%,100%   { color:#c5c5c5;      text-shadow:0 0 0 rgba(0,0,0,0); }
+    50%       { color:var(--ink);   text-shadow:0 0 24px rgba(0,0,0,0.18); }
+  }
+  .dep-block + .dep-block{
+    margin-top:clamp(80px,12vw,180px);
+    text-align:right;
+  }
+  @media(max-width:880px){
+    .dep-section{ padding-top:48px; padding-bottom:80px; }
+    .dep-block + .dep-block{ margin-top:64px; }
+  }
+
+  /* === Value Shift section === */
+  .vs-section{
+    padding-top:96px;
+    padding-bottom:120px;
+  }
+  .vs-head{ margin-bottom:64px; }
+  .vs-stage{
+    position:relative;
+    width:100%;
+    overflow:hidden;
+  }
+  .vs-stage-large{ min-height:clamp(220px,26vw,360px); }
+  .vs-stage-small{
+    min-height:clamp(96px,9vw,140px);
+    margin-top:clamp(32px,4vw,56px);
+  }
+  .vs-text{
+    position:absolute; top:0; left:0; right:0;
+    font-weight:400;
+    letter-spacing:-0.05em;
+    line-height:1.05;
+    will-change:color;
+    color:#c5c5c5;
+  }
+  .vs-line{
+    white-space:nowrap;
+    display:block;
+    width:-moz-fit-content;
+    width:fit-content;
+    max-width:100%;
+    position:relative;
+    will-change:left,transform;
+  }
+  .vs-stage-large .vs-text{
+    font-size:clamp(40px,6.4vw,96px);
+  }
+  .vs-stage-small .vs-text{
+    font-size:clamp(15px,1.4vw,22px);
+    line-height:1.55;
+    letter-spacing:-0.03em;
+  }
+
+  @media(max-width:880px){
+    .vs-section{ padding-top:64px; padding-bottom:80px; }
+    .vs-head{ margin-bottom:40px; }
+    .vs-stage-large{ min-height:clamp(140px,32vw,220px); }
+    .vs-stage-small{ min-height:clamp(70px,14vw,110px); margin-top:28px; }
+    .vs-stage-large .vs-text{ font-size:clamp(28px,7vw,52px); }
+    .vs-stage-small .vs-text{ font-size:clamp(13px,3.2vw,18px); line-height:1.5; }
+  }
+
+  /* Value Mapping (under Value Shift) — stadium pill */
+  .vm-block{
+    margin-top:clamp(48px, 6vw, 96px);
+    width:100%;
+    display:flex;
+    justify-content:center;
+  }
+  .vm-chart{
+    width:100%;
+    aspect-ratio: 16 / 10;
+    position:relative;
+  }
+  .vm-chart svg{ width:100%; height:100%; display:block; overflow:visible; }
+  .vm-chart .vm-ring{ fill:none; stroke:rgba(0,0,0,0.16); stroke-width:0.8; stroke-dasharray:2 3; }
+  .vm-chart .vm-ring-outer{ stroke:rgba(0,0,0,0.28); stroke-dasharray:none; stroke-width:1; }
+  .vm-chart .vm-pulse-inward{
+    fill:none;
+    stroke:#000000;
+    stroke-width:1.2;
+    opacity:0;
+    pointer-events:none;
+  }
+  .vm-chart .vm-sector-line{ stroke:rgba(0,0,0,0.10); stroke-width:0.6; stroke-dasharray:2 3; }
+  .vm-chart .vm-stakeholder-label{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight:400;
+    fill:#000000;
+    letter-spacing:0;
+  }
+  .vm-chart .vm-item-text{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight:400;
+    fill:rgba(0,0,0,0.65);
+    letter-spacing:0;
+  }
+  .vm-chart .vm-ring-label{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight:400;
+    fill:#000000;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    paint-order:stroke;
+    stroke:#f5f5f5;
+    stroke-width:4px;
+    stroke-linejoin:round;
+  }
+  .vm-chart .vm-center-text{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight:400;
+    fill:#000000;
+    letter-spacing:0;
+  }
+  @media(max-width:880px){
+    .vm-chart{ aspect-ratio: 7 / 16; }
+    .vm-chart .vm-ring{ stroke-width:0.7; }
+    .vm-chart .vm-ring-outer{ stroke-width:0.9; }
+    .vm-chart .vm-sector-line{ stroke-width:0.5; }
+  }
+
+  /* Tier scrollytelling */
+  .tier-scroll{
+    position:relative;
+    width:100%;
+    background:var(--bg);
+    color:var(--ink);
+    /* 5 step panels + 1 exit panel × 100vh, so the sticky iframe remains
+       pinned the entire time tier 5's text is on screen. */
+    --tier-panels: 6;
+    height: calc(var(--tier-panels) * 100vh);
+  }
+  .tier-scroll-inner{ position:relative; height:100%; }
+  .tier-sticky{
+    position:sticky;
+    top:0;
+    height:100vh;
+    width:100%;
+    overflow:hidden;
+    z-index:1;
+  }
+  .tier-sticky iframe{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    border:0;
+    background:transparent;
+    display:block;
+    /* Iframe content shouldn't capture wheel/touch — parent scroll wins. */
+    pointer-events:none;
+  }
+  .tier-readout{ display:none; }
+  .tier-steps{
+    position:relative;
+    z-index:2;
+    pointer-events:none;
+    width:100%;
+    /* Pull steps up so step 1 overlaps the sticky iframe from the very top
+       of the section, instead of starting one viewport later. */
+    margin-top:-100vh;
+  }
+  .tier-step{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    align-items:flex-start;
+    padding:0 32px 64px clamp(40px, 8vw, 140px);
+    box-sizing:border-box;
+    color:#fff;
+    max-width:620px;
+    pointer-events:none;
+  }
+  .tier-step-num{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:12px;
+    letter-spacing:0.14em;
+    opacity:0.45;
+    margin-bottom:10px;
+  }
+  .tier-step-title{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:28px;
+    font-weight:400;
+    letter-spacing:-0.01em;
+    margin-bottom:10px;
+  }
+  .tier-step-body{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:14px;
+    line-height:1.55;
+    color:rgba(255,255,255,0.7);
+    max-width:420px;
+  }
+  @media(max-width:880px){
+    .tier-step{ padding:0 18px 36px; }
+    .tier-step-title{ font-size:22px; }
+    .tier-step-body{ font-size:13px; }
+  }
+
+  /* Features section */
+  .ft-section{
+    padding-top:120px;
+    padding-bottom:140px;
+  }
+  .ft-head{ margin-bottom:56px; }
+  .ft-grid{
+    list-style:none; padding:0; margin:0;
+    display:flex;
+    gap:20px;
+  }
+  .ft-card{
+    background:#ededed;
+    border-radius:20px;
+    padding:clamp(28px,2.4vw,40px);
+    display:flex; flex-direction:column;
+    justify-content:space-between;
+    min-height:clamp(220px,22vw,300px);
+    gap:48px;
+    flex:1 1 0;
+    min-width:0;
+    transition:flex-grow .5s cubic-bezier(.22,.61,.36,1),
+               background-color .4s ease;
+  }
+  @media(min-width:881px){
+    .ft-grid:hover .ft-card{ flex-grow:0.7; }
+    .ft-grid .ft-card:hover{ flex-grow:1.9; background:#e9e9e9; }
+  }
+  .ft-title{
+    font-size:clamp(18px,1.55vw,24px);
+    font-weight:400;
+    letter-spacing:-0.03em;
+    line-height:1.2;
+    margin:0 0 6px;
+    color:var(--ink);
+  }
+  .ft-sub{
+    font-size:clamp(12px,0.9vw,14px);
+    color:var(--muted);
+    letter-spacing:-0.01em;
+    line-height:1.45;
+    margin:0;
+  }
+  .ft-tag{
+    font-size:clamp(11px,0.8vw,13px);
+    color:var(--muted);
+    letter-spacing:-0.01em;
+    align-self:flex-end;
+    text-align:right;
+  }
+
+  @media(max-width:880px){
+    .ft-section{ padding-top:72px; padding-bottom:80px; }
+    .ft-head{ margin-bottom:36px; }
+    .ft-grid{ flex-direction:column; gap:14px; }
+    .ft-card{ flex:0 0 auto; min-height:0; gap:24px; padding:24px; }
+    .ft-title{ font-size:clamp(18px,5vw,22px); }
+    .ft-sub{ font-size:clamp(12px,3.4vw,14px); }
+    .ft-tag{ font-size:clamp(11px,3vw,13px); }
+  }
+
+  /* SAM section */
+  .sam-section{
+    padding-top:120px; padding-bottom:140px;
+  }
+  /* When used as a panel inside the market stack, neutralize padding/border */
+  .market-panel.sam-section{
+    padding:clamp(40px,6vh,80px) 0;
+    border-top:0;
+    overflow:hidden;
+  }
+  .market-panel .wrap{ width:100%; max-height:100%; }
+  .sam-grid{
+    display:grid;
+    grid-template-columns:1.5fr 1fr;
+    column-gap:clamp(48px,8vw,140px);
+    row-gap:clamp(48px,6vw,96px);
+    align-items:start;
+  }
+  .sam-main{ position:relative; display:flex; flex-direction:column; }
+  .sam-side{
+    display:flex; flex-direction:column;
+    gap:clamp(56px,7vw,96px);
+    padding-top:clamp(8px,1vw,24px);
+    text-align:right;
+    align-items:flex-end;
+  }
+  .sam-eyebrow{
+    font-size:clamp(18px,1.6vw,24px);
+    font-weight:400;
+    letter-spacing:-0.02em;
+    color:var(--ink);
+    line-height:1.1;
+  }
+  .sam-eyebrow-sub{
+    font-size:clamp(12px,0.95vw,14px);
+    color:var(--muted);
+    margin-top:6px;
+    letter-spacing:-0.01em;
+    line-height:1.4;
+  }
+  .sam-big{
+    margin-top:clamp(16px,1.8vw,32px);
+    display:flex; align-items:flex-end;
+    line-height:0.9;
+  }
+  .sam-big .sam-count{
+    font-size:clamp(96px,13vw,180px);
+    font-weight:400;
+    letter-spacing:-0.06em;
+    line-height:0.88;
+  }
+  .sam-big .sam-unit{
+    font-size:clamp(36px,5vw,72px);
+    line-height:1;
+    letter-spacing:-0.04em;
+    margin-left:0.04em;
+    padding-bottom:0.12em;
+    color:var(--ink);
+  }
+  .sam-foot{
+    margin-top:clamp(20px,2.5vw,36px);
+    font-size:clamp(20px,2vw,30px);
+    letter-spacing:-0.03em;
+    line-height:1.1;
+  }
+  .sam-stat{ display:flex; flex-direction:column; align-items:flex-end; }
+  .sam-mid{
+    margin-top:clamp(10px,1.2vw,18px);
+    display:flex; align-items:flex-end;
+    justify-content:flex-end;
+    line-height:0.9;
+  }
+  .sam-mid .sam-count{
+    font-size:clamp(44px,6vw,86px);
+    font-weight:400;
+    letter-spacing:-0.05em;
+    line-height:0.9;
+  }
+  .sam-mid .sam-unit{
+    font-size:clamp(20px,2.4vw,36px);
+    letter-spacing:-0.03em;
+    line-height:1;
+    margin-left:0.05em;
+    padding-bottom:0.1em;
+  }
+  .sam-mid .sam-unit-pre{ margin-left:0; margin-right:0.02em; padding-bottom:0; align-self:flex-end; }
+  .sam-cap{
+    margin-top:12px;
+    font-size:clamp(12px,0.95vw,14px);
+    color:var(--muted);
+    letter-spacing:-0.01em;
+    line-height:1.45;
+  }
+  .sam-blurb{
+    margin:clamp(20px,2.4vw,32px) 0 0;
+    max-width:none;
+    text-align:left;
+    font-size:clamp(13px,0.95vw,15px);
+    color:var(--ink);
+    letter-spacing:-0.01em;
+    line-height:1.45;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .sam-sources{
+    margin-top:clamp(10px,1.2vw,16px);
+    display:flex; flex-direction:column; gap:4px;
+    font-size:clamp(10px,0.75vw,11px);
+    color:#959595;
+    letter-spacing:-0.01em;
+    line-height:1.5;
+  }
+
+  /* SAM reveal */
+  /* (handled by .market-panel.is-active opacity transition) */
+
+  @media(max-width:880px){
+    .sam-section{ padding-top:72px; padding-bottom:80px; }
+    .sam-grid{ grid-template-columns:1fr; gap:48px; }
+    .sam-side{ flex-direction:column; gap:40px; padding-top:0; }
+    .sam-big .sam-count{ font-size:clamp(96px,32vw,180px); }
+    .sam-big .sam-unit{ font-size:clamp(40px,12vw,72px); }
+    .sam-mid .sam-count{ font-size:clamp(60px,18vw,110px); }
+    .sam-mid .sam-unit{ font-size:clamp(26px,7vw,42px); }
+    .sam-foot{ font-size:clamp(22px,6.5vw,32px); margin-top:32px; }
+    .sam-blurb{ font-size:clamp(14px,4vw,17px); white-space:normal; }
+  }
+
+  /* TAM → SAM → SOM scroll stack */
+  .market-stack{
+    position:relative;
+    height:300vh; /* 3 panels × 100vh of scroll */
+  }
+  .market-stack::before{ display:none; }
+  .market-stage{
+    position:sticky; top:0;
+    height:100vh;
+    overflow:hidden;
+  }
+  .market-panel{
+    position:absolute; inset:0;
+    display:flex; align-items:center;
+    padding:0;
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity .6s ease, transform .6s cubic-bezier(.22,.61,.36,1);
+    pointer-events:none;
+    border-top:0;
+  }
+  .market-panel.is-active{
+    opacity:1; transform:translateY(0);
+    pointer-events:auto;
+  }
+  .market-panel .wrap{ width:100%; }
+  .market-kicker{
+    display:none;
+  }
+  .market-sub{
+    margin-top:10px;
+    font-size:clamp(14px,1.1vw,18px);
+    color:var(--muted);
+    letter-spacing:-0.01em;
+    line-height:1.4;
+  }
+  .market-panel .ft-head{ margin-bottom:clamp(20px,2.4vw,36px); }
+
+  /* Step indicator */
+  .market-nav{
+    display:none;
+  }
+
+  @media(max-width:880px){
+    .market-stack{ height:auto; }
+    .market-stack::before{ display:none; }
+    .market-stage{ position:relative; height:auto; overflow:visible; }
+    .market-panel{
+      position:relative; inset:auto;
+      opacity:1; transform:none;
+      pointer-events:auto;
+      border-top:1px solid var(--line);
+    }
+    .market-panel:first-of-type{ border-top:0; }
+    .market-nav{ display:none; }
+  }
+
+  .hyp-section{ padding-top:64px; padding-bottom:64px; }
+  .hyp-head{ margin-bottom:48px; }
+  .hyp-title{
+    font-size:clamp(32px,4vw,56px); font-weight:400;
+    letter-spacing:-0.05em; line-height:1;
+  }
+  .hyp-list{
+    list-style:none; padding:0; margin:0;
+    display:flex; flex-direction:column;
+  }
+  .hyp-list li{
+    display:flex; gap:32px; align-items:baseline;
+    padding:24px 0;
+    border-top:1px solid var(--line);
+  }
+  .hyp-list li:last-child{ border-bottom:1px solid var(--line); }
+  .hyp-num{
+    font-size:clamp(18px,1.8vw,28px); color:var(--muted);
+    letter-spacing:-0.04em; line-height:1.35; flex-shrink:0;
+    min-width:48px;
+  }
+  .hyp-text{
+    font-size:clamp(18px,1.8vw,28px); font-weight:400;
+    letter-spacing:-0.04em; line-height:1.35;
+    color:var(--ink);
+  }
+  @media(max-width:880px){
+    .hyp-section{ padding-top:48px; padding-bottom:48px; }
+    .hyp-head{ margin-bottom:32px; }
+    .hyp-list li{ gap:20px; padding:20px 0; }
+    .hyp-num{ min-width:28px; }
+  }
+
+  /* ============================================================
+     Entity Diagram (after Stakeholder mapping)
+     Two layouts: desktop SVG (1664×723) & mobile vertical list.
+     ============================================================ */
+  .entity-section{
+    padding:120px 0 100px;
+    background:var(--bg); color:var(--ink);
+    position:relative;
+  }
+  .entity-section::before{ display:none; }
+  .entity-head{
+    max-width:var(--max);
+    margin:0 auto 56px;
+    padding-left:var(--pad); padding-right:var(--pad);
+    display:grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "title meta"
+      "sub   meta";
+    column-gap:48px;
+    row-gap:16px;
+    align-items:end;
+  }
+  .entity-eyebrow{
+    font-size:clamp(11px,0.85vw,13px);
+    color:var(--muted);
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    margin:0;
+  }
+  .entity-footnote{
+    max-width:var(--max);
+    margin:48px auto 0;
+    padding-left:var(--pad); padding-right:var(--pad);
+    color:var(--muted);
+    font-size:clamp(11px,0.85vw,13px);
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+  }
+  .entity-title{
+    grid-area:title;
+    font-size:clamp(32px,4vw,56px);
+    font-weight:400;
+    letter-spacing:-0.05em;
+    line-height:1;
+    color:var(--ink);
+    margin:0;
+  }
+  .entity-sub{
+    grid-area:sub;
+    margin:0;
+    font-size:clamp(14px,1.1vw,18px);
+    color:var(--muted);
+    letter-spacing:-0.01em;
+    line-height:1.45;
+    max-width:640px;
+  }
+  .entity-meta{
+    grid-area:meta;
+    display:flex; gap:10px; flex-wrap:wrap;
+    justify-content:flex-end;
+    margin:0;
+  }
+  .entity-meta .em-stat{
+    display:inline-flex; align-items:baseline; gap:8px;
+    padding:10px 14px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    font-size:11px;
+    color:var(--muted);
+    letter-spacing:-0.01em;
+    white-space:nowrap;
+  }
+  .entity-meta .em-stat b{
+    color:var(--ink); font-weight:500;
+    font-size:13px; letter-spacing:-0.02em;
+  }
+
+  /* Desktop SVG canvas */
+  .entity-canvas-wrap{
+    max-width:var(--max); margin:0 auto;
+    padding-left:var(--pad); padding-right:var(--pad);
+    display:flex; justify-content:center;
+  }
+  .entity-canvas{
+    width:100%;
+    aspect-ratio:1664 / 723;
+    position:relative;
+    background:transparent;
+    margin:0 auto;
+  }
+  .entity-canvas svg{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    display:block;
+  }
+
+  /* Relationship paths — quiet, static structural lines */
+  .er-rel{
+    fill:none; stroke:#000000; stroke-width:0.6;
+    opacity:0.18;
+  }
+  .er-rel.is-dashed{ stroke-dasharray:3 5; opacity:0.12; }
+  .er-rel-label{
+    fill:#000000; opacity:0.32; font-size:8px;
+    letter-spacing:-0.02em;
+  }
+
+  /* Box-sequence pulse — each entity fades in to white, holds briefly,
+     then fades out. Registered custom properties make color/number
+     transitions actually interpolate (otherwise they snap). */
+  @property --erc { syntax:'<color>'; inherits:true; initial-value:#e5e5e5; }
+  @property --ert { syntax:'<color>'; inherits:true; initial-value:#000000; }
+  @property --ers { syntax:'<color>'; inherits:true; initial-value:#000000; }
+  @property --erso { syntax:'<number>'; inherits:true; initial-value:0; }
+  @property --erg { syntax:'<number>'; inherits:true; initial-value:0; }
+
+  .er-entity{
+    --erc:#e5e5e5;
+    --ert:#000000;
+    --ers:#000000;
+    --erso:0;
+    --erg:0;
+    filter:drop-shadow(0 0 calc(var(--erg) * 14px) rgba(0,0,0,calc(var(--erg) * 0.55)));
+    transition: --erc .35s ease, --ert .35s ease, --erg .35s ease;
+    cursor:default;
+  }
+  .er-entity.is-lit{ --erc:#000000; --ert:#ffffff; --erg:1; }
+  .er-entity rect{
+    fill:var(--erc); stroke:var(--ers); stroke-width:0;
+    stroke-opacity:var(--erso);
+  }
+  .er-entity text{ fill:var(--ert); }
+  .er-entity-title{ font-size:11px; letter-spacing:-0.03em; }
+  .er-entity-tag{ font-size:8px; opacity:0.45; }
+  .er-entity-rule{ stroke:var(--ert); stroke-width:0.4; opacity:0.22; }
+  .er-attr{ font-size:9px; letter-spacing:-0.02em; opacity:0.85; }
+  .er-attr.is-key{ opacity:1; }
+  .er-dim{ opacity:0.55; }
+
+  @keyframes erBoxPulse{
+    /* dim rest — dark gray box, no border */
+    0%, 94%, 100% {
+      --erc:#e5e5e5; --ert:#000000; --erso:0; --erg:0;
+    }
+    /* warm-up */
+    3% {
+      --erc:#d5d5d5; --ert:#000000; --erso:0; --erg:0.35;
+    }
+    /* rising */
+    6% {
+      --erc:#a5a5a5; --ert:#000000; --erso:0; --erg:0.7;
+    }
+    /* peak — full white */
+    9%, 15% {
+      --erc:#000000; --ert:#ffffff; --erso:0; --erg:1;
+    }
+    /* easing down */
+    18% {
+      --erc:#a5a5a5; --ert:#000000; --erso:0; --erg:0.7;
+    }
+    22% {
+      --erc:#d5d5d5; --ert:#000000; --erso:0; --erg:0.3;
+    }
+    /* settled */
+    28% {
+      --erc:#e5e5e5; --ert:#000000; --erso:0; --erg:0;
+    }
+  }
+
+  /* Hide the old line-pulse overlay layer (we keep the markup harmless) */
+  .er-flow{ display:none; }
+
+  /* Zone separators & labels — pure structural cues */
+  .er-band-line{ stroke:#000000; stroke-width:0.4; opacity:0.12; stroke-dasharray:3 5; }
+  .er-band-label{
+    fill:#000000; opacity:0.45; font-size:10px;
+    letter-spacing:0.14em; text-transform:uppercase;
+  }
+  .er-zone-glow{ display:none; }
+
+  /* Legend — restyled to portfolio typography */
+  .entity-legend{
+    max-width:var(--max); margin:40px auto 0;
+    padding-left:var(--pad); padding-right:var(--pad);
+    display:flex; flex-wrap:wrap; gap:14px 28px;
+    font-size:11px; color:var(--muted);
+    letter-spacing:-0.02em;
+  }
+  .entity-legend .lg-key{ display:inline-flex; align-items:center; gap:8px; }
+  .entity-legend .lg-mark{
+    display:inline-block; width:18px; height:1px; background:var(--ink); opacity:0.6;
+  }
+  .entity-legend .lg-mark.dashed{ background:transparent; border-top:1px dashed var(--ink); opacity:0.5; }
+  .entity-legend .lg-mark.box{
+    width:14px; height:10px; background:transparent;
+    border:1px solid var(--ink); border-radius:2px; opacity:0.7;
+    animation:erLegendBox 3.6s ease-in-out infinite;
+    box-shadow:0 0 0 rgba(0,0,0,0);
+  }
+  @keyframes erLegendBox{
+    0%, 100% { background:transparent; box-shadow:0 0 0 rgba(0,0,0,0); }
+    30%, 60% { background:var(--ink); box-shadow:0 0 8px rgba(0,0,0,0.45); }
+  }
+  .entity-legend .lg-glyph{ color:var(--ink); font-weight:500; }
+
+  /* ============================================================
+     Mobile vertical view (replaces SVG canvas on narrow screens).
+     ============================================================ */
+  @property --emc { syntax:'<color>'; inherits:true; initial-value:#f5f5f5; }
+  @property --emt { syntax:'<color>'; inherits:true; initial-value:#000000; }
+  @property --emb { syntax:'<color>'; inherits:true; initial-value:rgba(0,0,0,0.18); }
+  @property --emg { syntax:'<number>'; inherits:true; initial-value:0; }
+
+  .entity-mobile{ display:none; }
+  @media (max-width:768px){
+    .entity-section{ padding:80px 0 64px; }
+    .entity-head{
+      grid-template-columns:1fr;
+      grid-template-areas:
+        "title"
+        "sub"
+        "meta";
+      row-gap:14px;
+      margin-bottom:36px;
+    }
+    .entity-title{ font-size:clamp(28px,8vw,40px); }
+    .entity-sub{ font-size:14px; line-height:1.55; }
+    .entity-meta{ justify-content:flex-start; gap:8px; margin-top:6px; }
+    .entity-meta .em-stat{ padding:8px 12px; font-size:10.5px; }
+    .entity-meta .em-stat b{ font-size:12px; }
+    .entity-canvas-wrap{ display:none; }
+    .entity-legend{ gap:8px 16px; font-size:10px; margin-top:22px;
+      max-width:var(--max); padding-left:var(--pad); padding-right:var(--pad);
+    }
+    .entity-legend .lg-mark{ width:14px; }
+
+    .entity-mobile{
+      display:block;
+      max-width:var(--max); margin:0 auto;
+      padding-left:var(--pad); padding-right:var(--pad);
+    }
+    .em-zone{
+      position:relative;
+      border-radius:14px;
+      padding:14px 14px 12px;
+      margin-bottom:10px;
+      background:#eeeeee;
+    }
+    .em-zone-label{
+      font-size:9.5px; color:var(--muted);
+      letter-spacing:0.18em; text-transform:uppercase;
+      margin-bottom:12px;
+      padding-bottom:10px;
+      border-bottom:1px solid rgba(0,0,0,0.06);
+    }
+    .em-entities{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:6px;
+    }
+    .em-entity{
+      --emc:#e5e5e5;
+      --emt:#000000;
+      --emg:0;
+      border:0;
+      border-radius:8px;
+      padding:9px 11px;
+      font-size:11px;
+      letter-spacing:-0.02em;
+      background:var(--emc);
+      color:var(--emt);
+      display:flex; flex-direction:column; gap:3px;
+      min-height:44px;
+      box-shadow:0 0 calc(var(--emg) * 18px) rgba(0,0,0,calc(var(--emg) * 0.45));
+      transition: --emc .35s ease, --emt .35s ease, --emg .35s ease;
+    }
+    .em-entity.is-lit{ --emc:#000000; --emt:#ffffff; --emg:1; }
+    .em-entity .em-name{
+      font-weight:500; color:inherit;
+      font-size:11.5px; letter-spacing:-0.025em;
+    }
+    .em-entity .em-tag{
+      font-size:9px; opacity:0.6; color:inherit;
+      letter-spacing:0; line-height:1.3;
+    }
+    @keyframes emBoxPulse{
+      0%, 94%, 100% {
+        --emc:#e5e5e5; --emt:#000000; --emg:0;
+      }
+      3% {
+        --emc:#d5d5d5; --emt:#000000; --emg:0.35;
+      }
+      6% {
+        --emc:#a5a5a5; --emt:#000000; --emg:0.7;
+      }
+      9%, 15% {
+        --emc:#000000; --emt:#ffffff; --emg:1;
+      }
+      18% {
+        --emc:#a5a5a5; --emt:#000000; --emg:0.7;
+      }
+      22% {
+        --emc:#d5d5d5; --emt:#000000; --emg:0.3;
+      }
+      28% {
+        --emc:#e5e5e5; --emt:#000000; --emg:0;
+      }
+    }
+
+    /* Loop indicator note between zones (no traveling dot — boxes carry the pulse) */
+    .em-flow{ display:none; }
+    .em-loop-note{
+      text-align:center;
+      font-size:9.5px; color:var(--muted);
+      letter-spacing:0.16em; text-transform:uppercase;
+      margin-top:14px;
+      padding-top:14px;
+      border-top:1px dashed var(--line);
+    }
+  }
+
+  /* Very narrow phones: single column, smaller padding */
+  @media (max-width:420px){
+    .em-zone{ padding:12px 12px 10px; border-radius:12px; }
+    .em-entities{ grid-template-columns:1fr; gap:5px; }
+    .em-entity{ padding:8px 10px; min-height:0; flex-direction:row; align-items:baseline; gap:8px; }
+    .em-entity .em-name{ font-size:11.5px; }
+    .em-entity .em-tag{ font-size:9px; opacity:0.55; margin-left:auto; text-align:right; }
+  }
+
+  .interaction-overview-section{
+    padding-top:clamp(56px,8vw,120px);
+    padding-bottom:clamp(56px,8vw,120px);
+  }
+  .vimeo-section{
+    padding-top:clamp(56px,8vw,120px);
+    padding-bottom:clamp(56px,8vw,120px);
+  }
+  .vimeo-frame{
+    width:100%;
+    line-height:0;
+  }
+  .vimeo-frame iframe{
+    width:100%;
+    height:auto;
+    aspect-ratio:16/9;
+    border:0;
+    display:block;
+  }
 
   /* PHASE COLLAPSIBLE */
   .phase-media-wrap{ max-width:var(--max); margin:0 auto; padding:clamp(28px,4vw,48px) var(--pad) clamp(40px,6vw,80px); cursor:pointer; }
@@ -260,22 +1607,137 @@
     padding-left:var(--pad); padding-right:var(--pad);
   }
   .phase-num{ font-size:11px; color:var(--muted); letter-spacing:0.07em; margin-bottom:4px; }
-  .phase-name{
-    font-size:clamp(22px,3vw,42px); font-weight:500;
-    letter-spacing:-0.04em; line-height:1.1;
-    transition:opacity .2s; margin-bottom:4px;
-  }
+  .phase-name{ font-size:clamp(22px,3vw,42px); font-weight:400; letter-spacing:-0.04em; line-height:1.1; transition:opacity .2s; margin-bottom:4px; }
   .phase-sub{ font-size:13px; color:var(--muted); letter-spacing:-0.02em; line-height:1.4; }
+  /* Flat chapter headers (content rebuilt from scratch) */
+  .phase-flat{ max-width:var(--max); margin:0 auto; padding:clamp(56px,8vw,110px) var(--pad) clamp(28px,3.5vw,44px); border-top:1px solid var(--line); }
+  .phase-flat .phase-num{ margin-bottom:10px; }
+  .phase-flat .phase-name{ margin-bottom:8px; }
+  .phase-desc{ margin-top:clamp(20px,2.2vw,30px); font-size:clamp(16px,1.5vw,22px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
+  .phase-note{ margin-top:clamp(16px,1.8vw,24px); font-size:clamp(14px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.65; max-width:none; text-align:justify; }
+  .phase-note em{ font-style:normal; color:var(--ink); }
+  /* two photos + showcase video, equal height, natural widths (near-zero crop) */
+  .chapter-media-duo{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(200px,26vw,376px); margin-bottom:clamp(32px,4vw,48px); }
+  .chapter-media-duo .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; }
+  .chapter-media-duo .cell img, .chapter-media-duo .cell video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
+  .chapter-media-duo .m1{ flex:1.777 1 0; }  /* IMG_5507 16:9 */
+  .chapter-media-duo .m2{ flex:0.75 1 0; }   /* IMG_5493(1) portrait 3:4 */
+  .chapter-media-duo .m3{ flex:1.2 1 0; }    /* showcase video 6:5 */
+  /* four-up preview row. Each weight is the image's own aspect ratio, and the
+     row height is set so the four widths add up to the content measure, which
+     is what keeps the cover crop at zero instead of trimming the sides. */
+  .chapter-media-quad{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(150px,19.7vw,284px); margin-bottom:clamp(32px,4vw,48px); }
+  .chapter-media-quad .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; }
+  .chapter-media-quad .cell img{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
+  .chapter-media-quad .q1{ flex:0.667 1 0; } /* 3000x4500, 2:3  */
+  .chapter-media-quad .q2{ flex:1.335 1 0; } /* 1800x1348, 4:3  */
+  .chapter-media-quad .q3{ flex:1.335 1 0; } /* 1449x1085, 4:3  */
+  .chapter-media-quad .q4{ flex:1.333 1 0; } /* 1448x1086, 4:3  */
+  /* subsection within a chapter (e.g. Snapshot inside Overview) */
+  .subsec{ margin-top:clamp(48px,6vw,88px); }
+  .subsec-title{ font-size:clamp(20px,2vw,30px); font-weight:400; letter-spacing:-0.04em; line-height:1.15; color:var(--ink); }
+  .subsec-lead{ margin-top:clamp(14px,1.6vw,20px); font-size:clamp(16px,1.4vw,20px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
+  /* 16:9 video container (no rounded edges) */
+  .subsec-video{ position:relative; aspect-ratio:16/9; overflow:hidden; background:transparent; margin-top:clamp(20px,2.4vw,32px); }
+  /* wider 2:1 crop for the conceptual MVP walkthrough */
+  .subsec-video.wide{ aspect-ratio:2/1; }
+  /* native 8:5 for phone-mockup demos, so the status bar and nav are never cropped */
+  .subsec-video.native{ aspect-ratio:8/5; }
+
+  /* iOS Safari will not clip a composited video layer with overflow:hidden alone,
+     so the 1px bleed above leaks past the edge and reads as a faint outline.
+     The mask forces a real clipping layer; white and black are both fully opaque,
+     so the alpha stays 1 throughout and nothing fades. Same fix as .ongen-work. */
+  .hero-video,
+  .subsec-video,
+  .chapter-media-quad .cell,
+  .chapter-media-duo .cell{
+    -webkit-mask-image:-webkit-radial-gradient(white,black);
+    mask-image:radial-gradient(white,black);
+    transform:translateZ(0);
+  }
+  .subsec-video video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
+  /* full-width image at natural aspect ratio (e.g. logo row) */
+  .subsec-img{ display:block; width:100%; height:auto; margin-top:clamp(20px,2.4vw,32px); }
+
+  /* labelled build/stack breakdown (label | role) */
+  .build-list{ list-style:none; padding:0; margin:clamp(20px,2.4vw,32px) 0 0; }
+  .build-list li{ display:grid; grid-template-columns:200px 1fr; gap:clamp(16px,3vw,44px); padding:9px 0; }
+  /* wider label column for the longer feature names */
+  .build-list.features li{ grid-template-columns:260px 1fr; }
+
+  /* GradEX showcase row — video + photos, equal height, natural widths (near-zero crop) */
+  .gradex-row{ display:flex; gap:clamp(8px,1vw,14px); height:clamp(150px,20vw,320px); margin-top:clamp(20px,2.4vw,32px); }
+  .gradex-row figure{ margin:0; position:relative; overflow:hidden; background:transparent; min-width:0; }
+  .gradex-row img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .gradex-row video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
+  .gradex-row .v{ flex:1.333 1 0; }
+  .gradex-row .a{ flex:1.333 1 0; }
+  .gradex-row .b{ flex:0.749 1 0; }
+  .gradex-row .c{ flex:1.333 1 0; }
+  .gradex-cap{ margin-top:12px; font-size:clamp(11px,0.85vw,13px); color:var(--muted); letter-spacing:-0.01em; }
+  .build-list .k{ font-size:clamp(13px,1.05vw,16px); color:var(--ink); letter-spacing:-0.02em; }
+  .build-list .v{ font-size:clamp(13px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.5; }
+
+  /* ============ mobile refinements ============ */
+  @media(max-width:640px){
+    /* fit nav on a phone */
+    .nav-inner{ font-size:12px; padding:14px var(--pad); }
+    .nav-links{ gap:15px; }
+
+    /* meta stacks so long values wrap instead of forcing horizontal overflow */
+    .hero-side{ flex-direction:column; gap:13px; }
+    .hero-side .pair{ width:100%; }
+
+    /* smaller, tighter display type */
+    .hero-name{ font-size:clamp(22px,6.5vw,30px); letter-spacing:-0.035em; }
+    .hero-tagline{ font-size:14px; margin-top:12px; }
+    .phase-flat .phase-name{ font-size:clamp(19px,6vw,26px); }
+    .subsec-title{ font-size:clamp(17px,5vw,22px); }
+    .subsec{ margin-top:clamp(36px,9vw,56px); }
+
+    /* body copy: smaller, looser tracking, left-aligned
+       (justify leaves ugly word-gaps in a narrow column) */
+    .phase-desc{ font-size:15px; letter-spacing:-0.015em; line-height:1.45; margin-top:16px; }
+    .subsec-lead{ font-size:15px; letter-spacing:-0.015em; line-height:1.45; }
+    .phase-note{ font-size:13px; letter-spacing:-0.005em; line-height:1.55; text-align:left; }
+    .build-list li, .build-list.features li{ grid-template-columns:1fr; gap:4px; padding:14px 0; }
+    .build-list .k,.build-list .v{ font-size:13px; }
+    /* stack the top media row on phones */
+    .chapter-media-duo{ flex-direction:column; height:auto; gap:10px; }
+    .chapter-media-duo .cell{ flex:none; }
+    .chapter-media-duo .m1{ aspect-ratio:16/9; }
+    .chapter-media-duo .m2{ aspect-ratio:3/4; }
+    .chapter-media-duo .m3{ aspect-ratio:6/5; }
+    /* stack the preview row too. Class selectors, not `.cell`, so these beat
+       the .q1-.q4 flex weights on specificity rather than losing to them. */
+    .chapter-media-quad{ flex-direction:column; height:auto; gap:10px; }
+    .chapter-media-quad .q1,.chapter-media-quad .q2,
+    .chapter-media-quad .q3,.chapter-media-quad .q4{ flex:none; }
+    .chapter-media-quad .q1{ aspect-ratio:2/3; }
+    .chapter-media-quad .q2,.chapter-media-quad .q3,.chapter-media-quad .q4{ aspect-ratio:4/3; }
+    /* stack the GradEX photos on phones */
+    .gradex-row{ flex-direction:column; height:auto; gap:10px; }
+    .gradex-row figure{ flex:none; }
+    .gradex-row .v{ aspect-ratio:4/3; }
+    .gradex-row .a, .gradex-row .c{ aspect-ratio:4/3; }
+    .gradex-row .b{ aspect-ratio:3/4; }
+  }
+  @media(max-width:880px){ .phase-flat{ padding-top:clamp(40px,10vw,64px); } }
   .phase-toggle:hover .phase-name{ opacity:0.6; }
   .phase-arrow{ flex-shrink:0; color:var(--muted); transition:transform 0.38s ease; }
   .phase-block[data-open] .phase-arrow{ transform:rotate(180deg); }
   .phase-body{ display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.45s ease; }
   .phase-block[data-open] .phase-body{ grid-template-rows:1fr; }
   .phase-body-inner{ overflow:hidden; }
+  /* Market Analysis: sticky-safe — no overflow:hidden so market-stage sticky works */
+  .phase-block[data-market-phase] .phase-body{ display:none; }
+  .phase-block[data-market-phase][data-open] .phase-body{ display:block; }
+  .phase-block[data-market-phase] .phase-body-inner{ overflow:visible; }
   .phase-media{
     width:100%; height:0; padding-top:56.25%;   /* 16:9 viewport */
     border-radius:16px; overflow:hidden;
-    background:#d8d8d8; position:relative;
+    background:#ffffff; position:relative;
     transition:padding-top .45s ease;
   }
   /* Expanded: viewport height halves (center-cropped); inner content keeps its size */
@@ -285,17 +1747,17 @@
     width:100%; height:auto !important; aspect-ratio:16/9;
     transform:translateY(-50%);
   }
-
-  @media(max-width:880px){
-    .hero-name{ font-size:clamp(24px,7vw,48px); }
-    .report-name{ font-size:clamp(20px,6vw,40px); }
-    .kpi-row{ padding:24px 0; }
-    .kpi{ padding:0 20px; }
-  }
-  @media(max-width:640px){
-    .kpi-row{ grid-template-columns:1fr; padding:0; }
-    .kpi{ padding:20px 0; }
-    .kpi + .kpi{ border-left:none; border-top:1px solid var(--line); }
+  #ascii-stage, #valu-stage, #market-stage, #stakeholder-stage{ position:relative; }
+  #ascii-pre, #valu-pre, #market-pre, #stakeholder-pre{
+    position:absolute; top:0; left:0; margin:0; padding:0;
+    font-family:'Courier New',Courier,monospace;
+    font-size:12px; line-height:1.15;
+    white-space:pre;
+    color:#000000;
+    transform-origin:top left;
+    pointer-events:none;
+    user-select:none;
+    -webkit-user-select:none;
   }
 </style>
 <style>
@@ -303,6 +1765,181 @@
 :root{ --accent:#007aff; }
 html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 ::selection{ background:#007aff; color:#ffffff; }
+</style>
+<style>
+/* ===== Hypothesis · Theoretical Grounding — animated concept icons ===== */
+.ctx-section{ padding-top:24px; padding-bottom:72px; }
+.ctx-eyebrow{ font-size:12px; color:var(--muted); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:16px; }
+.ctx-section .hyp-title{ margin-bottom:18px; }
+.ctx-lede{ font-size:clamp(15px,1.25vw,18px); color:var(--muted); line-height:1.6; letter-spacing:-0.02em; max-width:64ch; }
+.ctx-list{ margin-top:28px; }
+.ctx-item{ display:grid; grid-template-columns:84px 1fr; gap:clamp(20px,3vw,48px); align-items:start; padding:38px 0; border-top:1px solid var(--line); }
+.ctx-item:last-child{ border-bottom:1px solid var(--line); }
+.ctx-ico{ width:72px; height:72px; color:var(--ink); }
+.ctx-ico svg{ width:100%; height:100%; overflow:visible; display:block; }
+.ctx-tag{ font-size:12px; color:var(--muted); letter-spacing:0.04em; text-transform:uppercase; margin-bottom:10px; }
+.ctx-item.is-frame .ctx-tag{ color:var(--accent,#007aff); }
+.ctx-name{ font-size:clamp(20px,2vw,30px); font-weight:400; letter-spacing:-0.04em; line-height:1.15; margin:0 0 14px; color:var(--ink); }
+.ctx-desc{ font-size:clamp(14px,1.05vw,16px); color:var(--muted); line-height:1.62; letter-spacing:-0.01em; max-width:66ch; }
+.ctx-vision{ font-size:clamp(14px,1.05vw,16px); color:var(--ink); line-height:1.5; letter-spacing:-0.01em; margin-top:16px; padding-left:16px; border-left:2px solid var(--line); font-style:italic; opacity:.9; max-width:60ch; }
+.ctx-cite{ display:block; font-size:12px; color:var(--muted); line-height:1.55; margin-top:16px; font-style:normal; }
+.ctx-cite i{ font-style:italic; }
+.ctx-cite a{ color:var(--muted); text-decoration:underline; text-underline-offset:2px; word-break:break-word; }
+@media(max-width:760px){
+  .ctx-item{ grid-template-columns:1fr; gap:16px; padding:28px 0; }
+  .ctx-ico{ width:56px; height:56px; }
+}
+/* icon palette (white on dark) */
+.ctx-ico .st{ fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+.ctx-ico .fl{ fill:currentColor; }
+.ctx-ico .dim{ fill:none; stroke:currentColor; stroke-width:2; opacity:.28; }
+/* 1) spark — machine-gathered data */
+.ctx-spark .sp{ transform-box:fill-box; transform-origin:center; animation:cxspark 3s ease-in-out infinite; }
+.ctx-spark .dot{ transform-box:fill-box; transform-origin:center; animation:cxtwinkle 2.4s ease-in-out infinite; }
+.ctx-spark .dot.d2{ animation-delay:.6s } .ctx-spark .dot.d3{ animation-delay:1.2s }
+@keyframes cxspark{ 0%,100%{ transform:scale(.9) rotate(0deg); opacity:.85 } 50%{ transform:scale(1.05) rotate(18deg); opacity:1 } }
+@keyframes cxtwinkle{ 0%,100%{ transform:scale(.45); opacity:.2 } 50%{ transform:scale(1); opacity:.95 } }
+/* 2) radar — context-aware */
+.ctx-radar .rg{ transform-box:fill-box; transform-origin:center; animation:cxripple 2.8s ease-out infinite; }
+.ctx-radar .rg.r2{ animation-delay:.9s } .ctx-radar .rg.r3{ animation-delay:1.8s }
+@keyframes cxripple{ 0%{ transform:scale(.18); opacity:0 } 22%{ opacity:.9 } 100%{ transform:scale(1); opacity:0 } }
+/* 3) detect — object detection */
+.ctx-detect .scan{ animation:cxscan 2.6s ease-in-out infinite; }
+.ctx-detect .tgt{ transform-box:fill-box; transform-origin:center; animation:cxtwinkle 2s ease-in-out infinite; }
+@keyframes cxscan{ 0%,100%{ transform:translateY(-11px); opacity:.25 } 50%{ transform:translateY(11px); opacity:1 } }
+/* 4) glasses — hybrid multimodal */
+.ctx-glass .sig{ transform-box:fill-box; transform-origin:center; animation:cxsignal 2.2s ease-out infinite; }
+.ctx-glass .sig.s2{ animation-delay:.7s }
+@keyframes cxsignal{ 0%{ transform:scale(.4); opacity:0 } 30%{ opacity:.9 } 100%{ transform:scale(1.15); opacity:0 } }
+/* 5) window — context engineering */
+.ctx-window .bar{ transform-box:fill-box; transform-origin:bottom; animation:cxfill 3s ease-in-out infinite; }
+.ctx-window .bar.b2{ animation-delay:.35s } .ctx-window .bar.b3{ animation-delay:.7s } .ctx-window .bar.b4{ animation-delay:1.05s }
+@keyframes cxfill{ 0%,12%{ transform:scaleY(0); opacity:.25 } 42%,78%{ transform:scaleY(1); opacity:1 } 100%{ transform:scaleY(0); opacity:.25 } }
+/* 6) adapt — contextual design */
+.ctx-adapt .inr{ transform-box:fill-box; transform-origin:center; animation:cxadapt 3.4s ease-in-out infinite; }
+@keyframes cxadapt{ 0%,100%{ transform:scale(.5) } 50%{ transform:scale(1) } }
+@media (prefers-reduced-motion:reduce){ .ctx-ico *{ animation:none !important; } }
+
+/* ===== Hypothesis · paradigm — thesis, animated diagrams, AI-use stats ===== */
+.para-section{ padding-top:8px; padding-bottom:8px; }
+.para-thesis{ font-size:clamp(22px,2.6vw,40px); font-weight:400; letter-spacing:-0.04em; line-height:1.3; color:var(--ink); max-width:24ch; }
+.para-thesis{ max-width:none; }
+.para-thesis em{ font-style:normal; color:var(--accent,#007aff); }
+.para-fig{ margin:clamp(44px,5.5vw,80px) 0 0; }
+.dgm-svg{ width:100%; height:auto; display:block; overflow:visible; }
+.dgm-svg text{ font-family:var(--font); }
+.dgm-big{ fill:#000000; font-weight:400; font-size:72px; letter-spacing:-2px; }
+.dgm-big2{ fill:#000000; font-weight:400; font-size:60px; letter-spacing:-1.5px; }
+.dgm-mid{ fill:#000000; font-weight:400; font-size:52px; letter-spacing:-1px; }
+.dgm-sub{ fill:#000000; font-weight:400; font-size:24px; }
+.dgm-lbl{ fill:var(--muted); font-size:22px; }
+.dgm-ln,.dgm-tick{ stroke:#000000; stroke-width:1.5; }
+.dgm-ar{ fill:none; stroke:#000000; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.dgm-br{ fill:none; stroke:var(--muted); stroke-width:1.5; stroke-dasharray:4 6; opacity:.6; }
+.dgm-dot{ stroke:var(--muted); stroke-width:2; stroke-dasharray:2 7; stroke-linecap:round; opacity:.8; }
+.dgm-flow-top{ stroke-dasharray:7 7; animation:dgmflowR 1.6s linear infinite; }
+.dgm-flow-bot{ stroke-dasharray:7 7; animation:dgmflowL 1.6s linear infinite; }
+@keyframes dgmflowR{ to{ stroke-dashoffset:-28; } }
+@keyframes dgmflowL{ to{ stroke-dashoffset:28; } }
+.dgm-core{ fill:#000000; transform-box:fill-box; transform-origin:center; animation:dgmcore 2s ease-in-out infinite; }
+.dgm-wave{ fill:none; stroke:#000000; stroke-width:6; stroke-linecap:round; }
+.dgm-wave.w1{ animation:dgmwave 2s ease-out infinite; }
+.dgm-wave.w2{ animation:dgmwave 2s ease-out infinite .55s; }
+@keyframes dgmwave{ 0%{ opacity:.12 } 45%{ opacity:1 } 100%{ opacity:.12 } }
+@keyframes dgmcore{ 0%,100%{ transform:scale(.85) } 50%{ transform:scale(1.12) } }
+.para-cap{ margin-top:18px; font-size:clamp(13px,1vw,15px); color:var(--muted); line-height:1.5; letter-spacing:-0.01em; }
+.para-cap b{ color:var(--ink); font-weight:500; }
+.para-stats{ margin-top:clamp(48px,6vw,88px); }
+.para-stats-head{ font-size:13px; color:var(--muted); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:24px; }
+.stat-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:18px; }
+.stat-row{ display:grid; grid-template-columns:minmax(150px,1.1fr) 3fr auto; gap:20px; align-items:center; }
+.stat-name{ font-size:clamp(14px,1.1vw,17px); color:var(--ink); letter-spacing:-0.01em; }
+.stat-track{ height:6px; background:var(--line); border-radius:999px; overflow:hidden; }
+.stat-track i{ display:block; height:100%; background:var(--ink); border-radius:999px; transform-origin:left; animation:statgrow 1.2s cubic-bezier(.7,0,.2,1) both; }
+.stat-pct{ font-size:clamp(14px,1.1vw,17px); color:var(--ink); font-variant-numeric:tabular-nums; min-width:54px; text-align:right; }
+@keyframes statgrow{ from{ transform:scaleX(0) } to{ transform:scaleX(1) } }
+@media(max-width:680px){ .stat-row{ grid-template-columns:1fr auto; } .stat-track{ grid-column:1 / -1; order:3; } }
+@media (prefers-reduced-motion:reduce){ .dgm-flow-top,.dgm-flow-bot,.dgm-core,.dgm-wave,.stat-track i{ animation:none !important; } }
+
+/* ===== Value Architecture · Propositional Model, manifesto, On-Air ===== */
+.prop-section{ padding-top:8px; padding-bottom:8px; }
+.prop-lede{ font-size:clamp(18px,1.9vw,28px); font-weight:400; letter-spacing:-0.03em; line-height:1.4; color:var(--ink); max-width:62ch; }
+.prop-model{ display:grid; grid-template-columns:96px 1fr; gap:clamp(24px,3.5vw,56px); align-items:start; margin-top:clamp(40px,5vw,72px); padding-top:clamp(32px,4vw,48px); border-top:1px solid var(--line); }
+.prop-ico{ width:80px; height:80px; color:var(--ink); }
+.prop-ico svg{ width:100%; height:100%; display:block; overflow:visible; }
+.prop-title{ font-size:clamp(22px,2.4vw,38px); font-weight:400; letter-spacing:-0.04em; line-height:1.12; color:var(--ink); margin:0 0 20px; }
+.prop-body{ font-size:clamp(14px,1.1vw,17px); color:var(--muted); line-height:1.65; letter-spacing:-0.01em; max-width:62ch; }
+.prop-body + .prop-body{ margin-top:16px; }
+@media(max-width:760px){ .prop-model{ grid-template-columns:1fr; gap:20px; } .prop-ico{ width:60px; height:60px; } }
+.prop-ico .eq{ fill:currentColor; transform-box:fill-box; transform-origin:center; }
+.prop-ico .eq.b1{ animation:eqbar 1.1s ease-in-out infinite }
+.prop-ico .eq.b2{ animation:eqbar 1.1s ease-in-out infinite .14s }
+.prop-ico .eq.b3{ animation:eqbar 1.1s ease-in-out infinite .28s }
+.prop-ico .eq.b4{ animation:eqbar 1.1s ease-in-out infinite .42s }
+.prop-ico .eq.b5{ animation:eqbar 1.1s ease-in-out infinite .56s }
+@keyframes eqbar{ 0%,100%{ transform:scaleY(.3) } 50%{ transform:scaleY(1) } }
+.manifesto{ padding-top:clamp(64px,8vw,120px); padding-bottom:clamp(40px,5vw,72px); }
+.manifesto-p{ font-size:clamp(22px,2.8vw,42px); font-weight:400; letter-spacing:-0.04em; line-height:1.34; color:var(--muted); }
+.manifesto-p b{ color:var(--ink); font-weight:400; }
+.manifesto-p + .manifesto-p{ margin-top:clamp(28px,3.5vw,56px); }
+.onair{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(56px,7vw,110px); border-top:1px solid var(--line); text-align:center; }
+.onair-badge{ display:inline-flex; align-items:center; gap:10px; margin-bottom:22px; }
+.onair-dot{ width:11px; height:11px; border-radius:50%; background:var(--accent,#007aff); animation:onairpulse 1.7s ease-in-out infinite; }
+.onair-live{ font-size:12px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
+.onair-title{ font-size:clamp(34px,5vw,72px); font-weight:400; letter-spacing:-0.05em; line-height:1; color:var(--ink); }
+.onair-sub{ font-size:clamp(14px,1.2vw,18px); color:var(--muted); letter-spacing:-0.01em; margin-top:16px; }
+@keyframes onairpulse{ 0%,100%{ opacity:.45; transform:scale(.8); box-shadow:0 0 0 0 rgba(0,122,255,0) } 50%{ opacity:1; transform:scale(1); box-shadow:0 0 0 7px rgba(0,122,255,.12) } }
+@media (prefers-reduced-motion:reduce){ .prop-ico .eq,.onair-dot{ animation:none !important; } }
+
+/* ===== Hypothesis · data-flow diagrams (animated canvas) ===== */
+.flow-section{ padding-top:8px; padding-bottom:8px; margin-top:clamp(56px,7vw,104px); }
+.flow-fig{ margin-top:clamp(40px,5vw,76px); }
+.flow-fig:first-child{ margin-top:0; }
+.flow-canvas-wrap{ position:relative; width:100%; aspect-ratio:1740/580; }
+.flow-canvas-wrap[data-flow="waves"]{ aspect-ratio:1740/520; }
+.flow-canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+@media(max-width:680px){
+  .flow-canvas-wrap, .flow-canvas-wrap[data-flow="waves"]{ aspect-ratio:2/1; }
+}
+
+/* ===== Market Analysis · National/Provincial/Regional radio map (animated waves) ===== */
+.canada-hero{ padding-top:8px; padding-bottom:8px; margin-bottom:clamp(40px,5vw,72px); }
+.canada-canvas-wrap{ position:relative; width:100%; aspect-ratio:1714/560; }
+.canada-canvas-wrap canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; mix-blend-mode:multiply; }
+@media(max-width:680px){ .canada-canvas-wrap{ aspect-ratio:1.7/1; } }
+
+/* ===== scroll reveal: blocks fade (and lift) in as they enter the viewport.
+   Gated on .reveal-on, set by a <head> script before first paint, so if
+   scripting is off nothing is ever hidden. ===== */
+.reveal-on .subsec-img,
+.reveal-on .chapter-media-duo,
+.reveal-on .chapter-media-quad,
+.reveal-on .gradex-row,
+.reveal-on .build-list,
+.reveal-on .phase-desc,
+.reveal-on .phase-note,
+.reveal-on .phase-num,
+.reveal-on .phase-name,
+.reveal-on .phase-sub,
+.reveal-on .subsec-title,
+.reveal-on .subsec-lead,
+.reveal-on .gradex-cap{
+  opacity:0; transform:translateY(16px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.reveal-on .reveal-in{ opacity:1; transform:none; }
+/* .subsec-video carries a translateZ(0) for the iOS mask clip, so fade only */
+.reveal-on .subsec-video{ opacity:0; transition:opacity .6s ease; }
+.reveal-on .subsec-video.reveal-in{ opacity:1; }
+@media(prefers-reduced-motion:reduce){
+  .reveal-on .subsec-img,.reveal-on .chapter-media-duo,.reveal-on .chapter-media-quad,.reveal-on .gradex-row,
+  .reveal-on .build-list,.reveal-on .phase-desc,.reveal-on .phase-note,
+  .reveal-on .phase-num,.reveal-on .phase-name,.reveal-on .phase-sub,
+  .reveal-on .subsec-title,.reveal-on .subsec-lead,.reveal-on .gradex-cap{
+    opacity:1; transform:none; transition:none;
+  }
+  .reveal-on .subsec-video{ opacity:1; transition:none; }
+}
 </style>
 <script>/* Mark touch devices before first paint and drop the live blur behind the
    sticky bars: phones recompute it on every scrolled frame. */
@@ -327,1216 +1964,214 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 </nav>
 
-<!-- ═══════════════════════════════════════════
-     PART 2 — Design Audit Report 2 (FIRST)
-     Rufus-Amelia 2.0: Demand-Pull Intelligence Hub
-     ═══════════════════════════════════════════ -->
-<header id="report2" class="hero wrap">
-  <div class="hero-back">
-    <a href="./index.html">← Back to Work</a>
-    <a href="#phase04" class="pt-nav-link">View Report 1 ↓</a>
+<header class="hero wrap">
+  <div class="hero-video">
+    <video class="lazy-vid" data-src="./Amazonproposal.mp4?v=20260812" data-poster="./posters/Amazonproposal.jpg?v=20260812"
+           loop muted playsinline preload="none"></video>
   </div>
-  <div class="hero-greeting">Design Management · Report 2</div>
-  <h1 class="hero-name">Rufus-Amelia 2.0:<br>Demand-Pull Intelligence Hub</h1>
-  <div class="tagline-row">
-    <p class="hero-tagline">From Reactive Search to Proactive Commerce &nbsp;·&nbsp; <a href="#phase04" class="scroll-link">Report 1 →</a></p>
-    <dl class="hero-team hero-team-inline">
-      <dt>Team</dt>
-      <div class="hero-team-list">
-        <div class="hero-team-member"><span>Michael Joongmin Park</span><span class="hero-team-role">Team Lead, Data Analyst</span></div>
-        <div class="hero-team-member"><span>Jaehong Hwang</span><span class="hero-team-role">Data Analyst, Research</span></div>
-        <div class="hero-team-member"><span>Elsie Jang</span><span class="hero-team-role">Research</span></div>
-        <div class="hero-team-member"><span>Brian Machado</span><span class="hero-team-role">Assistance</span></div>
-        <div class="hero-team-member"><span>Jaydyn Congreves</span><span class="hero-team-role">Assistance</span></div>
-      </div>
-    </dl>
-  </div>
+  <div class="hero-greeting">Team Project &middot; Team Lead</div>
+  <h1 class="hero-name">Rufus-Amelia 2.0</h1>
+  <p class="hero-tagline">A two-part design audit of Amazon, ending in a proposal that turns consumer intent into verified demand before anything is manufactured.</p>
   <div class="hero-row">
     <dl class="hero-side">
-      <div class="pair"><dt>Year</dt><dd>2026 / Mar</dd></div>
-      <div class="pair"><dt>Type</dt><dd>Design Management, Audit II</dd></div>
-      <div class="pair"><dt>Duration</dt><dd>2 Weeks</dd></div>
-      <div class="pair"><dt>Status</dt><dd class="status-live"><span class="status-dot"></span>Online · Published via GitHub</dd></div>
+      <div class="pair"><dt>My role</dt><dd>Team Lead, Data Analysis, Service Framework</dd></div>
+      <div class="pair"><dt>Team</dt><dd>Five, Industrial &amp; Graphic Design</dd></div>
+      <div class="pair"><dt>Year</dt><dd>2026 / Mar, 2 weeks</dd></div>
+      <div class="pair"><dt>Type</dt><dd>Design Management, Strategic Audit</dd></div>
     </dl>
   </div>
 </header>
 
-<div class="phase-wrap">
+<section class="phase-flat">
+  <div class="phase-num">01</div>
+  <div class="phase-name">Overview</div>
+  <div class="phase-sub">Two audits, one argument</div>
+  <p class="phase-desc">Audit I maps what Amazon actually is, a commerce layer, a cloud layer, and a content layer that reinforce each other. Audit II takes the failure that survey exposed and proposes a fix: connect the buyer-side AI to the seller-side AI so demand is verified before production starts.</p>
+  <p class="phase-note">I led the team and took the data analysis and the service framework myself. The reason the two audits belong on one page is that the second only makes sense if you accept the first: Amazon's problem is not that it moves too slowly, it is that its speed is built on manufacturing things nobody has committed to buying.</p>
 
-<div class="phase-block" data-open>
-  <button class="phase-toggle" onclick="togglePhase(this)">
-    <div class="phase-toggle-inner">
-      <div>
-        <div class="phase-num">01</div>
-        <div class="phase-name">Rufus &amp; Amelia</div>
-        <div class="phase-sub">Audit II · AI scope, service architecture, and the intelligence gap</div>
-      </div>
-      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+  <div class="subsec">
+    <h3 class="subsec-title">Snapshot</h3>
+    <p class="subsec-lead">Rufus reads intent, Amelia runs the seller side, and today neither one tells the other anything. The proposal closes that loop.</p>
+    <div class="subsec-video">
+      <video class="snap-vid" data-src="./ameliarufusprev1.mp4?v=20260812" data-poster="./posters/ameliarufusprev1.jpg?v=20260812" loop muted playsinline preload="none"></video>
     </div>
-  </button>
-  <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media">
-      <video class="lazy-vid" data-src="./Amazonproposal.mp4" data-poster="./posters/Amazonproposal.jpg" loop muted playsinline webkit-playsinline preload="none"
-        style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-    </div>
-  </div>
-  <div class="phase-body">
-    <div class="phase-body-inner">
-
-<section class="kpi-section wrap">
-  <div class="kpi-row">
-    <div class="kpi">
-      <div class="kpi-num">19.5%</div>
-      <div class="kpi-label">Verified Fulfillment Rate — converting speculative production into pre-sold assets by eliminating the Stakeholder Gamble</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-num">85.4%</div>
-      <div class="kpi-label">Intelligence Yield — establishing Amazon as primary Intelligence Hub monetizing behavioral signals into high-margin B2B PaaS assets</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-num">Zero</div>
-      <div class="kpi-label">Waste Supply-Chain Target — synchronizing manufacturing start points with confirmed demand, not forecasted probability</div>
-    </div>
+    <ul class="build-list">
+      <li><span class="k">19.5%</span><span class="v">Verified fulfillment rate, converting speculative production into pre-sold assets by removing the stakeholder gamble.</span></li>
+      <li><span class="k">85.4%</span><span class="v">Intelligence yield, with Amazon acting as the intelligence hub that turns behavioural signals into a B2B product.</span></li>
+      <li><span class="k">Zero</span><span class="v">Waste supply-chain target, synchronising the manufacturing start point with confirmed demand rather than forecast probability.</span></li>
+    </ul>
   </div>
 </section>
 
-<section class="project-section wrap">
-  <div class="project-stage">
-    <video class="lazy-vid" data-src="./ameliarufusprev1.mp4" data-poster="./posters/ameliarufusprev1.jpg" loop muted playsinline webkit-playsinline preload="none"
-      style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+<section class="phase-flat">
+  <div class="phase-num">02</div>
+  <div class="phase-name">Problem Definition</div>
+  <p class="phase-desc">Convenience is the product, and the cost of it is paid upstream. Goods are made speculatively, shipped fast, and returned at scale, with no demand validation anywhere before the purchase.</p>
+
+  <div class="subsec">
+    <div class="subsec-title">What Audit I found</div>
+    <ul class="build-list features">
+      <li><span class="k">One-click overconsumption</span><span class="v">The frictionless purchase loop is also an unverified demand loop. Products are manufactured on a forecast, shipped, and returned, and nothing in the flow checks whether the demand was real.</span></li>
+      <li><span class="k">Packaging waste and carbon</span><span class="v">Hyper-fast delivery means excess packaging and freight emissions. The model has no way to manage the risk of physical production without verified demand, so waste is created before anyone buys anything.</span></li>
+      <li><span class="k">Always-on engagement</span><span class="v">Content and commerce are tuned for watch time and purchase frequency. The same machine that drives engagement drives the carbon output per customer per year.</span></li>
+    </ul>
+  </div>
+
+  <div class="subsec">
+    <div class="subsec-title">The intelligence gap</div>
+    <p class="subsec-lead">Rufus and Amelia both sit inside a system where Amazon is the platform, the competitor, and the beneficiary at once. Their data circulates independently rather than in a shared loop.</p>
+    <div class="subsec-video">
+      <video class="snap-vid" data-src="./amazonrufusamelia2.mp4?v=20260812" data-poster="./posters/amazonrufusamelia2.jpg?v=20260812" loop muted playsinline preload="none"></video>
+    </div>
+    <ul class="build-list features">
+      <li><span class="k">Rufus risk</span><span class="v">Optimising for purchase intent erodes the browse-and-discover behaviour responsible for roughly 20 percent of e-commerce sales. Optimising for conversion can cannibalise discovery.</span></li>
+      <li><span class="k">Amelia risk</span><span class="v">Amelia risks becoming a tool that lets Amazon replace sellers rather than one that empowers them. Once sellers read it that way, migration off the platform accelerates.</span></li>
+      <li><span class="k">No confirmed integration</span><span class="v">The two launched as separate tools with no confirmed data path between them, which means buyer demand signals are not circulated back to the sellers who would act on them.</span></li>
+    </ul>
+    <p class="phase-note">This is the finding the whole proposal turns on. Amazon is using AI to capture value that third parties once created on its platform, and in doing so it undermines the network effects and participant incentives that made the platform valuable to begin with.</p>
   </div>
 </section>
 
-<!-- A1 AUDIT FINDINGS -->
-<section class="pt-section wrap">
-  <div class="section-head">
-    <div class="section-label">A1 — Audit 1 Findings</div>
-    <h2 class="section-title">From reactive to<br>proactive intelligence.</h2>
-    <p class="section-sub">Audit 1 identified three structural failures in Amazon's convenience model. Audit 2 reframes them as the design opportunity: an intelligence-driven production system built on verified demand.</p>
+<section class="phase-flat">
+  <div class="phase-num">03</div>
+  <div class="phase-name">Discovery</div>
+  <p class="phase-desc">Amazon is not simply an online retailer. Its architecture spans commerce, cloud, and content, and each layer shapes behaviour at a systemic level rather than a product level.</p>
+
+  <div class="subsec">
+    <div class="subsec-title">Three layers, one ecosystem</div>
+    <ul class="build-list features">
+      <li><span class="k">E-Commerce</span><span class="v">B2C marketplace, third-party seller services, fulfillment logistics, and advertising, with 62 percent of unit sales coming from third-party sellers. 37.6 percent of the US e-commerce market.</span></li>
+      <li><span class="k">AWS</span><span class="v">More than 200 fully managed services and a four to five year head start on Azure and Google, holding 30 percent of global cloud infrastructure. Over 90 percent of the Fortune 100 use AWS partner solutions.</span></li>
+      <li><span class="k">Prime Video</span><span class="v">315 million global users in 2025, differentiated by the Prime bundle, Amazon devices, and e-commerce data integration rather than by catalogue alone.</span></li>
+    </ul>
   </div>
-  <div class="three-grid">
-    <div class="three-cell">
-      <div class="three-cell-tag">AUDIT 1 PROBLEM 01</div>
-      <div class="three-cell-title">"1-Click" Overconsumption</div>
-      <div class="three-cell-body">"1-Click" convenience triggers impulsive overconsumption. The frictionless purchase loop is also an unverified demand loop — products are manufactured speculatively, shipped, and returned at scale with no demand validation upstream.</div>
-    </div>
-    <div class="three-cell">
-      <div class="three-cell-tag">AUDIT 1 PROBLEM 02</div>
-      <div class="three-cell-title">Packaging Waste &amp; Carbon</div>
-      <div class="three-cell-body">Hyper-fast delivery equals excessive packaging waste and carbon footprints. The existing model fails to manage the inherent risks of physical goods production without verified demand — creating supply chain waste before any purchase occurs.</div>
-    </div>
-    <div class="three-cell">
-      <div class="three-cell-tag">AUDIT 2 DIRECTION</div>
-      <div class="three-cell-title">Intelligence-Driven Production</div>
-      <div class="three-cell-body">Rufus-Amelia 2.0 shifts Amazon from Reactive to Proactive. The Verified Demand Model captures consumer intent as a primary asset — transforming speculative manufacturing into a Demand-Pull Intelligence Hub before a single unit is produced.</div>
-    </div>
+
+  <div class="subsec">
+    <div class="subsec-title">What each layer is actually optimising for</div>
+    <p class="subsec-lead">I read each service against the UN Sustainable Development Goals, because that is what forces the trade-off into view instead of letting the growth story stand alone.</p>
+    <ul class="build-list features">
+      <li><span class="k">E-Commerce</span><span class="v">The core value is not speed, it is the elimination of friction, from one-click checkout to predictive restocking. That creates income across a wide seller and delivery ecosystem, and it structurally incentivises overconsumption and non-circular returns at the same time.</span></li>
+      <li><span class="k">AWS</span><span class="v">The core value is stability rather than storage or compute. It expands scalable infrastructure to governments, enterprises, and startups, while near-monopoly dynamics and complex pricing reinforce digital inequality, and the data centres carry a heavy energy and water load.</span></li>
+      <li><span class="k">Prime Video</span><span class="v">It is not competing for attention, it is capturing loyalty. Bundled with membership, anchored by live sports, and monetised through shoppable advertising, which is genuine innovation in content and commerce convergence and an engagement design that optimises for watch time rather than well-being.</span></li>
+    </ul>
+  </div>
+
+  <div class="subsec">
+    <div class="subsec-title">Rufus, the buyer-side AI</div>
+    <p class="subsec-lead">In beta since February 2024, Rufus converts vague shopping intent into a ranked list, a confident decision, and a resolved post-purchase experience.</p>
+    <ul class="build-list features">
+      <li><span class="k">Discovery</span><span class="v">Parses intent, classifies categories, generates clarifying questions, and renders a ranked product list. Reduces browse-stage drop-off and improves category entry conversion.</span></li>
+      <li><span class="k">Decision</span><span class="v">Extracts specs, aligns features, and synthesises reviews into a comparison. Shortens comparison time and lifts detail-page dwell and conversion.</span></li>
+      <li><span class="k">Post-purchase</span><span class="v">Resolves delivery status, returns and exchanges, and product usage without menu navigation. Reduces support ticket volume and return rate.</span></li>
+    </ul>
+  </div>
+
+  <div class="subsec">
+    <div class="subsec-title">Amelia, the seller-side AI</div>
+    <p class="subsec-lead">A persistent intelligence layer across every page of Seller Central, built on Amazon Bedrock with retrieval so it pulls seller-specific data in real time.</p>
+    <ul class="build-list features">
+      <li><span class="k">Analytics</span><span class="v">Accelerates data-driven decisions and catches anomalies early, with demand forecasting across all seller tiers.</span></li>
+      <li><span class="k">Optimization</span><span class="v">Lifts listing search rank, strengthens price competitiveness, and improves advertising return on ad spend.</span></li>
+      <li><span class="k">Operations</span><span class="v">Prevents stock-outs and overstock, shortens support response, and removes account suspension risk through proactive compliance monitoring.</span></li>
+    </ul>
+    <p class="phase-note">Amelia already connects to FBA, Seller Central, Rufus, and Q, and the stated direction is autonomous action on inventory, pricing, and account operations by 2030. The connection it does not have is the one that matters.</p>
   </div>
 </section>
 
-<!-- A2 RUFUS B2C -->
-<section class="pt-section wrap">
-  <div class="section-head">
-    <div class="section-label">A2 — Service Scope I · B2C</div>
-    <h2 class="section-title">Rufus: Amazon's generative<br>AI shopping assistant.</h2>
-    <p class="section-sub">Launched in beta February 2024, Rufus is Amazon's B2C AI layer — operating across three behavioral branches to convert vague shopping intent into a ranked product list, a confident decision, and a resolved post-purchase experience.</p>
+<section class="phase-flat">
+  <div class="phase-num">04</div>
+  <div class="phase-name">Strategy</div>
+  <div class="phase-sub">Synchronising consumer intent with operational intelligence</div>
+  <p class="phase-desc">How can we convert strong demand signals into commercial opportunities before the product even exists? That is the question the proposal answers, with a real-time feedback loop between the buyer-side and seller-side AI.</p>
+  <div class="subsec-video">
+    <video class="snap-vid" data-src="./amazonstrategy.mp4?v=20260812" data-poster="./posters/amazonstrategy.jpg?v=20260812" loop muted playsinline preload="none"></video>
   </div>
-  <div class="hmw-block">
-    <div class="hmw-label">RUFUS — AMAZON'S DEFINITION OF VALUE</div>
-    <div class="hmw-text">Search → Prediction [2026] → [2030]</div>
-    <div class="opp-dims">
-      <div class="opp-dim">
-        <div class="opp-dim-title">Get Details</div>
-        <div class="opp-dim-body">Ask about product features, compatibility, ingredients, and customer reviews — without leaving the shopping experience.</div>
-      </div>
-      <div class="opp-dim">
-        <div class="opp-dim-title">Get Inspiration</div>
-        <div class="opp-dim-body">Ask about a new hobby or upcoming adventure and receive expert-level product advice tailored to your context.</div>
-      </div>
-      <div class="opp-dim">
-        <div class="opp-dim-title">Get Help</div>
-        <div class="opp-dim-body">Ask about existing orders, connect with customer service, and resolve post-purchase issues without navigating menus.</div>
-      </div>
-    </div>
+
+  <div class="subsec">
+    <div class="subsec-title">Three mechanisms</div>
+    <ul class="build-list features">
+      <li><span class="k">Intent aggregation</span><span class="v">Fragmented future concepts from Rufus interactions are synthesised into unified demand nodes for manufacturers, turning unstructured behavioural signals into structured commercial intelligence.</span></li>
+      <li><span class="k">Privacy-first data silo</span><span class="v">Users consent to demand aggregation without exposing individual identity to external manufacturers, so suppliers receive high-fidelity intent without receiving people.</span></li>
+      <li><span class="k">Real-time predictive loop</span><span class="v">A reservation immediately updates a production dashboard. Amelia converts Rufus intent signals into inventory and pricing decisions as they happen.</span></li>
+    </ul>
   </div>
-  <div class="branch-grid">
-    <div class="branch-cell">
-      <div class="branch-label">BRANCH 01</div>
-      <div class="branch-name">Discovery</div>
-      <div class="branch-sub">Converting vague intent into a ranked product list. Reduces browse-stage drop-off and improves category entry CVR.</div>
-      <div class="branch-steps">
-        <div class="branch-step">
-          <div class="branch-step-num">01</div>
-          <div><div class="branch-step-title">Category Recommend</div><div class="branch-step-text">Parses intent, classifies categories, detects trends → Aggregate → Classify → Rank → Validate → Emit</div></div>
-        </div>
-        <div class="branch-step">
-          <div class="branch-step-num">02</div>
-          <div><div class="branch-step-title">Refine / Filter</div><div class="branch-step-text">Generates clarifying questions, applies budget/brand/rating filters → Collect → Filter → Weight → Normalize → Emit</div></div>
-        </div>
-        <div class="branch-step">
-          <div class="branch-step-num">03</div>
-          <div><div class="branch-step-title">Product List</div><div class="branch-step-text">Aggregates scores, deduplicates, sorts, renders → Merge → Deduplicate → Sort → Format → Render</div></div>
-        </div>
-      </div>
-      <div class="branch-outcome">Reduces browse-stage drop-off · Improves category entry conversion rate</div>
-    </div>
-    <div class="branch-cell">
-      <div class="branch-label">BRANCH 02</div>
-      <div class="branch-name">Decision</div>
-      <div class="branch-sub">Shortening comparison time. Increases PDP dwell time and conversion rate through AI-generated review synthesis.</div>
-      <div class="branch-steps">
-        <div class="branch-step">
-          <div class="branch-step-num">01</div>
-          <div><div class="branch-step-title">Product Compare</div><div class="branch-step-text">Extracts specs, summarizes reviews, aligns features → Extract → Align → Score → Rank → Emit</div></div>
-        </div>
-        <div class="branch-step">
-          <div class="branch-step-num">02</div>
-          <div><div class="branch-step-title">Product Detail</div><div class="branch-step-text">Retrieves specs, matches Q&amp;A, generates answers → Parse → Lookup → Match → Generate → Route</div></div>
-        </div>
-        <div class="branch-step">
-          <div class="branch-step-num">03</div>
-          <div><div class="branch-step-title">Review Summary</div><div class="branch-step-text">Runs sentiment analysis, extracts highlights → Collect → Analyze → Summarize → Score → Emit</div></div>
-        </div>
-      </div>
-      <div class="branch-outcome">Shortens comparison time · Increases PDP dwell time and conversion rate</div>
-    </div>
-    <div class="branch-cell">
-      <div class="branch-label">BRANCH 03</div>
-      <div class="branch-name">Post-Purchase</div>
-      <div class="branch-sub">Reduces CS ticket volume and return rate. Improves lifetime value through proactive resolution.</div>
-      <div class="branch-steps">
-        <div class="branch-step">
-          <div class="branch-step-num">01</div>
-          <div><div class="branch-step-title">Delivery Status</div><div class="branch-step-text">Looks up orders, resolves carriers, estimates ETA → Fetch → Resolve → Estimate → Format → Notify</div></div>
-        </div>
-        <div class="branch-step">
-          <div class="branch-step-num">02</div>
-          <div><div class="branch-step-title">Return / Exchange</div><div class="branch-step-text">Classifies requests, checks eligibility, calculates refunds → Classify → Validate → Calculate → Route → Resolve</div></div>
-        </div>
-        <div class="branch-step">
-          <div class="branch-step-num">03</div>
-          <div><div class="branch-step-title">Product Usage</div><div class="branch-step-text">Extracts manuals, scans review tips, links videos → Parse → Identify → Extract → Build → Render</div></div>
-        </div>
-      </div>
-      <div class="branch-outcome">Reduces CS ticket volume · Lowers return rate · Improves LTV</div>
-    </div>
+
+  <div class="subsec">
+    <div class="subsec-title">Future Fulfillment</div>
+    <p class="subsec-lead">Rufus generates virtual product thumbnails from intent signals, users reserve future concepts, and Amelia converts those reservations into verified demand for suppliers, all before production begins.</p>
+    <ul class="build-list">
+      <li><span class="k">1,250K</span><span class="v">Raw intent signals at the discovery stage, captured across the ecosystem as unstructured behaviour.</span></li>
+      <li><span class="k">74.2%</span><span class="v">Engagement velocity at the interaction stage, where virtual prototyping moves a user from wanting something to verifying it.</span></li>
+      <li><span class="k">19.5%</span><span class="v">Verified fulfillment at conversion, locking in demand through future-queue commitments and then producing against it.</span></li>
+    </ul>
+    <p class="phase-note">This breaks the founding assumption of e-commerce, which is that the product already exists. Here the demand is generated and validated first, and production follows it.</p>
   </div>
-  <div class="two-grid" style="margin-top:clamp(40px,5vw,80px);">
-    <div class="two-cell">
-      <div class="two-cell-tag">ECOSYSTEM CONNECTIONS</div>
-      <div class="two-cell-title">Rufus connects buyer and seller ecosystems</div>
-      <div class="two-cell-body">Rufus interfaces with Amazon's product catalog, customer reviews, Sponsored Ads, Alexa+, and Amazon Lens — creating a closed-loop system where buyer intent data is captured but not yet circulated back to sellers.</div>
+
+  <div class="subsec">
+    <div class="subsec-title">How it gets measured</div>
+    <p class="subsec-lead">Three tiers, ordered so that an upstream failure invalidates everything below it rather than hiding inside an aggregate.</p>
+    <ul class="build-list features">
+      <li><span class="k">Intent signal</span><span class="v">The feasibility and accuracy of the virtual products suggested. This is the upstream layer that determines whether any downstream number means anything.</span></li>
+      <li><span class="k">Efficiency signal</span><span class="v">Fulfillment performance from the moment a seller accepts a reservation through production and delivery. This is the layer the user actually feels.</span></li>
+      <li><span class="k">Value signal</span><span class="v">The quality of the demand data supplied to sellers and manufacturers. Because it is sold as a B2B product, it carries service-level accountability.</span></li>
+    </ul>
+  </div>
+
+  <div class="subsec">
+    <div class="subsec-title">Who benefits</div>
+    <div class="subsec-video">
+      <video class="snap-vid" data-src="./amazonimpactanimation.mp4?v=20260812" data-poster="./posters/amazonimpactanimation.jpg?v=20260812" loop muted playsinline preload="none"></video>
     </div>
-    <div class="two-cell">
-      <div class="two-cell-tag">STRUCTURAL LIMIT</div>
-      <div class="two-cell-title">B2B touchpoint is effectively absent</div>
-      <div class="two-cell-body">"Rufus was designed from the ground up as a B2C shopping assistant, trained on shopping-specific data. Its B2B touchpoint is limited to providing sellers with advertising placement and exposure opportunities." — the demand signal does not reach sellers.</div>
-    </div>
+    <p class="phase-note">The model redistributes value across three groups. Customers move from choosing among what exists to co-creating what gets made, sellers stop gambling on forecasts and produce against confirmed orders, and logistics partners plan against real volume rather than projected volume. The benefit shifts away from reactive retail intermediaries, which is also the reason it would be politically hard inside the company.</p>
   </div>
 </section>
 
-<!-- A3 AMELIA B2B -->
-<section class="pt-section wrap">
-  <div class="section-head">
-    <div class="section-label">A3 — Service Scope II · B2B</div>
-    <h2 class="section-title">Amelia: Seller AI embedded<br>in Seller Central.</h2>
-    <p class="section-sub">Amelia is a persistent intelligence layer that supports commercial decision-making across every page of Seller Central — without disrupting workflow. Built on Amazon Bedrock via RAG, it pulls seller-specific data in real time.</p>
-  </div>
-  <div class="hmw-block">
-    <div class="hmw-label">AMELIA — AMAZON'S DEFINITION OF VALUE</div>
-    <div class="hmw-text">Action Autonomy [2026] → [2030]</div>
-    <div class="opp-dims">
-      <div class="opp-dim">
-        <div class="opp-dim-title">Rapid Intelligence</div>
-        <div class="opp-dim-body">Accurate answers on policy compliance and seasonal prep without navigating multiple resources — reducing seller decision latency.</div>
-      </div>
-      <div class="opp-dim">
-        <div class="opp-dim-title">Metric Visibility</div>
-        <div class="opp-dim-body">Sales figures, units sold, website traffic, year-over-year comparisons at individual product level — real-time operational clarity.</div>
-      </div>
-      <div class="opp-dim">
-        <div class="opp-dim-title">Continuous Accessibility</div>
-        <div class="opp-dim-body">Available across all pages of Seller Central at any time — a persistent assistant, not a tool you navigate to.</div>
-      </div>
-    </div>
-  </div>
-  <div class="branch-grid">
-    <div class="branch-cell">
-      <div class="branch-label">BRANCH 01</div>
-      <div class="branch-name">Analytics</div>
-      <div class="branch-sub">Accelerates data-driven decisions and enables early anomaly detection. Improves operational efficiency across all seller tiers.</div>
-      <div class="branch-steps">
-        <div class="branch-step">
-          <div class="branch-step-num">01</div>
-          <div><div class="branch-step-title">Sales Analytics</div><div class="branch-step-text">Ingests revenue and orders, detects trends → Ingest → Aggregate → Detect → Correlate → Emit</div></div>
-        </div>
-        <div class="branch-step">
-          <div class="branch-step-num">02</div>
-          <div><div class="branch-step-title">Performance Metrics</div><div class="branch-step-text">Calculates KPIs, benchmarks against industry → Collect → Calculate → Benchmark → Project → Emit</div></div>
-        </div>
-        <div class="branch-step">
-          <div class="branch-step-num">03</div>
-          <div><div class="branch-step-title">Business Intelligence</div><div class="branch-step-text">Generates insights, detects anomalies, forecasts demand → Analyze → Predict → Segment → Visualize → Render</div></div>
-        </div>
-      </div>
-      <div class="branch-outcome">Early anomaly detection · Demand forecasting · Operational efficiency</div>
-    </div>
-    <div class="branch-cell">
-      <div class="branch-label">BRANCH 02</div>
-      <div class="branch-name">Optimization</div>
-      <div class="branch-sub">Boosts listing search rank, strengthens price competitiveness, and improves advertising ROAS across all product categories.</div>
-      <div class="branch-steps">
-        <div class="branch-step">
-          <div class="branch-step-num">01</div>
-          <div><div class="branch-step-title">Listing Optimizer</div><div class="branch-step-text">Analyzes titles/keywords/images, generates descriptions → Parse → Score → Generate → Optimize → Publish</div></div>
-        </div>
-        <div class="branch-step">
-          <div class="branch-step-num">02</div>
-          <div><div class="branch-step-title">Pricing Engine</div><div class="branch-step-text">Scans competitors, models elasticity → Scan → Model → Calculate → Reprice → Emit</div></div>
-        </div>
-        <div class="branch-step">
-          <div class="branch-step-num">03</div>
-          <div><div class="branch-step-title">Ad Campaign</div><div class="branch-step-text">Builds campaigns, targets audiences, optimizes bids → Target → Bid → Place → Test → Report</div></div>
-        </div>
-      </div>
-      <div class="branch-outcome">Search rank boost · Price competitiveness · Advertising ROAS improvement</div>
-    </div>
-    <div class="branch-cell">
-      <div class="branch-label">BRANCH 03</div>
-      <div class="branch-name">Operations</div>
-      <div class="branch-sub">Prevents stock-outs and overstock. Reduces CS response time and eliminates account suspension risk through proactive compliance monitoring.</div>
-      <div class="branch-steps">
-        <div class="branch-step">
-          <div class="branch-step-num">01</div>
-          <div><div class="branch-step-title">Inventory Management</div><div class="branch-step-text">Monitors stock, forecasts demand, triggers reorders → Track → Forecast → Trigger → Route → Emit</div></div>
-        </div>
-        <div class="branch-step">
-          <div class="branch-step-num">02</div>
-          <div><div class="branch-step-title">Customer Service</div><div class="branch-step-text">Classifies tickets, drafts responses, processes refunds → Classify → Draft → Resolve → Escalate → Emit</div></div>
-        </div>
-        <div class="branch-step">
-          <div class="branch-step-num">03</div>
-          <div><div class="branch-step-title">Compliance Monitor</div><div class="branch-step-text">Scans policies, detects violations, drafts appeals → Scan → Detect → Score → Appeal → Report</div></div>
-        </div>
-      </div>
-      <div class="branch-outcome">No stock-outs · Faster CS response · Zero suspension risk</div>
-    </div>
-  </div>
-  <div class="two-grid" style="margin-top:clamp(40px,5vw,80px);">
-    <div class="two-cell">
-      <div class="two-cell-tag">ECOSYSTEM CONNECTIONS</div>
-      <div class="two-cell-title">Designed to eventually act autonomously</div>
-      <div class="two-cell-body">Amelia connects with FBA, Seller Central, Rufus, and Q — designed to eventually act autonomously on inventory, pricing, and account-level operations. Autonomous Management via Data Exchange Circulation is the stated 2030 direction.</div>
-    </div>
-    <div class="two-cell">
-      <div class="two-cell-tag">STRUCTURAL LIMIT</div>
-      <div class="two-cell-title">No confirmed data integration with Rufus</div>
-      <div class="two-cell-body">"Amelia and Rufus were launched as separate tools, and no direct data integration between the two has been confirmed. This suggests that buyer demand signals may not be circulated back to sellers." — the core gap that Rufus-Amelia 2.0 addresses.</div>
-    </div>
+<section class="phase-flat">
+  <div class="phase-num">05</div>
+  <div class="phase-name">Conclusion</div>
+  <div class="phase-sub">Beyond prediction, toward prospective commerce</div>
+  <p class="phase-desc">Prediction guesses what people will buy from a catalogue that already exists. Prospective commerce asks them to commit first, and treats that commitment as the trigger for making anything at all.</p>
+  <p class="phase-note">What I take from leading this is that an audit is only useful if it names the mechanism, not the symptom. Waste, returns, and emissions all read as separate problems until you notice they share one cause, which is that nothing in the system verifies demand before production. Once the team saw that, the proposal wrote itself.</p>
+
+  <div class="subsec">
+    <div class="subsec-title">What the model does not yet answer</div>
+    <ul class="build-list features">
+      <li><span class="k">Empirical validation</span><span class="v">The work rests on high-level strategic estimation without diverse real-world use cases. It assumes behavioural intent translates reliably into purchase commitment, and that assumption is untested.</span></li>
+      <li><span class="k">AI autonomy governance</span><span class="v">The gap between predicted intent and actual commitment needs a transparent governance framework. Closing it by assumption is exactly the failure the audit criticises elsewhere.</span></li>
+      <li><span class="k">Post-fulfillment transparency</span><span class="v">For customised or niche products, standardised after-sales guidelines are hard to design. The model has to account for what happens when a demand-validated product still disappoints.</span></li>
+    </ul>
   </div>
 </section>
-
-    </div><!-- /phase-body-inner -->
-  </div><!-- /phase-body -->
-</div><!-- /phase-block 01 -->
-
-<div class="phase-block">
-  <button class="phase-toggle" onclick="togglePhase(this)">
-    <div class="phase-toggle-inner">
-      <div>
-        <div class="phase-num">02</div>
-        <div class="phase-name">Strategy</div>
-        <div class="phase-sub">Audit II · Foresight, mission, and the verified demand proposal</div>
-      </div>
-      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-  </button>
-  <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media">
-      <video class="lazy-vid" data-src="./amazonstrategy.mp4" data-poster="./posters/amazonstrategy.jpg" loop muted playsinline webkit-playsinline preload="none"
-        style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-    </div>
-  </div>
-  <div class="phase-body">
-    <div class="phase-body-inner">
-
-<!-- A4 STRATEGIC FORESIGHT -->
-<section class="pt-section wrap">
-  <div class="section-head">
-    <div class="section-label">A4 — Strategic Foresight</div>
-    <h2 class="section-title">The intelligence gap between<br>Rufus and Amelia.</h2>
-    <p class="section-sub">Rufus and Amelia both embed AI assistance inside a system where Amazon is simultaneously the platform, the competitor, and the beneficiary. The data from each circulates independently — not in a shared loop.</p>
-  </div>
-  <div class="two-grid">
-    <div class="two-cell">
-      <div class="two-cell-tag"><span class="two-cell-badge badge-pos">STRONG SIGNAL</span></div>
-      <div class="two-cell-title">Service Connectivity — Rufus ↔ Amelia</div>
-      <div class="two-cell-body">"Bridging the intelligence gap between Rufus AI and Amelia AI presents a compelling business case and a clear strategic imperative for Amazon's next phase of growth. Bridging these two systems should be a near-term strategic goal."</div>
-    </div>
-    <div class="two-cell">
-      <div class="two-cell-tag"><span class="two-cell-badge badge-neg">WEAK SIGNAL</span></div>
-      <div class="two-cell-title">Value Mapping Risk — Structural Undermining</div>
-      <div class="two-cell-body">"Rufus structurally undermines Amazon's own revenue model: by optimizing for purchase intent, it systematically erodes the browse-and-discover behavior responsible for approximately 20% of e-commerce sales — the unplanned purchases."</div>
-    </div>
-  </div>
-  <div class="hmw-block">
-    <div class="hmw-label">VALUE DEFINITION — THE CORE TENSION</div>
-    <div class="hmw-text">"Amazon is using AI to capture the value that third parties once created on its platform. But in doing so, it is undermining the network effects and participant incentives that gave the platform its value to begin with."</div>
-    <div class="opp-dims">
-      <div class="opp-dim">
-        <div class="opp-dim-title">Rufus Risk</div>
-        <div class="opp-dim-body">By optimizing for purchase intent, Rufus erodes unplanned purchase behavior responsible for ~20% of e-commerce sales. Optimizing for conversion may cannibalize discovery.</div>
-      </div>
-      <div class="opp-dim">
-        <div class="opp-dim-title">Amelia Risk</div>
-        <div class="opp-dim-body">"Amelia risks becoming not a tool that empowers sellers, but a tool that enables Amazon to replace them." Once sellers recognize this dynamic, platform migration accelerates.</div>
-      </div>
-      <div class="opp-dim">
-        <div class="opp-dim-title">The Opportunity</div>
-        <div class="opp-dim-body">AI Layer Connectivity → Proactive Decision Making. A structure where sellers achieve growth outcomes only attainable through Amazon's platform — not despite it.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- A5 MISSION -->
-<section class="pt-section wrap">
-  <div class="section-head">
-    <div class="section-label">A5 — Mission</div>
-    <h2 class="section-title">Synchronizing Consumer Intent<br>with Operational Intelligence.</h2>
-    <p class="section-sub">A real-time feedback loop between Rufus (B2C) and Amelia (B2B) — eliminating information silos and maximizing fulfillment efficiency before a single unit is manufactured.</p>
-  </div>
-  <div class="hmw-block">
-    <div class="hmw-label">MISSION STATEMENT — RUFUS-AMELIA 2.0</div>
-    <div class="hmw-text">"How can we convert strong demand signals into commercial opportunities — before the product even exists?"</div>
-  </div>
-  <div class="shift-block">
-    <div class="shift-label">PARADIGM SHIFT</div>
-    <table class="shift-table">
-      <thead><tr><th>Era</th><th>Model</th><th>Logic</th></tr></thead>
-      <tbody>
-        <tr><td>Past</td><td>Shopping Search Platform</td><td>Users search for products that already exist. Supply precedes demand.</td></tr>
-        <tr><td>Present</td><td>AI-Powered Shopping</td><td>AI personalizes and predicts from existing catalog. Demand is validated retroactively.</td></tr>
-        <tr><td>Preferred Future</td><td>Prospective Commerce</td><td>AI captures intent before purchase. Demand is validated before production begins. Prediction → Manifestation.</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="three-grid">
-    <div class="three-cell">
-      <div class="three-cell-tag">PILLAR 01</div>
-      <div class="three-cell-title">Intent Aggregation</div>
-      <div class="three-cell-body">Synthesizing fragmented "Future Concepts" from Rufus interactions into unified "Demand Nodes" for manufacturers. Unstructured behavioral signals become structured commercial intelligence.</div>
-    </div>
-    <div class="three-cell">
-      <div class="three-cell-tag">PILLAR 02</div>
-      <div class="three-cell-title">Privacy-First Data Silo</div>
-      <div class="three-cell-body">Protecting user identity while providing high-fidelity intent signals to suppliers via Amelia B2B. Users consent to demand aggregation without exposing individual identity to external manufacturers.</div>
-    </div>
-    <div class="three-cell">
-      <div class="three-cell-tag">PILLAR 03</div>
-      <div class="three-cell-title">Real-time Predictive Loop</div>
-      <div class="three-cell-body">Direct feedback where user "Reservations" immediately update production dashboards. Amelia converts Rufus intent signals into seller inventory and pricing decisions in real time.</div>
-    </div>
-  </div>
-</section>
-
-<!-- A6 SOLUTION -->
-<section class="pt-section wrap">
-  <div class="section-head">
-    <div class="section-label">A6 — Solution Proposal</div>
-    <h2 class="section-title">Future Fulfillment:<br>Validating demand for suppliers.</h2>
-    <p class="section-sub">Rufus generates virtual product thumbnails based on user Intent Signals. Users reserve future concepts. Amelia converts those reservations into verified demand data for suppliers — before any production begins.</p>
-  </div>
-  <div class="flow-row">
-    <div class="flow-cell">
-      <div class="flow-num">01</div>
-      <div class="flow-title">Amelia Generates Virtual Product</div>
-      <div class="flow-body">AI generates virtual thumbnails of potential products based on user intent signals captured by Rufus</div>
-    </div>
-    <div class="flow-cell">
-      <div class="flow-num">02</div>
-      <div class="flow-title">User Places Reservation</div>
-      <div class="flow-body">Users "Reserve" or "Queue" for future concepts — gaining priority purchase rights when physical product launches</div>
-    </div>
-    <div class="flow-cell">
-      <div class="flow-num">03</div>
-      <div class="flow-title">Amazon Aggregates Demand Data</div>
-      <div class="flow-body">Rufus reservation data funnels into Amelia — converting fragmented intent into verified, quantified demand nodes</div>
-    </div>
-    <div class="flow-cell">
-      <div class="flow-num">04</div>
-      <div class="flow-title">Seller Receives Data &amp; Decides</div>
-      <div class="flow-body">Suppliers verify what users actually want before starting production — risk-free demand validation through the Amelia B2B layer</div>
-    </div>
-    <div class="flow-cell">
-      <div class="flow-num">05</div>
-      <div class="flow-title">Production Manufactures</div>
-      <div class="flow-body">Suppliers produce only verified "Future Products" — zero speculative manufacturing, zero inventory waste at origin</div>
-    </div>
-    <div class="flow-cell">
-      <div class="flow-num">06</div>
-      <div class="flow-title">Fulfillment Delivers &amp; Settles</div>
-      <div class="flow-body">Rufus directs pre-interested users to final checkout — conversion is guaranteed, not hoped for</div>
-    </div>
-  </div>
-  <div class="shift-block" style="margin-top:clamp(48px,6vw,96px);">
-    <div class="shift-label">COMPARATIVE VALUE ANALYSIS — PROJECTED VALUE SHIFT</div>
-    <table class="shift-table">
-      <thead><tr><th>Dimension</th><th>Current Model</th><th>Future Fulfillment</th></tr></thead>
-      <tbody>
-        <tr><td>Revenue Model</td><td>Commission / Advertising</td><td>Data PaaS / Reservation Fees</td></tr>
-        <tr><td>Risk Profile</td><td>Reactive — High Inventory Risk</td><td>Predictive / Validation — Zero Risk</td></tr>
-        <tr><td>Consumer Action</td><td>Search &amp; Buy</td><td>Reserve &amp; Co-create</td></tr>
-        <tr><td>Amazon's Role</td><td>Retailer / Marketplace</td><td>Predictive Intelligence Node</td></tr>
-        <tr><td>Manufacturer Relationship</td><td>Receives purchase orders post-production</td><td>Receives verified demand data pre-production</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-    </div><!-- /phase-body-inner -->
-  </div><!-- /phase-body -->
-</div><!-- /phase-block 02 -->
-
-<div class="phase-block">
-  <button class="phase-toggle" onclick="togglePhase(this)">
-    <div class="phase-toggle-inner">
-      <div>
-        <div class="phase-num">03</div>
-        <div class="phase-name">Impact</div>
-        <div class="phase-sub">Audit II · KPI framework, stakeholders, and system outcomes</div>
-      </div>
-      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-  </button>
-  <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media">
-      <video class="lazy-vid" data-src="./amazonimpactanimation.mp4" data-poster="./posters/amazonimpactanimation.jpg" loop muted playsinline webkit-playsinline preload="none"
-        style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-    </div>
-  </div>
-  <div class="phase-body">
-    <div class="phase-body-inner">
-
-<!-- A7 KPIs -->
-<section class="pt-section wrap">
-  <div class="section-head">
-    <div class="section-label">A7 — KPI Framework</div>
-    <h2 class="section-title">Measuring the<br>Verified Demand Engine.</h2>
-    <p class="section-sub">Three measurement tiers govern the Rufus-Amelia 2.0 system — from upstream AI recommendation quality through fulfillment performance to the integrity of demand data supplied to manufacturers.</p>
-  </div>
-  <div class="three-grid">
-    <div class="three-cell">
-      <div class="three-cell-tag">KPI LAYER I — UPSTREAM</div>
-      <div class="three-cell-title">Intent Signal</div>
-      <div class="three-cell-sub">AI Recommendation Quality</div>
-      <div class="three-cell-body">"Measures the feasibility and accuracy of virtual products suggested by Amelia. This is the upstream layer that determines the validity of all downstream KPIs."</div>
-      <div class="three-cell-items">
-        <div class="three-cell-item">Reservation Conversion Rate (RCR)</div>
-        <div class="three-cell-item">Conversion Velocity (CV) — time from intent to purchase</div>
-        <div class="three-cell-item">Proactive Relevance Score (PRS)</div>
-        <div class="three-cell-item">Hyper-Personalization Depth (cross-category accuracy)</div>
-      </div>
-    </div>
-    <div class="three-cell">
-      <div class="three-cell-tag">KPI LAYER II — MID-STREAM</div>
-      <div class="three-cell-title">Efficiency Signal</div>
-      <div class="three-cell-sub">Reservation to Fulfillment</div>
-      <div class="three-cell-body">"Tracks fulfillment performance from the moment a seller accepts a reservation through actual production and delivery. This layer has the most direct impact on user experience."</div>
-      <div class="three-cell-items">
-        <div class="three-cell-item">Inventory Waste Reduction Rate</div>
-        <div class="three-cell-item">Order Fulfillment Rate (OFR)</div>
-        <div class="three-cell-item">74.2% Engagement Velocity (Interaction)</div>
-        <div class="three-cell-item">Seller commitment to verified demand nodes</div>
-      </div>
-    </div>
-    <div class="three-cell">
-      <div class="three-cell-tag">KPI LAYER III — DOWNSTREAM</div>
-      <div class="three-cell-title">Value Signal</div>
-      <div class="three-cell-sub">Demand Data Accuracy</div>
-      <div class="three-cell-body">"Governs the quality of demand data Amazon supplies to sellers and manufacturers. Because this data is provided as a paid B2B product, SLA-based accountability applies."</div>
-      <div class="three-cell-items">
-        <div class="three-cell-item">Data-as-a-Service (PaaS) Yield</div>
-        <div class="three-cell-item">85.4% Data Utilization Rate</div>
-        <div class="three-cell-item">Zero-Waste Supply-Chain Target</div>
-        <div class="three-cell-item">External manufacturer R&amp;D cost reduction</div>
-      </div>
-    </div>
-  </div>
-  <div class="hmw-block">
-    <div class="hmw-label">SYSTEM LOGIC</div>
-    <div class="hmw-text">"Rufus-Amelia 2.0 breaks the foundational assumption of traditional e-commerce: that a product already exists. In this model, AI generates demand first — then production follows."</div>
-    <div class="opp-dims">
-      <div class="opp-dim">
-        <div class="opp-dim-title">1,250K Raw Intent Signals</div>
-        <div class="opp-dim-body">Discovery — capturing unstructured behavioral signals across Amazon's entire ecosystem</div>
-      </div>
-      <div class="opp-dim">
-        <div class="opp-dim-title">74.2% Engagement Velocity</div>
-        <div class="opp-dim-body">Interaction — Rufus 2.0 validates intent via virtual prototyping, moving users from "want" to "verify"</div>
-      </div>
-      <div class="opp-dim">
-        <div class="opp-dim-title">19.5% Verified Fulfillment</div>
-        <div class="opp-dim-body">Conversion — locking in market demand through future queue commitments, then executing zero-waste production</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- A8 IMPACT -->
-<section class="pt-section wrap">
-  <div class="section-head">
-    <div class="section-label">A8 — Impact</div>
-    <h2 class="section-title">Who benefits when the<br>model is applied.</h2>
-    <p class="section-sub">Rufus-Amelia 2.0 redistributes value across three stakeholder groups — shifting benefit from reactive retail intermediaries to users who co-create, sellers who validate, and logistics partners who plan with certainty.</p>
-  </div>
-  <div class="three-grid">
-    <div class="three-cell">
-      <div class="three-cell-tag">GROUP I — B2C</div>
-      <div class="three-cell-title">Customer</div>
-      <div class="three-cell-items">
-        <div class="three-cell-item">Elimination of Search Fatigue — dynamic comparison charts replace hundreds of reviews</div>
-        <div class="three-cell-item">Direct Future Co-creation — users become active "Future Concept" reservists with priority purchase rights</div>
-        <div class="three-cell-item">Anticipatory Fulfillment — Rufus predicts re-orders from Prime Video, Kindle, and purchase history before users search</div>
-      </div>
-    </div>
-    <div class="three-cell">
-      <div class="three-cell-tag">GROUP II — B2B</div>
-      <div class="three-cell-title">Corporation &amp; Platform</div>
-      <div class="three-cell-items">
-        <div class="three-cell-item">Inventory Risk Neutralization — "Demand-Pull" model eliminates speculative manufacturing at source</div>
-        <div class="three-cell-item">New Revenue via Data-as-a-Service — Amazon monetizes "Verified Intent Data" as industry benchmark</div>
-        <div class="three-cell-item">Global Supply Chain Sync — real-time feedback loops between Rufus (B2C) and Amelia (B2B) maximize efficiency</div>
-      </div>
-    </div>
-    <div class="three-cell">
-      <div class="three-cell-tag">GROUP III — POTENTIAL</div>
-      <div class="three-cell-title">External Stakeholders</div>
-      <div class="three-cell-items">
-        <div class="three-cell-item">Logistics Partners — pre-emptive resource allocation through 100% visibility of future demand signals</div>
-        <div class="three-cell-item">Investors — enterprise valuation redefined by structural removal of inventory liabilities</div>
-        <div class="three-cell-item">Global Manufacturers — R&amp;D sunk costs reduced by validating virtual prototypes before physical production</div>
-      </div>
-    </div>
-  </div>
-  <div class="scenario-grid">
-    <div class="scenario">
-      <div class="scenario-tag">SCENARIO A — OPTIMISTIC</div>
-      <div class="scenario-title">Best Case: Demand-Driven Ecosystem</div>
-      <div class="scenario-body">Consumers signal intent through reservation. Sellers reduce inventory risk through real demand confirmation. Amazon evolves into a co-designed, demand-driven ecosystem where production is a response to certainty — not a bet on probability.</div>
-    </div>
-    <div class="scenario">
-      <div class="scenario-tag">SCENARIO B — REALISTIC</div>
-      <div class="scenario-title">Base Case: Selective Adoption</div>
-      <div class="scenario-body">Reservation operates within specific verticals. SMEs adopt faster than large brands. Gradual expansion of AI-based demand validation across categories — the model proves itself in niche markets before scaling to the core catalog.</div>
-    </div>
-    <div class="scenario">
-      <div class="scenario-tag">SCENARIO C — CRITICAL</div>
-      <div class="scenario-title">Worst Case: Signal Distortion</div>
-      <div class="scenario-body">Reservations may not convert to purchases. Urgency-driven substitutions affect data accuracy. Speculative behaviors distort demand signals — the same behavioral biases that create overstock in current models may contaminate intent data in the new one.</div>
-    </div>
-  </div>
-</section>
-
-<!-- A9 CONCLUSION -->
-<section class="pt-section wrap">
-  <div class="section-head">
-    <div class="section-label">A9 — Conclusion</div>
-    <h2 class="section-title">Beyond prediction:<br>Prospective commerce.</h2>
-  </div>
-  <div class="conclusion-block">
-    <div class="conclusion-quote">"By validating absolute demand through Rufus 2.0 before a single unit is manufactured, Amazon will lead the global market into a new era of proactive commerce — we no longer merely move inventory; we synchronize human intent with manufacturing to eliminate the structural risk of physical products."</div>
-    <div class="conclusion-attr">Audit Report 2 Conclusion · Group 14 · GDES-3081-501 · March 2, 2026</div>
-  </div>
-  <div class="three-grid" style="margin-top:clamp(40px,5vw,80px);">
-    <div class="three-cell">
-      <div class="three-cell-tag">CRITICAL LIMITATION 01</div>
-      <div class="three-cell-title">Absence of Empirical Validation</div>
-      <div class="three-cell-body">The current project is based on high-level strategic estimation — limited by the absence of diverse, real-world use case validations. The model assumes behavioral intent signals translate reliably into purchase commitments.</div>
-    </div>
-    <div class="three-cell">
-      <div class="three-cell-tag">CRITICAL LIMITATION 02</div>
-      <div class="three-cell-title">AI Autonomy Governance</div>
-      <div class="three-cell-body">Clear ethical and operational boundaries for AI autonomy remain a challenge. The gap between "Predicted Intent" and "Actual Purchase Commitment" must be governed by transparent frameworks — not closed by assumption.</div>
-    </div>
-    <div class="three-cell">
-      <div class="three-cell-tag">CRITICAL LIMITATION 03</div>
-      <div class="three-cell-title">Post-Fulfillment Transparency</div>
-      <div class="three-cell-body">For highly customized or niche products, designing standardized post-purchase maintenance (A/S) guidelines is complex. The model must account for what happens when demand-validated products fail to meet user expectations.</div>
-    </div>
-  </div>
-</section>
-
-
-    </div><!-- /phase-body-inner -->
-  </div><!-- /phase-body -->
-</div><!-- /phase-block 03 -->
-
-<div class="phase-block" id="phase04">
-  <button class="phase-toggle" onclick="togglePhase(this)">
-    <div class="phase-toggle-inner">
-      <div>
-        <div class="phase-num">04</div>
-        <div class="phase-name">Amazon Overview</div>
-        <div class="phase-sub">Audit I · Service landscape, ecosystem layers, and market position</div>
-      </div>
-      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-  </button>
-  <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media">
-      <video class="lazy-vid" data-src="./amazonrufusamelia2.mp4" data-poster="./posters/amazonrufusamelia2.jpg" loop muted playsinline webkit-playsinline preload="none"
-        style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-    </div>
-  </div>
-  <div class="phase-body">
-    <div class="phase-body-inner">
-<section id="report1" class="report-section">
-  <header class="report-header wrap">
-    <div class="report-label">Design Management · Report 1</div>
-    <h2 class="report-name">Redesigning Convenience:<br>A Social Responsibility</h2>
-    <div class="tagline-row">
-      <p class="report-tagline">Amazon Design Audit &nbsp;·&nbsp; <a href="#report2" class="scroll-link">← Report 2</a></p>
-      <dl class="hero-team hero-team-inline">
-        <dt>Team</dt>
-        <div class="hero-team-list">
-          <div class="hero-team-member"><span>Michael Joongmin Park</span><span class="hero-team-role">Team Lead, Data Analyst</span></div>
-          <div class="hero-team-member"><span>Jaehong Hwang</span><span class="hero-team-role">Research</span></div>
-          <div class="hero-team-member"><span>Elsie Jang</span><span class="hero-team-role">Research</span></div>
-          <div class="hero-team-member"><span>Brian Machado</span><span class="hero-team-role">Assistance</span></div>
-          <div class="hero-team-member"><span>Jaydyn Congreves</span><span class="hero-team-role">Assistance</span></div>
-        </div>
-      </dl>
-    </div>
-    <dl class="report-meta">
-      <div class="pair"><dt>Year</dt><dd>2026 / Feb</dd></div>
-      <div class="pair"><dt>Type</dt><dd>Design Management, Audit</dd></div>
-      <div class="pair"><dt>Duration</dt><dd>2 Weeks</dd></div>
-      <div class="pair"><dt>Status</dt><dd class="status-live"><span class="status-dot"></span>Online · Published via GitHub</dd></div>
-    </dl>
-  </header>
-
-  <section class="kpi-section wrap">
-    <div class="kpi-row">
-      <div class="kpi">
-        <div class="kpi-num">37.6%</div>
-        <div class="kpi-label">US e-commerce market share — $576.6B brand value (2025)</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-num">30%</div>
-        <div class="kpi-label">Global cloud infrastructure market share — AWS leads Azure (20%) &amp; Google (13%)</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-num">399M</div>
-        <div class="kpi-label">OTT video users worldwide — 53%+ global penetration rate (2025)</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 01 INTRODUCTION -->
-  <section class="pt-section wrap">
-    <div class="section-head">
-      <div class="section-label">01 — Introduction</div>
-      <h2 class="section-title">Amazon is not simply<br>an online retailer.</h2>
-      <p class="section-sub">Four everyday questions reveal the depth and reach of Amazon's infrastructure — shaping how products are found, delivered, stored, and watched.</p>
-    </div>
-    <div class="intro-questions">
-      <div class="intro-q">
-        <div class="intro-q-num">Question I</div>
-        <div>
-          <div class="intro-q-text">When you need something in your daily life, where do you go first?</div>
-          <p class="intro-q-body">Amazon's e-commerce platform has become the default starting point for product discovery — not a search engine, not a store, but a demand-shaping system that anticipates what you need before you know you need it.</p>
-        </div>
-      </div>
-      <div class="intro-q">
-        <div class="intro-q-num">Question II</div>
-        <div>
-          <div class="intro-q-text">Which company delivered the package to your home?</div>
-          <p class="intro-q-body">From fulfillment centers to MK30 drones, Amazon's logistics network is rapidly becoming an autonomous last-mile infrastructure — with 500M drone packages projected annually by 2030.</p>
-        </div>
-      </div>
-      <div class="intro-q">
-        <div class="intro-q-num">Question III</div>
-        <div>
-          <div class="intro-q-text">Where can you watch the TV shows you want to see?</div>
-          <p class="intro-q-body">Prime Video is not merely a streaming platform. It is the content layer of Amazon's loyalty ecosystem — bundled with membership, powered by original IP, and now anchored by live sports and shoppable advertising.</p>
-        </div>
-      </div>
-      <div class="intro-q">
-        <div class="intro-q-num">Question IV</div>
-        <div>
-          <div class="intro-q-text">What powers the streaming behind your favorite shows?</div>
-          <p class="intro-q-body">AWS holds 30% of global cloud infrastructure — the invisible backbone beneath Netflix, Airbnb, and thousands of startups. Amazon decides not just how products reach customers, but how the entire digital economy is built and run.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 02 SERVICE OVERVIEW -->
-  <section class="pt-section wrap">
-    <div class="section-head">
-      <div class="section-label">02 — Core Services</div>
-      <h2 class="section-title">Three layers.<br>One ecosystem.</h2>
-      <p class="section-sub">Amazon's total service architecture spans commerce, cloud, and content — each reinforcing the others, each shaping behavior at a systemic level.</p>
-    </div>
-    <div class="three-grid">
-      <div class="three-cell">
-        <div class="three-cell-tag">SERVICE COMPONENT I</div>
-        <div class="three-cell-stat">82%</div>
-        <div class="three-cell-title">E-Commerce</div>
-        <div class="three-cell-sub">of total Amazon revenue</div>
-        <div class="three-cell-body">B2C marketplace, third-party seller services, fulfillment logistics, and advertising. 62% of unit sales from third-party sellers.</div>
-        <div class="three-cell-items">
-          <div class="three-cell-item">Online + Physical Stores ~40%</div>
-          <div class="three-cell-item">Third-Party Seller Services ~23%</div>
-          <div class="three-cell-item">Advertising Services ~9%</div>
-        </div>
-      </div>
-      <div class="three-cell">
-        <div class="three-cell-tag">SERVICE COMPONENT II</div>
-        <div class="three-cell-stat">18%</div>
-        <div class="three-cell-title">AWS Cloud Computing</div>
-        <div class="three-cell-sub">of total Amazon revenue</div>
-        <div class="three-cell-body">200+ fully managed cloud services. Launched in 2006, AWS holds a 4–5 year head start over Azure and Google. 90%+ of Fortune 100 companies use AWS Partner solutions.</div>
-        <div class="three-cell-items">
-          <div class="three-cell-item">Compute ~40%</div>
-          <div class="three-cell-item">Storage ~25%</div>
-          <div class="three-cell-item">Database &amp; AI ~20%</div>
-        </div>
-      </div>
-      <div class="three-cell">
-        <div class="three-cell-tag">SERVICE COMPONENT III</div>
-        <div class="three-cell-stat">6%</div>
-        <div class="three-cell-title">Prime Video Streaming</div>
-        <div class="three-cell-sub">of total Amazon revenue</div>
-        <div class="three-cell-body">Global OTT platform competing with Netflix and Disney+. 315M global users (2025). Differentiated by Prime bundle, Amazon devices, and e-commerce data integration.</div>
-        <div class="three-cell-items">
-          <div class="three-cell-item">Prime Membership Subscription ~30%</div>
-          <div class="three-cell-item">Prime Video Advertisement ~5%</div>
-          <div class="three-cell-item">Licensing &amp; Content ~1%</div>
-        </div>
-      </div>
-    </div>
-  </section>
-</section>
-
-    </div><!-- /phase-body-inner -->
-  </div><!-- /phase-body -->
-</div><!-- /phase-block 04 -->
-
-<div class="phase-block">
-  <button class="phase-toggle" onclick="togglePhase(this)">
-    <div class="phase-toggle-inner">
-      <div>
-        <div class="phase-num">05</div>
-        <div class="phase-name">Service Analysis</div>
-        <div class="phase-sub">Audit I · E-Commerce, AWS, and Prime Video deep-dive</div>
-      </div>
-      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-  </button>
-  <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media">
-      <div data-amazon-logo-morph style="width:100%;height:100%;"></div>
-    </div>
-  </div>
-  <div class="phase-body">
-    <div class="phase-body-inner">
-
-  <!-- 03 E-COMMERCE -->
-  <section class="pt-section wrap">
-    <div class="section-head">
-      <div class="section-label">03 — Service Component I</div>
-      <h2 class="section-title">E-Commerce:<br>Convenience as infrastructure.</h2>
-      <p class="section-sub">Amazon's core value in e-commerce is not speed — it is the elimination of friction. Every design decision, from one-click checkout to predictive restocking, is built to make convenience feel inevitable.</p>
-    </div>
-    <div class="trend-stats">
-      <div class="trend-stat">
-        <div class="trend-num">37.6%</div>
-        <div class="trend-desc">US e-commerce market share — an unmatched lead built on fulfillment capability and digital ecosystem lock-in</div>
-        <div class="trend-source">S&amp;P Global / Statista 2025</div>
-      </div>
-      <div class="trend-stat">
-        <div class="trend-num">62%</div>
-        <div class="trend-desc">of Amazon's unit sales come from third-party sellers — a marketplace model that externalizes inventory risk while capturing advertising revenue</div>
-        <div class="trend-source">Amazon Annual Report 2024</div>
-      </div>
-      <div class="trend-stat">
-        <div class="trend-num">$30.4B</div>
-        <div class="trend-desc">Net income in 2024 — driven by fulfillment scale, Prime loyalty, and AI-powered demand shaping</div>
-        <div class="trend-source">Amazon Annual Report 2024</div>
-      </div>
-    </div>
-    <div class="three-grid" style="margin-top:clamp(40px,5vw,80px);">
-      <div class="three-cell">
-        <div class="three-cell-tag">CORE VALUE</div>
-        <div class="three-cell-title">Convenience</div>
-        <div class="three-cell-body">One-click flows, unified account and payment systems, predictable delivery windows. The e-commerce ecosystem is a frictionless machine connecting sellers, fulfillment, and data — reinforced by Prime loyalty.</div>
-      </div>
-      <div class="three-cell">
-        <div class="three-cell-tag">CORE VALUE</div>
-        <div class="three-cell-title">Personalization</div>
-        <div class="three-cell-body">Recommendation and ranking systems shift the shopping experience from search to guided discovery. Rufus AI learns from Kindle, Prime Video, and Audible to build predictive intent profiles.</div>
-      </div>
-      <div class="three-cell">
-        <div class="three-cell-tag">CORE VALUE</div>
-        <div class="three-cell-title">Trust &amp; Reliability</div>
-        <div class="three-cell-body">Fulfillment standards and returns infrastructure lower perceived risk. Amazon's delivery network — including MK30 drones with 12km range and 60-minute delivery windows — redefines the reliability benchmark.</div>
-      </div>
-    </div>
-    <div class="roadmap-grid">
-      <div class="horizon">
-        <div class="horizon-tag">2026</div>
-        <div class="horizon-title">Global Expansion &amp; AI</div>
-        <div class="horizon-range">Near-term horizon</div>
-        <div class="horizon-items">
-          <div class="horizon-item">UK Launch Darlington + 20+ Leo satellite launches</div>
-          <div class="horizon-item">MK30 Drone — 12km range, Prime Air expansion</div>
-          <div class="horizon-item">Rufus AI: Account Memory, AutoBuy Launch</div>
-          <div class="horizon-item">Kindle/Audible integration with shopping data</div>
-        </div>
-      </div>
-      <div class="horizon">
-        <div class="horizon-tag">2027–2028</div>
-        <div class="horizon-title">Scale &amp; Revenue Impact</div>
-        <div class="horizon-range">Mid-term horizon</div>
-        <div class="horizon-items">
-          <div class="horizon-item">Rufus AI — $2B operating income projected</div>
-          <div class="horizon-item">4.44% GMV increase from AI-driven discovery</div>
-          <div class="horizon-item">30+ satellite launches, expanded Ad revenue</div>
-          <div class="horizon-item">60-minute delivery in major metro areas</div>
-        </div>
-      </div>
-      <div class="horizon">
-        <div class="horizon-tag">2030</div>
-        <div class="horizon-title">Autonomous Logistics</div>
-        <div class="horizon-range">Long-term horizon</div>
-        <div class="horizon-items">
-          <div class="horizon-item">500M drone packages per year</div>
-          <div class="horizon-item">100K electric delivery vans deployed</div>
-          <div class="horizon-item">50% food waste reduction via circular systems</div>
-          <div class="horizon-item">CapEx +60% infrastructure investment</div>
-        </div>
-      </div>
-    </div>
-    <div class="two-grid">
-      <div class="two-cell">
-        <div class="two-cell-tag"><span class="two-cell-badge badge-pos">SDG POSITIVE</span></div>
-        <div class="two-cell-title">SDG 8 · Decent Work and Economic Growth</div>
-        <div class="two-cell-body">Creates income opportunities across a broad ecosystem of third-party sellers, fulfillment workers, and last-mile delivery partners. Amazon's marketplace provides global market access for small businesses that previously lacked reach.</div>
-      </div>
-      <div class="two-cell">
-        <div class="two-cell-tag"><span class="two-cell-badge badge-neg">SDG NEGATIVE</span></div>
-        <div class="two-cell-title">SDG 12 · Responsible Consumption</div>
-        <div class="two-cell-body">Convenience-driven design — "Buy Now," default recommendations, low-friction returns — structurally incentivizes overconsumption. Easy returns increase packaging waste and create non-circular logistics outcomes at scale.</div>
-      </div>
-      <div class="two-cell">
-        <div class="two-cell-tag"><span class="two-cell-badge badge-pos">SDG POSITIVE</span></div>
-        <div class="two-cell-title">SDG 9 · Industry, Innovation &amp; Infrastructure</div>
-        <div class="two-cell-body">Strengthens digital commerce and logistics infrastructure globally. Prime Air drone delivery and autonomous fulfillment represent genuine infrastructure innovation that reduces last-mile costs across the sector.</div>
-      </div>
-      <div class="two-cell">
-        <div class="two-cell-tag"><span class="two-cell-badge badge-neg">SDG NEGATIVE</span></div>
-        <div class="two-cell-title">SDG 13 · Climate Action</div>
-        <div class="two-cell-body">Speed-driven shipping and high delivery frequency generate significant transport emissions. The demand-shaping machine that drives purchase frequency is also a machine that drives carbon output per customer per year.</div>
-      </div>
-    </div>
-    <div class="conclusion-block">
-      <div class="conclusion-quote">"E-commerce turns convenience into a system — shaping what we buy, how we buy, and the hidden costs behind each click."</div>
-      <div class="conclusion-attr">Service Component I Conclusion · Design Audit Report 1</div>
-    </div>
-  </section>
-
-  <!-- 04 AWS -->
-  <section class="pt-section wrap">
-    <div class="section-head">
-      <div class="section-label">04 — Service Component II</div>
-      <h2 class="section-title">AWS: From cloud provider<br>to agent builder.</h2>
-      <p class="section-sub">AWS's core value is not storage or compute — it is stability. 200+ managed services, enterprise-grade SLAs, and a 4–5 year ecosystem head start that competitors have yet to close.</p>
-    </div>
-    <div class="trend-stats">
-      <div class="trend-stat">
-        <div class="trend-num">30%</div>
-        <div class="trend-desc">Global cloud infrastructure market share in Q3 2025 — leading Azure at 20% and Google at 13%</div>
-        <div class="trend-source">Synergy Research Group 2025</div>
-      </div>
-      <div class="trend-stat">
-        <div class="trend-num">90%+</div>
-        <div class="trend-desc">of Fortune 100 companies utilize AWS Partner solutions — the deepest enterprise penetration in cloud</div>
-        <div class="trend-source">Amazon Web Services 2025</div>
-      </div>
-      <div class="trend-stat">
-        <div class="trend-num">$200B</div>
-        <div class="trend-desc">CapEx investment planned for 2026 — a +60% increase — powering AI Factories, European Sovereign Cloud, and SMR nuclear energy</div>
-        <div class="trend-source">Amazon Annual Report 2025</div>
-      </div>
-    </div>
-    <div class="roadmap-grid">
-      <div class="horizon">
-        <div class="horizon-tag">2025–2026</div>
-        <div class="horizon-title">AI Chips &amp; Agents</div>
-        <div class="horizon-range">Near-term horizon</div>
-        <div class="horizon-items">
-          <div class="horizon-item">Graviton5, Trainium3 UltraServers, Trainium2</div>
-          <div class="horizon-item">Nova 2 Family, Nova Forge &amp; Nova Act</div>
-          <div class="horizon-item">Bedrock AgentCore &amp; Kiro AI IDE</div>
-          <div class="horizon-item">European Sovereign Cloud launch (Germany)</div>
-        </div>
-      </div>
-      <div class="horizon">
-        <div class="horizon-tag">2027–2029</div>
-        <div class="horizon-title">AI Factories at Scale</div>
-        <div class="horizon-range">Mid-term horizon</div>
-        <div class="horizon-items">
-          <div class="horizon-item">AWS AI Factories in customer data centers</div>
-          <div class="horizon-item">Nova Act, Security Agent, DevOps Agent</div>
-          <div class="horizon-item">90% of workflows automated by AI agents</div>
-          <div class="horizon-item">OpenAI / Infosys Gen AI partnerships</div>
-        </div>
-      </div>
-      <div class="horizon">
-        <div class="horizon-tag">2030–2039</div>
-        <div class="horizon-title">Sustainable Infrastructure</div>
-        <div class="horizon-range">Long-term horizon</div>
-        <div class="horizon-items">
-          <div class="horizon-item">Water Positive Goal — 621 Renewable Projects (34GW+)</div>
-          <div class="horizon-item">Small Modular Reactor (SMR) operations</div>
-          <div class="horizon-item">Powering 3.8M homes annually via X-energy</div>
-          <div class="horizon-item">Trainium4, AWS Interconnect at scale</div>
-        </div>
-      </div>
-    </div>
-    <div class="two-grid">
-      <div class="two-cell">
-        <div class="two-cell-tag"><span class="two-cell-badge badge-pos">SDG POSITIVE</span></div>
-        <div class="two-cell-title">SDG 9 · Industry, Innovation &amp; Infrastructure</div>
-        <div class="two-cell-body">Builds a sustainable global cloud ecosystem by expanding scalable infrastructure to governments, enterprises, and startups — enabling organizations to build, store, and run digital services without owning physical servers.</div>
-      </div>
-      <div class="two-cell">
-        <div class="two-cell-tag"><span class="two-cell-badge badge-neg">SDG NEGATIVE</span></div>
-        <div class="two-cell-title">SDG 10 · Reduced Inequalities</div>
-        <div class="two-cell-body">AWS dominance and complex pricing can limit access for startups and smaller organizations in developing markets. Near-monopoly dynamics create structural barriers that reinforce digital inequality rather than reducing it.</div>
-      </div>
-      <div class="two-cell">
-        <div class="two-cell-tag"><span class="two-cell-badge badge-pos">SDG POSITIVE</span></div>
-        <div class="two-cell-title">SDG 17 · Partnerships for the Goals</div>
-        <div class="two-cell-body">Builds a global digital ecosystem through government and enterprise partnerships, positioning AWS as a shared infrastructure layer for international development, research, and public-sector digitization.</div>
-      </div>
-      <div class="two-cell">
-        <div class="two-cell-tag"><span class="two-cell-badge badge-neg">SDG NEGATIVE</span></div>
-        <div class="two-cell-title">SDG 12 · Responsible Consumption</div>
-        <div class="two-cell-body">Data centers consume massive electricity and water for cooling. AWS's aggressive growth trajectory requires energy-intensive infrastructure expansion — the sustainability commitments are real but lag the consumption curve.</div>
-      </div>
-    </div>
-    <div class="conclusion-block">
-      <div class="conclusion-quote">"AWS's core value is scalable, on-demand cloud infrastructure — letting organizations build, store, and run digital services quickly without owning physical servers."</div>
-      <div class="conclusion-attr">Service Component II Conclusion · Design Audit Report 1</div>
-    </div>
-  </section>
-
-  <!-- 05 PRIME VIDEO -->
-  <section class="pt-section wrap">
-    <div class="section-head">
-      <div class="section-label">05 — Service Component III</div>
-      <h2 class="section-title">Prime Video: Sports-driven<br>commerce streaming.</h2>
-      <p class="section-sub">Prime Video is not competing for attention — it is capturing loyalty. Bundled with Prime membership, anchored by live sports, and powered by shoppable advertising, it is a commerce engine wearing a content hat.</p>
-    </div>
-    <div class="trend-stats">
-      <div class="trend-stat">
-        <div class="trend-num">315M</div>
-        <div class="trend-desc">Global Prime Video users in 2025 — projected to reach 269M global subscribers by 2029 on a paid basis</div>
-        <div class="trend-source">Amazon / Statista 2025</div>
-      </div>
-      <div class="trend-stat">
-        <div class="trend-num">$3.8B</div>
-        <div class="trend-desc">Sports investment in 2026 alone — NBA ($1.8B/yr), UFC, UEFA Champions League, NFL, and NASCAR rights</div>
-        <div class="trend-source">Variety / Nielsen 2025</div>
-      </div>
-      <div class="trend-stat">
-        <div class="trend-num">+86%</div>
-        <div class="trend-desc">Ad revenue growth — $806M in 2025, driven by AI-powered shoppable ads that leverage Amazon's first-party commerce data</div>
-        <div class="trend-source">Amazon Annual Report 2025</div>
-      </div>
-    </div>
-    <div class="two-grid">
-      <div class="two-cell">
-        <div class="two-cell-tag"><span class="two-cell-badge badge-pos">SDG POSITIVE</span></div>
-        <div class="two-cell-title">SDG 8 · Decent Work and Economic Growth</div>
-        <div class="two-cell-body">Supports monetization opportunities for studios, creators, independent filmmakers, and media partners globally. Live sports rights deals create significant economic flow through broadcast and talent ecosystems.</div>
-      </div>
-      <div class="two-cell">
-        <div class="two-cell-tag"><span class="two-cell-badge badge-neg">SDG NEGATIVE</span></div>
-        <div class="two-cell-title">SDG 3 · Good Health and Well-being</div>
-        <div class="two-cell-body">Engagement-driven design optimizes for watch time, not well-being. Prolonged viewing patterns — especially among young users — may affect attention spans, sleep quality, and digital-physical balance.</div>
-      </div>
-      <div class="two-cell">
-        <div class="two-cell-tag"><span class="two-cell-badge badge-pos">SDG POSITIVE</span></div>
-        <div class="two-cell-title">SDG 9 · Industry, Innovation &amp; Infrastructure</div>
-        <div class="two-cell-body">Expands scalable digital infrastructure for global content distribution. Prime Video's shoppable ad technology and Amazon Marketing Cloud represent genuine innovation in the convergence of content and commerce.</div>
-      </div>
-      <div class="two-cell">
-        <div class="two-cell-tag"><span class="two-cell-badge badge-neg">SDG NEGATIVE</span></div>
-        <div class="two-cell-title">SDG 12 · Responsible Consumption</div>
-        <div class="two-cell-body">Engagement-driven content algorithms can encourage excessive digital consumption. Confusion around paid add-ons and channel subscriptions creates friction that disadvantages smaller, independent content creators.</div>
-      </div>
-    </div>
-    <div class="conclusion-block">
-      <div class="conclusion-quote">"Prime Video's core value is bundled convenience — frictionless, personalized streaming inside Prime that increases loyalty and keeps users in Amazon's ecosystem."</div>
-      <div class="conclusion-attr">Service Component III Conclusion · Design Audit Report 1</div>
-    </div>
-  </section>
-
-    </div><!-- /phase-body-inner -->
-  </div><!-- /phase-body -->
-</div><!-- /phase-block 05 -->
-
-<div class="phase-block">
-  <button class="phase-toggle" onclick="togglePhase(this)">
-    <div class="phase-toggle-inner">
-      <div>
-        <div class="phase-num">06</div>
-        <div class="phase-name">Design Proposal</div>
-        <div class="phase-sub">Audit I · Structural gaps and speculative solutions</div>
-      </div>
-      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-  </button>
-  <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media">
-      <div data-amazon-rxxr-bars style="width:100%;height:100%;"></div>
-    </div>
-  </div>
-  <div class="phase-body">
-    <div class="phase-body-inner">
-
-  <!-- 06 SOLUTIONS -->
-  <section class="pt-section wrap">
-    <div class="section-head">
-      <div class="section-label">06 — Possible Solutions</div>
-      <h2 class="section-title">Where Amazon's<br>ecosystem fails.</h2>
-      <p class="section-sub">Three structural gaps remain unaddressed by growth incentives — speed, scale, and always-on engagement. Our speculative models propose how each gap could be closed.</p>
-    </div>
-    <div class="three-grid">
-      <div class="three-cell">
-        <div class="three-cell-tag">SPECULATIVE MODEL 01</div>
-        <div class="three-cell-title">Streamlined Delivery Automation</div>
-        <div class="three-cell-sub">AI-Powered Robotics for Circular Logistics and Labor Hazard Prevention</div>
-        <div class="three-cell-body">Robotics and AI transform workers from manual laborers to on-site system managers. A circular logistics model via automated packaging collection closes the waste loop at the fulfillment level.</div>
-        <div class="three-cell-items">
-          <div class="three-cell-item">AI/Logistics Operations Center (LOC)</div>
-          <div class="three-cell-item">Autonomous Fleet Operations (AFO)</div>
-          <div class="three-cell-item">Customer Delivery Experience Team (CDX)</div>
-          <div class="three-cell-item">Robotics-Driven · AI-Powered · Human-Managed</div>
-        </div>
-      </div>
-      <div class="three-cell">
-        <div class="three-cell-tag">SPECULATIVE MODEL 02</div>
-        <div class="three-cell-title">Agentic Database / Server</div>
-        <div class="three-cell-sub">An autonomous data platform that continuously adapts and optimizes for the digital business</div>
-        <div class="three-cell-body">Amazon ForesightDB — a self-tuning, self-repairing, self-evolving autonomous database that reduces human intervention while maintaining SLA accountability. Human-in-the-loop transitioning to fully AI-powered.</div>
-        <div class="three-cell-items">
-          <div class="three-cell-item">Amazon ForesightDB — Selftuning</div>
-          <div class="three-cell-item">Amazon GovernAI DB — Policy Layer</div>
-          <div class="three-cell-item">Adaptive Intelligence · Autonomous Evolution</div>
-        </div>
-      </div>
-      <div class="three-cell">
-        <div class="three-cell-tag">SPECULATIVE MODEL 03</div>
-        <div class="three-cell-title">Adaptive Streaming Subscriptions</div>
-        <div class="three-cell-sub">Agentic AI for Accessible and Adaptive Streaming</div>
-        <div class="three-cell-body">A flexible subscription model that uses AI to match subscription tiers to actual viewing behavior — reducing subscription fatigue and expanding access for underserved audiences through collective and inter-platform pooling.</div>
-        <div class="three-cell-items">
-          <div class="three-cell-item">Flexible Subscription &amp; Universal Streaming Pass</div>
-          <div class="three-cell-item">Collective Subscription &amp; Inter-platform Partnership</div>
-          <div class="three-cell-item">Community-Pooled Subscription Model</div>
-        </div>
-      </div>
-    </div>
-    <div class="hmw-block">
-      <div class="hmw-label">TRANSFORMATION DIRECTION</div>
-      <div class="hmw-text">"The brand shifts from 'fastest and cheapest' toward trusted infrastructure for responsible convenience — where convenience is delivered with accountability."</div>
-      <div class="opp-dims">
-        <div class="opp-dim">
-          <div class="opp-dim-title">Decarbonize Operations</div>
-          <div class="opp-dim-body">Clean energy, lower-carbon logistics, water sustainability commitments backed by SMR nuclear investment and 34GW+ renewable projects.</div>
-        </div>
-        <div class="opp-dim">
-          <div class="opp-dim-title">Design for Circularity</div>
-          <div class="opp-dim-body">Packaging innovation, automated returns processing, reuse infrastructure, and a closed-loop model that treats waste as a system input — not an output.</div>
-        </div>
-        <div class="opp-dim">
-          <div class="opp-dim-title">Strengthen Social Responsibility</div>
-          <div class="opp-dim-body">Labor safeguards, supplier transparency, and auditability — transitioning Amazon from platform to accountable infrastructure with measurable social outcomes.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-    </div><!-- /phase-body-inner -->
-  </div><!-- /phase-body -->
-</div><!-- /phase-block 06 -->
-
-</div><!-- /phase-wrap -->
-
-<div class="phase-wrap">
-<div class="phase-block">
-  <button class="phase-toggle" onclick="togglePhase(this)">
-    <div class="phase-toggle-inner">
-      <div>
-        <div class="phase-num">07</div>
-        <div class="phase-name">Conclusion</div>
-        <div class="phase-sub">Reflections and key takeaways</div>
-      </div>
-      <svg class="phase-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-  </button>
-  <div class="phase-media-wrap" onclick="togglePhase(this)">
-    <div class="phase-media"></div>
-  </div>
-  <div class="phase-body">
-    <div class="phase-body-inner"></div>
-  </div>
-</div>
-</div><!-- /phase-wrap -->
 
 <footer style="padding:clamp(64px,8vw,120px) var(--pad) clamp(48px,6vw,80px); text-align:center;">
-  <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
+  <p style="font-size:13px; color:var(--muted);">&copy; 2026 Michael Joongmin Park</p>
 </footer>
 
-<script src="./amazon-logo-morph.js" defer></script>
-<script src="./amazon-bars.js" defer></script>
 <script src="./lazy-video.js?v=20260805"></script>
-
 <script>
-function togglePhase(el) {
-  const block = el.closest('.phase-block');
-  if (block.hasAttribute('data-open')) {
-    const nav = document.querySelector('nav.top');
-    const navH = nav ? nav.offsetHeight : 57;
-    const blockTop = block.getBoundingClientRect().top + window.scrollY;
-    if (window.scrollY > blockTop) {
-      window.scrollTo({ top: blockTop - navH, behavior: 'instant' });
-    }
-    block.removeAttribute('data-open');
-  } else {
-    block.setAttribute('data-open', '');
-  }
-}
-(function(){const n=document.querySelector('nav.top');if(n)document.documentElement.style.setProperty('--nav-h',n.offsetHeight+'px');})();
-</script>
+(function(){
+  var supported = 'IntersectionObserver' in window;
 
+  /* ---- reveal on scroll: fade blocks in as they enter view ---- */
+  var revealEls = document.querySelectorAll(
+    '.subsec-img,.subsec-video,.chapter-media-duo,.gradex-row,.build-list,' +
+    '.phase-desc,.phase-note,.phase-num,.phase-name,.phase-sub,' +
+    '.subsec-title,.subsec-lead,.gradex-cap'
+  );
+  if(!supported){
+    revealEls.forEach(function(el){ el.classList.add('reveal-in'); });
+  } else {
+    var rio = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('reveal-in'); rio.unobserve(e.target); }
+      });
+    }, { rootMargin:'0px 0px -8% 0px', threshold:0 });
+    revealEls.forEach(function(el){ rio.observe(el); });
+  }
+
+  /* Posters, clip fetching, playback and buffer release are all handled
+     by the media governor in lazy-video.js. */
+})();
+</script>
 </body>
 </html>
