@@ -284,13 +284,13 @@
     border-radius:6px;
     font-size:13px; font-weight:500; letter-spacing:-0.01em;
     white-space:nowrap;
-    background:rgba(200,200,200,0.62); color:#4d4d4d;
-    -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
-    border:1px solid rgba(0,0,0,0.12);
+    background:rgba(244,244,244,0.75); color:#a0a0a0;
     opacity:0; transform:translateY(6px);
     transition:opacity .28s ease, transform .35s cubic-bezier(.7,0,.2,1);
   }
-  .card-tags .tag.core{ background:#fff; color:#0a0a0a; }
+  /* one flat fill for every chip; the core ranks purely on how dark its
+     label is (18:1 against the plate, versus 2.4:1 for the rest) */
+  .card-tags .tag.core{ color:#0a0a0a; }
   .work:hover .card-tags .tag{ opacity:1; transform:translateY(0); }
   .card-tags .tag:nth-child(2){ transition-delay:.05s; }
   .card-tags .tag:nth-child(3){ transition-delay:.10s; }
@@ -303,13 +303,7 @@
      chips wrap rather than crowd it once the card is phone-width */
   .ongen-work .card-tags{ max-width:calc(100% - clamp(140px,16.5vw,238px)); }
   .work-block.is-small .card-tags{ left:14px; bottom:14px; gap:5px; }
-  /* the four carousel pieces run dark or saturated behind the chips, where a
-     translucent fill drops the label to 1.6:1, so they keep an opaque one */
-  .work-block.is-small .card-tags .tag{
-    height:26px; padding:0 11px; font-size:12px;
-    background:#c8c8c8;
-    -webkit-backdrop-filter:none; backdrop-filter:none;
-  }
+  .work-block.is-small .card-tags .tag{ height:26px; padding:0 11px; font-size:12px; }
   @media(max-width:880px){
     .card-tags{ left:14px; bottom:14px; gap:5px; }
     .card-tags .tag,
