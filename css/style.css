@@ -1,4 +1,4 @@
-/* Reset and Base Styles */
+﻿/* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -1265,17 +1265,6 @@ nav {
 }
 
 .view-report-pill-btn.btn-ult-report:hover {
-    background-color: #FFFFFF !important;
-    color: #000000 !important;
-}
-
-/* KnowMedi Report Button */
-.view-report-pill-btn.btn-knowmedi-report {
-    background-color: #000000 !important;
-    color: #FFFFFF !important;
-}
-
-.view-report-pill-btn.btn-knowmedi-report:hover {
     background-color: #FFFFFF !important;
     color: #000000 !important;
 }
