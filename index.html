@@ -268,56 +268,52 @@
     object-fit:cover; display:block;
   }
 
-  /* More button (bottom-left of every .work card) */
-  .more-btn{
+  /* Tag chips, revealed on hovering the media area itself (.work, not the
+     whole block, so the caption below does not trigger them) */
+  .card-tags{
     position:absolute;
     left:18px; bottom:18px;
     z-index:5;
-    height:48px;
-    display:inline-flex; align-items:center;
-    background:rgba(255,255,255,0.92);
-    color:#0a0a0a;
-    border-radius:999px;
-    backdrop-filter:blur(8px);
-    -webkit-backdrop-filter:blur(8px);
-    box-shadow:0 4px 18px rgba(0,0,0,0.18);
+    display:flex; flex-wrap:wrap; gap:6px;
+    max-width:calc(100% - 36px);
     pointer-events:none;
-    overflow:hidden;
-    padding-right:0;
-    transition:padding-right .35s cubic-bezier(.7,0,.2,1),
-               background-color .25s ease;
   }
-  .more-btn .more-icon{
-    width:48px; height:48px; flex-shrink:0;
-    display:flex; align-items:center; justify-content:center;
-    transform:rotate(45deg);
-    transition:transform .35s cubic-bezier(.7,0,.2,1);
-  }
-  .more-btn .more-icon svg{ width:20px; height:20px; display:block; }
-  .more-btn .more-label{
-    font-size:14px; font-weight:500; letter-spacing:-0.01em;
+  .card-tags .tag{
+    display:inline-flex; align-items:center;
+    height:30px; padding:0 12px;
+    border-radius:6px;
+    font-size:13px; font-weight:500; letter-spacing:-0.01em;
     white-space:nowrap;
-    max-width:0;
-    opacity:0;
-    overflow:hidden;
-    transition:max-width .35s cubic-bezier(.7,0,.2,1),
-               opacity .25s ease .05s;
+    background:rgba(200,200,200,0.62); color:#4d4d4d;
+    -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+    border:1px solid rgba(0,0,0,0.12);
+    opacity:0; transform:translateY(6px);
+    transition:opacity .28s ease, transform .35s cubic-bezier(.7,0,.2,1);
   }
-  .work-block:hover .more-btn{
-    background:#fff;
-    padding-right:18px;
+  .card-tags .tag.core{ background:#fff; color:#0a0a0a; }
+  .work:hover .card-tags .tag{ opacity:1; transform:translateY(0); }
+  .card-tags .tag:nth-child(2){ transition-delay:.05s; }
+  .card-tags .tag:nth-child(3){ transition-delay:.10s; }
+  /* no hover to key off on touch, so show them outright */
+  @media (hover:none){
+    .card-tags .tag{ opacity:1; transform:none; }
   }
-  .work-block:hover .more-btn .more-icon{
-    transform:rotate(0deg);
-  }
-  .work-block:hover .more-btn .more-label{
-    max-width:120px;
-    opacity:1;
+  /* keep clear of the GradEX badge sitting in the opposite corner */
+  /* reserve the badge's own footprint (offset + width) plus a gap, so the
+     chips wrap rather than crowd it once the card is phone-width */
+  .ongen-work .card-tags{ max-width:calc(100% - clamp(140px,16.5vw,238px)); }
+  .work-block.is-small .card-tags{ left:14px; bottom:14px; gap:5px; }
+  /* the four carousel pieces run dark or saturated behind the chips, where a
+     translucent fill drops the label to 1.6:1, so they keep an opaque one */
+  .work-block.is-small .card-tags .tag{
+    height:26px; padding:0 11px; font-size:12px;
+    background:#c8c8c8;
+    -webkit-backdrop-filter:none; backdrop-filter:none;
   }
   @media(max-width:880px){
-    .more-btn{ left:14px; bottom:14px; height:42px; }
-    .more-btn .more-icon{ width:42px; height:42px; }
-    .more-btn .more-icon svg{ width:18px; height:18px; }
+    .card-tags{ left:14px; bottom:14px; gap:5px; }
+    .card-tags .tag,
+    .work-block.is-small .card-tags .tag{ height:25px; padding:0 10px; font-size:11px; }
   }
 
   /* ABOUT */
@@ -856,6 +852,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <a href="./finboard.html">
         <div class="work" style="background:#0a0a0a;">
           <video class="lazy-vid" data-src="./finboardprev.mp4?v=20260805f" data-poster="./posters/finboardprev.jpg?v=20260805f" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+          <div class="card-tags"><span class="tag core">iOS Native</span><span class="tag">Banking App</span><span class="tag">Concept</span></div>
         </div>
         <div class="w-info">
           <div class="t"><span>finboard : Live Personal-Finance Dashboard</span><span class="arrow">→</span></div>
@@ -877,6 +874,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
                 sizes="(max-width: 880px) 100px, 13.5vw" />
             </div>
           </div>
+          <div class="card-tags"><span class="tag core">Thesis Project</span><span class="tag">Spatial Intelligence</span><span class="tag">AR App</span></div>
         </div>
         <div class="w-info">
           <div class="t"><span>OnGen AR 2026 : Reimagined Radio in Augmented Reality</span><span class="arrow">→</span></div>
@@ -887,7 +885,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
     <div class="work-block reveal is-big o2">
       <a href="./tokentrust.html">
-        <div class="work"><video class="lazy-vid" data-src="./tokentrust169.mp4?v=20260805b" data-poster="./posters/tokentrust169.jpg?v=20260805b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
+        <div class="work"><video class="lazy-vid" data-src="./tokentrust169.mp4?v=20260805b" data-poster="./posters/tokentrust169.jpg?v=20260805b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video><div class="card-tags"><span class="tag core">Team Lead</span><span class="tag">AI Governance</span><span class="tag">Concept</span></div></div>
         <div class="w-info">
           <div class="t"><span>Token Trust : Use AI tokens wisely, See where my data goes</span><span class="arrow">→</span></div>
           <div class="w-meta"><div class="m"><span>2026</span><span>Service Design</span><span>3 Weeks</span></div><div class="w-tags"><span class="w-tag">Service Proposal</span><span class="w-tag">Web App</span></div></div>
@@ -909,6 +907,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <a href="./gridone.html">
         <div class="work">
           <video class="lazy-vid" data-hover data-src="./gridoneprev.mp4" data-poster="./posters/gridoneprev.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+          <div class="card-tags"><span class="tag core">Service Design</span><span class="tag">Service Proposal</span><span class="tag">Mobile App</span></div>
         </div>
         <div class="w-info">
           <div class="t"><span>GridOne — Tailored Maintenance &amp; Building Consulting Firm</span><span class="arrow">→</span></div>
@@ -925,6 +924,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
             data-poster="./posters/amazonproposalthumb.jpg"
             loop muted playsinline webkit-playsinline preload="none"
             style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(1);"></video>
+          <div class="card-tags"><span class="tag core">Design Management</span><span class="tag">Service Audit</span><span class="tag">Service Proposal</span></div>
         </div>
         <div class="w-info">
           <div class="t"><span>Amelia-Rufus 2.0 Amazon Service Audit-Proposal</span><span class="arrow">→</span></div>
@@ -935,7 +935,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
     <div class="work-block is-small">
       <a href="./intact-lifolio.html">
-        <div class="work"><video class="lazy-vid" data-hover data-src="./intactlifoliothumb.mp4" data-poster="./posters/intactlifoliothumb.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
+        <div class="work"><video class="lazy-vid" data-hover data-src="./intactlifoliothumb.mp4" data-poster="./posters/intactlifoliothumb.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video><div class="card-tags"><span class="tag core">Product Design</span><span class="tag">Service Proposal</span><span class="tag">Web App</span></div></div>
         <div class="w-info">
           <div class="t"><span>intact lifolio</span><span class="arrow">→</span></div>
           <div class="w-meta"><div class="m"><span>2026</span><span>Product Design</span></div><div class="w-tags"><span class="w-tag">Service Proposal</span><span class="w-tag">Web App</span></div></div>
@@ -947,6 +947,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <a href="./ult.html">
         <div class="work ult-work">
           <video class="lazy-vid ult-vid" data-hover data-src="./ultvid.mp4" data-poster="./posters/ultvid.jpg" muted loop playsinline preload="none"></video>
+          <div class="card-tags"><span class="tag core">Urban Logistics</span><span class="tag">Physical UX</span><span class="tag">Mobile App</span></div>
         </div>
         <div class="w-info">
           <div class="t"><span>ULT</span><span class="arrow">→</span></div>
@@ -1175,18 +1176,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   })();
 
 
-  /* Inject "More" button into every .work card */
-  (function(){
-    var ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>';
-    document.querySelectorAll('.work').forEach(function(card){
-      if(card.querySelector('.more-btn')) return;
-      var btn = document.createElement('div');
-      btn.className = 'more-btn';
-      btn.setAttribute('aria-hidden','true');
-      btn.innerHTML = '<span class="more-icon">'+ICON+'</span><span class="more-label">More</span>';
-      card.appendChild(btn);
-    });
-  })();
 </script>
 
 <script>
