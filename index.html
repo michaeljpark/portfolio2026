@@ -711,21 +711,15 @@
     object-fit:cover; display:block;
     filter:brightness(0.9);
   }
-  /* GradEX 111 credit, pinned inside the clip as a small card. Width is a
-     share of the card so it scales with the 100vw bleed, with a floor so it
-     stays legible once the card is phone-width. */
+  /* GradEX 111 credit, overlaid straight onto the clip with no frame of its
+     own: the lockup is knocked out of an opaque black plate, so the video
+     shows through the letterforms. Width is a share of the card so it scales
+     with the 100vw bleed, with a floor for phone-width cards. */
   .gradex-badge{
     position:absolute; z-index:2;
-    top:clamp(10px,1.15vw,20px); right:clamp(10px,1.15vw,20px);
+    bottom:clamp(10px,1.15vw,20px); right:clamp(10px,1.15vw,20px);
     width:clamp(100px,13.5%,208px);
     aspect-ratio:1225/419;
-    overflow:hidden;
-    /* the lockup is knocked out of an opaque black plate, so the letterforms
-       are transparent: white behind it is what makes them read as white */
-    background:#fff;
-    border:1px solid rgba(255,255,255,0.22);
-    border-radius:5px;
-    box-shadow:0 8px 24px rgba(0,0,0,0.35);
     pointer-events:none;
   }
   .gradex-badge img{
