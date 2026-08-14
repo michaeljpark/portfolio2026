@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>OnGen AR 2026 — Michael Joongmin Park</title>
+<title>CF Sherway Gardens — Michael Joongmin Park</title>
 <link rel="icon" type="image/svg+xml" href="./mkpk.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -11,8 +11,7 @@
 <script>document.documentElement.className += ' reveal-on';</script>
 <style>
   :root{
-    /* dark theme: same token contract as the other pages, inverted */
-    --bg:#0a0a0a; --ink:#ffffff; --muted:#8f8f8f; --line:#242424;
+    --bg:#ffffff; --ink:#0a0a0a; --muted:#6a6a6a; --line:#e6e6e6;
     --max:1440px; --pad:clamp(12px,2vw,28px);
     --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
@@ -59,6 +58,12 @@
   /* bleed 1px past every edge so sub-pixel rounding never exposes the
      video element's default black background as a hairline */
   .hero-video video{
+    position:absolute; inset:-1px;
+    width:calc(100% + 2px); height:calc(100% + 2px);
+    object-fit:cover; display:block;
+  }
+  /* this project's hero is a still, so it needs the same bleed as the clip */
+  .hero-video img{
     position:absolute; inset:-1px;
     width:calc(100% + 2px); height:calc(100% + 2px);
     object-fit:cover; display:block;
@@ -1624,6 +1629,16 @@
   .chapter-media-duo .m1{ flex:1.777 1 0; }  /* IMG_5507 16:9 */
   .chapter-media-duo .m2{ flex:0.75 1 0; }   /* IMG_5493(1) portrait 3:4 */
   .chapter-media-duo .m3{ flex:1.2 1 0; }    /* showcase video 6:5 */
+  /* four-up preview row. Each weight is the image's own aspect ratio, and the
+     row height is set so the four widths add up to the content measure, which
+     is what keeps the cover crop at zero instead of trimming the sides. */
+  .chapter-media-quad{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(150px,19.7vw,284px); margin-bottom:clamp(32px,4vw,48px); }
+  .chapter-media-quad .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; }
+  .chapter-media-quad .cell img{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
+  .chapter-media-quad .q1{ flex:0.667 1 0; } /* 3000x4500, 2:3  */
+  .chapter-media-quad .q2{ flex:1.335 1 0; } /* 1800x1348, 4:3  */
+  .chapter-media-quad .q3{ flex:1.335 1 0; } /* 1449x1085, 4:3  */
+  .chapter-media-quad .q4{ flex:1.333 1 0; } /* 1448x1086, 4:3  */
   /* subsection within a chapter (e.g. Snapshot inside Overview) */
   .subsec{ margin-top:clamp(48px,6vw,88px); }
   .subsec-title{ font-size:clamp(20px,2vw,30px); font-weight:400; letter-spacing:-0.04em; line-height:1.15; color:var(--ink); }
@@ -1632,7 +1647,7 @@
   .subsec-video{ position:relative; aspect-ratio:16/9; overflow:hidden; background:transparent; margin-top:clamp(20px,2.4vw,32px); }
   /* wider 2:1 crop for the conceptual MVP walkthrough */
   .subsec-video.wide{ aspect-ratio:2/1; }
-  /* native 8:5 for full-bleed dashboard demos, so edge content is never cropped */
+  /* native 8:5 for phone-mockup demos, so the status bar and nav are never cropped */
   .subsec-video.native{ aspect-ratio:8/5; }
 
   /* iOS Safari will not clip a composited video layer with overflow:hidden alone,
@@ -1641,6 +1656,7 @@
      so the alpha stays 1 throughout and nothing fades. Same fix as .ongen-work. */
   .hero-video,
   .subsec-video,
+  .chapter-media-quad .cell,
   .chapter-media-duo .cell{
     -webkit-mask-image:-webkit-radial-gradient(white,black);
     mask-image:radial-gradient(white,black);
@@ -1699,11 +1715,16 @@
     .chapter-media-duo .m1{ aspect-ratio:16/9; }
     .chapter-media-duo .m2{ aspect-ratio:3/4; }
     .chapter-media-duo .m3{ aspect-ratio:6/5; }
+    /* stack the preview row too. Class selectors, not `.cell`, so these beat
+       the .q1-.q4 flex weights on specificity rather than losing to them. */
+    .chapter-media-quad{ flex-direction:column; height:auto; gap:10px; }
+    .chapter-media-quad .q1,.chapter-media-quad .q2,
+    .chapter-media-quad .q3,.chapter-media-quad .q4{ flex:none; }
+    .chapter-media-quad .q1{ aspect-ratio:2/3; }
+    .chapter-media-quad .q2,.chapter-media-quad .q3,.chapter-media-quad .q4{ aspect-ratio:4/3; }
     /* stack the GradEX photos on phones */
     .gradex-row{ flex-direction:column; height:auto; gap:10px; }
-    /* must match the .gradex-row .v/.a/.b/.c specificity, or flex-basis:0
-       stays in force and every stacked figure collapses to zero height */
-    .gradex-row .v, .gradex-row .a, .gradex-row .b, .gradex-row .c{ flex:none; }
+    .gradex-row figure{ flex:none; }
     .gradex-row .v{ aspect-ratio:4/3; }
     .gradex-row .a, .gradex-row .c{ aspect-ratio:4/3; }
     .gradex-row .b{ aspect-ratio:3/4; }
@@ -1898,6 +1919,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
    scripting is off nothing is ever hidden. ===== */
 .reveal-on .subsec-img,
 .reveal-on .chapter-media-duo,
+.reveal-on .chapter-media-quad,
 .reveal-on .gradex-row,
 .reveal-on .build-list,
 .reveal-on .phase-desc,
@@ -1916,7 +1938,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .reveal-on .subsec-video{ opacity:0; transition:opacity .6s ease; }
 .reveal-on .subsec-video.reveal-in{ opacity:1; }
 @media(prefers-reduced-motion:reduce){
-  .reveal-on .subsec-img,.reveal-on .chapter-media-duo,.reveal-on .gradex-row,
+  .reveal-on .subsec-img,.reveal-on .chapter-media-duo,.reveal-on .chapter-media-quad,.reveal-on .gradex-row,
   .reveal-on .build-list,.reveal-on .phase-desc,.reveal-on .phase-note,
   .reveal-on .phase-num,.reveal-on .phase-name,.reveal-on .phase-sub,
   .reveal-on .subsec-title,.reveal-on .subsec-lead,.reveal-on .gradex-cap{
@@ -1950,185 +1972,104 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <header class="hero wrap">
   <div class="hero-video">
-    <video class="lazy-vid" data-src="./ongenthumb.mp4" data-poster="./posters/ongenthumb.jpg?v=20260723"
-           loop muted playsinline preload="none"></video>
+    <img src="./cfprev.png" alt="Cadillac Fairview" loading="eager" srcset="./light/cfprev.webp 1440w, ./cfprev.png 2604w" sizes="(max-width: 1500px) 95vw, 1425px" />
   </div>
-  <div class="hero-greeting">Thesis Project</div>
-  <h1 class="hero-name">OnGen AR 2026</h1>
-  <p class="hero-tagline">Reimagined Radio in Augmented Reality</p>
+  <div class="hero-greeting">UX Design &middot; Cadillac Fairview</div>
+  <h1 class="hero-name">CF Sherway Gardens</h1>
+  <p class="hero-tagline">A public realm where a newcomer can connect to their new home, inside a mall that currently reads as a shop rather than a place.</p>
   <div class="hero-row">
     <dl class="hero-side">
-      <div class="pair"><dt>Year</dt><dd>2026 / Apr</dd></div>
-      <div class="pair"><dt>Type</dt><dd>Thesis, AR, Service, Platform, UI/UX</dd></div>
-      <div class="pair"><dt>Duration</dt><dd>Sep 2025 - Mar 2026 (6 months)</dd></div>
-      <div class="pair"><dt>Skills</dt><dd>Product Design, Interface Design, Interaction Design, Prototyping, Usability Testing</dd></div>
+      <div class="pair"><dt>Year</dt><dd>2025 / Sep</dd></div>
+      <div class="pair"><dt>Type</dt><dd>UX Research, Public Realm</dd></div>
+      <div class="pair"><dt>Partner</dt><dd>Cadillac Fairview</dd></div>
+      <div class="pair"><dt>My role</dt><dd>Research, Prototyping, Concept Direction</dd></div>
     </dl>
   </div>
 </header>
 
 <section class="phase-flat">
-  <div class="chapter-media-duo">
-    <div class="cell m1"><img src="./IMG_5507.jpg" alt="" loading="lazy" srcset="./light/IMG_5507.webp 1440w, ./IMG_5507.jpg 2250w" sizes="(max-width: 880px) 95vw, 46vw" /></div>
-    <div class="cell m2"><img src="./IMG_5493_1.jpg" alt="" loading="lazy" /></div>
-    <div class="cell m3"><video class="snap-vid" data-src="./Showcasingongen1.mp4?v=20260721" data-poster="./posters/showcasingongen1.jpg?v=20260721" loop muted playsinline preload="none"></video></div>
-  </div>
+  <img class="subsec-img" src="./cfteam.png" alt="The project team, five industrial design students" loading="lazy" style="margin-top:0; margin-bottom:clamp(32px,4vw,48px);" srcset="./light/cfteam.webp 1440w, ./cfteam.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <div class="phase-num">01</div>
   <div class="phase-name">Overview</div>
-  <div class="phase-sub">Reimagined radio in augmented reality</div>
-  <p class="phase-desc">OnGen is a real-time geolocational platform for AR users.</p>
-  <p class="phase-note">In the AR era, AI already reads our surroundings and summarizes them for us, acting as an assistant that interprets the world on our behalf. But what if the AR experience could go beyond that assistant role? <em>What if space itself were mapped into the user's own world, and reshaped to match each person's interests?</em> OnGen began as a thesis project exploring that question.</p>
-  <p class="phase-note">At GradEX 111, the graduate exhibition hosted by OCAD University, OnGen drew 408 sessions from 147 test users (121 guests and 26 registered), with a median interaction time of 35.6 seconds. These real numbers let me validate whether the service could hold up in real-world use.</p>
+  <div class="phase-sub">A mall you can only reach by car, asked to become a place</div>
+  <p class="phase-desc">CF Sherway Gardens sits in Etobicoke at Highway 427 and the Gardiner, ringed on all sides by parking lots and arterial roads. The access that makes it work by car is the same thing that makes it unwelcoming on foot, and that contradiction is the project.</p>
+  <p class="phase-note">Cadillac Fairview is developing three phases around the mall, including 1750 Queensway, and over the next 7 to 15 years the user base shifts from commuter to proximate resident. So the brief is not a retail problem. It is what the building has to become before those residents arrive. I worked on research and prototyping in a team of five industrial design students, and the concept carried forward from my side is the one documented here.</p>
 
   <div class="subsec">
     <h3 class="subsec-title">Snapshot</h3>
-    <p class="subsec-lead">OnGen AR is a geolocation intelligence that reconstructs the city you might miss, or the one you care about, and brings it closer.</p>
-    <div class="subsec-video">
-      <video class="snap-vid" data-src="./ongendaytime.mp4?v=20260727" data-poster="./posters/ongendaytime.jpg?v=20260727" loop muted playsinline preload="none"></video>
-    </div>
-    <div class="subsec-video">
-      <video class="snap-vid" data-src="./ongennighttime.mp4?v=20260728" data-poster="./posters/ongennighttime.jpg?v=20260728" loop muted playsinline preload="none"></video>
-    </div>
+    <p class="subsec-lead">The challenge statement, the site, and the trend mix the direction had to sit inside.</p>
+    <img class="subsec-img" src="./cfprojectoutline.png" alt="Project outline: purpose, site, change, users, challenge statement, and trend mix" loading="lazy" srcset="./light/cfprojectoutline.webp 1440w, ./cfprojectoutline.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <p class="phase-note">The team fixed four non-negotiables at the start, safety, accessibility, user-centred decisions, and the 15-minute city as the conceptual frame, and every direction had to survive all four. The trend mix set the reference points: the third place, the 15-minute city, and precedents like The Well and Waterworks Food Hall, both of which built an identity first and drew footfall second.</p>
   </div>
 </section>
 
 <section class="phase-flat">
   <div class="phase-num">02</div>
   <div class="phase-name">Problem Definition</div>
-  <p class="phase-desc">AR devices already exist, but AR interaction is still an extension of the smartphone. So what new modes of interaction could maximize immersion in a user's augmented reality environment?</p>
-  <p class="phase-note">OnGen AR maps social media and local information onto real buildings, raising immersion and making space itself both content and context. Through the AR display, the project focuses on the user as a spectator and uses that role as an effective mode of interaction.</p>
+  <p class="phase-desc">The mall is legible as a shop and illegible as a place. There is no reason to go unless you already know what you want from the stores that are there.</p>
+  <p class="phase-note">Three findings held across everything recorded on site, and they are physical rather than attitudinal.</p>
 
   <div class="subsec">
-    <h3 class="subsec-title">Potential Clients</h3>
-    <p class="phase-note">The OS providers OnGen AR could realistically run on.</p>
-    <img class="subsec-img" src="./Client.png" alt="Potential OS providers: Meta, Rokid, and Apple" loading="lazy" srcset="./light/Client.webp 1440w, ./Client.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">Meta, Rokid, and Apple's upcoming glasses are potential service providers, and a basic precondition for scaling OnGen AR. The field is still experimental, and since most experiences today rely on mobile and laptop interaction models, I found that AR itself is not yet effective. This pointed to the need for interaction built on the growing adoption of AR devices.</p>
+    <div class="subsec-title">What is actually wrong</div>
+    <ul class="build-list features">
+      <li><span class="k">Not a destination</span><span class="v">Nothing in the building gives you an alibi to be there. Visiting is an errand, so nobody arrives without a purchase already in mind.</span></li>
+      <li><span class="k">Nothing signals welcome</span><span class="v">Nothing in the environment tells a person new to Canada that they are wanted in the space. Signage, entrances, and lighting all address a shopper, never a resident.</span></li>
+      <li><span class="k">Almost no non-retail space</span><span class="v">Seating exists only in the food court. The centre court and the large open areas sit unused, so there is nowhere to simply be.</span></li>
+    </ul>
+    <p class="phase-note">That last one set the test I used for the rest of the project. Every problem observed on site is physical and spatial, seating, orientation, unused floor area, nowhere to rest. So any proposal that does not change the space fails, no matter how good it sounds.</p>
   </div>
 </section>
 
 <section class="phase-flat">
   <div class="phase-num">03</div>
   <div class="phase-name">Discovery</div>
-  <img class="subsec-img" src="./ongenthesisquestions.png" alt="The three research questions guiding the project" loading="lazy" srcset="./light/ongenthesisquestions.webp 1440w, ./ongenthesisquestions.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
-  <p class="phase-note">The AR display market is growing quickly, and it points to strong potential demand, yet today's AR glasses still sit as an accessory to the phone. To move past that limit, I set the project's research direction toward maximizing the user's AR experience.</p>
-  <img class="subsec-img" src="./ongenresearch0.png" alt="User journey and experience strategy" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/ongenresearch0.webp 1440w, ./ongenresearch0.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
-  <p class="phase-note">I mapped the user journey and the possibilities a user might experience, and built a strategy to optimize that experience. Five peers and two supervising faculty, Alexander Manu and Bernard Dietz, critiqued the work, and I used their feedback to design the actual survey, shaping it in line with TCPS 2. Together with existing research, Survey Phase 1 gave a baseline read on user behavior and set up Phase 2.</p>
-  <img class="subsec-img" src="./ongensurveyplan.png" alt="Survey plan and MVP prototype context" loading="lazy" srcset="./light/ongensurveyplan.webp 1440w, ./ongensurveyplan.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
-  <p class="phase-note">Building on the points confirmed in the earlier stage, I ran the hypothesis validation through a Google Form survey with 22 respondents. To ground their answers, I published an MVP prototype that supported basic interaction and provided it as context.</p>
-
-  <div class="subsec">
-    <div class="subsec-title">Low-fidelity Conceptual MVP</div>
-    <div class="subsec-video native">
-      <video class="snap-vid" data-src="./ongenprepilotoverview.mp4?v=20260811" data-poster="./posters/ongenprepilotoverview.jpg?v=20260811" loop muted playsinline preload="none"></video>
-    </div>
-    <p class="phase-note">I ran a digital showcase of what OnGen AR does, so people could respond to something concrete instead of a description. Each person went through the interaction first and answered the survey afterward. Thirteen of the 22 respondents interacted with the working app directly.</p>
-    <ul class="build-list features">
-      <li><span class="k">Recognition Assistance</span><span class="v">Collects the user's digital records and behavior data to sustain and prompt their actions.</span></li>
-      <li><span class="k">Live site dashboard</span><span class="v">Uses the user's location to surface nearby updates, news, and related current information.</span></li>
-      <li><span class="k">Personalized podcast curation</span><span class="v">Draws on what the user experiences as media to automatically deliver digital content and news matched to their interests.</span></li>
-    </ul>
-  </div>
-
-  <div class="subsec">
-    <div class="subsec-title">Survey Result - Phase 1</div>
-    <img class="subsec-img" src="./ongensurveyresult.png" alt="Survey results dashboard and qualitative prompts" loading="lazy" srcset="./light/ongensurveyresult.webp 1440w, ./ongensurveyresult.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">I built statistics and a dashboard to gauge how ready real users are for AR experiences and how they feel about AI being part of them. As part of the qualitative research, I collected a range of user prompts that surfaced concrete excitement and concerns.</p>
-  </div>
-
-  <div class="subsec">
-    <div class="subsec-title">Confirmed Concept Direction</div>
-    <div class="subsec-video native">
-      <video class="snap-vid" data-src="./ongenconceptoverview.mp4?v=20260811" data-poster="./posters/ongenconceptoverview.jpg?v=20260811" loop muted playsinline preload="none"></video>
-    </div>
-    <p class="phase-note">After the pre-pilot and the survey, I confirmed the direction. OnGen curates nearby local information and each user's interests, and for the interaction itself it uses the camera to map that content onto the real terrain, so the space around the user becomes the experience.</p>
-    <img class="subsec-img" src="./ongendirection.png" alt="Confirmed interaction scope: built-in camera, real-time data sync, and visual mapping" loading="lazy" srcset="./light/ongendirection.webp 1440w, ./ongendirection.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">These three fixed the design synthesis and the interaction scope, and I planned the build against them.</p>
-  </div>
+  <p class="phase-desc">Two phases, one to record the building as it behaves and one to hear how people describe it.</p>
+  <img class="subsec-img" src="./cfresaerch1.png" alt="Phase I onsite observation and Phase II interview comments" loading="lazy" srcset="./light/cfresaerch1.webp 1440w, ./cfresaerch1.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
+  <p class="phase-note">Phase I was a single walk through the mall on a Friday in mid-September, during work and school hours, recorded on site rather than inferred. Scaling that one walk up is exactly how the 15-minute city scales a single street. Orientation turned out to be the quiet problem: corridors look alike, and a visitor who cannot form a mental map never develops a habit. Phase II was interviews with seven people, mostly students aged 20 to 26, run under the OCAD U research consent form with quotations anonymised.</p>
+  <p class="phase-note">Counting the signals rather than reading them was what settled the direction. Cultural wants and welcoming came up 13 times, environment 9, and wanting to shop in person 10. The strongest signal in the whole data set was the one the challenge statement was already pointing at, and the fact that people still want to come in person meant the retail side was the asset to build on, not the problem.</p>
+  <img class="subsec-img" src="./cfresearch2.png" alt="Pain points mapped to a Space, Community, Culture framework, and the resulting opportunities" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/cfresearch2.webp 1440w, ./cfresearch2.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
+  <p class="phase-note">I sorted the pain points into three needs, space, community, and culture, and wrote a definition for each so they could be designed against instead of quoted. Space makes the place, culture gives the reason, community brings people back. Those became three how-might-we questions and a timeline: a 2 year window where the concept has to work inside the building as it stands today, and a 7 to 15 year one where the condos are occupied and the 15-minute city is functioning. The concept has to be true in both.</p>
 </section>
 
 <section class="phase-flat">
   <div class="phase-num">04</div>
   <div class="phase-name">Prototyping</div>
-  <p class="phase-desc">The prototype was built from computer-science components. Because the service runs on AI, I set up an environment that connects to AI APIs and runs a local AI, and carried out the experiments there.</p>
-  <img class="subsec-img" src="./ongenresearch2.png" alt="VS Code build of the OnGen AR prototype" loading="lazy" srcset="./light/ongenresearch2.webp 1440w, ./ongenresearch2.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
-  <p class="phase-note">Built entirely in VS Code, the prototype runs as a small full-stack app.</p>
-  <ul class="build-list">
-    <li><span class="k">Python</span><span class="v">Server for the local AI and the backend.</span></li>
-    <li><span class="k">HTML &amp; CSS</span><span class="v">Flattened frontend that renders the interface.</span></li>
-    <li><span class="k">JavaScript app</span><span class="v">Backend logic that runs the experience.</span></li>
-    <li><span class="k">Prompter</span><span class="v">Podcast Generator AI instructions that generate each broadcast.</span></li>
-  </ul>
+  <div class="phase-sub">Sherway Stamp</div>
+  <p class="phase-desc">Scan the poster, hear the story, collect the stamp. Commissioned posters placed through the mall's dead space, each one paired with seating.</p>
+  <img class="subsec-img" src="./cfresearch3.png" alt="Sherway Stamp concept: three layers, core value, and review comments" loading="lazy" srcset="./light/cfresearch3.webp 1440w, ./cfresearch3.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
 
   <div class="subsec">
-    <div class="subsec-title">Figma Design System</div>
-    <img class="subsec-img" src="./ongenprototype2.png" alt="Figma design system: dashboard, components, type ramp, and the downtown Toronto map" loading="lazy" srcset="./light/ongenprototype2.webp 1440w, ./ongenprototype2.png 2800w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">I built the OnGen interface as a design system in Figma, a web-based resource that gathers the dashboard, components, type ramp, and the downtown map in one place. It cannot run inside an actual AR device, but it let me design the whole interface as a single coherent concept and use it as the visual reference for the build. Along the way, I took critique at Gate 5 and Gate 6, which let me refine the finer interaction details.</p>
+    <div class="subsec-title">Three layers</div>
+    <ul class="build-list features">
+      <li><span class="k">Physical &middot; the poster</span><span class="v">Commissioned artwork in the unused open area, the centre court, and the blank corridor walls, each piece paired with seating. It works with no phone at all, which is why it passes the spatial test on its own.</span></li>
+      <li><span class="k">Interaction &middot; the scan</span><span class="v">Image recognition rather than spatial AR. The poster is the marker, so it is one tap, no headset, and no holding a camera up for three minutes.</span></li>
+      <li><span class="k">Experience &middot; the story</span><span class="v">Playback happens inside the app: narration, synced captions, and the artist behind the work. Sit, listen, save it, move on.</span></li>
+    </ul>
+    <p class="phase-note">The reason the poster is the work rather than a QR sticker is that a QR code is a characterless object. People can tell a code does something, but in a public space, when its purpose is not obvious, actual scans are rare. Making the artwork itself the trigger means the intervention still changes the room for everyone who never scans anything.</p>
   </div>
 
   <div class="subsec">
-    <div class="subsec-title">Gate 5 Mid-point Showcase</div>
-    <div class="subsec-video">
-      <video class="snap-vid" data-src="./ongenprototyping1.mp4?v=20260727b" data-poster="./posters/ongenprototyping1.jpg?v=20260727b" loop muted playsinline preload="none"></video>
-    </div>
-    <p class="phase-note">Before I published to Firebase, I showed this build as a mid-point check at Gate 5, around February, during the faculty and peer critique. The showcase made clear that the interaction still fell short of the AR premise in many places, and I used that feedback to reset the project's direction.</p>
+    <div class="subsec-title">What it fixes on site</div>
+    <ul class="build-list">
+      <li><span class="k">Unused open area</span><span class="v">Occupied.</span></li>
+      <li><span class="k">No seating</span><span class="v">Seating with a purpose.</span></li>
+      <li><span class="k">No orientation</span><span class="v">Stamp points read as landmarks.</span></li>
+      <li><span class="k">No alibi</span><span class="v">A seasonal one.</span></li>
+    </ul>
+    <p class="phase-note">The stamp interaction guides the cultural side, and it also suits services and store promotions, so it has a commercial argument as well as a civic one. That mattered, because a proposal a landlord cannot run does not get built.</p>
   </div>
-
-  <div class="subsec">
-    <div class="subsec-title">Firebase Data Pipeline</div>
-    <img class="subsec-img" src="./ongenfirebaseoverview.png" alt="Firestore collections holding AR interaction sessions and community radio data" loading="lazy" srcset="./light/ongenfirebaseoverview.webp 1440w, ./ongenfirebaseoverview.png 2868w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">Through Firebase, I captured user interaction data in detail, from micro-interactions to retention and how users responded, and set the project up to update itself recursively from that data. I designed it to parse and extract the data as well, so the interactions could be analyzed directly.</p>
-  </div>
-
-  <div class="subsec">
-    <div class="subsec-title">Tracking Process</div>
-    <div class="subsec-video">
-      <video class="snap-vid" data-src="./ongentrackingprocess.mp4?v=20260802" data-poster="./posters/ongentrackingprocess.jpg?v=20260802" loop muted playsinline preload="none"></video>
-    </div>
-    <p class="phase-note">This breaks the overlay into its steps. I start from the raw scene, scan the site into a rough 3D model, build the digital layer against that model, and composite it back into the viewpoint, so the content lines up with the real buildings.</p>
-  </div>
-
-  <div class="subsec">
-    <div class="subsec-title">Spatial Feed</div>
-    <div class="subsec-video">
-      <video class="snap-vid" data-src="./ongenprototyping3.mp4?v=20260802" data-poster="./posters/ongenprototyping3.jpg?v=20260802" loop muted playsinline preload="none"></video>
-    </div>
-    <p class="phase-note">The feed lives in space rather than in a list. Each post is pinned to where it happened, carrying its bearing, distance, and how many people are listening nearby, so the city itself becomes the timeline.</p>
-  </div>
-
 </section>
 
 <section class="phase-flat">
   <div class="phase-num">05</div>
   <div class="phase-name">Conclusion</div>
-  <div class="phase-sub">GradEX 111 Showcase</div>
-  <div class="gradex-row">
-    <figure class="v"><img src="./ongenrad1.png" alt="OnGen AR on show at GradEX 111, with the Reimagined Radio in AR board and the ON AIR sign" loading="lazy" srcset="./light/ongenrad1.webp 1024w, ./ongenrad1.png 1024w" sizes="(max-width: 880px) 95vw, 28vw" /></figure>
-    <figure class="a"><img src="./gradex1.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" /></figure>
-    <figure class="b"><img src="./gradex2.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" srcset="./light/gradex2.webp 1440w, ./gradex2.jpg 2054w" sizes="(max-width: 880px) 95vw, 33vw" /></figure>
-    <figure class="c"><img src="./gradex3.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" srcset="./light/gradex3.webp 1440w, ./gradex3.jpg 2696w" sizes="(max-width: 880px) 95vw, 33vw" /></figure>
-  </div>
-  <p class="gradex-cap">OnGen AR on show at GradEX 111, OCAD University.</p>
-  <img class="subsec-img" src="./gradex111label.png" alt="GradEX 111" loading="lazy" style="margin-top:clamp(32px,4vw,56px);" srcset="./light/gradex111label.webp 1440w, ./gradex111label.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
-  <img class="subsec-img" src="./ongenresearch1.png" alt="Final research: system value and analysis" loading="lazy" style="margin-top:clamp(48px,7vw,90px);" srcset="./light/ongenresearch1.webp 1440w, ./ongenresearch1.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
-  <p class="phase-note">This board brings together the internal research methods and results I used to build the project. I designed the final academic research for realizing Audio Augmented Reality, and secured the data that follow-up research will need. Establishing a new user flow for AR interaction let me confirm this as a market from a new product-design perspective.</p>
-
-  <div class="subsec">
-    <div class="subsec-title">Spatial Intelligence</div>
-    <div class="subsec-video">
-      <video class="snap-vid" data-src="./ongenglassview1.mp4?v=20260723" data-poster="./posters/ongenglassview1.jpg?v=20260723" loop muted playsinline preload="none"></video>
-    </div>
-    <p class="phase-note">Building spatial intelligence was the core of the OnGen project. It is a product meant to widen the practical use of AR hardware, and a project that connects the digital and the physical. As AR glasses are expected to gain more capability, it holds real room to grow.</p>
-  </div>
-
-  <div class="subsec">
-    <div class="subsec-title">Limitations</div>
-    <p class="phase-note">SDK access to AR display hardware during the project period.</p>
-    <img class="subsec-img" src="./metaraybansdk.png" alt="Meta Ray-Ban Display SDK availability" loading="lazy" srcset="./light/metaraybansdk.webp 1440w, ./metaraybansdk.png 2788w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">At the time of this project, Meta had not opened the Ray-Ban Display SDK to developers, so I could not build OnGen onto the device it was designed for. This was the main constraint on the project and the one dependency I could not design around. I therefore ran the showcase on a web app I built myself with HTML and Python, which means what visitors experienced may not have matched the intended AR interaction exactly. Once the SDK is released to developers, OnGen can run on the actual hardware and the project moves into full development.</p>
-  </div>
+  <p class="phase-desc">The useful move was refusing to treat this as a branding problem. Every observation was spatial, so the test became whether a proposal changes the room.</p>
+  <p class="phase-note">Reviewing the concepts against each other left three open questions I would take up next. Photo recognition needs finalized guidelines on what content is displayed and what prompts a person to scan at all. A one-time scan is not a habit, so the stamp ecosystem needs a retention loop rather than a single interaction. And the scan technology has to be checked against what is actually shippable today rather than what the category is heading toward, since an emerging-trend interaction risks being a one-off instead of something sustainable.</p>
+  <p class="phase-note">The part I would keep in any version of this is the constraint. Sherway does not need a new identity, it needs a reason to stay, and the cheapest way to create one is to give the space something worth sitting in front of.</p>
 </section>
 
 <footer style="padding:clamp(64px,8vw,120px) var(--pad) clamp(48px,6vw,80px); text-align:center;">
-  <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
+  <p style="font-size:13px; color:var(--muted);">&copy; 2026 Michael Joongmin Park</p>
 </footer>
 
 <script src="./lazy-video.js?v=20260805"></script>
@@ -2138,7 +2079,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
   /* ---- reveal on scroll: fade blocks in as they enter view ---- */
   var revealEls = document.querySelectorAll(
-    '.subsec-img,.subsec-video,.chapter-media-duo,.gradex-row,.build-list,' +
+    '.subsec-img,.subsec-video,.chapter-media-duo,.chapter-media-quad,.gradex-row,.build-list,' +
     '.phase-desc,.phase-note,.phase-num,.phase-name,.phase-sub,' +
     '.subsec-title,.subsec-lead,.gradex-cap'
   );
