@@ -61,12 +61,11 @@
     position:absolute; inset:-1px;
     width:calc(100% + 2px); height:calc(100% + 2px);
     object-fit:cover; display:block;
-  }
-  /* this project's hero is a still, so it needs the same bleed as the clip */
-  .hero-video img{
-    position:absolute; inset:-1px;
-    width:calc(100% + 2px); height:calc(100% + 2px);
-    object-fit:cover; display:block;
+    /* the banner was exported on a warm off-white (245,243,241), which reads
+       as a grey slab against the page's #fff. Lift the white point so its
+       background matches the page; the only thing that clips is that flat
+       background, since the artwork itself sits well below it. */
+    filter:brightness(1.05);
   }
   /* mobile: zoom the 3:1 hero into a taller 16:9 crop (cover trims the sides) */
   @media(max-width:640px){
@@ -1972,7 +1971,8 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <header class="hero wrap">
   <div class="hero-video">
-    <img src="./cfprev.png" alt="Cadillac Fairview" loading="eager" srcset="./light/cfprev.webp 1440w, ./cfprev.png 2604w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <video class="lazy-vid" data-src="./sherwaystampbanner.mp4" data-poster="./posters/sherwaystampbanner.jpg"
+           loop muted playsinline preload="none"></video>
   </div>
   <div class="hero-greeting">UX Design &middot; Cadillac Fairview</div>
   <h1 class="hero-name">CF Sherway Gardens</h1>
