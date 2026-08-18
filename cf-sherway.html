@@ -2062,6 +2062,25 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     </ul>
     <p class="phase-note">The stamp interaction guides the cultural side, and it also suits services and store promotions, so it has a commercial argument as well as a civic one. That mattered, because a proposal a landlord cannot run does not get built.</p>
   </div>
+
+  <div class="subsec">
+    <div class="subsec-title">Low-fidelity Prototype</div>
+    <p class="subsec-lead">Six steps of the in-app loop, then each screen set wireframed beside the flow that drives it, so the structure could be argued about before any visual style existed.</p>
+    <img class="subsec-img" src="./sherwaystamplofi.png" alt="Low-fidelity board: in-app interaction flow, design decisions, and four wireframed screen sets with their flow diagrams" loading="lazy" srcset="./light/sherwaystamplofi.webp 1440w, ./sherwaystamplofi.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <p class="phase-note">I split the app into four flows: onboarding, poster scan, earning a stamp from a store purchase, and rewards. Drawing each one as a decision tree rather than a screen list is what exposed the failure paths, and those are the branches that decide whether this is a service or a demo. What happens when the poster is not recognised, when someone leaves before the story ends, when a receipt does not match. Each one needed an answer that keeps the person in the loop instead of dropping them.</p>
+    <p class="phase-note">The design decisions row above it is the record of what I ruled out. The biggest was scope: no spatial AR, no headset, no app-only content. Every choice had to survive the test from the research, that the intervention still has to change the room for the people who never open the app.</p>
+  </div>
+
+  <div class="subsec">
+    <div class="subsec-title">High-fidelity Prototype</div>
+    <p class="subsec-lead">Three passes: getting the person in, running the core loop, and giving the season somewhere to go.</p>
+    <img class="subsec-img" src="./sherwaystamphifi1.png" alt="High-fidelity onboarding: splash, what the service is, language picker, time-in-Canada question, and the first stamp earned" loading="lazy" srcset="./light/sherwaystamphifi1.webp 1440w, ./sherwaystamphifi1.png 2894w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <p class="phase-note">Onboarding carries the most weight, because this is a service for people who are new here. The language picker runs six languages with English captions kept on, so picking your own language is not a trade against understanding the room. The one question I ask is how long you have been in Canada, and it only orders the stories, nothing is checked and nothing is kept. Saying that on the screen matters more than the question itself.</p>
+    <img class="subsec-img" src="./sherwaystamphifi2.png" alt="High-fidelity core loop: the stamp book, poster scan, story playback with transcript, a retail stamp, and the rewards screen" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/sherwaystamphifi2.webp 1440w, ./sherwaystamphifi2.png 2894w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <p class="phase-note">The book is the home, not the camera. I put the collection first so the app has a state to return to, and the scan sits one tap away rather than as the landing screen. Playback ships with a transcript in view, since a story you cannot read is a story a newcomer may not follow. The retail stamp shares the same book as the poster stamps, which is what lets the commercial side ride on the cultural one instead of sitting beside it.</p>
+    <img class="subsec-img" src="./sherwaystamphifi3.png" alt="High-fidelity: events list, wayfinding to the next stamp, a completed season, and the component set" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/sherwaystamphifi3.webp 1440w, ./sherwaystamphifi3.png 2894w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <p class="phase-note">This pass answers the retention question the review raised. Events carry stamps too, the map walks you to the next one, and a finished season becomes something you keep rather than something that resets. That turns a single scan into a reason to come back, which was the gap between a one-time interaction and a habit.</p>
+  </div>
 </section>
 
 <section class="phase-flat">
