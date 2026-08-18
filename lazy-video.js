@@ -20,6 +20,8 @@
    Optional: data-hover — pointer-driven instead of scroll-driven; the
              clip is fetched on mouseenter and released on mouseleave
              (mouse devices only, touch keeps the scroll behaviour).
+   In Safari every clip is treated as data-hover on mouse devices,
+   because Safari will not autoplay them.
    Dynamically created videos: window.observeLazyVid(videoEl).
    Current profile, for debugging: window.mediaProfile(). */
 (function () {
@@ -38,6 +40,17 @@
   try { reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
   try { isTouch = matchMedia('(hover:none) and (pointer:coarse)').matches; } catch (e) {}
   if (isTouch) root.classList.add('touch-ui');
+
+  /* Safari refuses to start these clips on its own, so on a Safari mouse
+     device every clip becomes pointer-driven rather than scroll-driven.
+     Vendor plus a negative UA test, since every Chromium and Firefox build
+     still carries "Safari" in its own user-agent string. iOS is unaffected:
+     canHover is false there, so those keep the scroll behaviour. */
+  var isSafari = false;
+  try {
+    isSafari = /apple/i.test(navigator.vendor || '') &&
+               !/(chrome|chromium|crios|fxios|edg|opr|android)/i.test(navigator.userAgent || '');
+  } catch (e) {}
 
   /* ---------------- visitor profile ---------------- */
 
@@ -460,7 +473,7 @@
     adopt(v);
     vids.push(v);
     v.addEventListener('error', onError);
-    if (v.dataset.hover !== undefined && canHover) bindHover(v);
+    if ((v.dataset.hover !== undefined || isSafari) && canHover) bindHover(v);
     else if (io) io.observe(v);
     schedule();
   }
