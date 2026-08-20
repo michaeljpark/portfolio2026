@@ -61,11 +61,6 @@
     position:absolute; inset:-1px;
     width:calc(100% + 2px); height:calc(100% + 2px);
     object-fit:cover; display:block;
-    /* the banner was exported on a warm off-white (245,243,241), which reads
-       as a grey slab against the page's #fff. Lift the white point so its
-       background matches the page; the only thing that clips is that flat
-       background, since the artwork itself sits well below it. */
-    filter:brightness(1.05);
   }
   /* mobile: zoom the 3:1 hero into a taller 16:9 crop (cover trims the sides) */
   @media(max-width:640px){

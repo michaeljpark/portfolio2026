@@ -63,6 +63,20 @@
     width:calc(100% + 2px); height:calc(100% + 2px);
     object-fit:cover; display:block;
   }
+  /* GradEX 111 credit, overlaid on the hero clip the same way it sits on the
+     index card. The lockup is knocked out of an opaque black plate, so the
+     video shows through the letterforms; width is a share of the hero with a
+     floor so it stays legible once the page is phone-width. */
+  .gradex-badge{
+    position:absolute; z-index:2;
+    bottom:clamp(10px,1.15vw,20px); right:clamp(10px,1.15vw,20px);
+    width:clamp(100px,13.5%,208px);
+    aspect-ratio:1225/419;
+    pointer-events:none;
+  }
+  .gradex-badge img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
   /* mobile: zoom the 3:1 hero into a taller 16:9 crop (cover trims the sides) */
   @media(max-width:640px){
     .hero-video{ aspect-ratio:16/9; }
@@ -1952,6 +1966,11 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="hero-video">
     <video class="lazy-vid" data-src="./ongenthumb.mp4" data-poster="./posters/ongenthumb.jpg?v=20260723"
            loop muted playsinline preload="none"></video>
+    <div class="gradex-badge">
+      <img src="./light/gradex111.webp" alt="GradEX 111, OCAD University" loading="lazy" decoding="async"
+        srcset="./light/gradex111.webp 512w, ./gradex111.png 1225w"
+        sizes="(max-width: 880px) 100px, 13.5vw" />
+    </div>
   </div>
   <div class="hero-greeting">Thesis Project</div>
   <h1 class="hero-name">OnGen AR 2026</h1>
