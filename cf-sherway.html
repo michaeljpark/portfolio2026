@@ -1626,13 +1626,15 @@
   /* four-up preview row. Each weight is the image's own aspect ratio, and the
      row height is set so the four widths add up to the content measure, which
      is what keeps the cover crop at zero instead of trimming the sides. */
-  .chapter-media-quad{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(150px,19.7vw,284px); margin-bottom:clamp(32px,4vw,48px); }
+  /* no fixed height: each cell grows by its own aspect ratio and is given that same ratio,
+     so all four resolve to one shared height and object-fit:cover never has to crop */
+  .chapter-media-quad{ display:flex; align-items:flex-start; gap:clamp(8px,1vw,16px); margin-bottom:clamp(32px,4vw,48px); }
   .chapter-media-quad .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; }
   .chapter-media-quad .cell img{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
-  .chapter-media-quad .q1{ flex:0.667 1 0; } /* 3000x4500, 2:3  */
-  .chapter-media-quad .q2{ flex:1.335 1 0; } /* 1800x1348, 4:3  */
-  .chapter-media-quad .q3{ flex:1.335 1 0; } /* 1449x1085, 4:3  */
-  .chapter-media-quad .q4{ flex:1.333 1 0; } /* 1448x1086, 4:3  */
+  .chapter-media-quad .q1{ flex:0.706 1 0; aspect-ratio:1266/1792; }
+  .chapter-media-quad .q2{ flex:1.000 1 0; aspect-ratio:1792/1792; }
+  .chapter-media-quad .q3{ flex:1.339 1 0; aspect-ratio:2400/1792; }
+  .chapter-media-quad .q4{ flex:0.707 1 0; aspect-ratio:1267/1792; }
   /* subsection within a chapter (e.g. Snapshot inside Overview) */
   .subsec{ margin-top:clamp(48px,6vw,88px); }
   .subsec-title{ font-size:clamp(20px,2vw,30px); font-weight:400; letter-spacing:-0.04em; line-height:1.15; color:var(--ink); }
@@ -1711,11 +1713,15 @@
     .chapter-media-duo .m3{ aspect-ratio:6/5; }
     /* stack the preview row too. Class selectors, not `.cell`, so these beat
        the .q1-.q4 flex weights on specificity rather than losing to them. */
-    .chapter-media-quad{ flex-direction:column; height:auto; gap:10px; }
+    /* align-items on the desktop rule is flex-start, which in column direction would
+       shrink every cell to its (zero) content width, so put stretch back here */
+    .chapter-media-quad{ flex-direction:column; align-items:stretch; height:auto; gap:10px; }
     .chapter-media-quad .q1,.chapter-media-quad .q2,
     .chapter-media-quad .q3,.chapter-media-quad .q4{ flex:none; }
-    .chapter-media-quad .q1{ aspect-ratio:2/3; }
-    .chapter-media-quad .q2,.chapter-media-quad .q3,.chapter-media-quad .q4{ aspect-ratio:4/3; }
+    .chapter-media-quad .q1{ aspect-ratio:1266/1792; }
+    .chapter-media-quad .q2{ aspect-ratio:1/1; }
+    .chapter-media-quad .q3{ aspect-ratio:2400/1792; }
+    .chapter-media-quad .q4{ aspect-ratio:1267/1792; }
     /* stack the GradEX photos on phones */
     .gradex-row{ flex-direction:column; height:auto; gap:10px; }
     .gradex-row figure{ flex:none; }
@@ -1983,7 +1989,20 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </header>
 
 <section class="phase-flat">
-  <img class="subsec-img" src="./cfteam.png" alt="The project team, five industrial design students" loading="lazy" style="margin-top:0; margin-bottom:clamp(32px,4vw,48px);" srcset="./light/cfteam.webp 1440w, ./cfteam.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
+  <div class="subsec" style="margin-top:0;">
+    <div class="subsec-title">Meet the team</div>
+    <img class="subsec-img" src="./cfteam.png" alt="The project team, five industrial design students" loading="lazy" style="margin-bottom:clamp(32px,4vw,48px);" srcset="./light/cfteam.webp 1440w, ./cfteam.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
+  </div>
+
+  <div class="subsec" style="margin-top:clamp(40px,5vw,72px);">
+    <div class="subsec-title">Gallery</div>
+    <div class="chapter-media-quad" style="margin-top:clamp(20px,2.4vw,32px);">
+      <div class="cell q1"><img src="./Sherwaystampov1.png" alt="Title board: Sherway Stamp, hear the stories, collect, and perks" loading="lazy" srcset="./light/Sherwaystampov1.webp 1200w, ./Sherwaystampov1.png 1266w" sizes="(max-width: 640px) 95vw, 22vw" /></div>
+      <div class="cell q2"><img src="./Sherwaystampov2.png" alt="The app opened in the mall, showing the Sherway Stamp splash" loading="lazy" srcset="./light/Sherwaystampov2.webp 1200w, ./Sherwaystampov2.png 1792w" sizes="(max-width: 640px) 95vw, 22vw" /></div>
+      <div class="cell q3"><img src="./Sherwaystampov3.png" alt="A stamp point installed at Centre Court, with people gathered around it" loading="lazy" srcset="./light/Sherwaystampov3.webp 1200w, ./Sherwaystampov3.png 2400w" sizes="(max-width: 640px) 95vw, 22vw" /></div>
+      <div class="cell q4"><img src="./Sherwaystampov4.png" alt="Lock screen prompt pointing to the first stamp two minutes away" loading="lazy" srcset="./light/Sherwaystampov4.webp 1200w, ./Sherwaystampov4.png 1267w" sizes="(max-width: 640px) 95vw, 22vw" /></div>
+    </div>
+  </div>
   <div class="phase-num">01</div>
   <div class="phase-name">Overview</div>
   <div class="phase-sub">A mall you can only reach by car, asked to become a place</div>
