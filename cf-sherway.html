@@ -1617,12 +1617,14 @@
   .phase-note{ margin-top:clamp(16px,1.8vw,24px); font-size:clamp(14px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.65; max-width:none; text-align:justify; }
   .phase-note em{ font-style:normal; color:var(--ink); }
   /* two photos + showcase video, equal height, natural widths (near-zero crop) */
-  .chapter-media-duo{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(200px,26vw,376px); margin-bottom:clamp(32px,4vw,48px); }
+  /* same rule as .chapter-media-quad: grow weight and aspect ratio are both the image's
+     own ratio, so the row height falls out of the width and nothing is cropped */
+  .chapter-media-duo{ display:flex; align-items:flex-start; gap:clamp(8px,1vw,16px); margin-bottom:clamp(32px,4vw,48px); }
   .chapter-media-duo .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; }
   .chapter-media-duo .cell img, .chapter-media-duo .cell video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
-  .chapter-media-duo .m1{ flex:1.777 1 0; }  /* IMG_5507 16:9 */
-  .chapter-media-duo .m2{ flex:0.75 1 0; }   /* IMG_5493(1) portrait 3:4 */
-  .chapter-media-duo .m3{ flex:1.2 1 0; }    /* showcase video 6:5 */
+  .chapter-media-duo .m1{ flex:0.982 1 0; aspect-ratio:1767/1800; }
+  .chapter-media-duo .m2{ flex:1.749 1 0; aspect-ratio:3147/1799; }
+  .chapter-media-duo .m3{ flex:1.657 1 0; aspect-ratio:2984/1801; }
   /* four-up preview row. Each weight is the image's own aspect ratio, and the
      row height is set so the four widths add up to the content measure, which
      is what keeps the cover crop at zero instead of trimming the sides. */
@@ -1706,11 +1708,11 @@
     .build-list li, .build-list.features li{ grid-template-columns:1fr; gap:4px; padding:14px 0; }
     .build-list .k,.build-list .v{ font-size:13px; }
     /* stack the top media row on phones */
-    .chapter-media-duo{ flex-direction:column; height:auto; gap:10px; }
+    .chapter-media-duo{ flex-direction:column; align-items:stretch; height:auto; gap:10px; }
     .chapter-media-duo .cell{ flex:none; }
-    .chapter-media-duo .m1{ aspect-ratio:16/9; }
-    .chapter-media-duo .m2{ aspect-ratio:3/4; }
-    .chapter-media-duo .m3{ aspect-ratio:6/5; }
+    .chapter-media-duo .m1{ aspect-ratio:1767/1800; }
+    .chapter-media-duo .m2{ aspect-ratio:3147/1799; }
+    .chapter-media-duo .m3{ aspect-ratio:2984/1801; }
     /* stack the preview row too. Class selectors, not `.cell`, so these beat
        the .q1-.q4 flex weights on specificity rather than losing to them. */
     /* align-items on the desktop rule is flex-start, which in column direction would
@@ -2041,6 +2043,11 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <img class="subsec-img" src="./cfresaerch1.png" alt="Phase I onsite observation and Phase II interview comments" loading="lazy" srcset="./light/cfresaerch1.webp 1440w, ./cfresaerch1.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">Phase I was a single walk through the mall on a Friday in mid-September, during work and school hours, recorded on site rather than inferred. Scaling that one walk up is exactly how the 15-minute city scales a single street. Orientation turned out to be the quiet problem: corridors look alike, and a visitor who cannot form a mental map never develops a habit. Phase II was interviews we ran with seven people, mostly students aged 20 to 26, under the OCAD U research consent form with quotations anonymised.</p>
   <p class="phase-note">Counting the signals rather than reading them was what settled our direction. Cultural wants and welcoming came up 13 times, environment 9, and wanting to shop in person 10. The strongest signal in the whole data set was the one the challenge statement was already pointing at, and the fact that people still want to come in person meant the retail side was the asset to build on, not the problem.</p>
+  <div class="chapter-media-duo" style="margin-top:clamp(20px,2.4vw,32px);">
+    <div class="cell m1"><img src="./cfdiscovery1.png" alt="Onsite observation in the mall, recorded on a weekday during work and school hours" loading="lazy" srcset="./light/cfdiscovery1.webp 1200w, ./cfdiscovery1.png 1767w" sizes="(max-width: 640px) 95vw, 30vw" /></div>
+    <div class="cell m2"><img src="./cfdiscovery2.png" alt="Interview comments on sticky notes, then the same notes sorted into themes and tallied" loading="lazy" srcset="./light/cfdiscovery2.webp 1200w, ./cfdiscovery2.png 3147w" sizes="(max-width: 640px) 95vw, 30vw" /></div>
+    <div class="cell m3"><img src="./cfdiscovery3.png" alt="Working through the synthesis together" loading="lazy" srcset="./light/cfdiscovery3.webp 1200w, ./cfdiscovery3.png 2984w" sizes="(max-width: 640px) 95vw, 30vw" /></div>
+  </div>
   <img class="subsec-img" src="./cfresearch2.png" alt="Pain points mapped to a Space, Community, Culture framework, and the resulting opportunities" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/cfresearch2.webp 1440w, ./cfresearch2.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">We sorted the pain points into three needs, space, community, and culture, and wrote a definition for each so they could be designed against instead of quoted. Space makes the place, culture gives the reason, community brings people back. Those became three how-might-we questions and a timeline: a 2 year window where the concept has to work inside the building as it stands today, and a 7 to 15 year one where the condos are occupied and the 15-minute city is functioning. It has to be true in both.</p>
 </section>
