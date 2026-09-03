@@ -44,7 +44,8 @@
     --line:  #e6e6e6;
     --card:  #f4f4f4;
     --max:   1440px;
-    --pad:   clamp(12px, 2vw, 28px);
+    --pad:   clamp(20px, 4vw, 56px);
+    --sbw:   0px;
     --font:  "Helvetica Neue",Helvetica,Arial,sans-serif;
   }
   :root[data-theme="dark"]{
@@ -135,9 +136,26 @@
     line-height:1;
     letter-spacing:-0.05em;
   }
+  /* the lede is one row: copy on the left, the freshness pill pinned bottom right.
+     max-width is what breaks the sentence over two lines and frees the space it sits in */
+  .hero-lede{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    gap:clamp(20px,3vw,56px); margin-top:14px;
+  }
   .hero-tagline{
-    font-size:16px; color:var(--muted); margin-top:14px;
-    line-height:1.5; white-space:nowrap;
+    font-size:16px; color:var(--muted); margin:0;
+    line-height:1.5; max-width:64ch;
+  }
+  /* same box as the chips that appear on a work card hover: matched height,
+     padding, corner radius and type, so the two read as one component */
+  .updated-tag{
+    flex:0 0 auto;
+    display:inline-flex; align-items:center;
+    height:30px; padding:0 12px;
+    border-radius:6px;
+    font-size:13px; font-weight:500; letter-spacing:-0.01em;
+    white-space:nowrap;
+    background:var(--card); color:var(--muted);
   }
   .hero-row{
     margin-top:36px; padding-top:24px; border-top:1px solid var(--line);
@@ -182,10 +200,15 @@
   /* BIG: full-bleed, edge-to-edge, 2:1 */
   .work-block.is-big{
     grid-column:1 / -1;
-    width:100vw; margin-left:calc(50% - 50vw);
+    width:calc(100vw - var(--sbw));
+    margin-left:calc(50% - (100vw - var(--sbw)) / 2);
   }
   .work-block.is-big .work{ aspect-ratio:2/1; }
-  .work-block.is-big .w-info{ padding:0 var(--pad); margin-top:18px; }
+  /* the card is full-bleed but its caption is not: give it the same max-width and
+     auto margins as .wrap so the text starts on the hero's left edge above 1440px too */
+  .work-block.is-big .w-info{
+    max-width:var(--max); margin:18px auto 0; padding:0 var(--pad);
+  }
   .work-block.is-big .w-info .t{ font-size:clamp(20px,2.4vw,32px); }
   /* explicit order: bigs first (ongen→token→cf→finboard), carousel last */
   .work-block.o1{ order:1 } .work-block.o2{ order:2 }
@@ -739,7 +762,8 @@
   @media (max-width:880px){
     header.hero{ padding-top:36px; padding-bottom:24px; }
     section{ padding-top:24px; padding-bottom:24px; }
-    .hero-tagline{ white-space:normal; }
+    .hero-lede{ flex-direction:column; align-items:flex-end; gap:12px; }
+    .hero-tagline{ max-width:none; }
     .hero-row{ display:none; }
     .sec-head{ margin-bottom:24px; }
     .hero-info-mobile{ display:flex; flex-direction:column; gap:14px; font-size:13px; margin-top:24px; }
@@ -821,7 +845,10 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <header class="hero wrap">
   <div class="hero-greeting reveal">Hi! I'm</div>
   <h1 class="hero-name reveal">Michael Joongmin Park</h1>
-  <p class="hero-tagline reveal">I am a product designer. My priority is defining design strategies, solutions, and possibility through data-driven research, and building them into products people actually use.</p>
+  <div class="hero-lede reveal">
+    <p class="hero-tagline">I am a product designer. My priority is defining design strategies, solutions, and possibility through data-driven research, and building them into products people actually use.</p>
+    <span class="updated-tag" id="lastUpdated" data-pushed="2026-08-28T20:11:28Z">Updated today</span>
+  </div>
 
   <div class="hero-row reveal">
     <dl class="hero-side">
@@ -1255,6 +1282,80 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     track.addEventListener('scroll', update, { passive:true });
     window.addEventListener('resize', update);
     update();
+  })();
+</script>
+
+<script>
+  /* Publish the classic-scrollbar width so the full-bleed cards can subtract it.
+     Overlay scrollbars (macOS, touch) measure 0, which is the correct answer there. */
+  (function () {
+    function measure() {
+      var w = window.innerWidth - document.documentElement.clientWidth;
+      document.documentElement.style.setProperty("--sbw", (w > 0 ? w : 0) + "px");
+    }
+    measure();
+    window.addEventListener("resize", measure);
+  })();
+</script>
+
+<script>
+  /* "Last updated" pill.
+
+     data-pushed on the element is the push date baked in at edit time, so the pill is
+     correct on first paint and stays correct with no network. The GitHub API call then
+     refreshes it, which is what keeps it honest after a push that did not touch this file.
+     Unauthenticated api.github.com allows 60 requests an hour per IP; on a failure, a rate
+     limit, or an offline visitor the baked date simply stands. */
+  (function () {
+    var el = document.getElementById('lastUpdated');
+    if (!el) return;
+
+    var REPO = 'michaeljpark/portfolio2026';
+
+    function midnight(d) {
+      var m = new Date(d.getTime());
+      m.setHours(0, 0, 0, 0);
+      return m;
+    }
+
+    function label(iso) {
+      var then = new Date(iso);
+      if (isNaN(then.getTime())) return null;
+
+      /* compare calendar days, not elapsed hours, so a push at 11pm reads "yesterday"
+         the next morning rather than "today" for another hour */
+      var days = Math.round((midnight(new Date()) - midnight(then)) / 86400000);
+
+      if (days <= 0) return 'Updated today';
+      if (days === 1) return 'Updated yesterday';
+      if (days < 30) return 'Updated ' + days + ' days ago';
+
+      var months = Math.round(days / 30.44);
+      if (months < 12) return 'Updated ' + months + ' month' + (months === 1 ? '' : 's') + ' ago';
+
+      var years = Math.round(months / 12);
+      return 'Updated ' + years + ' year' + (years === 1 ? '' : 's') + ' ago';
+    }
+
+    function paint(iso) {
+      var text = label(iso);
+      if (!text) return;
+      el.textContent = text;
+      el.title = new Date(iso).toLocaleDateString(undefined,
+        { year: 'numeric', month: 'long', day: 'numeric' });
+      el.setAttribute('datetime', iso);
+    }
+
+    paint(el.dataset.pushed);
+
+    try {
+      fetch('https://api.github.com/repos/' + REPO, {
+        headers: { Accept: 'application/vnd.github+json' }
+      })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) { if (j && j.pushed_at) paint(j.pushed_at); })
+        .catch(function () {});
+    } catch (e) {}
   })();
 </script>
 
