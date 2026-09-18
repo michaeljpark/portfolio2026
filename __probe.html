@@ -2133,5 +2133,26 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
      by the media governor in lazy-video.js. */
 })();
 </script>
+<script>
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    var imgs=document.querySelectorAll('img'),bad=[];
+    for(var i=0;i<imgs.length;i++) if(!(imgs[i].complete&&imgs[i].naturalWidth>0)) bad.push((imgs[i].currentSrc||imgs[i].src).split('/').pop());
+    function f(sel){ var e=document.querySelector(sel); if(!e) return 'MISSING';
+      var r=e.getBoundingClientRect();
+      return Math.round(r.width)+'x'+Math.round(r.height)+' box='+(r.width/r.height).toFixed(3)+' img='+(e.naturalWidth/e.naturalHeight).toFixed(3); }
+    var names=[].map.call(document.querySelectorAll('.phase-name'),function(n){return n.textContent;});
+    var nums=[].map.call(document.querySelectorAll('.phase-num'),function(n){return n.textContent;});
+    var y=0,el=document.querySelector('img[src*="dynamicislandredesign"]'); while(el){y+=el.offsetTop;el=el.offsetParent;}
+    document.title='vw='+document.documentElement.clientWidth
+      +' ovf='+(document.documentElement.scrollWidth-document.documentElement.clientWidth)
+      +' imgs='+imgs.length+' broken='+bad.length+(bad.length?':'+bad.join(','):'')
+      +' | island '+f('img[src*="dynamicislandredesign"]')
+      +' | inapp '+f('img[src*="Inappredesign"]')
+      +' | chapters '+nums.join(',')+' = '+names.join(',')
+      +' | redesignTop='+Math.round(y);
+  },8000);
+});
+</script>
 </body>
 </html>
