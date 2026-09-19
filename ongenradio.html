@@ -1702,6 +1702,14 @@
   .gradex-cap{ margin-top:12px; font-size:clamp(11px,0.85vw,13px); color:var(--muted); letter-spacing:-0.01em; }
   .build-list .k{ font-size:clamp(13px,1.05vw,16px); color:var(--ink); letter-spacing:-0.02em; }
   .build-list .v{ font-size:clamp(13px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.5; }
+  /* three features, each with its own image above its name and line: same type as the
+     build-list it replaced, so the image and the words it belongs to cannot drift apart */
+  .feature-trio{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(12px,1.4vw,20px); margin-top:clamp(20px,2.4vw,32px); }
+  .feature-trio figure{ margin:0; min-width:0; }
+  .feature-trio img{ display:block; width:100%; height:auto; }
+  .feature-trio figcaption{ margin-top:14px; }
+  .feature-trio .k{ display:block; font-size:clamp(13px,1.05vw,16px); color:var(--ink); letter-spacing:-0.02em; }
+  .feature-trio .v{ display:block; margin-top:4px; font-size:clamp(13px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.5; }
 
   /* ============ mobile refinements ============ */
   @media(max-width:640px){
@@ -1727,6 +1735,8 @@
     .phase-note{ font-size:13px; letter-spacing:-0.005em; line-height:1.55; text-align:left; }
     .build-list li, .build-list.features li{ grid-template-columns:1fr; gap:4px; padding:14px 0; }
     .build-list .k,.build-list .v{ font-size:13px; }
+    .feature-trio{ grid-template-columns:1fr; gap:28px; }
+    .feature-trio .k,.feature-trio .v{ font-size:13px; }
     /* stack the top media row on phones */
     .chapter-media-duo{ flex-direction:column; height:auto; gap:10px; }
     .chapter-media-duo .cell{ flex:none; }
@@ -1934,6 +1944,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .reveal-on .chapter-media-duo,
 .reveal-on .gradex-row,
 .reveal-on .build-list,
+.reveal-on .feature-trio,
 .reveal-on .phase-desc,
 .reveal-on .phase-note,
 .reveal-on .phase-num,
@@ -1951,7 +1962,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .reveal-on .subsec-video.reveal-in{ opacity:1; }
 @media(prefers-reduced-motion:reduce){
   .reveal-on .subsec-img,.reveal-on .chapter-media-duo,.reveal-on .gradex-row,
-  .reveal-on .build-list,.reveal-on .phase-desc,.reveal-on .phase-note,
+  .reveal-on .build-list,.reveal-on .feature-trio,.reveal-on .phase-desc,.reveal-on .phase-note,
   .reveal-on .phase-num,.reveal-on .phase-name,.reveal-on .phase-sub,
   .reveal-on .subsec-title,.reveal-on .subsec-lead,.reveal-on .gradex-cap{
     opacity:1; transform:none; transition:none;
@@ -2071,11 +2082,20 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <video class="snap-vid" data-src="./ongenprepilotoverview.mp4?v=20260811" data-poster="./posters/ongenprepilotoverview.jpg?v=20260811" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">I ran a digital showcase of what OnGen AR does, so people could respond to something concrete instead of a description. Each person went through the interaction first and answered the survey afterward. Thirteen of the 22 respondents interacted with the working app directly.</p>
-    <ul class="build-list features">
-      <li><span class="k">Recognition Assistance</span><span class="v">Collects the user's digital records and behavior data to sustain and prompt their actions.</span></li>
-      <li><span class="k">Live site dashboard</span><span class="v">Uses the user's location to surface nearby updates, news, and related current information.</span></li>
-      <li><span class="k">Personalized podcast curation</span><span class="v">Draws on what the user experiences as media to automatically deliver digital content and news matched to their interests.</span></li>
-    </ul>
+    <div class="feature-trio">
+      <figure>
+        <img width="1672" height="941" src="./ongenRecognition%20Assistance.png" alt="Recognition Assistance: a user in AR glasses checking his phone" loading="lazy" srcset="./light/ongenRecognition%20Assistance.webp 1200w, ./ongenRecognition%20Assistance.png 1672w" sizes="(max-width: 640px) 95vw, 32vw" />
+        <figcaption><span class="k">Recognition Assistance</span><span class="v">Collects the user's digital records and behavior data to sustain and prompt their actions.</span></figcaption>
+      </figure>
+      <figure>
+        <img width="1672" height="941" src="./ongenLive%20site%20dashboard.png" alt="Live site dashboard: people in AR glasses spread across one space" loading="lazy" srcset="./light/ongenLive%20site%20dashboard.webp 1200w, ./ongenLive%20site%20dashboard.png 1672w" sizes="(max-width: 640px) 95vw, 32vw" />
+        <figcaption><span class="k">Live site dashboard</span><span class="v">Uses the user's location to surface nearby updates, news, and related current information.</span></figcaption>
+      </figure>
+      <figure>
+        <img width="1340" height="754" src="./ongenPersonalized%20podcast%20curation.png" alt="Personalized podcast curation: a user sitting alone, listening" loading="lazy" srcset="./light/ongenPersonalized%20podcast%20curation.webp 1200w, ./ongenPersonalized%20podcast%20curation.png 1340w" sizes="(max-width: 640px) 95vw, 32vw" />
+        <figcaption><span class="k">Personalized podcast curation</span><span class="v">Draws on what the user experiences as media to automatically deliver digital content and news matched to their interests.</span></figcaption>
+      </figure>
+    </div>
   </div>
 
   <div class="subsec">
@@ -2187,7 +2207,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
   /* ---- reveal on scroll: fade blocks in as they enter view ---- */
   var revealEls = document.querySelectorAll(
-    '.subsec-img,.subsec-video,.chapter-media-duo,.gradex-row,.build-list,' +
+    '.subsec-img,.subsec-video,.chapter-media-duo,.gradex-row,.build-list,.feature-trio,' +
     '.phase-desc,.phase-note,.phase-num,.phase-name,.phase-sub,' +
     '.subsec-title,.subsec-lead,.gradex-cap'
   );
