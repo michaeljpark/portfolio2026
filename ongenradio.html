@@ -1710,6 +1710,8 @@
   .feature-trio figcaption{ margin-top:14px; }
   .feature-trio .k{ display:block; font-size:clamp(13px,1.05vw,16px); color:var(--ink); letter-spacing:-0.02em; }
   .feature-trio .v{ display:block; margin-top:4px; font-size:clamp(13px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.5; }
+  .feature-trio.hmw img{ aspect-ratio:16/9; object-fit:cover; }
+  .feature-trio.hmw .k{ line-height:1.45; }
 
   /* ============ mobile refinements ============ */
   @media(max-width:640px){
@@ -1969,6 +1971,36 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   }
   .reveal-on .subsec-video{ opacity:1; transition:none; }
 }
+
+/* ===== hover focus: inside a group of photos, the one under the pointer stays
+   lit and the rest step back. Mouse only. The return to full brightness waits
+   a beat, so sliding across the gap between two photos does not flash the
+   whole group back on. ===== */
+@media (hover:hover) and (pointer:fine){
+  .chapter-media-duo .cell, .gradex-row figure, .feature-trio figure{ transition:opacity .35s ease .12s; }
+  .chapter-media-duo .cell:hover, .gradex-row figure:hover, .feature-trio figure:hover{ transition-delay:0s; }
+  .chapter-media-duo:has(.cell:hover) .cell:not(:hover),
+  .gradex-row:has(figure:hover) figure:not(:hover),
+  .feature-trio:has(figure:hover) figure:not(:hover){ opacity:.45; transition-delay:0s; }
+}
+
+/* ===== photo cursor: over a photo the pointer turns into a pill naming it.
+   The class that hides the arrow is set by script, so without it nothing
+   changes. ===== */
+.cursor-pill{ position:fixed; left:0; top:0; z-index:100; pointer-events:none; }
+.cursor-pill span{
+  display:flex; align-items:center; height:32px; padding:0 14px; border-radius:999px;
+  background:rgba(10,10,10,.72); border:1px solid rgba(255,255,255,.14);
+  -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+  color:#fff; font-family:var(--font); font-size:13px; font-weight:500; letter-spacing:-0.01em; line-height:1; white-space:nowrap;
+  opacity:0; transform:translate(-50%,-50%) scale(.6);
+  transition:transform .22s cubic-bezier(.2,.7,.2,1), opacity .18s ease;
+}
+.cursor-pill.on span{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+html.cursor-pill-on [data-cursor]{ cursor:none; }
+@media (prefers-reduced-motion:reduce){
+  .cursor-pill span{ transform:translate(-50%,-50%); transition:opacity .18s ease; }
+}
 </style>
 <script>/* Mark touch devices before first paint and drop the live blur behind the
    sticky bars: phones recompute it on every scrolled frame. */
@@ -2026,9 +2058,9 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <section class="phase-flat" id="overview">
   <div class="chapter-media-duo">
-    <div class="cell m1"><img src="./IMG_5507.jpg" alt="" loading="lazy" srcset="./light/IMG_5507.webp 1440w, ./IMG_5507.jpg 2250w" sizes="(max-width: 880px) 95vw, 46vw" /></div>
-    <div class="cell m2"><img src="./IMG_5493_1.jpg" alt="" loading="lazy" /></div>
-    <div class="cell m3"><video class="snap-vid" data-src="./Showcasingongen1.mp4?v=20260721" data-poster="./posters/showcasingongen1.jpg?v=20260721" loop muted playsinline preload="none"></video></div>
+    <div class="cell m1" data-cursor="GradEX 111 Overview"><img src="./IMG_5507.jpg" alt="" loading="lazy" srcset="./light/IMG_5507.webp 1440w, ./IMG_5507.jpg 2250w" sizes="(max-width: 880px) 95vw, 46vw" /></div>
+    <div class="cell m2" data-cursor="Audience"><img src="./IMG_5493_1.jpg" alt="" loading="lazy" /></div>
+    <div class="cell m3" data-cursor="Public Presentation"><video class="snap-vid" data-src="./Showcasingongen1.mp4?v=20260721" data-poster="./posters/showcasingongen1.jpg?v=20260721" loop muted playsinline preload="none"></video></div>
   </div>
   <div class="phase-name">Overview</div>
   <div class="phase-sub">Reimagined radio in augmented reality</div>
@@ -2069,7 +2101,20 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <section class="phase-flat" id="discovery">
   <div class="phase-name">Discovery</div>
-  <img class="subsec-img" width="1920" height="810" src="./ongenthesisquestions.png" alt="The three research questions guiding the project" loading="lazy" srcset="./light/ongenthesisquestions.webp 1440w, ./ongenthesisquestions.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
+  <div class="feature-trio hmw">
+    <figure>
+      <img data-cursor="Integration" width="1694" height="933" src="./ongenhmw1.png" alt="A visitor in AR glasses looking up at a white gallery wall" loading="lazy" srcset="./light/ongenhmw1.webp 1200w, ./ongenhmw1.png 1694w" sizes="(max-width: 640px) 95vw, 32vw" />
+      <figcaption><span class="k">How might we integrate users' physical and digital experiences in AR?</span></figcaption>
+    </figure>
+    <figure>
+      <img data-cursor="Attention" width="1672" height="941" src="./ongenhmw2.png" alt="A user examining a pair of Ray-Ban smart glasses" loading="lazy" srcset="./light/ongenhmw2.webp 1200w, ./ongenhmw2.png 1672w" sizes="(max-width: 640px) 95vw, 32vw" />
+      <figcaption><span class="k">How might we enhance user attention in AR by delivering personalized services based on their interests?</span></figcaption>
+    </figure>
+    <figure>
+      <img data-cursor="Natural Context" width="1671" height="941" src="./ongenhmw3.png" alt="A user tapping the temple of Ray-Ban smart glasses while speaking" loading="lazy" srcset="./light/ongenhmw3.webp 1200w, ./ongenhmw3.png 1671w" sizes="(max-width: 640px) 95vw, 32vw" />
+      <figcaption><span class="k">How might we enable AI to understand users' physical context naturally, rather than relying on mandatory user input in AR?</span></figcaption>
+    </figure>
+  </div>
   <p class="phase-note">The AR display market is growing quickly, and it points to strong potential demand, yet today's AR glasses still sit as an accessory to the phone. To move past that limit, I set the project's research direction toward maximizing the user's AR experience.</p>
   <img class="subsec-img" width="2856" height="958" src="./ongenresearch0.png" alt="User journey and experience strategy" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/ongenresearch0.webp 1440w, ./ongenresearch0.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">I mapped the user journey and the possibilities a user might experience, and built a strategy to optimize that experience. Five peers and two supervising faculty, Alexander Manu and Bernard Dietz, critiqued the work, and I used their feedback to design the actual survey, shaping it in line with TCPS 2. Together with existing research, Survey Phase 1 gave a baseline read on user behavior and set up Phase 2.</p>
@@ -2084,15 +2129,15 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <p class="phase-note">I ran a digital showcase of what OnGen AR does, so people could respond to something concrete instead of a description. Each person went through the interaction first and answered the survey afterward. Thirteen of the 22 respondents interacted with the working app directly.</p>
     <div class="feature-trio">
       <figure>
-        <img width="1672" height="941" src="./ongenRecognition%20Assistance.png" alt="Recognition Assistance: a user in AR glasses checking his phone" loading="lazy" srcset="./light/ongenRecognition%20Assistance.webp 1200w, ./ongenRecognition%20Assistance.png 1672w" sizes="(max-width: 640px) 95vw, 32vw" />
+        <img data-cursor="Immersive" width="1672" height="941" src="./ongenRecognition%20Assistance.png" alt="Recognition Assistance: a user in AR glasses checking a phone" loading="lazy" srcset="./light/ongenRecognition%20Assistance.webp 1200w, ./ongenRecognition%20Assistance.png 1672w" sizes="(max-width: 640px) 95vw, 32vw" />
         <figcaption><span class="k">Recognition Assistance</span><span class="v">Collects the user's digital records and behavior data to sustain and prompt their actions.</span></figcaption>
       </figure>
       <figure>
-        <img width="1672" height="941" src="./ongenLive%20site%20dashboard.png" alt="Live site dashboard: people in AR glasses spread across one space" loading="lazy" srcset="./light/ongenLive%20site%20dashboard.webp 1200w, ./ongenLive%20site%20dashboard.png 1672w" sizes="(max-width: 640px) 95vw, 32vw" />
+        <img data-cursor="Realtime" width="1672" height="941" src="./ongenLive%20site%20dashboard.png" alt="Live site dashboard: people in AR glasses spread across one space" loading="lazy" srcset="./light/ongenLive%20site%20dashboard.webp 1200w, ./ongenLive%20site%20dashboard.png 1672w" sizes="(max-width: 640px) 95vw, 32vw" />
         <figcaption><span class="k">Live site dashboard</span><span class="v">Uses the user's location to surface nearby updates, news, and related current information.</span></figcaption>
       </figure>
       <figure>
-        <img width="1340" height="754" src="./ongenPersonalized%20podcast%20curation.png" alt="Personalized podcast curation: a user sitting alone, listening" loading="lazy" srcset="./light/ongenPersonalized%20podcast%20curation.webp 1200w, ./ongenPersonalized%20podcast%20curation.png 1340w" sizes="(max-width: 640px) 95vw, 32vw" />
+        <img data-cursor="Personalization" width="1340" height="754" src="./ongenPersonalized%20podcast%20curation.png" alt="Personalized podcast curation: a user sitting alone, listening" loading="lazy" srcset="./light/ongenPersonalized%20podcast%20curation.webp 1200w, ./ongenPersonalized%20podcast%20curation.png 1340w" sizes="(max-width: 640px) 95vw, 32vw" />
         <figcaption><span class="k">Personalized podcast curation</span><span class="v">Draws on what the user experiences as media to automatically deliver digital content and news matched to their interests.</span></figcaption>
       </figure>
     </div>
@@ -2169,10 +2214,10 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="phase-name">Conclusion</div>
   <div class="phase-sub">GradEX 111 Showcase</div>
   <div class="gradex-row">
-    <figure class="v"><img src="./ongenrad1.png" alt="OnGen AR on show at GradEX 111, with the Reimagined Radio in AR board and the ON AIR sign" loading="lazy" srcset="./light/ongenrad1.webp 1024w, ./ongenrad1.png 1024w" sizes="(max-width: 880px) 95vw, 28vw" /></figure>
-    <figure class="a"><img src="./gradex1.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" /></figure>
-    <figure class="b"><img src="./gradex2.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" srcset="./light/gradex2.webp 1440w, ./gradex2.jpg 2054w" sizes="(max-width: 880px) 95vw, 33vw" /></figure>
-    <figure class="c"><img src="./gradex3.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" srcset="./light/gradex3.webp 1440w, ./gradex3.jpg 2696w" sizes="(max-width: 880px) 95vw, 33vw" /></figure>
+    <figure class="v" data-cursor="Showcase Booth"><img src="./ongenrad1.png" alt="OnGen AR on show at GradEX 111, with the Reimagined Radio in AR board and the ON AIR sign" loading="lazy" srcset="./light/ongenrad1.webp 1024w, ./ongenrad1.png 1024w" sizes="(max-width: 880px) 95vw, 28vw" /></figure>
+    <figure class="a" data-cursor="Session"><img src="./gradex1.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" /></figure>
+    <figure class="b" data-cursor="Booth Overview"><img src="./gradex2.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" srcset="./light/gradex2.webp 1440w, ./gradex2.jpg 2054w" sizes="(max-width: 880px) 95vw, 33vw" /></figure>
+    <figure class="c" data-cursor="Project Advisor"><img src="./gradex3.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" srcset="./light/gradex3.webp 1440w, ./gradex3.jpg 2696w" sizes="(max-width: 880px) 95vw, 33vw" /></figure>
   </div>
   <p class="gradex-cap">OnGen AR on show at GradEX 111, OCAD University.</p>
   <img class="subsec-img" width="1920" height="810" src="./gradex111label.png" alt="GradEX 111" loading="lazy" style="margin-top:clamp(32px,4vw,56px);" srcset="./light/gradex111label.webp 1440w, ./gradex111label.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
@@ -2221,6 +2266,54 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     }, { rootMargin:'0px 0px -8% 0px', threshold:0 });
     revealEls.forEach(function(el){ rio.observe(el); });
   }
+
+  /* ---- photo cursor: over a [data-cursor] photo the pointer becomes a pill
+     carrying its label. Mouse only; touch never sees it. ---- */
+  (function(){
+    var mq;
+    try{ mq = matchMedia('(hover:hover) and (pointer:fine)'); }catch(e){ return; }
+    var root = document.documentElement;
+    var pill = document.createElement('div');
+    pill.className = 'cursor-pill';
+    pill.setAttribute('aria-hidden', 'true');
+    var label = document.createElement('span');
+    pill.appendChild(label);
+    document.body.appendChild(pill);
+
+    var cur = null, x = 0, y = 0, known = false, raf = 0;
+    function place(){ raf = 0; pill.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)'; }
+    function show(el){
+      if(el === cur) return;
+      if(el){
+        if(!cur) place();                   /* appear at the pointer, not where it last hid */
+        label.textContent = el.getAttribute('data-cursor');
+        pill.classList.add('on');
+      } else pill.classList.remove('on');
+      cur = el;
+    }
+    function under(){
+      var t = known && document.elementFromPoint(x, y);
+      return t && t.closest ? t.closest('[data-cursor]') : null;
+    }
+    function sync(){ root.classList.toggle('cursor-pill-on', mq.matches); if(!mq.matches) show(null); }
+
+    document.addEventListener('pointermove', function(e){
+      if(e.pointerType === 'touch' || !mq.matches){ show(null); return; }
+      x = e.clientX; y = e.clientY; known = true;
+      if(!raf) raf = requestAnimationFrame(place);
+      show(e.target.closest ? e.target.closest('[data-cursor]') : null);
+    }, { passive:true });
+    /* the page can slide a photo out from under a still pointer */
+    var sraf = 0;
+    window.addEventListener('scroll', function(){
+      if(!known || sraf) return;
+      sraf = requestAnimationFrame(function(){ sraf = 0; show(under()); });
+    }, { passive:true });
+    document.addEventListener('mouseout', function(e){ if(!e.relatedTarget){ known = false; show(null); } });
+    window.addEventListener('blur', function(){ show(null); });
+    if(mq.addEventListener) mq.addEventListener('change', sync); else if(mq.addListener) mq.addListener(sync);
+    sync();
+  })();
 
   /* Posters, clip fetching, playback and buffer release are all handled
      by the media governor in lazy-video.js. */
