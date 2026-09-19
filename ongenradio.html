@@ -1723,6 +1723,16 @@
   .title-row .phase-name, .title-row .subsec-title{ margin:0; }
   .title-row.at-phase{ margin-bottom:8px; }
   .title-row .logo-row{ margin-top:0; }
+  /* exhibition posts from Instagram as photo + likes, one height across: each card's
+     flex-grow is its photo's aspect ratio, so the widths share the row and the
+     heights come out equal with nothing cropped. Stacked on phones. */
+  .insta-row{ display:flex; gap:clamp(12px,1.4vw,20px); margin-top:clamp(20px,2.4vw,32px); }
+  .insta-card{ flex:var(--ar) 1 0; min-width:0; display:block; color:var(--ink); }
+  .insta-card img{ display:block; width:100%; height:auto; aspect-ratio:var(--ar); object-fit:cover; }
+  .insta-card .meta{ display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 12px; margin-top:12px; }
+  .insta-card .likes{ display:flex; align-items:center; gap:6px; font-size:clamp(13px,1.05vw,16px); letter-spacing:-0.01em; }
+  .insta-card .credit{ margin-left:auto; font-size:clamp(11px,0.85vw,13px); color:var(--muted); letter-spacing:-0.01em; white-space:nowrap; }
+  .insta-card .likes svg{ flex:none; width:1.1em; height:1.1em; fill:none; stroke:currentColor; stroke-width:2; stroke-linejoin:round; }
 
   /* ============ mobile refinements ============ */
   @media(max-width:640px){
@@ -1751,6 +1761,9 @@
     .feature-trio{ grid-template-columns:1fr; gap:28px; }
     .feature-trio .k,.feature-trio .v{ font-size:13px; }
     .logo-row .repo{ font-size:13px; }
+    .insta-row{ flex-direction:column; gap:24px; }
+    .insta-card{ flex:none; }
+    .insta-card .likes{ font-size:13px; }
     /* stack the top media row on phones */
     .chapter-media-duo{ flex-direction:column; height:auto; gap:10px; }
     .chapter-media-duo .cell{ flex:none; }
@@ -1960,6 +1973,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .reveal-on .build-list,
 .reveal-on .feature-trio,
 .reveal-on .logo-row,
+.reveal-on .insta-row,
 .reveal-on .phase-desc,
 .reveal-on .phase-note,
 .reveal-on .phase-num,
@@ -1977,7 +1991,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .reveal-on .subsec-video.reveal-in{ opacity:1; }
 @media(prefers-reduced-motion:reduce){
   .reveal-on .subsec-img,.reveal-on .chapter-media-duo,.reveal-on .gradex-row,
-  .reveal-on .build-list,.reveal-on .feature-trio,.reveal-on .logo-row,.reveal-on .phase-desc,.reveal-on .phase-note,
+  .reveal-on .build-list,.reveal-on .feature-trio,.reveal-on .logo-row,.reveal-on .insta-row,.reveal-on .phase-desc,.reveal-on .phase-note,
   .reveal-on .phase-num,.reveal-on .phase-name,.reveal-on .phase-sub,
   .reveal-on .subsec-title,.reveal-on .subsec-lead,.reveal-on .gradex-cap{
     opacity:1; transform:none; transition:none;
@@ -1990,11 +2004,12 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
    a beat, so sliding across the gap between two photos does not flash the
    whole group back on. ===== */
 @media (hover:hover) and (pointer:fine){
-  .chapter-media-duo .cell, .gradex-row figure, .feature-trio figure{ transition:opacity .35s ease .12s; }
-  .chapter-media-duo .cell:hover, .gradex-row figure:hover, .feature-trio figure:hover{ transition-delay:0s; }
+  .chapter-media-duo .cell, .gradex-row figure, .feature-trio figure, .insta-card{ transition:opacity .35s ease .12s; }
+  .chapter-media-duo .cell:hover, .gradex-row figure:hover, .feature-trio figure:hover, .insta-card:hover{ transition-delay:0s; }
   .chapter-media-duo:has(.cell:hover) .cell:not(:hover),
   .gradex-row:has(figure:hover) figure:not(:hover),
-  .feature-trio:has(figure:hover) figure:not(:hover){ opacity:.45; transition-delay:0s; }
+  .feature-trio:has(figure:hover) figure:not(:hover),
+  .insta-row:has(.insta-card:hover) .insta-card:not(:hover){ opacity:.45; transition-delay:0s; }
 }
 
 /* ===== photo cursor: over a photo the pointer turns into a pill naming it.
@@ -2168,7 +2183,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <video class="snap-vid" data-src="./ongenconceptoverview.mp4?v=20260811" data-poster="./posters/ongenconceptoverview.jpg?v=20260811" loop muted playsinline preload="none"></video>
     </div>
     <div class="subsec-video">
-      <video class="snap-vid" data-src="./ongenConfirmed%20Concept%20Direction.mp4?v=20260919" data-poster="./posters/ongenconfirmedconcept.jpg?v=20260919" loop muted playsinline preload="none"></video>
+      <video class="snap-vid" data-src="./ongenConfirmed%20Concept%20Direction.mp4?v=20260919b" data-poster="./posters/ongenconfirmedconcept.jpg?v=20260919b" loop muted playsinline preload="none"></video>
     </div>
     <p class="phase-note">After the pre-pilot and the survey, I confirmed the direction. OnGen curates nearby local information and each user's interests, and for the interaction itself it uses the camera to map that content onto the real terrain, so the space around the user becomes the experience.</p>
     <img class="subsec-img" width="1920" height="810" src="./ongendirection.png" alt="Confirmed interaction scope: built-in camera, real-time data sync, and visual mapping" loading="lazy" srcset="./light/ongendirection.webp 1440w, ./ongendirection.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
@@ -2261,6 +2276,20 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
   <p class="gradex-cap">OnGen AR on show at GradEX 111, OCAD University.</p>
   <img class="subsec-img" width="1920" height="810" src="./gradex111label.png" alt="GradEX 111" loading="lazy" style="margin-top:clamp(32px,4vw,56px);" srcset="./light/gradex111label.webp 1440w, ./gradex111label.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
+  <div class="insta-row">
+    <a class="insta-card" style="--ar:0.8004" href="https://www.instagram.com/p/DXb0kfGllzA/" target="_blank" rel="noopener">
+      <img width="1440" height="1799" data-cursor="View on Instagram" src="./ongeninsta1.webp" alt="Graduate portrait posted by @ocadu.id" loading="lazy" srcset="./light/ongeninsta1.webp 800w, ./ongeninsta1.webp 1440w" sizes="(max-width: 640px) 95vw, 27vw" />
+      <span class="meta"><span class="likes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>103 likes</span><span class="credit">Instagram - @ocadu.id</span></span>
+    </a>
+    <a class="insta-card" style="--ar:1.3324" href="https://www.instagram.com/p/DYNY-EnJrAm/" target="_blank" rel="noopener">
+      <img width="1439" height="1080" data-cursor="View on Instagram" src="./ongeninsta3.webp" alt="The Industrial Design class at GradEX 111, posted by @ocadu.id" loading="lazy" srcset="./light/ongeninsta3.webp 800w, ./ongeninsta3.webp 1439w" sizes="(max-width: 640px) 95vw, 45vw" />
+      <span class="meta"><span class="likes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>184 likes</span><span class="credit">Instagram - @ocadu.id</span></span>
+    </a>
+    <a class="insta-card" style="--ar:0.7508" href="https://www.instagram.com/p/DX-lMQAlrjd/" target="_blank" rel="noopener">
+      <img width="1440" height="1918" data-cursor="View on Instagram" src="./ongeninsta2.webp" alt="OnGen on screen beside the ON AIR sign, posted by @ocadu.id" loading="lazy" srcset="./light/ongeninsta2.webp 800w, ./ongeninsta2.webp 1440w" sizes="(max-width: 640px) 95vw, 27vw" />
+      <span class="meta"><span class="likes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>82 likes</span><span class="credit">Instagram - @ocadu.id</span></span>
+    </a>
+  </div>
   <img class="subsec-img" width="2856" height="1282" src="./ongenresearch1.png" alt="Final research: system value and analysis" loading="lazy" style="margin-top:clamp(48px,7vw,90px);" srcset="./light/ongenresearch1.webp 1440w, ./ongenresearch1.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">This board brings together the internal research methods and results I used to build the project. I designed the final academic research for realizing Audio Augmented Reality, and secured the data that follow-up research will need. Establishing a new user flow for AR interaction let me confirm this as a market from a new product-design perspective.</p>
 
@@ -2292,7 +2321,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
   /* ---- reveal on scroll: fade blocks in as they enter view ---- */
   var revealEls = document.querySelectorAll(
-    '.subsec-img,.subsec-video,.chapter-media-duo,.gradex-row,.build-list,.feature-trio,.logo-row,' +
+    '.subsec-img,.subsec-video,.chapter-media-duo,.gradex-row,.build-list,.feature-trio,.logo-row,.insta-row,' +
     '.phase-desc,.phase-note,.phase-num,.phase-name,.phase-sub,' +
     '.subsec-title,.subsec-lead,.gradex-cap'
   );
