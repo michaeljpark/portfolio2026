@@ -32,14 +32,34 @@
     background:color-mix(in srgb, var(--bg) 88%, transparent);
     backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   }
+  /* three columns so the section indicator sits on the true centre of the bar,
+     whatever the widths of the name on the left and the links on the right */
   .nav-inner{
-    display:flex; align-items:center; justify-content:space-between;
+    display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
     padding:18px var(--pad); max-width:var(--max); margin:0 auto; font-size:13px;
   }
-  .nav-mark{ font-weight:500; }
-  .nav-links{ display:flex; gap:28px; }
+  .nav-mark{ font-weight:500; grid-column:1; justify-self:start; }
+  .nav-links{ display:flex; gap:28px; grid-column:3; justify-self:end; }
   .nav-links a{ color:var(--muted); transition:color .2s; }
   .nav-links a:hover{ color:var(--ink); }
+
+  /* section indicator: this page's own chapters, driven by phase-nav.js */
+  /* the space either side lives on the indicator, not as grid gaps, so it goes away
+     with it: on a phone the name and the links get the whole bar back */
+  .phase-nav{ grid-column:2; margin:0 32px; position:relative; display:flex; gap:22px; white-space:nowrap; }
+  .phase-nav a{ color:var(--muted); transition:color .2s; }
+  .phase-nav a:hover, .phase-nav a[aria-current]{ color:var(--ink); }
+  .phase-nav-bar{
+    position:absolute; left:0; bottom:-7px; height:1px; width:0;
+    background:var(--ink); opacity:0; pointer-events:none;
+    transition:transform .45s cubic-bezier(.2,.7,.2,1), width .45s cubic-bezier(.2,.7,.2,1), opacity .2s;
+  }
+  @media (prefers-reduced-motion: reduce){ .phase-nav-bar{ transition:opacity .2s; } }
+  /* below this width the chapter names no longer fit between the name and the links */
+  @media (max-width:1059px){ .phase-nav{ display:none; } }
+  .phase-nav.is-cramped{ display:none; }
+  /* a jump lands with the chapter's top rule just under the sticky bar */
+  .phase-flat{ scroll-margin-top:56px; }
 
   header.hero{
     padding:0 var(--pad) 64px;
@@ -1955,6 +1975,14 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <nav class="top">
   <div class="nav-inner">
     <a href="./index.html" class="nav-mark">Michael J. Park</a>
+    <div class="phase-nav">
+      <a href="#overview">Overview</a>
+      <a href="#problem-definition">Problem Definition</a>
+      <a href="#discovery">Discovery</a>
+      <a href="#prototyping">Prototyping</a>
+      <a href="#conclusion">Conclusion</a>
+      <span class="phase-nav-bar" aria-hidden="true"></span>
+    </div>
     <div class="nav-links">
       <a href="./index.html#work">Work</a>
       <a href="./index.html#about">About</a>
@@ -1982,8 +2010,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 </header>
 
-<section class="phase-flat">
-  <div class="phase-num">01</div>
+<section class="phase-flat" id="overview">
   <div class="phase-name">Overview</div>
   <div class="phase-sub">Scan to contract, in one continuous flow</div>
   <p class="phase-desc">GridOne turns a smartphone scan of a room into a measured scope, a transparent estimate, a code check, an instrument-verified inspection, and a signed contract, without the owner re-entering anything or chasing a different person at every step.</p>
@@ -2000,8 +2027,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 </section>
 
-<section class="phase-flat">
-  <div class="phase-num">02</div>
+<section class="phase-flat" id="problem-definition">
   <div class="phase-name">Problem Definition</div>
   <p class="phase-desc">Owners approach renovation with almost no leverage. I narrowed that into three structural frictions, because each one needs a different mechanism to dissolve.</p>
 
@@ -2016,8 +2042,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 </section>
 
-<section class="phase-flat">
-  <div class="phase-num">03</div>
+<section class="phase-flat" id="discovery">
   <div class="phase-name">Discovery</div>
   <p class="phase-desc">Toronto's housing stock is old and getting older, which makes the demand durable rather than cyclical. That is what made a single-city beachhead defensible.</p>
 
@@ -2061,8 +2086,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 </section>
 
-<section class="phase-flat">
-  <div class="phase-num">04</div>
+<section class="phase-flat" id="prototyping">
   <div class="phase-name">Prototyping</div>
   <div class="phase-sub">Four layers, one continuous data handoff</div>
   <p class="phase-desc">Each layer transforms the one below it and passes structured data up. Nothing is re-entered, so the scan captured in the first layer is still doing work at the contract in the fourth.</p>
@@ -2091,8 +2115,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 </section>
 
-<section class="phase-flat">
-  <div class="phase-num">05</div>
+<section class="phase-flat" id="conclusion">
   <div class="phase-name">Conclusion</div>
   <div class="phase-sub">Resolve asymmetry, trust, and complexity with continuity</div>
   <p class="phase-desc">When capture, analysis, estimate, code check, measurement, and contract all live in one flow, the owner stops chasing a different person at every step, and every price becomes a measured, auditable claim.</p>
@@ -2106,6 +2129,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </footer>
 
 <script src="./lazy-video.js?v=20260818"></script>
+<script src="./phase-nav.js?v=20260919"></script>
 <script>
 (function(){
   var supported = 'IntersectionObserver' in window;

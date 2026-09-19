@@ -32,14 +32,34 @@
     background:color-mix(in srgb, var(--bg) 88%, transparent);
     backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   }
+  /* three columns so the section indicator sits on the true centre of the bar,
+     whatever the widths of the name on the left and the links on the right */
   .nav-inner{
-    display:flex; align-items:center; justify-content:space-between;
+    display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
     padding:18px var(--pad); max-width:var(--max); margin:0 auto; font-size:13px;
   }
-  .nav-mark{ font-weight:500; }
-  .nav-links{ display:flex; gap:28px; }
+  .nav-mark{ font-weight:500; grid-column:1; justify-self:start; }
+  .nav-links{ display:flex; gap:28px; grid-column:3; justify-self:end; }
   .nav-links a{ color:var(--muted); transition:color .2s; }
   .nav-links a:hover{ color:var(--ink); }
+
+  /* section indicator: this page's own chapters, driven by phase-nav.js */
+  /* the space either side lives on the indicator, not as grid gaps, so it goes away
+     with it: on a phone the name and the links get the whole bar back */
+  .phase-nav{ grid-column:2; margin:0 32px; position:relative; display:flex; gap:22px; white-space:nowrap; }
+  .phase-nav a{ color:var(--muted); transition:color .2s; }
+  .phase-nav a:hover, .phase-nav a[aria-current]{ color:var(--ink); }
+  .phase-nav-bar{
+    position:absolute; left:0; bottom:-7px; height:1px; width:0;
+    background:var(--ink); opacity:0; pointer-events:none;
+    transition:transform .45s cubic-bezier(.2,.7,.2,1), width .45s cubic-bezier(.2,.7,.2,1), opacity .2s;
+  }
+  @media (prefers-reduced-motion: reduce){ .phase-nav-bar{ transition:opacity .2s; } }
+  /* below this width the chapter names no longer fit between the name and the links */
+  @media (max-width:1023px){ .phase-nav{ display:none; } }
+  .phase-nav.is-cramped{ display:none; }
+  /* a jump lands with the chapter's top rule just under the sticky bar */
+  .phase-flat{ scroll-margin-top:56px; }
 
   header.hero{
     padding:0 var(--pad) 64px;
@@ -1955,6 +1975,12 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <nav class="top">
   <div class="nav-inner">
     <a href="./index.html" class="nav-mark">Michael J. Park</a>
+    <div class="phase-nav">
+      <a href="#overview">Overview</a>
+      <a href="#prototyping">Prototyping</a>
+      <a href="#conclusion">Conclusion</a>
+      <span class="phase-nav-bar" aria-hidden="true"></span>
+    </div>
     <div class="nav-links">
       <a href="./index.html#work">Work</a>
       <a href="./index.html#about">About</a>
@@ -1982,8 +2008,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 </header>
 
-<section class="phase-flat">
-  <div class="phase-num">01</div>
+<section class="phase-flat" id="overview">
   <div class="phase-name">Overview</div>
   <div class="phase-sub">The drop-off point is the part that breaks</div>
   <p class="phase-desc">ULT is a two-week concept for autonomous last-mile delivery in dense vertical housing. A pod flies the parcel to the resident's own balcony, and the handover is confirmed by the resident from their phone rather than left to a courier's judgement.</p>
@@ -1998,8 +2023,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 </section>
 
-<section class="phase-flat">
-  <div class="phase-num">02</div>
+<section class="phase-flat" id="prototyping">
   <div class="phase-name">Prototyping</div>
   <div class="phase-sub">Arrival, verification, acceptance</div>
   <p class="phase-desc">The interface exists for one moment, the seconds when a machine is hovering outside somebody's window and they have to decide whether to open it.</p>
@@ -2014,8 +2038,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 </section>
 
-<section class="phase-flat">
-  <div class="phase-num">03</div>
+<section class="phase-flat" id="conclusion">
   <div class="phase-name">Conclusion</div>
   <p class="phase-desc">The interesting part of autonomous delivery is not the flight, it is the consent at the end of it.</p>
   <p class="phase-note">Two weeks was enough to establish the interaction and not much more. What I would want next is the failure path, since the concept only becomes a service once it answers what happens when nobody accepts, when the wrong window is approached, and who is accountable when a pod is at the glass and the resident is not home.</p>
@@ -2026,6 +2049,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </footer>
 
 <script src="./lazy-video.js?v=20260818"></script>
+<script src="./phase-nav.js?v=20260919"></script>
 <script>
 (function(){
   var supported = 'IntersectionObserver' in window;

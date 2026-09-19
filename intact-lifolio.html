@@ -32,14 +32,34 @@
     background:color-mix(in srgb, var(--bg) 88%, transparent);
     backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   }
+  /* three columns so the section indicator sits on the true centre of the bar,
+     whatever the widths of the name on the left and the links on the right */
   .nav-inner{
-    display:flex; align-items:center; justify-content:space-between;
+    display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
     padding:18px var(--pad); max-width:var(--max); margin:0 auto; font-size:13px;
   }
-  .nav-mark{ font-weight:500; }
-  .nav-links{ display:flex; gap:28px; }
+  .nav-mark{ font-weight:500; grid-column:1; justify-self:start; }
+  .nav-links{ display:flex; gap:28px; grid-column:3; justify-self:end; }
   .nav-links a{ color:var(--muted); transition:color .2s; }
   .nav-links a:hover{ color:var(--ink); }
+
+  /* section indicator: this page's own chapters, driven by phase-nav.js */
+  /* the space either side lives on the indicator, not as grid gaps, so it goes away
+     with it: on a phone the name and the links get the whole bar back */
+  .phase-nav{ grid-column:2; margin:0 32px; position:relative; display:flex; gap:22px; white-space:nowrap; }
+  .phase-nav a{ color:var(--muted); transition:color .2s; }
+  .phase-nav a:hover, .phase-nav a[aria-current]{ color:var(--ink); }
+  .phase-nav-bar{
+    position:absolute; left:0; bottom:-7px; height:1px; width:0;
+    background:var(--ink); opacity:0; pointer-events:none;
+    transition:transform .45s cubic-bezier(.2,.7,.2,1), width .45s cubic-bezier(.2,.7,.2,1), opacity .2s;
+  }
+  @media (prefers-reduced-motion: reduce){ .phase-nav-bar{ transition:opacity .2s; } }
+  /* below this width the chapter names no longer fit between the name and the links */
+  @media (max-width:1059px){ .phase-nav{ display:none; } }
+  .phase-nav.is-cramped{ display:none; }
+  /* a jump lands with the chapter's top rule just under the sticky bar */
+  .phase-flat{ scroll-margin-top:56px; }
 
   header.hero{
     padding:0 var(--pad) 64px;
@@ -1955,6 +1975,14 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <nav class="top">
   <div class="nav-inner">
     <a href="./index.html" class="nav-mark">Michael J. Park</a>
+    <div class="phase-nav">
+      <a href="#overview">Overview</a>
+      <a href="#problem-definition">Problem Definition</a>
+      <a href="#discovery">Discovery</a>
+      <a href="#prototyping">Prototyping</a>
+      <a href="#conclusion">Conclusion</a>
+      <span class="phase-nav-bar" aria-hidden="true"></span>
+    </div>
     <div class="nav-links">
       <a href="./index.html#work">Work</a>
       <a href="./index.html#about">About</a>
@@ -1982,8 +2010,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 </header>
 
-<section class="phase-flat">
-  <div class="phase-num">01</div>
+<section class="phase-flat" id="overview">
   <div class="phase-name">Overview</div>
   <div class="phase-sub">Insurance built around decisions, not disasters</div>
   <p class="phase-desc">Lifolio uses Intact's existing policy data as a signal layer, detects life events in real time, maps the legal and financial obligations attached to them, and connects customers with the right professional before they know they need one.</p>
@@ -1995,16 +2022,15 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <div class="subsec-video">
       <video class="snap-vid" data-src="./intactlifoliothumb.mp4?v=20260812" data-poster="./posters/intactlifoliothumb.jpg?v=20260812" loop muted playsinline preload="none"></video>
     </div>
-    <img class="subsec-img" src="./lifolioimg.png" alt="Lifolio product overview" loading="lazy" srcset="./light/lifolioimg.webp 1440w, ./lifolioimg.png 1672w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <img class="subsec-img" width="1672" height="941" src="./lifolioimg.png" alt="Lifolio product overview" loading="lazy" srcset="./light/lifolioimg.webp 1440w, ./lifolioimg.png 1672w" sizes="(max-width: 1500px) 95vw, 1425px" />
   </div>
 </section>
 
-<section class="phase-flat">
-  <div class="phase-num">02</div>
+<section class="phase-flat" id="problem-definition">
   <div class="phase-name">Problem Definition</div>
   <p class="phase-desc">Insurance, as the world knows it, is reactive, transactional, and invisible until disaster strikes. So where is the insurance for the decisions that shape what comes next?</p>
   <p class="phase-note">Insurance resolves uncertainty after the fact, but the uncertainty that shapes a person's financial trajectory happens before any claim is filed. A home purchase, a marriage, a job change: each carries legal and financial obligations that most people navigate blind.</p>
-  <img class="subsec-img" src="./lifolioimg2.png" alt="The gap between reactive protection and the decisions that come before a claim" loading="lazy" srcset="./light/lifolioimg2.webp 1440w, ./lifolioimg2.png 1672w" sizes="(max-width: 1500px) 95vw, 1425px" />
+  <img class="subsec-img" width="1672" height="941" src="./lifolioimg2.png" alt="The gap between reactive protection and the decisions that come before a claim" loading="lazy" srcset="./light/lifolioimg2.webp 1440w, ./lifolioimg2.png 1672w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">For young adults and first-time earners the gap is wider. Financial literacy is not a given, and the systems built to help, lawyers and advisors and accountants, are priced out of reach at exactly the moments they are needed most.</p>
 
   <div class="subsec">
@@ -2017,8 +2043,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 </section>
 
-<section class="phase-flat">
-  <div class="phase-num">03</div>
+<section class="phase-flat" id="discovery">
   <div class="phase-name">Discovery</div>
   <p class="phase-desc">Where government sets the framework, private enterprise delivers the outcome. I built the case on that split, because a proposal that argues against the regulator does not get built.</p>
   <p class="phase-note">Canada's regulatory architecture, OSFI, FCAC, and the provincial superintendents, defines the standards and the direction. When volatility strikes, private insurers consistently outperform public relief mechanisms on speed, scope, and recovery depth. Lifolio does not operate against that direction, it extends the private sector's reach within it.</p>
@@ -2042,12 +2067,11 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <li><span class="k">Operational flexibility</span><span class="v">Government: cross-provincial licensing restricts adjuster redeployment during disasters. Private: national operations, flexible deployment, no jurisdictional barrier.</span></li>
     </ul>
     <p class="phase-note">Lifolio operates in full alignment with OSFI's consumer protection guidelines, FCAC's national financial literacy mandate, and the provincial superintendents. The argument is not that government should not lead. It is that Intact's data reach, operational agility, and existing trust relationship enable a layer of proactive guidance that no government program currently delivers at the level of an individual.</p>
-    <img class="subsec-img" src="./lifolioimg3.png" alt="Regulatory alignment across OSFI, FCAC, and the provincial superintendents" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/lifolioimg3.webp 1440w, ./lifolioimg3.png 1672w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <img class="subsec-img" width="1672" height="941" src="./lifolioimg3.png" alt="Regulatory alignment across OSFI, FCAC, and the provincial superintendents" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/lifolioimg3.webp 1440w, ./lifolioimg3.png 1672w" sizes="(max-width: 1500px) 95vw, 1425px" />
   </div>
 </section>
 
-<section class="phase-flat">
-  <div class="phase-num">04</div>
+<section class="phase-flat" id="prototyping">
   <div class="phase-name">Prototyping</div>
   <div class="phase-sub">Proactive over reactive, personal over generic</div>
   <p class="phase-desc">The premise is that the best time to offer guidance is before a customer realises they need it. Intact's policy data is the signal, the AI layer is the interpreter, and the professional network is the safety net.</p>
@@ -2064,8 +2088,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 </section>
 
-<section class="phase-flat">
-  <div class="phase-num">05</div>
+<section class="phase-flat" id="conclusion">
   <div class="phase-name">Conclusion</div>
   <p class="phase-desc">Lifolio started as a question about timing. Insurance already knows a great deal about its customers, and almost none of it is used before something goes wrong.</p>
   <p class="phase-note">What the research settled is that the gap is structural rather than a matter of effort. Public programs are built for aggregate relief and cannot reach an individual before a decision, while a private insurer already holds the signal and the relationship. Framing the proposal as an extension of the regulator's direction rather than an argument against it is what made it credible to present.</p>
@@ -2077,6 +2100,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </footer>
 
 <script src="./lazy-video.js?v=20260818"></script>
+<script src="./phase-nav.js?v=20260919"></script>
 <script>
 (function(){
   var supported = 'IntersectionObserver' in window;

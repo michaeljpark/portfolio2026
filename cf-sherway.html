@@ -32,14 +32,34 @@
     background:color-mix(in srgb, var(--bg) 88%, transparent);
     backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   }
+  /* three columns so the section indicator sits on the true centre of the bar,
+     whatever the widths of the name on the left and the links on the right */
   .nav-inner{
-    display:flex; align-items:center; justify-content:space-between;
+    display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
     padding:18px var(--pad); max-width:var(--max); margin:0 auto; font-size:13px;
   }
-  .nav-mark{ font-weight:500; }
-  .nav-links{ display:flex; gap:28px; }
+  .nav-mark{ font-weight:500; grid-column:1; justify-self:start; }
+  .nav-links{ display:flex; gap:28px; grid-column:3; justify-self:end; }
   .nav-links a{ color:var(--muted); transition:color .2s; }
   .nav-links a:hover{ color:var(--ink); }
+
+  /* section indicator: this page's own chapters, driven by phase-nav.js */
+  /* the space either side lives on the indicator, not as grid gaps, so it goes away
+     with it: on a phone the name and the links get the whole bar back */
+  .phase-nav{ grid-column:2; margin:0 32px; position:relative; display:flex; gap:22px; white-space:nowrap; }
+  .phase-nav a{ color:var(--muted); transition:color .2s; }
+  .phase-nav a:hover, .phase-nav a[aria-current]{ color:var(--ink); }
+  .phase-nav-bar{
+    position:absolute; left:0; bottom:-7px; height:1px; width:0;
+    background:var(--ink); opacity:0; pointer-events:none;
+    transition:transform .45s cubic-bezier(.2,.7,.2,1), width .45s cubic-bezier(.2,.7,.2,1), opacity .2s;
+  }
+  @media (prefers-reduced-motion: reduce){ .phase-nav-bar{ transition:opacity .2s; } }
+  /* below this width the chapter names no longer fit between the name and the links */
+  @media (max-width:1059px){ .phase-nav{ display:none; } }
+  .phase-nav.is-cramped{ display:none; }
+  /* a jump lands with the chapter's top rule just under the sticky bar */
+  .phase-flat{ scroll-margin-top:56px; }
 
   header.hero{
     padding:0 var(--pad) 64px;
@@ -1963,6 +1983,14 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <nav class="top">
   <div class="nav-inner">
     <a href="./index.html" class="nav-mark">Michael J. Park</a>
+    <div class="phase-nav">
+      <a href="#overview">Overview</a>
+      <a href="#problem-definition">Problem Definition</a>
+      <a href="#discovery">Discovery</a>
+      <a href="#prototyping">Prototyping</a>
+      <a href="#conclusion">Conclusion</a>
+      <span class="phase-nav-bar" aria-hidden="true"></span>
+    </div>
     <div class="nav-links">
       <a href="./index.html#work">Work</a>
       <a href="./index.html#about">About</a>
@@ -1990,10 +2018,10 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 </header>
 
-<section class="phase-flat">
+<section class="phase-flat" id="overview">
   <div class="subsec" style="margin-top:0;">
     <div class="subsec-title">Meet the team</div>
-    <img class="subsec-img" src="./cfteam.png" alt="The project team, five industrial design students" loading="lazy" style="margin-bottom:clamp(32px,4vw,48px);" srcset="./light/cfteam.webp 1440w, ./cfteam.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <img class="subsec-img" width="3314" height="932" src="./cfteam.png" alt="The project team, five industrial design students" loading="lazy" style="margin-bottom:clamp(32px,4vw,48px);" srcset="./light/cfteam.webp 1440w, ./cfteam.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
   </div>
 
   <div class="subsec" style="margin-top:clamp(40px,5vw,72px);">
@@ -2005,7 +2033,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <div class="cell q4"><img src="./Sherwaystampov4.png" alt="Lock screen prompt pointing to the first stamp two minutes away" loading="lazy" srcset="./light/Sherwaystampov4.webp 1200w, ./Sherwaystampov4.png 1267w" sizes="(max-width: 640px) 95vw, 22vw" /></div>
     </div>
   </div>
-  <div class="phase-num">01</div>
   <div class="phase-name">Overview</div>
   <div class="phase-sub">A mall you can only reach by car, asked to become a place</div>
   <p class="phase-desc">CF Sherway Gardens sits in Etobicoke at Highway 427 and the Gardiner, ringed on all sides by parking lots and arterial roads. The access that makes it work by car is the same thing that makes it unwelcoming on foot, and that contradiction is the project.</p>
@@ -2018,29 +2045,27 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <video class="snap-vid" data-src="./Sherwaystampsnapshot.mp4" data-poster="./posters/Sherwaystampsnapshot.jpg" loop muted playsinline preload="none"></video>
     </div>
     <p class="subsec-lead" style="margin-top:clamp(48px,6vw,88px);">The challenge statement, the site, and the trend mix the direction had to sit inside.</p>
-    <img class="subsec-img" src="./cfprojectoutline.png" alt="Project outline: purpose, site, change, users, challenge statement, and trend mix" loading="lazy" srcset="./light/cfprojectoutline.webp 1440w, ./cfprojectoutline.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <img class="subsec-img" width="3314" height="1554" src="./cfprojectoutline.png" alt="Project outline: purpose, site, change, users, challenge statement, and trend mix" loading="lazy" srcset="./light/cfprojectoutline.webp 1440w, ./cfprojectoutline.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">Our reference points were the third place and the 15-minute city, plus precedents like The Well and Waterworks Food Hall, both of which built an identity first and drew footfall second.</p>
   </div>
 </section>
 
-<section class="phase-flat">
-  <div class="phase-num">02</div>
+<section class="phase-flat" id="problem-definition">
   <div class="phase-name">Problem Definition</div>
   <p class="phase-desc">The mall is legible as a shop and illegible as a place. There is no reason to go unless you already know what you want from the stores, which means every visit has to be justified by a purchase.</p>
   <p class="phase-note">Three findings held across everything my team and I recorded on site, and they are physical rather than attitudinal.</p>
 
   <div class="subsec">
     <div class="subsec-title">What is actually wrong</div>
-    <img class="subsec-img" src="./sherwaystamp%20direction.png" alt="Three findings: not a destination, nothing signals welcome, almost no non-retail space" loading="lazy" srcset="./light/sherwaystamp%20direction.webp 1440w, ./sherwaystamp%20direction.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <img class="subsec-img" width="1920" height="810" src="./sherwaystamp%20direction.png" alt="Three findings: not a destination, nothing signals welcome, almost no non-retail space" loading="lazy" srcset="./light/sherwaystamp%20direction.webp 1440w, ./sherwaystamp%20direction.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">Every problem we found was physical, seating, orientation, unused floor area. So any proposal that does not change the space fails, no matter how good it sounds.</p>
   </div>
 </section>
 
-<section class="phase-flat">
-  <div class="phase-num">03</div>
+<section class="phase-flat" id="discovery">
   <div class="phase-name">Discovery</div>
   <p class="phase-desc">Two phases, one to record the building as it behaves and one to hear how people describe it.</p>
-  <img class="subsec-img" src="./cfresaerch1.png" alt="Phase I onsite observation and Phase II interview comments" loading="lazy" srcset="./light/cfresaerch1.webp 1440w, ./cfresaerch1.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
+  <img class="subsec-img" width="3314" height="1157" src="./cfresaerch1.png" alt="Phase I onsite observation and Phase II interview comments" loading="lazy" srcset="./light/cfresaerch1.webp 1440w, ./cfresaerch1.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">One walk through the mall on a weekday, then interviews with seven people. Orientation turned out to be the quiet problem: corridors look alike, and a visitor who cannot form a mental map never develops a habit.</p>
   <p class="phase-note">Counting the signals rather than reading them settled our direction. Cultural wants and welcoming came up 13 times, wanting to shop in person 10. People still want to come in person, which meant the retail side was the asset to build on, not the problem.</p>
   <div class="chapter-media-duo" style="margin-top:clamp(20px,2.4vw,32px);">
@@ -2048,33 +2073,32 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <div class="cell m2"><img src="./cfdiscovery2.png" alt="Interview comments on sticky notes, then the same notes sorted into themes and tallied" loading="lazy" srcset="./light/cfdiscovery2.webp 1200w, ./cfdiscovery2.png 3147w" sizes="(max-width: 640px) 95vw, 30vw" /></div>
     <div class="cell m3"><img src="./cfdiscovery3.png" alt="Working through the synthesis together" loading="lazy" srcset="./light/cfdiscovery3.webp 1200w, ./cfdiscovery3.png 2984w" sizes="(max-width: 640px) 95vw, 30vw" /></div>
   </div>
-  <img class="subsec-img" src="./cfresearch2.png" alt="Pain points mapped to a Space, Community, Culture framework, and the resulting opportunities" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/cfresearch2.webp 1440w, ./cfresearch2.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
+  <img class="subsec-img" width="3314" height="1455" src="./cfresearch2.png" alt="Pain points mapped to a Space, Community, Culture framework, and the resulting opportunities" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/cfresearch2.webp 1440w, ./cfresearch2.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">The pain points sorted into three needs. Space makes the place, culture gives the reason, community brings people back. The concept had to hold in the building as it stands today and in the one that exists once the condos are occupied.</p>
 </section>
 
-<section class="phase-flat">
-  <div class="phase-num">04</div>
+<section class="phase-flat" id="prototyping">
   <div class="phase-name">Prototyping</div>
   <div class="phase-sub">Sherway Stamp</div>
   <p class="phase-desc">Commissioned posters through the mall's dead space, each one paired with seating, and a collection that carries across a season the way a membership does.</p>
-  <img class="subsec-img" src="./cfresearch3.png" alt="Sherway Stamp concept: three layers, core value, and review comments" loading="lazy" srcset="./light/cfresearch3.webp 1440w, ./cfresearch3.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
+  <img class="subsec-img" width="3314" height="1363" src="./cfresearch3.png" alt="Sherway Stamp concept: three layers, core value, and review comments" loading="lazy" srcset="./light/cfresearch3.webp 1440w, ./cfresearch3.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
 
   <div class="subsec">
     <div class="subsec-title">Three layers</div>
-    <img class="subsec-img" src="./sherwaystamp%20Three%20layers.png" alt="Three layers: physical the poster, interaction the scan, experience the story" loading="lazy" srcset="./light/sherwaystamp%20Three%20layers.webp 1440w, ./sherwaystamp%20Three%20layers.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <img class="subsec-img" width="1920" height="810" src="./sherwaystamp%20Three%20layers.png" alt="Three layers: physical the poster, interaction the scan, experience the story" loading="lazy" srcset="./light/sherwaystamp%20Three%20layers.webp 1440w, ./sherwaystamp%20Three%20layers.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">A QR code is a characterless object, and in a public space people rarely scan one when its purpose is not obvious. Making the artwork the trigger means the intervention changes the room even for people who never scan anything.</p>
   </div>
 
   <div class="subsec">
     <div class="subsec-title">What it fixes on site</div>
-    <img class="subsec-img" src="./cfsolution.png" alt="What the concept fixes on site: a one-off unstructured event becomes an integrated seasonal system, no orientation becomes incentive-based motivation, and discontinuity along the user journey becomes welcoming storytelling" loading="lazy" srcset="./light/cfsolution.webp 1440w, ./cfsolution.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <img class="subsec-img" width="1920" height="810" src="./cfsolution.png" alt="What the concept fixes on site: a one-off unstructured event becomes an integrated seasonal system, no orientation becomes incentive-based motivation, and discontinuity along the user journey becomes welcoming storytelling" loading="lazy" srcset="./light/cfsolution.webp 1440w, ./cfsolution.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">What I argued for was that the stamp sit on top of what Sherway already runs, its seasonal programming and its store promotions, rather than beside them. Folding those into one collection makes a visit accumulate the way a membership does, and gives the building something to draw people in with.</p>
   </div>
 
   <div class="subsec">
     <div class="subsec-title">Low-fidelity Prototype</div>
     <p class="subsec-lead">The in-app loop, then each screen set wireframed beside the flow that drives it.</p>
-    <img class="subsec-img" src="./sherwaystamplofi.png" alt="Low-fidelity board: in-app interaction flow, design decisions, and four wireframed screen sets with their flow diagrams" loading="lazy" srcset="./light/sherwaystamplofi.webp 1440w, ./sherwaystamplofi.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <img class="subsec-img" width="3314" height="1646" src="./sherwaystamplofi.png" alt="Low-fidelity board: in-app interaction flow, design decisions, and four wireframed screen sets with their flow diagrams" loading="lazy" srcset="./light/sherwaystamplofi.webp 1440w, ./sherwaystamplofi.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">Drawing each flow as a decision tree rather than a screen list is what exposed the failure paths, and those are what decide whether this is a service or a demo.</p>
     <p class="phase-note">The biggest thing we ruled out was scope: no spatial AR, no headset, no app-only content. The intervention still has to change the room for people who never open the app.</p>
   </div>
@@ -2086,7 +2110,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
   <div class="subsec">
     <div class="subsec-title">Scan, listen, keep</div>
-    <img class="subsec-img" src="./sherwaystamphifi1.png" alt="High-fidelity onboarding: splash, what the service is, language picker, time-in-Canada question, and the first stamp earned" loading="lazy" srcset="./light/sherwaystamphifi1.webp 1440w, ./sherwaystamphifi1.png 2894w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <img class="subsec-img" width="2894" height="1080" src="./sherwaystamphifi1.png" alt="High-fidelity onboarding: splash, what the service is, language picker, time-in-Canada question, and the first stamp earned" loading="lazy" srcset="./light/sherwaystamphifi1.webp 1440w, ./sherwaystamphifi1.png 2894w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">This is a service for people who are new here, so onboarding carries the most weight. Six languages with English captions kept on, and the one question asked only orders the stories.</p>
     <div class="subsec-video wide">
       <video class="snap-vid" data-src="./sherwaystampfeature1.mp4" data-poster="./posters/sherwaystampfeature1.jpg" loop muted playsinline preload="none"></video>
@@ -2096,7 +2120,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
   <div class="subsec">
     <div class="subsec-title">What a stamp is worth</div>
-    <img class="subsec-img" src="./sherwaystamphifi2.png" alt="High-fidelity core loop: the stamp book, poster scan, story playback with transcript, a retail stamp, and the rewards screen" loading="lazy" srcset="./light/sherwaystamphifi2.webp 1440w, ./sherwaystamphifi2.png 2894w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <img class="subsec-img" width="2894" height="1080" src="./sherwaystamphifi2.png" alt="High-fidelity core loop: the stamp book, poster scan, story playback with transcript, a retail stamp, and the rewards screen" loading="lazy" srcset="./light/sherwaystamphifi2.webp 1440w, ./sherwaystamphifi2.png 2894w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">The book is the home, not the camera, so the app has a state to return to and the scan sits one tap away rather than as the landing screen.</p>
     <div class="subsec-video">
       <video class="snap-vid" data-src="./sherwaystampfeature2.mp4" data-poster="./posters/sherwaystampfeature2.jpg" loop muted playsinline preload="none"></video>
@@ -2106,7 +2130,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
   <div class="subsec">
     <div class="subsec-title">Events, and the walk there</div>
-    <img class="subsec-img" src="./sherwaystamphifi3.png" alt="High-fidelity: events list, wayfinding to the next stamp, a completed season, and the component set" loading="lazy" srcset="./light/sherwaystamphifi3.webp 1440w, ./sherwaystamphifi3.png 2894w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <img class="subsec-img" width="2894" height="1080" src="./sherwaystamphifi3.png" alt="High-fidelity: events list, wayfinding to the next stamp, a completed season, and the component set" loading="lazy" srcset="./light/sherwaystamphifi3.webp 1440w, ./sherwaystamphifi3.png 2894w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">Events carry stamps the same way posters do, and a finished season becomes something you keep rather than something that resets.</p>
     <div class="subsec-video wide">
       <video class="snap-vid" data-src="./sherwaystampfeature3.mp4" data-poster="./posters/sherwaystampfeature3.jpg" loop muted playsinline preload="none"></video>
@@ -2117,15 +2141,14 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="subsec">
     <div class="subsec-title">How the direction got settled</div>
     <p class="subsec-lead">Five concepts, and the route to the one the team took forward.</p>
-    <img class="subsec-img" src="./cffinalization.png" alt="Project flow diagram: five concepts from the team, the one carried forward, and the reframe into hybrid physical and digital touchpoints that became Sherway Stamp" loading="lazy" srcset="./light/cffinalization.webp 1440w, ./cffinalization.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <img class="subsec-img" width="3314" height="1185" src="./cffinalization.png" alt="Project flow diagram: five concepts from the team, the one carried forward, and the reframe into hybrid physical and digital touchpoints that became Sherway Stamp" loading="lazy" srcset="./light/cffinalization.webp 1440w, ./cffinalization.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">The team picked the concept the others could fold into, The New Roots, and that one was not mine. Mine came back at the reframe after the client pitch, as the digital half of a hybrid touchpoint, and Sherway Stamp is what that produced.</p>
   </div>
 </section>
 
-<section class="phase-flat">
-  <div class="phase-num">05</div>
+<section class="phase-flat" id="conclusion">
   <div class="phase-name">Conclusion</div>
-  <img class="subsec-img" src="./sherway%20banner.png" alt="CF Sherway Gardens seen from the street, with the Cadillac Fairview mark over it" loading="lazy" style="margin-top:clamp(20px,2.2vw,30px);" srcset="./light/sherway%20banner.webp 1440w, ./sherway%20banner.png 1800w" sizes="(max-width: 1500px) 95vw, 1425px" />
+  <img class="subsec-img" width="1800" height="600" src="./sherway%20banner.png" alt="CF Sherway Gardens seen from the street, with the Cadillac Fairview mark over it" loading="lazy" style="margin-top:clamp(20px,2.2vw,30px);" srcset="./light/sherway%20banner.webp 1440w, ./sherway%20banner.png 1800w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-desc">The useful move was refusing to treat this as a branding problem. Every observation we made was spatial, so the test became whether a proposal changes the room.</p>
   <p class="phase-note">Sherway Stamp is not the direction my team confirmed at the end. The New Roots is, and Sherway Stamp was reorganised into a supporting function inside it. What it contributed was the skeleton of the digital experience and the basic interaction direction that confirmed concept builds on.</p>
   <p class="phase-note">Two questions were left open: what makes someone scan in the first place, and whether the scan technology is shippable today rather than soon.</p>
@@ -2137,6 +2160,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </footer>
 
 <script src="./lazy-video.js?v=20260828"></script>
+<script src="./phase-nav.js?v=20260919"></script>
 <script>
 (function(){
   var supported = 'IntersectionObserver' in window;
