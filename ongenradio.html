@@ -1712,6 +1712,17 @@
   .feature-trio .v{ display:block; margin-top:4px; font-size:clamp(13px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.5; }
   .feature-trio.hmw img{ aspect-ratio:16/9; object-fit:cover; }
   .feature-trio.hmw .k{ line-height:1.45; }
+  /* tool logos: every mark is trimmed to its drawn edge (PNGs cropped, SVG viewBoxes
+     tightened), so one height lines them all up */
+  .logo-row{ --logo-h:clamp(26px,2.3vw,34px); display:flex; flex-wrap:wrap; align-items:center; gap:clamp(10px,1vw,14px); margin-top:clamp(16px,1.8vw,24px); }
+  .logo-row .logo{ display:block; flex:none; height:var(--logo-h); width:auto; }
+  .logo-row .repo{ display:flex; align-items:center; gap:10px; margin-left:clamp(6px,0.8vw,12px); font-size:clamp(14px,1.05vw,16px); color:var(--ink); letter-spacing:-0.01em; white-space:nowrap; }
+  /* heading left, its logos right, centred on the heading line; when the two stop
+     fitting side by side, the logos drop under the heading */
+  .title-row{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:clamp(12px,1.4vw,18px) clamp(16px,2vw,32px); }
+  .title-row .phase-name, .title-row .subsec-title{ margin:0; }
+  .title-row.at-phase{ margin-bottom:8px; }
+  .title-row .logo-row{ margin-top:0; }
 
   /* ============ mobile refinements ============ */
   @media(max-width:640px){
@@ -1739,6 +1750,7 @@
     .build-list .k,.build-list .v{ font-size:13px; }
     .feature-trio{ grid-template-columns:1fr; gap:28px; }
     .feature-trio .k,.feature-trio .v{ font-size:13px; }
+    .logo-row .repo{ font-size:13px; }
     /* stack the top media row on phones */
     .chapter-media-duo{ flex-direction:column; height:auto; gap:10px; }
     .chapter-media-duo .cell{ flex:none; }
@@ -1947,6 +1959,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .reveal-on .gradex-row,
 .reveal-on .build-list,
 .reveal-on .feature-trio,
+.reveal-on .logo-row,
 .reveal-on .phase-desc,
 .reveal-on .phase-note,
 .reveal-on .phase-num,
@@ -1964,7 +1977,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .reveal-on .subsec-video.reveal-in{ opacity:1; }
 @media(prefers-reduced-motion:reduce){
   .reveal-on .subsec-img,.reveal-on .chapter-media-duo,.reveal-on .gradex-row,
-  .reveal-on .build-list,.reveal-on .feature-trio,.reveal-on .phase-desc,.reveal-on .phase-note,
+  .reveal-on .build-list,.reveal-on .feature-trio,.reveal-on .logo-row,.reveal-on .phase-desc,.reveal-on .phase-note,
   .reveal-on .phase-num,.reveal-on .phase-name,.reveal-on .phase-sub,
   .reveal-on .subsec-title,.reveal-on .subsec-lead,.reveal-on .gradex-cap{
     opacity:1; transform:none; transition:none;
@@ -2164,7 +2177,15 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </section>
 
 <section class="phase-flat" id="prototyping">
-  <div class="phase-name">Prototyping</div>
+  <div class="title-row at-phase">
+    <div class="phase-name">Prototyping</div>
+    <div class="logo-row">
+      <img class="logo" width="128" height="128" src="./light/cslogo-trim.webp" alt="CSS" />
+      <img class="logo" width="128" height="128" src="./light/htmllogo-trim.webp" alt="HTML" />
+      <img class="logo" width="128" height="128" src="./light/jslogo-trim.webp" alt="JavaScript" />
+      <svg class="logo" width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="Python"><defs><mask id="py-knock"><rect width="40" height="40" fill="#fff"/><g fill="#000" stroke="#000"><circle cx="14.5" cy="5" r="1.85" stroke="none"/><circle cx="25.5" cy="35" r="1.85" stroke="none"/><line x1="10" y1="9.5" x2="20" y2="9.5"/><line x1="20" y1="30.5" x2="30" y2="30.5"/><path d="m 9.5,30 c 0,-10 2.5,-10 10,-10 8.5,0 11,0 11,-10" fill="none"/></g></mask></defs><g fill="#fff" mask="url(#py-knock)"><rect x="10" y="0" width="20" height="40" rx="10" ry="5"/><rect x="0" y="10" width="40" height="20" rx="5" ry="10"/></g></svg>
+    </div>
+  </div>
   <p class="phase-desc">The prototype was built from computer-science components. Because the service runs on AI, I set up an environment that connects to AI APIs and runs a local AI, and carried out the experiments there.</p>
   <img class="subsec-img" width="2856" height="1284" src="./ongenresearch2.png" alt="VS Code build of the OnGen AR prototype" loading="lazy" srcset="./light/ongenresearch2.webp 1440w, ./ongenresearch2.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">Built entirely in VS Code, the prototype runs as a small full-stack app.</p>
@@ -2176,7 +2197,12 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </ul>
 
   <div class="subsec">
-    <div class="subsec-title">Figma Design System</div>
+    <div class="title-row">
+      <div class="subsec-title">Figma Design System</div>
+      <div class="logo-row">
+        <svg class="logo" width="200" height="300" viewBox="0 0 200 300" role="img" aria-label="Figma"><defs><mask id="fg-seams"><rect width="200" height="300" fill="#fff"/><path d="M100 0V200M0 100H200M0 200H100" stroke="#000" stroke-width="10"/></mask></defs><g fill="#fff" mask="url(#fg-seams)"><path d="M50 300c27.6 0 50-22.4 50-50v-50H50c-27.6 0-50 22.4-50 50s22.4 50 50 50z"/><path d="M0 150c0-27.6 22.4-50 50-50h50v100H50c-27.6 0-50-22.4-50-50z"/><path d="M0 50C0 22.4 22.4 0 50 0h50v100H50C22.4 100 0 77.6 0 50z"/><path d="M100 0h50c27.6 0 50 22.4 50 50s-22.4 50-50 50h-50V0z"/><path d="M200 150c0 27.6-22.4 50-50 50s-50-22.4-50-50 22.4-50 50-50 50 22.4 50 50z"/></g></svg>
+      </div>
+    </div>
     <img class="subsec-img" width="2800" height="1154" src="./ongenprototype2.png" alt="Figma design system: dashboard, components, type ramp, and the downtown Toronto map" loading="lazy" srcset="./light/ongenprototype2.webp 1440w, ./ongenprototype2.png 2800w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">I built the OnGen interface as a design system in Figma, a web-based resource that gathers the dashboard, components, type ramp, and the downtown map in one place. It cannot run inside an actual AR device, but it let me design the whole interface as a single coherent concept and use it as the visual reference for the build. Along the way, I took critique at Gate 5 and Gate 6, which let me refine the finer interaction details.</p>
   </div>
@@ -2190,13 +2216,24 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 
   <div class="subsec">
-    <div class="subsec-title">Firebase Data Pipeline</div>
+    <div class="title-row">
+      <div class="subsec-title">Firebase Data Pipeline</div>
+      <div class="logo-row">
+        <svg class="logo" width="444" height="555" viewBox="78.99 21 443.87 555.23" role="img" aria-label="Firebase"><path fill="#fff" d="M473.406 214.608C460.939 197.309 432.272 161.741 388.237 108.901C369.122 85.9821 352.725 66.5283 344.653 56.9775C340.202 51.7091 336.384 47.2013 333.37 43.6374L328.566 37.9745L325.96 34.9036L325.453 34.157L325.227 34.0584L314.113 21L300.026 32.2976C264.063 61.1049 234.607 98.2375 214.872 139.624C202.771 164.248 194.869 188.322 190.727 213.115C189.643 218.693 188.713 224.426 187.938 230.174C183.106 229.779 178.19 229.526 173.316 229.413C172.908 229.385 172.499 229.371 171.95 229.357C154.102 228.737 136.352 230.864 119.209 235.696L111.87 237.752L108.095 244.373C90.4016 275.406 80.3859 310.736 79.1322 346.53C77.5122 393.016 90.1762 438.009 115.758 476.649C140.79 514.444 176.147 543.336 218.013 560.198L223.465 562.395L225.113 562.973L225.183 562.945C246.99 570.861 269.881 575.285 293.222 576.088C295.871 576.186 298.505 576.228 301.139 576.228C330.594 576.228 359.275 570.467 386.491 559.071L386.688 559.155L393.928 555.803C430.638 538.828 462.052 512.148 484.774 478.636C508.144 444.165 521.272 403.835 522.737 362.012C524.484 312.018 507.876 262.432 473.392 214.622L473.406 214.608ZM309.535 369.506C317.128 398.285 315.634 425.937 305.126 451.814C278.868 425.895 259.611 397.397 247.863 367.026C235.284 334.542 227.719 303.636 225.324 275.054C236.439 278.703 246.652 283.52 255.752 289.451C281.925 306.51 300.026 333.444 309.535 369.52V369.506ZM314.324 508.823C325.481 517.318 337.215 525.277 349.316 532.602C331.496 537.448 313.113 539.575 294.518 538.913C291.645 538.814 288.771 538.645 285.883 538.406C296.476 529.277 305.999 519.374 314.31 508.823H314.324ZM345.484 360.025C333.539 314.751 310.169 280.52 276.037 258.291C261.062 248.543 244.003 241.147 225.268 236.316C225.536 233.202 225.874 230.103 226.268 227.061C226.606 224.455 226.958 222.06 227.339 219.82C230.424 203.888 235.016 188.125 240.961 172.982C243.243 167.178 245.736 161.417 248.384 155.852L248.483 155.655C252.568 147.386 257.174 139.033 262.598 130.102L264.725 126.594L264.654 126.552C277.248 106.873 292.335 88.9262 309.591 73.1068L316.254 80.9813C331.792 99.3926 346.4 116.804 359.684 132.736C389.561 168.573 428.3 215.636 443.246 236.386C472.8 277.35 487.042 319.174 485.591 360.73C484.464 393.002 474.913 424.472 457.953 451.716C441.894 477.537 419.524 499.146 393.168 514.359C378.461 507.02 357.106 494.948 334.426 477.382C352.711 440.939 356.444 401.483 345.498 360.025H345.484ZM285.911 484.89C269.148 506.612 249.201 520.741 237.566 527.84C235.678 527.15 233.79 526.432 231.931 525.671L230.438 525.079C195.968 510.838 166.893 486.764 146.354 455.435C125.365 423.416 114.969 386.198 116.307 347.798C117.265 320.273 124.125 293.973 136.719 269.617C144.03 267.997 151.482 266.982 158.934 266.602L160.863 266.56C164.625 266.475 168.372 266.475 171.936 266.56C177.176 266.799 182.43 267.349 187.6 268.18C189.29 303.171 197.883 340.924 213.167 380.423C227.888 418.443 252.343 453.561 285.897 484.876L285.911 484.89Z"/></svg>
+      </div>
+    </div>
     <img class="subsec-img" width="2868" height="782" src="./ongenfirebaseoverview.png" alt="Firestore collections holding AR interaction sessions and community radio data" loading="lazy" srcset="./light/ongenfirebaseoverview.webp 1440w, ./ongenfirebaseoverview.png 2868w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">Through Firebase, I captured user interaction data in detail, from micro-interactions to retention and how users responded, and set the project up to update itself recursively from that data. I designed it to parse and extract the data as well, so the interactions could be analyzed directly.</p>
   </div>
 
   <div class="subsec">
-    <div class="subsec-title">Tracking Process</div>
+    <div class="title-row">
+      <div class="subsec-title">Tracking Process</div>
+      <div class="logo-row">
+        <img class="logo" width="507" height="128" src="./light/blender_logo_no_socket_white-trim.webp" alt="Blender" />
+        <span class="repo"><svg class="logo" width="1024" height="999" viewBox="0 0 16 15.61" role="img" aria-label="GitHub"><path fill="#fff" fill-rule="evenodd" clip-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z"/></svg><span>blender/libmv</span></span>
+      </div>
+    </div>
     <div class="subsec-video">
       <video class="snap-vid" data-src="./ongentrackingprocess.mp4?v=20260802" data-poster="./posters/ongentrackingprocess.jpg?v=20260802" loop muted playsinline preload="none"></video>
     </div>
@@ -2255,7 +2292,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
   /* ---- reveal on scroll: fade blocks in as they enter view ---- */
   var revealEls = document.querySelectorAll(
-    '.subsec-img,.subsec-video,.chapter-media-duo,.gradex-row,.build-list,.feature-trio,' +
+    '.subsec-img,.subsec-video,.chapter-media-duo,.gradex-row,.build-list,.feature-trio,.logo-row,' +
     '.phase-desc,.phase-note,.phase-num,.phase-name,.phase-sub,' +
     '.subsec-title,.subsec-lead,.gradex-cap'
   );
