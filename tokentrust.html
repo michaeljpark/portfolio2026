@@ -1645,6 +1645,8 @@
   .chapter-media-duo .m3{ flex:1.2 1 0; }    /* showcase video 6:5 */
   /* subsection within a chapter (e.g. Snapshot inside Overview) */
   .subsec{ margin-top:clamp(48px,6vw,88px); }
+  /* TokenTrust blue, the accent on the position indicator of a swipeable set */
+  .shots{ --brand:#93B6FA; }
   .subsec-title{ font-size:clamp(20px,2vw,30px); font-weight:400; letter-spacing:-0.04em; line-height:1.15; color:var(--ink); }
   .subsec-lead{ margin-top:clamp(14px,1.6vw,20px); font-size:clamp(16px,1.4vw,20px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
   /* 16:9 video container (no rounded edges) */
@@ -1919,6 +1921,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
    Gated on .reveal-on, set by a <head> script before first paint, so if
    scripting is off nothing is ever hidden. ===== */
 .reveal-on .subsec-img,
+.reveal-on .shots,
 .reveal-on .chapter-media-duo,
 .reveal-on .gradex-row,
 .reveal-on .build-list,
@@ -1938,7 +1941,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .reveal-on .subsec-video{ opacity:0; transition:opacity .6s ease; }
 .reveal-on .subsec-video.reveal-in{ opacity:1; }
 @media(prefers-reduced-motion:reduce){
-  .reveal-on .subsec-img,.reveal-on .chapter-media-duo,.reveal-on .gradex-row,
+  .reveal-on .subsec-img,.reveal-on .shots,.reveal-on .chapter-media-duo,.reveal-on .gradex-row,
   .reveal-on .build-list,.reveal-on .phase-desc,.reveal-on .phase-note,
   .reveal-on .phase-num,.reveal-on .phase-name,.reveal-on .phase-sub,
   .reveal-on .subsec-title,.reveal-on .subsec-lead,.reveal-on .gradex-cap{
@@ -2072,26 +2075,58 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="subsec">
     <div class="subsec-title">Low-fidelity Prototype</div>
     <p class="subsec-lead">Three journeys, each wireframed beside the flow that drives it. I drew these myself before any visual decision was made, because what I wanted the team arguing about was branching, not colour.</p>
-    <img class="subsec-img" width="3320" height="1652" src="./tokentrustlowfid1.png" alt="Low-fidelity wireframes for onboarding: splash, the promise, connect sources, privacy level, with the app launch flow diagram" loading="lazy" srcset="./light/tokentrustlowfid1.webp 1440w, ./tokentrustlowfid1.png 3320w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">Onboard and connect. I gave these four screens one job, which is to make the purpose of the service unmistakable before anything else happens. This is a data security and data tracing tool for AI use, not another dashboard, so the promise screen states it in four plain steps and the connect screen says out loud that access is read-only and counts usage rather than content. If a person cannot say what the app is for by the time they reach the privacy slider, nothing later in the product recovers it.</p>
-    <p class="phase-note">The diagram beside the frames is where I made the branching explicit, bank sign-in with an email fallback, and what happens when somebody finishes onboarding without connecting anything. Privacy level sits last, so the first real decision a user makes is how much to share rather than whether to join. Every region is annotated with its layout behaviour, heading hug, list vertical at gap 12, spacer fill, CTA hug, so the wireframe handed the team a layout contract instead of a picture, and the component library inherited those rules directly.</p>
-    <img class="subsec-img" width="3320" height="1652" src="./tokentrustlowfid2.png" alt="Low-fidelity wireframes for the conversion loop: dashboard, trade sheet, review, converted, with the conversion flow diagram" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/tokentrustlowfid2.webp 1440w, ./tokentrustlowfid2.png 3320w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">Hold and move. I treated the dashboard as one of the core interactions of the service: a live read of where AI tokens currently stand and which way the trend is moving, visible at a glance. Balance, the trend chart, the two actions, and the connected sources all sit on one surface, because that visibility is the product. If you have to dig to find out what your contribution is worth right now, the compensation argument stays theoretical.</p>
-    <p class="phase-note">From there the app has to be able to act as a place where value actually changes hands, so I gave conversion the interaction grammar of a financial trade. A sheet over a dimmed backdrop keeps the balance visible behind the quote, the rate is locked and time-boxed, and confirming is a deliberate hold rather than a tap. I also made the team draw the failure paths before the happy path was pretty. A rate not confirmed within thirty seconds routes to a re-quote, a failed settlement routes to a screen that has to state a reason, and both land back on review instead of dumping you out.</p>
-    <img class="subsec-img" width="3320" height="1712" src="./tokentrustlowfid3.png" alt="Low-fidelity wireframes for return and control: return ledger, refund receipt, data flow, settings, with the refund flow diagram" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/tokentrustlowfid3.webp 1440w, ./tokentrustlowfid3.png 3320w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">Get back and control. This is the core of the service, and the question I was designing against here is how a person can hold any right over the data their own AI use produces. Intellectual property is the honest name for it, so the interaction has to make the claim concrete rather than rhetorical. The receipt does that work: a line-by-line breakdown of what was scored, above a who-used-it block that names the buyers and flags the passages withheld as sensitive. Ownership you cannot itemise is not ownership.</p>
-    <p class="phase-note">The rest of the journey is about visualising how the data moves and how far the user is allowed to see. Data flow splits destination from usage on a segmented control, because where it went and what it was used for are two different questions people ask separately. The flow reaches a ledger row of zero twice, once when nobody bought the data and once when the score sat below threshold, and I insisted on drawing both, since a return model that cannot show you why you were paid nothing is not auditable. A change to your sharing level applies from the next session and not retroactively, because consent you can rewrite backwards is not consent.</p>
+    <div class="shots" data-label="Journey" style="--shot-ar:3320/1712">
+      <div class="shots-track">
+      <figure class="shot">
+        <img class="shot-img" width="3320" height="1652" src="./tokentrustlowfid1.png" alt="Low-fidelity wireframes for onboarding: splash, the promise, connect sources, privacy level, with the app launch flow diagram" loading="lazy" srcset="./light/tokentrustlowfid1.webp 1440w, ./tokentrustlowfid1.png 3320w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+        <p class="phase-note">Onboard and connect. I gave these four screens one job, which is to make the purpose of the service unmistakable before anything else happens. This is a data security and data tracing tool for AI use, not another dashboard, so the promise screen states it in four plain steps and the connect screen says out loud that access is read-only and counts usage rather than content. If a person cannot say what the app is for by the time they reach the privacy slider, nothing later in the product recovers it.</p>
+        <p class="phase-note">The diagram beside the frames is where I made the branching explicit, bank sign-in with an email fallback, and what happens when somebody finishes onboarding without connecting anything. Privacy level sits last, so the first real decision a user makes is how much to share rather than whether to join. Every region is annotated with its layout behaviour, heading hug, list vertical at gap 12, spacer fill, CTA hug, so the wireframe handed the team a layout contract instead of a picture, and the component library inherited those rules directly.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="3320" height="1652" src="./tokentrustlowfid2.png" alt="Low-fidelity wireframes for the conversion loop: dashboard, trade sheet, review, converted, with the conversion flow diagram" loading="lazy" srcset="./light/tokentrustlowfid2.webp 1440w, ./tokentrustlowfid2.png 3320w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+        <p class="phase-note">Hold and move. I treated the dashboard as one of the core interactions of the service: a live read of where AI tokens currently stand and which way the trend is moving, visible at a glance. Balance, the trend chart, the two actions, and the connected sources all sit on one surface, because that visibility is the product. If you have to dig to find out what your contribution is worth right now, the compensation argument stays theoretical.</p>
+        <p class="phase-note">From there the app has to be able to act as a place where value actually changes hands, so I gave conversion the interaction grammar of a financial trade. A sheet over a dimmed backdrop keeps the balance visible behind the quote, the rate is locked and time-boxed, and confirming is a deliberate hold rather than a tap. I also made the team draw the failure paths before the happy path was pretty. A rate not confirmed within thirty seconds routes to a re-quote, a failed settlement routes to a screen that has to state a reason, and both land back on review instead of dumping you out.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="3320" height="1712" src="./tokentrustlowfid3.png" alt="Low-fidelity wireframes for return and control: return ledger, refund receipt, data flow, settings, with the refund flow diagram" loading="lazy" srcset="./light/tokentrustlowfid3.webp 1440w, ./tokentrustlowfid3.png 3320w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+        <p class="phase-note">Get back and control. This is the core of the service, and the question I was designing against here is how a person can hold any right over the data their own AI use produces. Intellectual property is the honest name for it, so the interaction has to make the claim concrete rather than rhetorical. The receipt does that work: a line-by-line breakdown of what was scored, above a who-used-it block that names the buyers and flags the passages withheld as sensitive. Ownership you cannot itemise is not ownership.</p>
+        <p class="phase-note">The rest of the journey is about visualising how the data moves and how far the user is allowed to see. Data flow splits destination from usage on a segmented control, because where it went and what it was used for are two different questions people ask separately. The flow reaches a ledger row of zero twice, once when nobody bought the data and once when the score sat below threshold, and I insisted on drawing both, since a return model that cannot show you why you were paid nothing is not auditable. A change to your sharing level applies from the next session and not retroactively, because consent you can rewrite backwards is not consent.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </div>
   </div>
 
   <div class="subsec">
     <div class="subsec-title">High-fidelity Prototype</div>
     <p class="subsec-lead">The same three journeys built out, with a component library underneath so the states we kept arguing about had one definition each.</p>
-    <img class="subsec-img" width="3702" height="1562" src="./tokentrusthighfidelityprototype1.png" alt="High-fidelity prototype: splash, the promise, connect sources, and privacy level screens beside the UI component library" loading="lazy" srcset="./light/tokentrusthighfidelityprototype1.webp 1440w, ./tokentrusthighfidelityprototype1.png 3702w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">The second screen states the promise in four steps, own, move, get back, control, because the whole proposition has to survive one screen or it will not survive a pitch. Connecting sources is read-only and says so directly, we count usage and not content, since asking people to link their AI accounts is the moment trust is either won or lost. The privacy level is a slider rather than a switch, so sharing more visibly raises the refund multiplier and consent becomes a dial the user holds.</p>
-    <img class="subsec-img" width="3702" height="1562" src="./tokentrusthighfidelityprototype2.png" alt="High-fidelity prototype: dashboard, source detail, token market, trade sheet, review, processing, and converted screens" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/tokentrusthighfidelityprototype2.webp 1440w, ./tokentrusthighfidelityprototype2.png 3702w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">This is where the interplatform idea stops being a diagram. The token market shows a live conversion rate per provider, the trade sheet quotes the multiplier and locks it, and the review step names the network fee and the settlement time before anything moves. I insisted on the locked-rate and hold-to-confirm pattern because a conversion people do not understand is a conversion they will not trust, and trust is the entire product.</p>
-    <img class="subsec-img" width="3702" height="1562" src="./tokentrusthighfidelityprototype3.png" alt="High-fidelity prototype: return ledger, refund receipt, data flow destinations and usage, settings and privacy, beside the full screen flow map" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/tokentrusthighfidelityprototype3.webp 1440w, ./tokentrusthighfidelityprototype3.png 3702w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">The refund receipt is the screen I care most about. It shows session length, the DQI score, the base refund, the privacy multiplier, and the bonus, then names which providers used the data and flags the passages withheld as sensitive. That single screen is DQI, Reward Token, and the privacy gate made visible at once. The flow map beside it is how I kept the whole thing coherent, since drawing every route between the four tabs is what surfaced the gaps and let me hand the team a structure they could critique as a system instead of screen by screen.</p>
+    <div class="shots" data-label="Screen set" style="--shot-ar:3702/1562">
+      <div class="shots-track">
+      <figure class="shot">
+        <img class="shot-img" width="3702" height="1562" src="./tokentrusthighfidelityprototype1.png" alt="High-fidelity prototype: splash, the promise, connect sources, and privacy level screens beside the UI component library" loading="lazy" srcset="./light/tokentrusthighfidelityprototype1.webp 1440w, ./tokentrusthighfidelityprototype1.png 3702w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+        <p class="phase-note">The second screen states the promise in four steps, own, move, get back, control, because the whole proposition has to survive one screen or it will not survive a pitch. Connecting sources is read-only and says so directly, we count usage and not content, since asking people to link their AI accounts is the moment trust is either won or lost. The privacy level is a slider rather than a switch, so sharing more visibly raises the refund multiplier and consent becomes a dial the user holds.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="3702" height="1562" src="./tokentrusthighfidelityprototype2.png" alt="High-fidelity prototype: dashboard, source detail, token market, trade sheet, review, processing, and converted screens" loading="lazy" srcset="./light/tokentrusthighfidelityprototype2.webp 1440w, ./tokentrusthighfidelityprototype2.png 3702w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+        <p class="phase-note">This is where the interplatform idea stops being a diagram. The token market shows a live conversion rate per provider, the trade sheet quotes the multiplier and locks it, and the review step names the network fee and the settlement time before anything moves. I insisted on the locked-rate and hold-to-confirm pattern because a conversion people do not understand is a conversion they will not trust, and trust is the entire product.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="3702" height="1562" src="./tokentrusthighfidelityprototype3.png" alt="High-fidelity prototype: return ledger, refund receipt, data flow destinations and usage, settings and privacy, beside the full screen flow map" loading="lazy" srcset="./light/tokentrusthighfidelityprototype3.webp 1440w, ./tokentrusthighfidelityprototype3.png 3702w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+        <p class="phase-note">The refund receipt is the screen I care most about. It shows session length, the DQI score, the base refund, the privacy multiplier, and the bonus, then names which providers used the data and flags the passages withheld as sensitive. That single screen is DQI, Reward Token, and the privacy gate made visible at once. The flow map beside it is how I kept the whole thing coherent, since drawing every route between the four tabs is what surfaced the gaps and let me hand the team a structure they could critique as a system instead of screen by screen.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </div>
   </div>
 
   <div class="subsec">
@@ -2136,13 +2171,14 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <script src="./lazy-video.js?v=20260818"></script>
 <script src="./phase-nav.js?v=20260919b"></script>
+<script src="./swipe-shots.js?v=20260921"></script>
 <script>
 (function(){
   var supported = 'IntersectionObserver' in window;
 
   /* ---- reveal on scroll: fade blocks in as they enter view ---- */
   var revealEls = document.querySelectorAll(
-    '.subsec-img,.subsec-video,.chapter-media-duo,.gradex-row,.build-list,' +
+    '.subsec-img,.subsec-video,.shots,.chapter-media-duo,.gradex-row,.build-list,' +
     '.phase-desc,.phase-note,.phase-num,.phase-name,.phase-sub,' +
     '.subsec-title,.subsec-lead,.gradex-cap'
   );
