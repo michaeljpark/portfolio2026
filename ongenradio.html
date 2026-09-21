@@ -2012,23 +2012,6 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
   .insta-row:has(.insta-card:hover) .insta-card:not(:hover){ opacity:.45; transition-delay:0s; }
 }
 
-/* ===== photo cursor: over a photo the pointer turns into a pill naming it.
-   The class that hides the arrow is set by script, so without it nothing
-   changes. ===== */
-.cursor-pill{ position:fixed; left:0; top:0; z-index:100; pointer-events:none; }
-.cursor-pill span{
-  display:flex; align-items:center; height:32px; padding:0 14px; border-radius:999px;
-  background:rgba(10,10,10,.72); border:1px solid rgba(255,255,255,.14);
-  -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
-  color:#fff; font-family:var(--font); font-size:13px; font-weight:500; letter-spacing:-0.01em; line-height:1; white-space:nowrap;
-  opacity:0; transform:translate(-50%,-50%) scale(.6);
-  transition:transform .22s cubic-bezier(.2,.7,.2,1), opacity .18s ease;
-}
-.cursor-pill.on span{ opacity:1; transform:translate(-50%,-50%) scale(1); }
-html.cursor-pill-on [data-cursor]{ cursor:none; }
-@media (prefers-reduced-motion:reduce){
-  .cursor-pill span{ transform:translate(-50%,-50%); transition:opacity .18s ease; }
-}
 </style>
 <script>/* Mark touch devices before first paint and drop the live blur behind the
    sticky bars: phones recompute it on every scrolled frame. */
@@ -2315,6 +2298,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <script src="./lazy-video.js?v=20260818"></script>
 <script src="./phase-nav.js?v=20260919b"></script>
+<script src="./cursor-pill.js?v=20260921"></script>
 <script>
 (function(){
   var supported = 'IntersectionObserver' in window;
@@ -2335,54 +2319,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     }, { rootMargin:'0px 0px -8% 0px', threshold:0 });
     revealEls.forEach(function(el){ rio.observe(el); });
   }
-
-  /* ---- photo cursor: over a [data-cursor] photo the pointer becomes a pill
-     carrying its label. Mouse only; touch never sees it. ---- */
-  (function(){
-    var mq;
-    try{ mq = matchMedia('(hover:hover) and (pointer:fine)'); }catch(e){ return; }
-    var root = document.documentElement;
-    var pill = document.createElement('div');
-    pill.className = 'cursor-pill';
-    pill.setAttribute('aria-hidden', 'true');
-    var label = document.createElement('span');
-    pill.appendChild(label);
-    document.body.appendChild(pill);
-
-    var cur = null, x = 0, y = 0, known = false, raf = 0;
-    function place(){ raf = 0; pill.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)'; }
-    function show(el){
-      if(el === cur) return;
-      if(el){
-        if(!cur) place();                   /* appear at the pointer, not where it last hid */
-        label.textContent = el.getAttribute('data-cursor');
-        pill.classList.add('on');
-      } else pill.classList.remove('on');
-      cur = el;
-    }
-    function under(){
-      var t = known && document.elementFromPoint(x, y);
-      return t && t.closest ? t.closest('[data-cursor]') : null;
-    }
-    function sync(){ root.classList.toggle('cursor-pill-on', mq.matches); if(!mq.matches) show(null); }
-
-    document.addEventListener('pointermove', function(e){
-      if(e.pointerType === 'touch' || !mq.matches){ show(null); return; }
-      x = e.clientX; y = e.clientY; known = true;
-      if(!raf) raf = requestAnimationFrame(place);
-      show(e.target.closest ? e.target.closest('[data-cursor]') : null);
-    }, { passive:true });
-    /* the page can slide a photo out from under a still pointer */
-    var sraf = 0;
-    window.addEventListener('scroll', function(){
-      if(!known || sraf) return;
-      sraf = requestAnimationFrame(function(){ sraf = 0; show(under()); });
-    }, { passive:true });
-    document.addEventListener('mouseout', function(e){ if(!e.relatedTarget){ known = false; show(null); } });
-    window.addEventListener('blur', function(){ show(null); });
-    if(mq.addEventListener) mq.addEventListener('change', sync); else if(mq.addListener) mq.addListener(sync);
-    sync();
-  })();
 
   /* Posters, clip fetching, playback and buffer release are all handled
      by the media governor in lazy-video.js. */
