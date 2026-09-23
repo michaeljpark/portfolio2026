@@ -1683,6 +1683,9 @@
   .subsec-video video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
   /* full-width image at natural aspect ratio (e.g. logo row) */
   .subsec-img{ display:block; width:100%; height:auto; margin-top:clamp(20px,2.4vw,32px); }
+  /* a single photo cut to the shape the four-up gallery row makes, centred on
+     the entrance; on a phone that band would be a sliver, so it opens to 16:9 */
+  .strip-img{ aspect-ratio:1333/344; object-fit:cover; object-position:50% 60%; }
 
   /* labelled build/stack breakdown (label | role) */
   .build-list{ list-style:none; padding:0; margin:clamp(20px,2.4vw,32px) 0 0; }
@@ -1718,6 +1721,7 @@
     .hero-tagline{ font-size:14px; margin-top:12px; }
     .phase-flat .phase-name{ font-size:clamp(19px,6vw,26px); }
     .subsec-title{ font-size:clamp(17px,5vw,22px); }
+    .strip-img{ aspect-ratio:16/9; }
     .subsec{ margin-top:clamp(36px,9vw,56px); }
 
     /* body copy: smaller, looser tracking, left-aligned
@@ -2035,6 +2039,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
   <div class="phase-name">Overview</div>
   <div class="phase-sub">A mall you can only reach by car, asked to become a place</div>
+  <img class="subsec-img strip-img" width="1600" height="1067" src="./sherwaygardens.png" alt="The CF Sherway Gardens entrance at dusk: the canopy over the valet drive, the mall sign, and cars at the door" loading="lazy" srcset="./light/sherwaygardens.webp 1200w, ./sherwaygardens.png 1600w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-desc">CF Sherway Gardens sits in Etobicoke at Highway 427 and the Gardiner, ringed on all sides by parking lots and arterial roads. The access that makes it work by car is the same thing that makes it unwelcoming on foot, and that contradiction is the project.</p>
   <p class="phase-note">Cadillac Fairview is building three phases around the mall, so the user base shifts from commuter to resident over 7 to 15 years. My team and I worked on what the building has to become before they arrive. Research and prototyping were my part of it.</p>
 

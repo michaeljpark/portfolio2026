@@ -1934,6 +1934,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
    Gated on .reveal-on, set by a <head> script before first paint, so if
    scripting is off nothing is ever hidden. ===== */
 .reveal-on .subsec-img,
+.reveal-on .shots,
 .reveal-on .chapter-media-duo,
 .reveal-on .chapter-media-quad,
 .reveal-on .gradex-row,
@@ -1954,7 +1955,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .reveal-on .subsec-video{ opacity:0; transition:opacity .6s ease; }
 .reveal-on .subsec-video.reveal-in{ opacity:1; }
 @media(prefers-reduced-motion:reduce){
-  .reveal-on .subsec-img,.reveal-on .chapter-media-duo,.reveal-on .chapter-media-quad,.reveal-on .gradex-row,
+  .reveal-on .subsec-img,.reveal-on .shots,.reveal-on .chapter-media-duo,.reveal-on .chapter-media-quad,.reveal-on .gradex-row,
   .reveal-on .build-list,.reveal-on .phase-desc,.reveal-on .phase-note,
   .reveal-on .phase-num,.reveal-on .phase-name,.reveal-on .phase-sub,
   .reveal-on .subsec-title,.reveal-on .subsec-lead,.reveal-on .gradex-cap{
@@ -2057,26 +2058,62 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="subsec">
     <div class="subsec-title">Low-fidelity Prototype</div>
     <p class="subsec-lead">Three boards, each wireframed beside the flow that drives it, so the structure could be argued about before any visual style existed.</p>
-    <img class="subsec-img" width="3320" height="1612" src="./Finboard%20lowfid1.png" alt="Low-fidelity wireframes: Home Screen widgets, Dynamic Island, and the in-app dashboard, with the card-charged flow diagram" loading="lazy" srcset="./light/Finboard%20lowfid1.webp 1440w, ./Finboard%20lowfid1.png 3320w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">Home Screen, Dynamic Island, in-app dashboard. I projected the app onto the surfaces iOS already provides, building the wireframes out of native components rather than inventing a shell, so the first pass could be judged as an iOS product instead of as a picture of one. The flow beside it is a prediction of what the person does next. A card is charged, the island carries a Live Activity if push is on and the widget simply refreshes if it is not, and the daily limit decides whether the AI Accountant says anything at all. Whether they tap through is the branch that mattered most to me, because staying glanceable has to count as a successful outcome rather than a drop-off.</p>
-    <img class="subsec-img" width="3320" height="1612" src="./Finboard%20lowfid2.png" alt="Low-fidelity wireframes: widget layout, interactive widget controls, and in-app settings, with the long-press flow diagram" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/Finboard%20lowfid2.webp 1440w, ./Finboard%20lowfid2.png 3320w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">Widget layout and widget interaction. This board is about what a person can do to the widget without leaving the Home Screen. Long-pressing the Controls widget opens the daily-limit slider in place, the new limit saves with no app launch, and the Today bar recalculates on the spot. I drew the over-limit case as its own branch, since setting a limit you have already passed is exactly the moment the widget has to say so rather than accept it quietly. Only finer control hands you off to Settings, which keeps the app as the exception and not the default.</p>
-    <img class="subsec-img" width="3320" height="1662" src="./Finboard%20lowfid3.png" alt="Low-fidelity wireframes: AI forecast, Bills, and Connection screens, with the weekly forecast flow diagram" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/Finboard%20lowfid3.webp 1440w, ./Finboard%20lowfid3.png 3320w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">AI forecast, Bills, and Connection. These are the in-app screens, and the flow shows how they feed back into the widget rather than replacing it. The weekly forecast runs, two swaps are suggested if you are projected over the goal, bills are checked, a reminder fires two days ahead, and autopay decides whether the charge happens for you or gets handed to Cards. Every path ends at card balances updating, which is the number the widget reads. That loop is the whole relationship: the app does the work and the widget is where you see the result.</p>
+    <div class="shots" data-label="Board" style="--shot-ar:3320/1662">
+      <div class="shots-track">
+      <figure class="shot">
+        <img class="shot-img" width="3320" height="1612" src="./Finboard%20lowfid1.png" alt="Low-fidelity wireframes: Home Screen widgets, Dynamic Island, and the in-app dashboard, with the card-charged flow diagram" loading="lazy" srcset="./light/Finboard%20lowfid1.webp 1440w, ./Finboard%20lowfid1.png 3320w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+        <p class="phase-note">Home Screen, Dynamic Island, in-app dashboard. I projected the app onto the surfaces iOS already provides, building the wireframes out of native components rather than inventing a shell, so the first pass could be judged as an iOS product instead of as a picture of one. The flow beside it is a prediction of what the person does next. A card is charged, the island carries a Live Activity if push is on and the widget simply refreshes if it is not, and the daily limit decides whether the AI Accountant says anything at all. Whether they tap through is the branch that mattered most to me, because staying glanceable has to count as a successful outcome rather than a drop-off.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="3320" height="1612" src="./Finboard%20lowfid2.png" alt="Low-fidelity wireframes: widget layout, interactive widget controls, and in-app settings, with the long-press flow diagram" loading="lazy" srcset="./light/Finboard%20lowfid2.webp 1440w, ./Finboard%20lowfid2.png 3320w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+        <p class="phase-note">Widget layout and widget interaction. This board is about what a person can do to the widget without leaving the Home Screen. Long-pressing the Controls widget opens the daily-limit slider in place, the new limit saves with no app launch, and the Today bar recalculates on the spot. I drew the over-limit case as its own branch, since setting a limit you have already passed is exactly the moment the widget has to say so rather than accept it quietly. Only finer control hands you off to Settings, which keeps the app as the exception and not the default.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="3320" height="1662" src="./Finboard%20lowfid3.png" alt="Low-fidelity wireframes: AI forecast, Bills, and Connection screens, with the weekly forecast flow diagram" loading="lazy" srcset="./light/Finboard%20lowfid3.webp 1440w, ./Finboard%20lowfid3.png 3320w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+        <p class="phase-note">AI forecast, Bills, and Connection. These are the in-app screens, and the flow shows how they feed back into the widget rather than replacing it. The weekly forecast runs, two swaps are suggested if you are projected over the goal, bills are checked, a reminder fires two days ahead, and autopay decides whether the charge happens for you or gets handed to Cards. Every path ends at card balances updating, which is the number the widget reads. That loop is the whole relationship: the app does the work and the widget is where you see the result.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </div>
   </div>
 
   <div class="subsec">
     <div class="subsec-title">High-fidelity Prototype</div>
     <p class="subsec-lead">Four boards, moving from the component set to the surfaces, then to the widget itself, and finally to the setup that has to happen before any of it works.</p>
-    <img class="subsec-img" width="2734" height="1154" src="./finboard%20hifid1.png" alt="High-fidelity: Home Screen, widget stack, Live Activity and Weekly Activity on the Dynamic Island, beside the icon component set" loading="lazy" srcset="./light/finboard%20hifid1.webp 1440w, ./finboard%20hifid1.png 2734w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">This pass is where the components got built. I drew the icon set, the type, and the card shapes as a library first, then used them to visualize the interactions the low-fidelity flows had already confirmed. Home Screen, the widget stack, the Live Activity for a single charge, and the weekly ring on the island are the same four moments from the earlier diagram, now at the fidelity a person would actually see. Working from a fixed component set is what kept the four surfaces consistent without redrawing anything, so I could judge them side by side instead of one at a time.</p>
-    <img class="subsec-img" width="2734" height="1154" src="./finboard%20hifid2.png" alt="High-fidelity in-app screens: Today, AI forecast, Bills, Connection, and Widget setting" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/finboard%20hifid2.webp 1440w, ./finboard%20hifid2.png 2734w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">In-app is where I made the interaction concrete, and the work was less about layout than about deciding which elements and which words earned a place on each screen. Doing that changed the feature priority. Because the widget is the product, cutting complexity out of the app came first rather than last, and what survived is only what the widget cannot do: four weeks of forecast history, recurring bills and autopay, linked cards and balances, and the settings that decide what the board shows you. Every screen here exists to cover a gap in the glance, not to compete with it.</p>
-    <img class="subsec-img" width="2734" height="1154" src="./finboard%20hifid3.png" alt="High-fidelity widget, widget settings, and widget interaction, with the consolidated flow map" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/finboard%20hifid3.webp 1440w, ./finboard%20hifid3.png 2734w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">This is the widget interaction, and it is the board that mattered most. I worked it from two directions at once: how much say the person gets over which financial information reaches them, and how far the widget control can be simplified before it stops being useful. Controlling the widget from inside the user's own flow is what puts them in charge of the feed, so the daily limit, the notifications, and the dashboard toggles are all reachable without the app becoming the destination. The map on the right folds the three earlier journeys into one, and every branch resolves to a widget state refreshed within fifteen to sixty minutes, with opening the app kept optional.</p>
-    <img class="subsec-img" width="2734" height="1154" src="./finboard%20hifid4.png" alt="High-fidelity onboarding: two in-app guide screens, the iOS widget gallery, size and feature selection, and the edit state" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/finboard%20hifid4.webp 1440w, ./finboard%20hifid4.png 2734w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">None of the above happens on its own. Right after the download, a person has to get the widget onto their Home Screen and choose what it is allowed to show, and iOS gives no help with that. So I treated the initial setup as an onboarding phase in its own right rather than as a settings screen. Two guide cards walk through the press and hold, the plus button, finding finboard in the widget list, and picking a size, then hand off to the system gallery and come back with the widget live.</p>
-    <p class="phase-note">I wrote the guide to be skippable and repeatable, with <em>I have added it</em> next to <em>Show me again</em>, because the one thing I could not do was block the product behind a setup step. Ten seconds, stated up front, and the promise that you will not need to open the app again after it. For a widget-first product this phase is not an accessory to the design, it is where the design either survives first contact with a real user or does not.</p>
+    <div class="shots" data-label="Board" style="--shot-ar:2734/1154">
+      <div class="shots-track">
+      <figure class="shot">
+        <img class="shot-img" width="2734" height="1154" src="./finboard%20hifid1.png" alt="High-fidelity: Home Screen, widget stack, Live Activity and Weekly Activity on the Dynamic Island, beside the icon component set" loading="lazy" srcset="./light/finboard%20hifid1.webp 1440w, ./finboard%20hifid1.png 2734w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+        <p class="phase-note">This pass is where the components got built. I drew the icon set, the type, and the card shapes as a library first, then used them to visualize the interactions the low-fidelity flows had already confirmed. Home Screen, the widget stack, the Live Activity for a single charge, and the weekly ring on the island are the same four moments from the earlier diagram, now at the fidelity a person would actually see. Working from a fixed component set is what kept the four surfaces consistent without redrawing anything, so I could judge them side by side instead of one at a time.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="2734" height="1154" src="./finboard%20hifid2.png" alt="High-fidelity in-app screens: Today, AI forecast, Bills, Connection, and Widget setting" loading="lazy" srcset="./light/finboard%20hifid2.webp 1440w, ./finboard%20hifid2.png 2734w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+        <p class="phase-note">In-app is where I made the interaction concrete, and the work was less about layout than about deciding which elements and which words earned a place on each screen. Doing that changed the feature priority. Because the widget is the product, cutting complexity out of the app came first rather than last, and what survived is only what the widget cannot do: four weeks of forecast history, recurring bills and autopay, linked cards and balances, and the settings that decide what the board shows you. Every screen here exists to cover a gap in the glance, not to compete with it.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="2734" height="1154" src="./finboard%20hifid3.png" alt="High-fidelity widget, widget settings, and widget interaction, with the consolidated flow map" loading="lazy" srcset="./light/finboard%20hifid3.webp 1440w, ./finboard%20hifid3.png 2734w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+        <p class="phase-note">This is the widget interaction, and it is the board that mattered most. I worked it from two directions at once: how much say the person gets over which financial information reaches them, and how far the widget control can be simplified before it stops being useful. Controlling the widget from inside the user's own flow is what puts them in charge of the feed, so the daily limit, the notifications, and the dashboard toggles are all reachable without the app becoming the destination. The map on the right folds the three earlier journeys into one, and every branch resolves to a widget state refreshed within fifteen to sixty minutes, with opening the app kept optional.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="2734" height="1154" src="./finboard%20hifid4.png" alt="High-fidelity onboarding: two in-app guide screens, the iOS widget gallery, size and feature selection, and the edit state" loading="lazy" srcset="./light/finboard%20hifid4.webp 1440w, ./finboard%20hifid4.png 2734w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+        <p class="phase-note">None of the above happens on its own. Right after the download, a person has to get the widget onto their Home Screen and choose what it is allowed to show, and iOS gives no help with that. So I treated the initial setup as an onboarding phase in its own right rather than as a settings screen. Two guide cards walk through the press and hold, the plus button, finding finboard in the widget list, and picking a size, then hand off to the system gallery and come back with the widget live.</p>
+        <p class="phase-note">I wrote the guide to be skippable and repeatable, with <em>I have added it</em> next to <em>Show me again</em>, because the one thing I could not do was block the product behind a setup step. Ten seconds, stated up front, and the promise that you will not need to open the app again after it. For a widget-first product this phase is not an accessory to the design, it is where the design either survives first contact with a real user or does not.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </div>
   </div>
 
   <div class="subsec">
@@ -2140,13 +2177,14 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <script src="./lazy-video.js?v=20260818"></script>
 <script src="./phase-nav.js?v=20260919b"></script>
+<script src="./swipe-shots.js?v=20260921"></script>
 <script>
 (function(){
   var supported = 'IntersectionObserver' in window;
 
   /* ---- reveal on scroll: fade blocks in as they enter view ---- */
   var revealEls = document.querySelectorAll(
-    '.subsec-img,.subsec-video,.chapter-media-duo,.chapter-media-quad,.gradex-row,.build-list,' +
+    '.subsec-img,.subsec-video,.shots,.chapter-media-duo,.chapter-media-quad,.gradex-row,.build-list,' +
     '.phase-desc,.phase-note,.phase-num,.phase-name,.phase-sub,' +
     '.subsec-title,.subsec-lead,.gradex-cap,.fine-print'
   );
