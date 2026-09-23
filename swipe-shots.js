@@ -31,14 +31,19 @@
     '.shots-track::-webkit-scrollbar{display:none;}' +
     '.shot{flex:0 0 100%;min-width:0;margin:0;scroll-snap-align:start;}' +
     '.shot-img{display:block;width:100%;height:auto;aspect-ratio:var(--shot-ar,auto);object-fit:contain;object-position:top center;}' +
-    '.shot figcaption > :first-child{margin-top:clamp(16px,1.8vw,24px);}' +
+    /* the gap under the screens is where the controls sit, so the caption starts below it */
+    '.shot figcaption > :first-child{margin-top:clamp(58px,5.4vw,74px);}' +
     /* the slides off to the side never enter the viewport, so the page's
        scroll-reveal must not be the thing that decides they are visible */
     '.reveal-on .shots .phase-note,.reveal-on .shots .subsec-lead{opacity:1;transform:none;}' +
-    '.shots-ui{display:flex;align-items:center;justify-content:center;gap:clamp(10px,1.2vw,16px);margin-bottom:clamp(12px,1.4vw,18px);}' +
+    /* the controls sit in the band right under the screens: always in view with
+       what they move, never parked under the sticky bar, never over the picture */
+    '.shots-ui{position:absolute;z-index:2;left:50%;top:var(--shots-ui-top,0px);transform:translate(-50%,-50%);' +
+      'display:flex;align-items:center;gap:clamp(6px,0.8vw,10px);padding:0 8px;border-radius:999px;' +
+      'background:var(--bg);border:1px solid var(--line);}' +
     '.shots-dots{display:flex;align-items:center;}' +
     /* the dot people see is 6px; the target a thumb has to hit is 18x30 */
-    '.shots-dots button{-webkit-appearance:none;appearance:none;border:0;margin:0;padding:12px 6px;background:none;' +
+    '.shots-dots button{-webkit-appearance:none;appearance:none;border:0;margin:0;padding:11px 6px;background:none;' +
       'display:block;cursor:pointer;line-height:0;-webkit-tap-highlight-color:transparent;}' +
     '.shots-dots button::before{content:"";display:block;width:6px;height:6px;border-radius:999px;background:var(--line);' +
       'transition:width .4s ' + EASE + ',background-color .3s ease;}' +
@@ -87,9 +92,16 @@
       b.setAttribute('aria-controls', s.id);
       return b;
     });
-    /* above the screens, not under the caption: the set is tall enough that
-       controls at the bottom would be off the screen while you look at it */
-    root.insertBefore(ui, track);
+    root.appendChild(ui);
+
+    /* park the chip near the foot of the picture, whatever the picture's ratio */
+    function placeUi() {
+      var img = slides[0].querySelector('img');
+      if (!img) return;
+      var r = img.getBoundingClientRect(), rr = root.getBoundingClientRect();
+      if (!r.height) return;
+      root.style.setProperty('--shots-ui-top', Math.round(r.bottom - rr.top + 27) + 'px');
+    }
 
     var index = -1;
     function mark(i) {
@@ -131,7 +143,9 @@
       dots[i].focus();
     });
 
-    window.addEventListener('resize', function () { mark(current()); });
+    window.addEventListener('resize', function () { placeUi(); mark(current()); });
+    window.addEventListener('load', placeUi);
+    placeUi();
     mark(current());
   });
 })();
