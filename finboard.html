@@ -1634,6 +1634,8 @@
   .phase-flat .phase-num{ margin-bottom:10px; }
   .phase-flat .phase-name{ margin-bottom:8px; }
   .phase-desc{ margin-top:clamp(20px,2.2vw,30px); font-size:clamp(16px,1.5vw,22px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
+  /* a one-line statement: bigger than the running text, still under the chapter name */
+  .phase-desc.statement{ font-size:clamp(20px,2.2vw,32px); letter-spacing:-0.03em; line-height:1.25; }
   .phase-note{ margin-top:clamp(16px,1.8vw,24px); font-size:clamp(14px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.65; max-width:none; text-align:justify; }
   .phase-note em{ font-style:normal; color:var(--ink); }
   /* two photos + showcase video, equal height, natural widths (near-zero crop) */
@@ -1721,6 +1723,7 @@
     /* body copy: smaller, looser tracking, left-aligned
        (justify leaves ugly word-gaps in a narrow column) */
     .phase-desc{ font-size:15px; letter-spacing:-0.015em; line-height:1.45; margin-top:16px; }
+    .phase-desc.statement{ font-size:19px; line-height:1.3; }
     .subsec-lead{ font-size:15px; letter-spacing:-0.015em; line-height:1.45; }
     .phase-note{ font-size:13px; letter-spacing:-0.005em; line-height:1.55; text-align:left; }
     .build-list li, .build-list.features li{ grid-template-columns:1fr; gap:4px; padding:14px 0; }
@@ -2035,8 +2038,8 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="subsec-video">
     <video class="snap-vid" data-src="./finboardProblem%20Definition.mp4?v=20260923" data-poster="./posters/finboardproblemdefinition.jpg?v=20260923" loop muted playsinline preload="none"></video>
   </div>
-  <p class="phase-desc">There is no simple way to understand your spending quickly. Banking apps collect the data but keep it behind a login, so it never becomes self-understanding.</p>
-  <p class="phase-note">Canadian bank apps already ship personal-finance tools, but they sit deep inside the app and go unused, and no major bank surfaces spending across institutions. I framed the problem around access rather than features: how do you put a person's own financial picture in front of them, at the moment and place they would actually glance at it?</p>
+  <p class="phase-desc statement">Your Receipt is Not Visible.</p>
+  <p class="phase-note">Canadian bank apps already ship personal-finance tools, but they sit deep inside the app and go unused, and no major bank surfaces spending across institutions. I framed the problem around access rather than features: how do you put a person's own financial picture in front of them, at the moment and place they would actually glance at it? There is no simple way to understand your spending quickly. Banking apps collect the data but keep it behind a login, so it never becomes self-understanding.</p>
 </section>
 
 <section class="phase-flat" id="discovery">
