@@ -12,6 +12,8 @@
 <style>
   :root{
     --bg:#ffffff; --ink:#0a0a0a; --muted:#6a6a6a; --line:#e6e6e6;
+    /* the label that rides under the pointer: black plate, white text */
+    --pill-bg:#0a0a0a; --pill-ink:#ffffff; --pill-border:rgba(255,255,255,.14);
     --max:1440px; --pad:clamp(12px,2vw,28px);
     --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
@@ -1636,6 +1638,19 @@
   .phase-desc{ margin-top:clamp(20px,2.2vw,30px); font-size:clamp(16px,1.5vw,22px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
   /* a one-line statement: bigger than the running text, still under the chapter name */
   .phase-desc.statement{ font-size:clamp(20px,2.2vw,32px); letter-spacing:-0.03em; line-height:1.25; }
+  /* three photos carrying the framing, one line of it each */
+  .feature-trio{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(12px,1.4vw,20px); margin-top:clamp(20px,2.4vw,32px); }
+  .feature-trio figure{ margin:0; min-width:0; }
+  .feature-trio img{ display:block; width:100%; height:auto; }
+  .feature-trio figcaption{ margin-top:14px; }
+  .feature-trio .v{ display:block; font-size:clamp(13px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.5; }
+  /* hover focus: whatever the pointer is on stays, the rest of the row steps back */
+  @media (hover:hover) and (pointer:fine){
+    .feature-trio figure, .chapter-media-quad .cell{ transition:opacity .35s ease .12s; }
+    .feature-trio figure:hover, .chapter-media-quad .cell:hover{ transition-delay:0s; }
+    .feature-trio:has(figure:hover) figure:not(:hover),
+    .chapter-media-quad:has(.cell:hover) .cell:not(:hover){ opacity:.35; transition-delay:0s; }
+  }
   .phase-note{ margin-top:clamp(16px,1.8vw,24px); font-size:clamp(14px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.65; max-width:none; text-align:justify; }
   .phase-note em{ font-style:normal; color:var(--ink); }
   /* two photos + showcase video, equal height, natural widths (near-zero crop) */
@@ -1724,6 +1739,8 @@
        (justify leaves ugly word-gaps in a narrow column) */
     .phase-desc{ font-size:15px; letter-spacing:-0.015em; line-height:1.45; margin-top:16px; }
     .phase-desc.statement{ font-size:19px; line-height:1.3; }
+    .feature-trio{ grid-template-columns:1fr; gap:28px; }
+    .feature-trio .v{ font-size:13px; }
     .subsec-lead{ font-size:15px; letter-spacing:-0.015em; line-height:1.45; }
     .phase-note{ font-size:13px; letter-spacing:-0.005em; line-height:1.55; text-align:left; }
     .build-list li, .build-list.features li{ grid-template-columns:1fr; gap:4px; padding:14px 0; }
@@ -1937,6 +1954,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
    Gated on .reveal-on, set by a <head> script before first paint, so if
    scripting is off nothing is ever hidden. ===== */
 .reveal-on .subsec-img,
+.reveal-on .feature-trio,
 .reveal-on .shots,
 .reveal-on .chapter-media-duo,
 .reveal-on .chapter-media-quad,
@@ -1958,7 +1976,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .reveal-on .subsec-video{ opacity:0; transition:opacity .6s ease; }
 .reveal-on .subsec-video.reveal-in{ opacity:1; }
 @media(prefers-reduced-motion:reduce){
-  .reveal-on .subsec-img,.reveal-on .shots,.reveal-on .chapter-media-duo,.reveal-on .chapter-media-quad,.reveal-on .gradex-row,
+  .reveal-on .subsec-img,.reveal-on .shots,.reveal-on .feature-trio,.reveal-on .chapter-media-duo,.reveal-on .chapter-media-quad,.reveal-on .gradex-row,
   .reveal-on .build-list,.reveal-on .phase-desc,.reveal-on .phase-note,
   .reveal-on .phase-num,.reveal-on .phase-name,.reveal-on .phase-sub,
   .reveal-on .subsec-title,.reveal-on .subsec-lead,.reveal-on .gradex-cap{
@@ -2019,10 +2037,10 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <section class="phase-flat" id="overview">
   <div class="chapter-media-quad">
-    <div class="cell q1"><img src="./finboardprev1.png" alt="" loading="lazy" srcset="./light/finboardprev1.webp 1440w, ./finboardprev1.png 3000w" sizes="(max-width: 640px) 95vw, 14vw" /></div>
-    <div class="cell q2"><img src="./finboardprev2.png" alt="" loading="lazy" srcset="./light/finboardprev2.webp 1440w, ./finboardprev2.png 1800w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
-    <div class="cell q3"><img src="./finboardprev3.png" alt="" loading="lazy" srcset="./light/finboardprev3.webp 1440w, ./finboardprev3.png 1449w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
-    <div class="cell q4"><img src="./finboardprev4.png" alt="" loading="lazy" srcset="./light/finboardprev4.webp 1440w, ./finboardprev4.png 1448w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
+    <div class="cell q1" data-cursor="Dashboard"><img src="./finboardprev1.png" alt="The finboard Today screen on a phone, close up" loading="lazy" srcset="./light/finboardprev1.webp 1440w, ./finboardprev1.png 3000w" sizes="(max-width: 640px) 95vw, 14vw" /></div>
+    <div class="cell q2" data-cursor="At a glance"><img src="./finboardprev2.png" alt="A phone being lifted out of a pocket, the widget stack on screen" loading="lazy" srcset="./light/finboardprev2.webp 1440w, ./finboardprev2.png 1800w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
+    <div class="cell q3" data-cursor="Guide"><img src="./finboardprev3.png" alt="The onboarding screen explaining how to put finboard on the home screen" loading="lazy" srcset="./light/finboardprev3.webp 1440w, ./finboardprev3.png 1449w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
+    <div class="cell q4" data-cursor="Add widget"><img src="./finboardprev4.png" alt="iOS's Add Widget sheet with the finboard widget in it" loading="lazy" srcset="./light/finboardprev4.webp 1440w, ./finboardprev4.png 1448w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
   </div>
   <div class="phase-name">Overview</div>
   <div class="phase-sub">A widget-first banking dashboard for financial cognition</div>
@@ -2047,14 +2065,43 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="subsec-video">
     <video class="snap-vid" data-src="./finboardDiscovery.mp4?v=20260923" data-poster="./posters/finboarddiscovery.jpg?v=20260923" loop muted playsinline preload="none"></video>
   </div>
-  <img class="subsec-img" width="1920" height="810" src="./finboardresearch1.png" alt="Framing: an iOS-native widget dashboard hypothesis for early-career adults" loading="lazy" srcset="./light/finboardresearch1.webp 1440w, ./finboardresearch1.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
+  <div class="feature-trio">
+    <figure>
+      <img data-cursor="Target" width="1672" height="940" src="./finboardstudent.png" alt="A student sitting with a backpack, reading their phone" loading="lazy" srcset="./light/finboardstudent.webp 1200w, ./finboardstudent.png 1672w" sizes="(max-width: 640px) 95vw, 32vw" />
+      <figcaption><span class="v">iOS-native widget dashboard for students and early-career adults</span></figcaption>
+    </figure>
+    <figure>
+      <img data-cursor="Environment" width="1672" height="941" src="./finboardbank.png" alt="An ATM surrounded by tax slips, statements and receipts taped to the glass" loading="lazy" srcset="./light/finboardbank.webp 1200w, ./finboardbank.png 1672w" sizes="(max-width: 640px) 95vw, 32vw" />
+      <figcaption><span class="v">Canadian bank apps already contain personal-financial-management tools, but those tools sit behind a login and are not adopted.</span></figcaption>
+    </figure>
+    <figure>
+      <img data-cursor="Behavior" width="1672" height="941" src="./finboardwidget.png" alt="A person at a counter, looking down at the surface in front of them" loading="lazy" srcset="./light/finboardwidget.webp 1200w, ./finboardwidget.png 1672w" sizes="(max-width: 640px) 95vw, 32vw" />
+      <figcaption><span class="v">A widgetized app experience from the banking app improves a person’s own spending habits.</span></figcaption>
+    </figure>
+  </div>
   <p class="phase-note">I opened the research by fixing the target and the bet. finboard would be an iOS-native widget dashboard for students and early-career adults in the Canadian banking context, and the working hypothesis was that surfacing bank data as a widget, outside the login, would improve how people see their own spending.</p>
-  <img class="subsec-img" width="2840" height="1104" src="./finboardresearch2.png" alt="Pain board synthesizing market, in-app behavior, and Canadian regulation" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/finboardresearch2.webp 1440w, ./finboardresearch2.png 2840w" sizes="(max-width: 1500px) 95vw, 1425px" />
-  <p class="phase-note">From there I mapped the pain across three fronts at once, the market, in-app behavior, and Canada's banking rules. It showed me that the weak link is not the tools themselves but their adoption, and that the incoming Consumer-Driven Banking Act shapes what a cross-institution product is allowed to do.</p>
-  <img class="subsec-img" width="2840" height="1065" src="./finboardresearch3.png" alt="Illustrative data and user-behavior research" loading="lazy" srcset="./light/finboardresearch3.webp 1440w, ./finboardresearch3.png 2840w" sizes="(max-width: 1500px) 95vw, 1425px" />
-  <p class="phase-note">I grounded the direction in data and existing behavioral research, reading what actually lifts app satisfaction, who adopts new in-app surfaces first, and how glanceable feedback changes spending. One pattern held throughout: information beats features, and the users who struggle most gain the most from low-effort, always-visible cues.</p>
-  <img class="subsec-img" width="2840" height="1234" src="./finboardresearch4.png" alt="AS-IS versus TO-BE user flow diagram" loading="lazy" srcset="./light/finboardresearch4.webp 1440w, ./finboardresearch4.png 2840w" sizes="(max-width: 1500px) 95vw, 1425px" />
-  <p class="phase-note">Then I redrew the flow. Today, checking your spending means logging into each bank, digging past a balance-only view, and doing the math yourself, and most people drop off along the way. finboard intercepts that drop-off point and replaces the whole routine with a glanceable widget backed by a single consent-based connection.</p>
+  <div class="shots" data-label="Board" style="--shot-ar:2840/1234">
+    <div class="shots-track">
+      <figure class="shot">
+        <img class="shot-img" width="2840" height="1104" src="./finboardresearch2.png" alt="Pain board synthesizing market, in-app behavior, and Canadian regulation" loading="lazy" srcset="./light/finboardresearch2.webp 1440w, ./finboardresearch2.png 2840w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+      <p class="phase-note">From there I mapped the pain across three fronts at once, the market, in-app behavior, and Canada's banking rules. It showed me that the weak link is not the tools themselves but their adoption, and that the incoming Consumer-Driven Banking Act shapes what a cross-institution product is allowed to do.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="2840" height="1065" src="./finboardresearch3.png" alt="Illustrative data and user-behavior research" loading="lazy" srcset="./light/finboardresearch3.webp 1440w, ./finboardresearch3.png 2840w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+      <p class="phase-note">I grounded the direction in data and existing behavioral research, reading what actually lifts app satisfaction, who adopts new in-app surfaces first, and how glanceable feedback changes spending. One pattern held throughout: information beats features, and the users who struggle most gain the most from low-effort, always-visible cues.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="2840" height="1234" src="./finboardresearch4.png" alt="AS-IS versus TO-BE user flow diagram" loading="lazy" srcset="./light/finboardresearch4.webp 1440w, ./finboardresearch4.png 2840w" sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+      <p class="phase-note">Then I redrew the flow. Today, checking your spending means logging into each bank, digging past a balance-only view, and doing the math yourself, and most people drop off along the way. finboard intercepts that drop-off point and replaces the whole routine with a glanceable widget backed by a single consent-based connection.</p>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
 </section>
 
 <section class="phase-flat" id="prototyping">
@@ -2184,13 +2231,14 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <script src="./lazy-video.js?v=20260818"></script>
 <script src="./phase-nav.js?v=20260919b"></script>
 <script src="./swipe-shots.js?v=20260921"></script>
+<script src="./cursor-pill.js?v=20260921"></script>
 <script>
 (function(){
   var supported = 'IntersectionObserver' in window;
 
   /* ---- reveal on scroll: fade blocks in as they enter view ---- */
   var revealEls = document.querySelectorAll(
-    '.subsec-img,.subsec-video,.shots,.chapter-media-duo,.chapter-media-quad,.gradex-row,.build-list,' +
+    '.subsec-img,.subsec-video,.shots,.feature-trio,.chapter-media-duo,.chapter-media-quad,.gradex-row,.build-list,' +
     '.phase-desc,.phase-note,.phase-num,.phase-name,.phase-sub,' +
     '.subsec-title,.subsec-lead,.gradex-cap,.fine-print'
   );
