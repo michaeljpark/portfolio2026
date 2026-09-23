@@ -52,10 +52,73 @@
       'transition:transform .2s ' + EASE + ';}' +
     '.shots-nav.prev:not(:disabled):active svg{transform:translateX(-2px);}' +
     '.shots-nav.next:not(:disabled):active svg{transform:translateX(2px);}' +
-    /* chevrons are for a pointer; a finger has the swipe */
-    '@media (hover:hover) and (pointer:fine){.shots-nav{display:grid;}}' +
+    /* the picture is split in thirds: the outer two step back and forward, the
+       middle one is left alone, and over a live third the arrow becomes a round
+       brand-coloured button pointing the way it will go */
+    '.shots-edge{position:absolute;top:0;height:var(--shots-img-h,0px);width:33.333%;' +
+      'display:none;border:0;padding:0;margin:0;background:none;z-index:2;-webkit-tap-highlight-color:transparent;}' +
+    '.shots-edge.prev{left:0;}' +
+    '.shots-edge.next{right:0;}' +
+    '.shots-edge:not(:disabled){cursor:none;}' +
+    '.shots-edge:disabled{cursor:default;}' +
+    '.shots-edge:focus-visible{outline:1px solid var(--ink);outline-offset:-3px;}' +
+    '.shots-cursor{position:fixed;left:0;top:0;z-index:100;pointer-events:none;}' +
+    '.shots-cursor span{display:grid;place-items:center;width:46px;height:46px;border-radius:999px;' +
+      'background:var(--brand,var(--ink));color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.14);' +
+      'opacity:0;transform:translate(-50%,-50%) scale(.6);' +
+      'transition:transform .22s ' + EASE + ',opacity .18s ease;}' +
+    '.shots-cursor.on span{opacity:1;transform:translate(-50%,-50%) scale(1);}' +
+    '.shots-cursor svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;' +
+      'transition:transform .22s ' + EASE + ';}' +
+    '.shots-cursor.back svg{transform:scaleX(-1);}' +
+    /* chevrons and edge zones are for a pointer; a finger has the swipe */
+    '@media (hover:hover) and (pointer:fine){.shots-nav{display:grid;}.shots-edge{display:block;}}' +
+    '@media (prefers-reduced-motion: reduce){.shots-cursor span{transform:translate(-50%,-50%);transition:opacity .18s ease;}' +
+      '.shots-cursor.on span{transform:translate(-50%,-50%);}}' +
     '@media (prefers-reduced-motion: reduce){.shots-dots button::before{transition:background-color .2s ease;}}';
   document.head.appendChild(css);
+
+  /* one button follows the pointer for all the sets on the page */
+  var mouse = false;
+  try { mouse = matchMedia('(hover:hover) and (pointer:fine)').matches; } catch (e) {}
+  var cursor = null, cursorOn = null, cx = 0, cy = 0, craf = 0;
+
+  function buildCursor() {
+    cursor = document.createElement('div');
+    cursor.className = 'shots-cursor';
+    cursor.setAttribute('aria-hidden', 'true');
+    cursor.innerHTML = '<span><svg viewBox="0 0 24 24">' +
+      '<path d="M10.029 4.285A2 2 0 0 0 7 6v12a2 2 0 0 0 3.029 1.715l9.997-5.998a2 2 0 0 0 .003-3.432z"/>' +
+      '<path d="M3 4v16"/></svg></span>';
+    document.body.appendChild(cursor);
+  }
+
+  function placeCursor() { craf = 0; cursor.style.transform = 'translate3d(' + cx + 'px,' + cy + 'px,0)'; }
+
+  function showCursor(edge) {
+    if (edge === cursorOn) return;
+    if (edge) {
+      if (!cursorOn) placeCursor();          /* appear under the pointer, not where it last hid */
+      cursor.classList.toggle('back', edge.classList.contains('prev'));
+      cursor.classList.add('on');
+    } else cursor.classList.remove('on');
+    cursorOn = edge;
+  }
+
+  if (mouse) {
+    buildCursor();
+    document.addEventListener('pointermove', function (e) {
+      if (e.pointerType === 'touch') { showCursor(null); return; }
+      cx = e.clientX; cy = e.clientY;
+      if (!craf) craf = requestAnimationFrame(placeCursor);
+      var edge = e.target.closest ? e.target.closest('.shots-edge') : null;
+      showCursor(edge && !edge.disabled ? edge : null);
+    }, { passive: true });
+    document.addEventListener('mouseout', function (e) { if (!e.relatedTarget) showCursor(null); });
+    window.addEventListener('blur', function () { showCursor(null); });
+    /* the zone under a still pointer can change or switch off as the set moves */
+    window.addEventListener('scroll', function () { if (cursorOn) showCursor(null); }, { passive: true });
+  }
 
   sets.forEach(function (root, n) {
     var track = root.querySelector('.shots-track');
@@ -91,6 +154,27 @@
        controls at the bottom would be off the screen while you look at it */
     root.insertBefore(ui, track);
 
+    /* click zones down the left and right of the picture itself */
+    var edges = ['prev', 'next'].map(function (dir) {
+      var e = document.createElement('button');
+      e.type = 'button';
+      e.className = 'shots-edge ' + dir;
+      e.setAttribute('aria-label', (dir === 'prev' ? 'Previous ' : 'Next ') + label.toLowerCase());
+      e.addEventListener('click', function () { goTo(current() + (dir === 'prev' ? -1 : 1)); });
+      root.appendChild(e);
+      return e;
+    });
+
+    /* the zones cover the picture, not the caption under it */
+    function sizeEdges() {
+      var img = slides[0].querySelector('img');
+      if (!img) return;
+      var r = img.getBoundingClientRect(), rr = root.getBoundingClientRect();
+      if (!r.height) return;
+      root.style.setProperty('--shots-img-h', Math.round(r.height) + 'px');
+      edges.forEach(function (e) { e.style.top = Math.round(r.top - rr.top) + 'px'; });
+    }
+
     var index = -1;
     function mark(i) {
       if (i === index) return;
@@ -101,6 +185,11 @@
       });
       prev.disabled = i === 0;
       next.disabled = i === slides.length - 1;
+      if (edges) {
+        edges[0].disabled = prev.disabled;
+        edges[1].disabled = next.disabled;
+        if (cursorOn && cursorOn.disabled) showCursor(null);
+      }
     }
     function current() {
       return Math.round(track.scrollLeft / Math.max(1, slides[0].getBoundingClientRect().width));
@@ -131,7 +220,9 @@
       dots[i].focus();
     });
 
-    window.addEventListener('resize', function () { mark(current()); });
+    window.addEventListener('resize', function () { sizeEdges(); mark(current()); });
+    window.addEventListener('load', sizeEdges);
+    sizeEdges();
     mark(current());
   });
 })();
