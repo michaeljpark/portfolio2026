@@ -38,7 +38,7 @@
 <style>
   :root{
     /* Light theme (default) */
-    --bg:    #ffffff;
+    --bg:    #fafafa;        /* off-white, not paper white */
     --ink:   #0a0a0a;
     --muted: #8a8a8a;
     --line:  #e6e6e6;
@@ -47,7 +47,7 @@
     --pad:   clamp(20px, 4vw, 56px);
     --sbw:   0px;
     --font:  "Helvetica Neue",Helvetica,Arial,sans-serif;
-  }
+  } 
   :root[data-theme="dark"]{
     --bg:    #000000;
     --ink:   #ffffff;
@@ -197,19 +197,20 @@
     column-gap:20px; row-gap:56px;
     align-items:start;
   }
-  /* BIG: full-bleed, edge-to-edge, 2:1 */
-  .work-block.is-big{
-    grid-column:1 / -1;
-    width:calc(100vw - var(--sbw));
-    margin-left:calc(50% - (100vw - var(--sbw)) / 2);
-  }
+  /* BIG: the four main pieces two across, 2:1 each */
+  .work-block.is-big{ grid-column:span 3; }
   .work-block.is-big .work{ aspect-ratio:2/1; }
-  /* the card is full-bleed but its caption is not: give it the same max-width and
-     auto margins as .wrap so the text starts on the hero's left edge above 1440px too */
-  .work-block.is-big .w-info{
-    max-width:var(--max); margin:18px auto 0; padding:0 var(--pad);
+  .work-block.is-big .w-info{ margin-top:18px; }
+  .work-block.is-big .w-info .t{ font-size:clamp(18px,1.7vw,26px); }
+  /* cnpt is not one of the four: it sits in its own band under them */
+  .startup-wrap{
+    grid-column:1 / -1; order:5;
+    margin-top:48px; padding-top:64px;
+    border-top:1px solid var(--line);
   }
-  .work-block.is-big .w-info .t{ font-size:clamp(20px,2.4vw,32px); }
+  .startup-wrap .carousel-head{ margin-bottom:28px; }
+  /* the same size as one of the four above, just on its own row */
+  .startup-wrap .work-block.is-big{ grid-column:auto; width:calc((100% - 20px) / 2); }
   /* explicit order: bigs first (ongen→token→cf→finboard→cnpt), carousel last */
   .work-block.o1{ order:1 } .work-block.o2{ order:2 }
   .work-block.o3{ order:3 } .work-block.o4{ order:4 }
@@ -772,6 +773,9 @@
     .hero-info-mobile .pair{ display:flex; flex-direction:column; gap:2px; }
     .hero-info-mobile dt{ color:var(--muted); }
     .selected{ column-gap:12px; row-gap:36px; }
+    /* one main piece per row once half-width cards get too small to read */
+    .work-block.is-big{ grid-column:1 / -1; }
+    .startup-wrap .work-block.is-big{ width:100%; }
     /* carousel: 2 cards in view on tablet */
     .carousel{ gap:14px; }
     .carousel .work-block{ flex-basis:calc((100% - 14px) / 2); }
@@ -931,20 +935,26 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     </div>
 
     <!-- ongoing venture, no case page: the card goes straight to the studio site -->
-    <div class="work-block reveal is-big o5">
-      <a href="https://cnpt.ca/" target="_blank" rel="noopener">
-        <div class="work" style="background:#0a0a0a;">
-          <!-- 16:9 source in a 2:1 card, so only height is cropped. The wordmark sits at 55% of the
-               frame; anchoring the crop to the bottom puts it on the card's centre line, and the
-               120px taken off the top still clears the hair -->
-          <video class="lazy-vid" data-src="./cnptherovid.mp4" data-poster="./posters/cnptherovid.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;object-position:50% 100%;display:block;"></video>
-          <div class="card-tags"><span class="tag core">Startup</span><span class="tag">Incubating</span><span class="tag">In Progress</span></div>
-        </div>
-        <div class="w-info">
-          <div class="t"><span>cnpt : Concept Canada</span><span class="arrow">→</span></div>
-          <div class="w-meta"><div class="m"><span>2026</span><span>Design Consultancy</span><span>Co-owner</span></div><div class="w-tags"><span class="w-tag">Concept Development</span><span class="w-tag">Market Entry</span></div></div>
-        </div>
-      </a>
+    <div class="startup-wrap reveal">
+      <div class="carousel-head">
+        <div class="label">Venture</div>
+        <h2>Startup</h2>
+      </div>
+      <div class="work-block reveal is-big o5">
+        <a href="https://cnpt.ca/" target="_blank" rel="noopener">
+          <div class="work" style="background:#0a0a0a;">
+            <!-- 16:9 source in a 2:1 card, so only height is cropped. The wordmark sits at 55% of the
+                 frame; anchoring the crop to the bottom puts it on the card's centre line, and the
+                 120px taken off the top still clears the hair -->
+            <video class="lazy-vid" data-src="./cnptherovid.mp4" data-poster="./posters/cnptherovid.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;object-position:50% 100%;display:block;"></video>
+            <div class="card-tags"><span class="tag core">Startup</span><span class="tag">Incubating</span><span class="tag">In Progress</span></div>
+          </div>
+          <div class="w-info">
+            <div class="t"><span>cnpt : Concept Canada</span><span class="arrow">→</span></div>
+            <div class="w-meta"><div class="m"><span>2026</span><span>Design Consultancy</span><span>Co-owner</span></div><div class="w-tags"><span class="w-tag">Concept Development</span><span class="w-tag">Market Entry</span></div></div>
+          </div>
+        </a>
+      </div>
     </div>
 
     <div class="carousel-wrap reveal">
