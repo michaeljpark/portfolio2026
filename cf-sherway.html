@@ -1698,9 +1698,10 @@
   .feature-trio .v{ display:block; font-size:clamp(13px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.5; }
   /* hover focus: the photo under the pointer stays, the rest of the row steps back */
   @media (hover:hover) and (pointer:fine){
-    .chapter-media-quad .cell, .feature-trio figure{ transition:opacity .35s ease .12s; }
-    .chapter-media-quad .cell:hover, .feature-trio figure:hover{ transition-delay:0s; }
+    .chapter-media-quad .cell, .chapter-media-duo .cell, .feature-trio figure{ transition:opacity .35s ease .12s; }
+    .chapter-media-quad .cell:hover, .chapter-media-duo .cell:hover, .feature-trio figure:hover{ transition-delay:0s; }
     .chapter-media-quad:has(.cell:hover) .cell:not(:hover),
+    .chapter-media-duo:has(.cell:hover) .cell:not(:hover),
     .feature-trio:has(figure:hover) figure:not(:hover){ opacity:.35; transition-delay:0s; }
   }
 
@@ -2111,9 +2112,9 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <p class="phase-note">One walk through the mall on a weekday, then interviews with seven people. Orientation turned out to be the quiet problem: corridors look alike, and a visitor who cannot form a mental map never develops a habit.</p>
   <p class="phase-note">Counting the signals rather than reading them settled our direction. Cultural wants and welcoming came up 13 times, wanting to shop in person 10. People still want to come in person, which meant the retail side was the asset to build on, not the problem.</p>
   <div class="chapter-media-duo" style="margin-top:clamp(20px,2.4vw,32px);">
-    <div class="cell m1"><img src="./cfdiscovery1.png" alt="Onsite observation in the mall, recorded on a weekday during work and school hours" loading="lazy" srcset="./light/cfdiscovery1.webp 1200w, ./cfdiscovery1.png 1767w" sizes="(max-width: 640px) 95vw, 30vw" /></div>
-    <div class="cell m2"><img src="./cfdiscovery2.png" alt="Interview comments on sticky notes, then the same notes sorted into themes and tallied" loading="lazy" srcset="./light/cfdiscovery2.webp 1200w, ./cfdiscovery2.png 3147w" sizes="(max-width: 640px) 95vw, 30vw" /></div>
-    <div class="cell m3"><img src="./cfdiscovery3.png" alt="Working through the synthesis together" loading="lazy" srcset="./light/cfdiscovery3.webp 1200w, ./cfdiscovery3.png 2984w" sizes="(max-width: 640px) 95vw, 30vw" /></div>
+    <div class="cell m1" data-cursor="On-site"><img src="./cfdiscovery1.png" alt="Onsite observation in the mall, recorded on a weekday during work and school hours" loading="lazy" srcset="./light/cfdiscovery1.webp 1200w, ./cfdiscovery1.png 1767w" sizes="(max-width: 640px) 95vw, 30vw" /></div>
+    <div class="cell m2" data-cursor="Synthesis"><img src="./cfdiscovery2.png" alt="Interview comments on sticky notes, then the same notes sorted into themes and tallied" loading="lazy" srcset="./light/cfdiscovery2.webp 1200w, ./cfdiscovery2.png 3147w" sizes="(max-width: 640px) 95vw, 30vw" /></div>
+    <div class="cell m3" data-cursor="Bodystorming"><img src="./cfdiscovery3.png" alt="Working through the synthesis together" loading="lazy" srcset="./light/cfdiscovery3.webp 1200w, ./cfdiscovery3.png 2984w" sizes="(max-width: 640px) 95vw, 30vw" /></div>
   </div>
   <img class="subsec-img" width="3314" height="1455" src="./cfresearch2.png" alt="Pain points mapped to a Space, Community, Culture framework, and the resulting opportunities" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/cfresearch2.webp 1440w, ./cfresearch2.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">The pain points sorted into three needs. Space makes the place, culture gives the reason, community brings people back. The concept had to hold in the building as it stands today and in the one that exists once the condos are occupied.</p>
@@ -2127,7 +2128,20 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
   <div class="subsec">
     <div class="subsec-title">Three layers</div>
-    <img class="subsec-img" width="1920" height="810" src="./sherwaystamp%20Three%20layers.png" alt="Three layers: physical the poster, interaction the scan, experience the story" loading="lazy" srcset="./light/sherwaystamp%20Three%20layers.webp 1440w, ./sherwaystamp%20Three%20layers.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
+    <div class="feature-trio">
+      <figure>
+        <img data-cursor="Physical" width="2752" height="1536" src="./cflayer1.jpg" alt="The Sherway Stamp poster standing in the mall" loading="lazy" srcset="./light/cflayer1.webp 1200w, ./cflayer1.jpg 2752w" sizes="(max-width: 640px) 95vw, 32vw" />
+        <figcaption><span class="v">Commissioned artwork in the unused open area.</span></figcaption>
+      </figure>
+      <figure>
+        <img data-cursor="Scan" width="2752" height="1536" src="./cflayer2.jpg" alt="Someone holding a phone up to scan the poster" loading="lazy" srcset="./light/cflayer2.webp 1200w, ./cflayer2.jpg 2752w" sizes="(max-width: 640px) 95vw, 32vw" />
+        <figcaption><span class="v">Image recognition rather than spatial AR.</span></figcaption>
+      </figure>
+      <figure>
+        <img data-cursor="Story" width="2752" height="1536" src="./cflayer3.jpg" alt="Someone listening to the story on their phone, smiling" loading="lazy" srcset="./light/cflayer3.webp 1200w, ./cflayer3.jpg 2752w" sizes="(max-width: 640px) 95vw, 32vw" />
+        <figcaption><span class="v">Playback happens inside the app.</span></figcaption>
+      </figure>
+    </div>
     <p class="phase-note">A QR code is a characterless object, and in a public space people rarely scan one when its purpose is not obvious. Making the artwork the trigger means the intervention changes the room even for people who never scan anything.</p>
   </div>
 
