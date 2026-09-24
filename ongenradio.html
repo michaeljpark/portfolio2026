@@ -81,7 +81,9 @@
   .hero-video video{
     position:absolute; inset:-1px;
     width:calc(100% + 2px); height:calc(100% + 2px);
-    object-fit:cover; display:block;
+    /* the banner is 3:1 over a 16:9 clip, so it keeps the upper band: the
+       glasses and the display beside them rather than the jaw */
+    object-fit:cover; object-position:50% 12%; display:block;
   }
   /* GradEX 111 credit, overlaid on the hero clip the same way it sits on the
      index card. The lockup is knocked out of an opaque black plate, so the
@@ -2046,7 +2048,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <header class="hero wrap">
   <div class="hero-video">
-    <video class="lazy-vid" data-src="./ongenthumbbanner.mp4?v=20260921" data-poster="./posters/ongenthumbbanner.jpg?v=20260921"
+    <video class="lazy-vid" data-src="./ongenthumbbanner.mp4?v=20260924" data-poster="./posters/ongenthumbbanner.jpg?v=20260924"
            loop muted playsinline preload="none"></video>
     <div class="gradex-badge">
       <img src="./light/gradex111.webp" alt="GradEX 111, OCAD University" loading="lazy" decoding="async"
