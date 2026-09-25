@@ -130,8 +130,35 @@
 
   /* HERO */
   header.hero{
-    padding:64px var(--pad) 64px;
+    padding:32px var(--pad) 64px;
     border-bottom:1px solid var(--line);
+  }
+  /* The opening screen should always end on the first cards, whatever the window
+     height: the hero takes the room that is left over once the nav (70), the work
+     heading block (194) and a 120px strip of card are accounted for. On short
+     windows the hero's own height wins and the strip just gets thinner. */
+  @media (min-width:881px){
+    header.hero{
+      min-height:min(calc(100svh - 384px), 620px);
+      display:flex; flex-direction:column;
+    }
+    /* whatever room is left over goes between the lede and the fact row, which
+       then sits on the fold line instead of leaving a hole under the hero */
+    header.hero .hero-lede{ margin-bottom:36px; }   /* the floor the auto margin cannot go under */
+    header.hero .hero-row{ margin-top:auto; }
+  }
+  /* Short windows (a scaled 1080p laptop lands near 620px of viewport) cannot
+     afford the full hero, so the gaps above and around the work heading give way
+     first and the strip of card survives. */
+  @media (min-width:881px) and (max-height:799px){
+    header.hero{ padding-top:24px; padding-bottom:40px; }
+    #work{ padding-top:32px; }
+    #work .sec-head{ margin-bottom:46px; }
+  }
+  @media (min-width:881px) and (max-height:679px){
+    header.hero{ padding-top:20px; padding-bottom:28px; }
+    #work{ padding-top:24px; }
+    #work .sec-head{ margin-bottom:36px; }
   }
   .hero-greeting{
     font-size:17px; color:var(--muted); margin-bottom:6px;
@@ -177,8 +204,12 @@
   /* SECTION */
   section{ padding:48px 0; border-bottom:1px solid var(--line); }
   .sec-head{
-    display:flex; align-items:baseline; justify-content:space-between;
+    display:flex; justify-content:space-between;
     margin-bottom:56px; gap:32px; flex-wrap:wrap;
+    /* the right-hand line sits on the heading's baseline, so the two blocks end
+       on the same line; flex-end is the fallback where last baseline is not read */
+    align-items:flex-end;
+    align-items:last baseline;
   }
   .sec-head h2,
   .carousel-head h2{
@@ -752,7 +783,7 @@
 
   /* RESPONSIVE */
   @media (max-width:880px){
-    header.hero{ padding-top:36px; padding-bottom:24px; }
+    header.hero{ padding-top:20px; padding-bottom:24px; }
     section{ padding-top:24px; padding-bottom:24px; }
     .hero-lede{ flex-direction:column; align-items:flex-end; gap:12px; }
     .hero-tagline{ max-width:none; }
@@ -862,7 +893,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <div class="label">Selected Work</div>
       <h2>Recent highlights</h2>
     </div>
-    <p class="desc">A small slice of the past year — service strategy, design management, and a four-phase thesis on emerging-tech experiences.</p>
+    <p class="desc">Four projects from the past two years: a six-month thesis, a client project with Cadillac Fairview, and two self-directed concepts.</p>
   </div>
 
   <div class="selected">
