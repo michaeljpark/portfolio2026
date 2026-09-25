@@ -269,6 +269,7 @@
     display:block;
     border-radius: 0;
   }
+  :root[data-theme="dark"] .work{ box-shadow:inset 0 0 0 1px var(--line); }
   .work img{
     width:100%; height:100%; object-fit:cover;
     transition: transform .6s cubic-bezier(.7,0,.2,1);
@@ -734,24 +735,6 @@
     object-fit:cover; display:block;
     filter:brightness(0.9);
   }
-  /* GradEX 111 credit, overlaid straight onto the clip with no frame of its
-     own: the lockup is knocked out of an opaque black plate, so the video
-     shows through the letterforms. Width is a share of the card so it scales
-     with the 100vw bleed, with a floor for phone-width cards. */
-  .gradex-badge{
-    position:absolute; z-index:2;
-    bottom:clamp(10px,1.15vw,20px); right:clamp(10px,1.15vw,20px);
-    width:clamp(100px,13.5%,208px);
-    aspect-ratio:1225/419;
-    pointer-events:none;
-  }
-  .gradex-badge img{
-    width:100%; height:100%; object-fit:cover; display:block;
-  }
-  /* opt the badge out of the card-wide hover zoom, which otherwise wins on
-     specificity and pushes the lockup around inside its own frame */
-  a:hover .work .gradex-badge img{ transform:none; }
-
   /* Resume animations when work-block enters viewport */
   .work-block.in-view .ar-bubble-shape,
   .work-block.in-view .ar-bubble-content,
@@ -899,7 +882,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <div class="work-block reveal is-big o4">
       <a href="./finboard.html">
         <div class="work" style="background:#0a0a0a;" data-cursor="Fintech UI/UX" data-cursor-icon="arrow-up-right">
-          <video class="lazy-vid" data-src="./finboardprev.mp4?v=20260805f" data-poster="./posters/finboardprev.jpg?v=20260805f" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+          <video class="lazy-vid" data-src="./finboardcard.mp4?v=20260925b" data-poster="./posters/finboardcard.jpg?v=20260925b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
           <div class="card-tags"><span class="tag core">iOS Native</span><span class="tag">Banking App</span><span class="tag">Design Audit</span><span class="tag">Concept</span></div>
         </div>
         <div class="w-info">
@@ -916,11 +899,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
             <video class="lazy-vid" muted loop playsinline preload="none"
               data-poster="./posters/ongenglassview1.jpg"
               data-src="./ongenglassview1.mp4"></video>
-            <div class="gradex-badge">
-              <img src="./light/gradex111.webp" alt="GradEX 111, OCAD University" loading="lazy" decoding="async"
-                srcset="./light/gradex111.webp 512w, ./gradex111.png 1225w"
-                sizes="(max-width: 880px) 100px, 13.5vw" />
-            </div>
           </div>
           <div class="card-tags"><span class="tag core">Thesis Project</span><span class="tag">Spatial Intelligence</span><span class="tag">AR App</span></div>
         </div>
@@ -933,7 +911,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
     <div class="work-block reveal is-big o2">
       <a href="./tokentrust.html">
-        <div class="work" data-cursor="AI B2B" data-cursor-icon="arrow-up-right"><video class="lazy-vid" data-src="./tokentrust169.mp4?v=20260805b" data-poster="./posters/tokentrust169.jpg?v=20260805b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video><div class="card-tags"><span class="tag core">Team Lead</span><span class="tag">AI Governance</span><span class="tag">Concept</span></div></div>
+        <div class="work" data-cursor="AI B2B" data-cursor-icon="arrow-up-right"><video class="lazy-vid" data-src="./tokentrustcard.mp4?v=20260925b" data-poster="./posters/tokentrustcard.jpg?v=20260925b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video><div class="card-tags"><span class="tag core">Team Lead</span><span class="tag">AI Governance</span><span class="tag">Concept</span></div></div>
         <div class="w-info">
           <div class="t"><span>Token Trust : AI Transparency &amp; User Data Governance</span><span class="arrow">→</span></div>
           <div class="w-meta"><div class="m"><span>2026</span><span>Service Design</span><span>3 Weeks</span></div><div class="w-tags"><span class="w-tag">Service Proposal</span><span class="w-tag">Web App</span></div></div>
