@@ -4,6 +4,9 @@
    it and shows that text in a small pill riding under the cursor instead. Mouse
    only: a finger never sees it, and without this file nothing changes.
 
+   An element can also carry data-cursor-icon="<name>" to put one of the small
+   line icons below in front of the label.
+
    The pill takes its colours from the page: --bg and --ink build the plate, and
    a page can say it differently on :root with --pill-ink (label colour, e.g. a
    brand accent), --pill-bg, --pill-border, --pill-font and --pill-size. */
@@ -13,11 +16,16 @@
   var mq;
   try { mq = matchMedia('(hover:hover) and (pointer:fine)'); } catch (e) { return; }
 
+  /* lucide, path data only */
+  var ICONS = {
+    'arrow-up-right': '<path d="M7 7h10v10"/><path d="M7 17 17 7"/>'
+  };
+
   var root = document.documentElement;
   var css = document.createElement('style');
   css.textContent =
     '.cursor-pill{position:fixed;left:0;top:0;z-index:100;pointer-events:none;}' +
-    '.cursor-pill span{display:flex;align-items:center;height:32px;padding:0 14px;border-radius:999px;' +
+    '.cursor-pill span{display:flex;align-items:center;gap:7px;height:32px;padding:0 14px;border-radius:999px;' +
       'background:var(--pill-bg,color-mix(in srgb,var(--bg) 78%,transparent));' +
       'border:1px solid var(--pill-border,color-mix(in srgb,var(--ink) 14%,transparent));' +
       'box-shadow:0 6px 20px rgba(0,0,0,.08);' +
@@ -27,6 +35,7 @@
       'opacity:0;transform:translate(-50%,-50%) scale(.6);' +
       'transition:transform .22s cubic-bezier(.2,.7,.2,1),opacity .18s ease;}' +
     '.cursor-pill.on span{opacity:1;transform:translate(-50%,-50%) scale(1);}' +
+    '.cursor-pill svg{width:var(--pill-icon,15px);height:var(--pill-icon,15px);flex:none;display:block;}' +
     'html.cursor-pill-on [data-cursor]{cursor:none;}' +
     '@media (prefers-reduced-motion: reduce){.cursor-pill span{transform:translate(-50%,-50%);transition:opacity .18s ease;}}';
   document.head.appendChild(css);
@@ -47,6 +56,10 @@
     if (el) {
       if (!cur) place();                  /* appear at the pointer, not where it last hid */
       label.textContent = el.getAttribute('data-cursor');
+      var icon = ICONS[el.getAttribute('data-cursor-icon')];
+      if (icon) label.insertAdjacentHTML('afterbegin',
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+        'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + icon + '</svg>');
       pill.classList.add('on');
     } else pill.classList.remove('on');
     cur = el;

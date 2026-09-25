@@ -47,6 +47,12 @@
     --pad:   clamp(20px, 4vw, 56px);
     --sbw:   0px;
     --font:  "Helvetica Neue",Helvetica,Arial,sans-serif;
+    /* pointer label over the cards: light grey plate, same in both themes */
+    --pill-bg:     #ececec;
+    --pill-ink:    #0a0a0a;
+    --pill-border: transparent;
+    --pill-size:   13px;
+    --pill-icon:   15px;
   } 
   :root[data-theme="dark"]{
     --bg:    #000000;
@@ -340,7 +346,7 @@
   /* ABOUT */
   .about-media{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(150px,20.9vw,301px);
   margin:clamp(28px,3.5vw,44px) 0 clamp(32px,4vw,48px); }
-.about-media .cell{ position:relative; overflow:hidden; background:transparent; min-width:0;
+.about-media .cell{ position:relative; display:block; overflow:hidden; background:transparent; min-width:0;
   -webkit-mask-image:-webkit-radial-gradient(white,black); mask-image:radial-gradient(white,black); }
 .about-media .cell img{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px);
   object-fit:cover; display:block; }
@@ -830,6 +836,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <body>
 
 <script src="./lazy-video.js?v=20260820" defer></script>
+<script src="./cursor-pill.js?v=20260925" defer></script>
 
 
 <nav class="top">
@@ -878,7 +885,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="selected">
     <div class="work-block reveal is-big o3">
       <a href="./cf-sherway.html">
-        <div class="work" style="background:#ffffff;">
+        <div class="work" style="background:#ffffff;" data-cursor="UX Research B2C" data-cursor-icon="arrow-up-right">
           <video class="lazy-vid" data-src="./Sherwaystampsnapshot.mp4" data-poster="./posters/Sherwaystampsnapshot.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
           <div class="card-tags"><span class="tag core">Client Project</span><span class="tag">Public Realm</span><span class="tag">UX Research</span></div>
         </div>
@@ -891,7 +898,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
     <div class="work-block reveal is-big o4">
       <a href="./finboard.html">
-        <div class="work" style="background:#0a0a0a;">
+        <div class="work" style="background:#0a0a0a;" data-cursor="Fintech UI/UX" data-cursor-icon="arrow-up-right">
           <video class="lazy-vid" data-src="./finboardprev.mp4?v=20260805f" data-poster="./posters/finboardprev.jpg?v=20260805f" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
           <div class="card-tags"><span class="tag core">iOS Native</span><span class="tag">Banking App</span><span class="tag">Design Audit</span><span class="tag">Concept</span></div>
         </div>
@@ -904,7 +911,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
     <div class="work-block reveal is-big o1">
       <a href="./ongenradio.html">
-        <div class="work ongen-work">
+        <div class="work ongen-work" data-cursor="AR UI/UX" data-cursor-icon="arrow-up-right">
           <div class="ongen-img">
             <video class="lazy-vid" muted loop playsinline preload="none"
               data-poster="./posters/ongenglassview1.jpg"
@@ -926,7 +933,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
     <div class="work-block reveal is-big o2">
       <a href="./tokentrust.html">
-        <div class="work"><video class="lazy-vid" data-src="./tokentrust169.mp4?v=20260805b" data-poster="./posters/tokentrust169.jpg?v=20260805b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video><div class="card-tags"><span class="tag core">Team Lead</span><span class="tag">AI Governance</span><span class="tag">Concept</span></div></div>
+        <div class="work" data-cursor="AI B2B" data-cursor-icon="arrow-up-right"><video class="lazy-vid" data-src="./tokentrust169.mp4?v=20260805b" data-poster="./posters/tokentrust169.jpg?v=20260805b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video><div class="card-tags"><span class="tag core">Team Lead</span><span class="tag">AI Governance</span><span class="tag">Concept</span></div></div>
         <div class="w-info">
           <div class="t"><span>Token Trust : AI Transparency &amp; User Data Governance</span><span class="arrow">→</span></div>
           <div class="w-meta"><div class="m"><span>2026</span><span>Service Design</span><span>3 Weeks</span></div><div class="w-tags"><span class="w-tag">Service Proposal</span><span class="w-tag">Web App</span></div></div>
@@ -942,7 +949,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       </div>
       <div class="work-block reveal is-big o5">
         <a href="https://cnpt.ca/" target="_blank" rel="noopener">
-          <div class="work" style="background:#0a0a0a;">
+          <div class="work" style="background:#0a0a0a;" data-cursor="Design Studio" data-cursor-icon="arrow-up-right">
             <!-- 16:9 source in a 2:1 card, so only height is cropped. The wordmark sits at 55% of the
                  frame; anchoring the crop to the bottom puts it on the card's centre line, and the
                  120px taken off the top still clears the hair -->
@@ -1041,10 +1048,10 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 
   <div class="about-media reveal">
-    <div class="cell a1"><img src="./mike1.jpg" alt="" loading="lazy" srcset="./light/mike1.webp 918w, ./mike1.jpg 918w" sizes="(max-width: 640px) 95vw, 25vw" /></div>
-    <div class="cell a4"><img src="./IMG_5507.jpg" alt="" loading="lazy" srcset="./light/IMG_5507.webp 1440w, ./IMG_5507.jpg 2250w" sizes="(max-width: 640px) 95vw, 39vw" /></div>
-    <div class="cell a2"><img src="./mike2.png" alt="" loading="lazy" srcset="./light/mike2.webp 1440w, ./mike2.png 3024w" sizes="(max-width: 640px) 95vw, 17vw" /></div>
-    <div class="cell a3"><img src="./mike3.png" alt="" loading="lazy" srcset="./light/mike3.webp 964w, ./mike3.png 964w" sizes="(max-width: 640px) 95vw, 17vw" /></div>
+    <a class="cell a1" href="https://www.linkedin.com/in/michael-park-design/" target="_blank" rel="noopener" aria-label="Workshop — Michael Park on LinkedIn" data-cursor="Workshop"><img src="./mike1.jpg" alt="" loading="lazy" srcset="./light/mike1.webp 918w, ./mike1.jpg 918w" sizes="(max-width: 640px) 95vw, 25vw" /></a>
+    <a class="cell a4" href="https://www.linkedin.com/in/michael-park-design/" target="_blank" rel="noopener" aria-label="Presentation — Michael Park on LinkedIn" data-cursor="Presentation"><img src="./IMG_5507.jpg" alt="" loading="lazy" srcset="./light/IMG_5507.webp 1440w, ./IMG_5507.jpg 2250w" sizes="(max-width: 640px) 95vw, 39vw" /></a>
+    <a class="cell a2" href="https://www.linkedin.com/in/michael-park-design/" target="_blank" rel="noopener" aria-label="Research — Michael Park on LinkedIn" data-cursor="Research"><img src="./mike2.png" alt="" loading="lazy" srcset="./light/mike2.webp 1440w, ./mike2.png 3024w" sizes="(max-width: 640px) 95vw, 17vw" /></a>
+    <a class="cell a3" href="https://www.linkedin.com/in/michael-park-design/" target="_blank" rel="noopener" aria-label="Convocation — Michael Park on LinkedIn" data-cursor="Convocation"><img src="./mike3.png" alt="" loading="lazy" srcset="./light/mike3.webp 964w, ./mike3.png 964w" sizes="(max-width: 640px) 95vw, 17vw" /></a>
   </div>
 
   <dl class="hero-info-mobile reveal">
