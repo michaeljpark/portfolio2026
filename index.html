@@ -422,23 +422,30 @@
   }
 
   /* ABOUT */
-  .about-media{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(150px,20.9vw,301px);
+  .about-media{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(150px,27.5vw,396px);
   margin:clamp(28px,3.5vw,44px) 0 clamp(32px,4vw,48px); }
 .about-media .cell{ position:relative; display:block; overflow:hidden; background:transparent; min-width:0;
   -webkit-mask-image:-webkit-radial-gradient(white,black); mask-image:radial-gradient(white,black); }
 .about-media .cell img{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px);
   object-fit:cover; display:block; }
 /* each weight is the photo's own aspect ratio, and the row height is set so the
-   four widths add up to the content measure, which keeps the cover crop at zero */
-.about-media .a1{ flex:1.125 1 0; } /*  918x816   */
-.about-media .a2{ flex:0.750 1 0; } /* 3024x4032  */
-.about-media .a3{ flex:0.753 1 0; } /*  964x1280  */
-.about-media .a4{ flex:1.777 1 0; } /* 2250x1266  */
+   three widths add up to the content measure, which keeps the cover crop at zero */
+.about-media .cell{ flex:var(--w) 1 0; }
+.about-media .a2{ --w:0.750; } /* 3024x4032  */
+.about-media .a3{ --w:0.753; } /*  964x1280  */
+.about-media .a4{ --w:1.777; } /* 2250x1266  */
+/* hover opens one frame: every width is a share of the same row, so growing the
+   one under the pointer squeezes the other two aside on its own */
+@media (hover:hover) and (pointer:fine){
+  .about-media .cell{ transition:flex-grow .45s cubic-bezier(.2,.7,.2,1); }
+  .about-media .cell:hover{ flex-grow:calc(var(--w) * 1.6); }
+}
+@media (prefers-reduced-motion: reduce){
+  .about-media .cell{ transition-duration:.01s; }
+}
 @media(max-width:640px){
   .about-media{ flex-direction:column; height:auto; gap:10px; }
-  .about-media .a1,.about-media .a2,
-  .about-media .a3,.about-media .a4{ flex:none; }
-  .about-media .a1{ aspect-ratio:9/8; }
+  .about-media .a2,.about-media .a3,.about-media .a4{ flex:none; }
   .about-media .a2,.about-media .a3{ aspect-ratio:3/4; }
   .about-media .a4{ aspect-ratio:16/9; }
 }
@@ -1116,10 +1123,9 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 
   <div class="about-media reveal">
-    <a class="cell a1" href="https://www.linkedin.com/in/michael-park-design/" target="_blank" rel="noopener" aria-label="Workshop — Michael Park on LinkedIn" data-cursor="Workshop"><img src="./mike1.jpg" alt="" loading="lazy" srcset="./light/mike1.webp 918w, ./mike1.jpg 918w" sizes="(max-width: 640px) 95vw, 25vw" /></a>
-    <a class="cell a4" href="https://www.linkedin.com/in/michael-park-design/" target="_blank" rel="noopener" aria-label="Presentation — Michael Park on LinkedIn" data-cursor="Presentation"><img src="./IMG_5507.jpg" alt="" loading="lazy" srcset="./light/IMG_5507.webp 1440w, ./IMG_5507.jpg 2250w" sizes="(max-width: 640px) 95vw, 39vw" /></a>
-    <a class="cell a2" href="https://www.linkedin.com/in/michael-park-design/" target="_blank" rel="noopener" aria-label="Research — Michael Park on LinkedIn" data-cursor="Research"><img src="./mike2.png" alt="" loading="lazy" srcset="./light/mike2.webp 1440w, ./mike2.png 3024w" sizes="(max-width: 640px) 95vw, 17vw" /></a>
-    <a class="cell a3" href="https://www.linkedin.com/in/michael-park-design/" target="_blank" rel="noopener" aria-label="Convocation — Michael Park on LinkedIn" data-cursor="Convocation"><img src="./mike3.png" alt="" loading="lazy" srcset="./light/mike3.webp 964w, ./mike3.png 964w" sizes="(max-width: 640px) 95vw, 17vw" /></a>
+    <a class="cell a4" href="https://www.linkedin.com/in/michael-park-design/" target="_blank" rel="noopener" aria-label="Presentation — Michael Park on LinkedIn" data-cursor="Presentation"><img src="./IMG_5507.jpg" alt="" loading="lazy" srcset="./light/IMG_5507.webp 1440w, ./IMG_5507.jpg 2250w" sizes="(max-width: 640px) 95vw, 50vw" /></a>
+    <a class="cell a2" href="https://www.linkedin.com/in/michael-park-design/" target="_blank" rel="noopener" aria-label="Research — Michael Park on LinkedIn" data-cursor="Research"><img src="./mike2.png" alt="" loading="lazy" srcset="./light/mike2.webp 1440w, ./mike2.png 3024w" sizes="(max-width: 640px) 95vw, 23vw" /></a>
+    <a class="cell a3" href="https://www.linkedin.com/in/michael-park-design/" target="_blank" rel="noopener" aria-label="Convocation — Michael Park on LinkedIn" data-cursor="Convocation"><img src="./mike3.png" alt="" loading="lazy" srcset="./light/mike3.webp 964w, ./mike3.png 964w" sizes="(max-width: 640px) 95vw, 23vw" /></a>
   </div>
 
   <dl class="hero-info-mobile reveal">
