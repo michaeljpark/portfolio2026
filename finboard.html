@@ -1639,14 +1639,30 @@
   /* a one-line statement: bigger than the running text, still under the chapter name */
   .phase-desc.statement{ font-size:clamp(20px,2.2vw,32px); letter-spacing:-0.03em; line-height:1.25; }
   /* three photos carrying the framing, one line of it each */
-  .feature-trio{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(12px,1.4vw,20px); margin-top:clamp(36px,4.2vw,64px); }
-  .feature-trio figure{ margin:0; min-width:0; }
-  .feature-trio img{ display:block; width:100%; height:auto; }
-  .feature-trio figcaption{ margin-top:14px; }
+  /* a flex row so one frame can widen on hover; the picture height is worked out
+     from the row's resting column width, so it never moves while that happens */
+  .feature-trio{
+    display:flex; align-items:flex-start; gap:var(--trio-gap); margin-top:clamp(36px,4.2vw,64px);
+    --trio-gap:clamp(12px,1.4vw,20px);
+    --trio-col:calc((min(100vw, var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--trio-gap)) / 3);
+    --trio-h:calc(var(--trio-col) / 1.7778);
+  }
+  .feature-trio figure{ margin:0; min-width:0; flex:1 1 0; }
+  .feature-trio img{ display:block; width:100%; height:var(--trio-h); object-fit:cover; }
+  /* the caption always sets to the width a squeezed column has, so widening the
+     picture beside it never rewraps the text and the row keeps its height */
+  .feature-trio figcaption{ margin-top:14px; width:calc(var(--trio-col) * 0.857); max-width:100%; }
   .feature-trio .v{ display:block; font-size:clamp(13px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.5; }
   /* hover focus: whatever the pointer is on stays, the rest of the row steps back */
   @media (hover:hover) and (pointer:fine){
     .feature-trio figure, .chapter-media-quad .cell{ transition:opacity .35s ease .12s; }
+    .feature-trio figure{ transition:opacity .35s ease .12s, flex-grow .45s cubic-bezier(.2,.7,.2,1); }
+    /* the frame under the pointer widens and squeezes the rest of the row aside */
+    .chapter-media-duo .cell, .chapter-media-quad .cell, .gradex-row figure{
+      transition:opacity .35s ease .12s, flex-grow .45s cubic-bezier(.2,.7,.2,1); }
+    .chapter-media-duo .cell:hover, .chapter-media-quad .cell:hover, .gradex-row figure:hover{
+      flex-grow:calc(var(--w) * 1.5); transition-delay:0s; }
+    .feature-trio figure:hover{ flex-grow:1.5; }
     .feature-trio figure:hover, .chapter-media-quad .cell:hover{ transition-delay:0s; }
     .feature-trio:has(figure:hover) figure:not(:hover),
     .chapter-media-quad:has(.cell:hover) .cell:not(:hover){ opacity:.35; transition-delay:0s; }
@@ -1655,21 +1671,21 @@
   .phase-note em{ font-style:normal; color:var(--ink); }
   /* two photos + showcase video, equal height, natural widths (near-zero crop) */
   .chapter-media-duo{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(200px,26vw,376px); margin-bottom:clamp(32px,4vw,48px); }
-  .chapter-media-duo .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; }
+  .chapter-media-duo .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; flex:var(--w) 1 0; }
   .chapter-media-duo .cell img, .chapter-media-duo .cell video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
-  .chapter-media-duo .m1{ flex:1.777 1 0; }  /* IMG_5507 16:9 */
-  .chapter-media-duo .m2{ flex:0.75 1 0; }   /* IMG_5493(1) portrait 3:4 */
-  .chapter-media-duo .m3{ flex:1.2 1 0; }    /* showcase video 6:5 */
+  .chapter-media-duo .m1{ --w:1.777; }  /* IMG_5507 16:9 */
+  .chapter-media-duo .m2{ --w:0.75; }   /* IMG_5493(1) portrait 3:4 */
+  .chapter-media-duo .m3{ --w:1.2; }    /* showcase video 6:5 */
   /* four-up preview row. Each weight is the image's own aspect ratio, and the
      row height is set so the four widths add up to the content measure, which
      is what keeps the cover crop at zero instead of trimming the sides. */
   .chapter-media-quad{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(150px,19.7vw,284px); margin-bottom:clamp(32px,4vw,48px); }
-  .chapter-media-quad .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; }
+  .chapter-media-quad .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; flex:var(--w) 1 0; }
   .chapter-media-quad .cell img{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
-  .chapter-media-quad .q1{ flex:0.667 1 0; } /* 3000x4500, 2:3  */
-  .chapter-media-quad .q2{ flex:1.335 1 0; } /* 1800x1348, 4:3  */
-  .chapter-media-quad .q3{ flex:1.335 1 0; } /* 1449x1085, 4:3  */
-  .chapter-media-quad .q4{ flex:1.333 1 0; } /* 1448x1086, 4:3  */
+  .chapter-media-quad .q1{ --w:0.667; } /* 3000x4500, 2:3  */
+  .chapter-media-quad .q2{ --w:1.335; } /* 1800x1348, 4:3  */
+  .chapter-media-quad .q3{ --w:1.335; } /* 1449x1085, 4:3  */
+  .chapter-media-quad .q4{ --w:1.333; } /* 1448x1086, 4:3  */
   /* subsection within a chapter (e.g. Snapshot inside Overview) */
   .subsec{ margin-top:clamp(48px,6vw,88px); }
   .subsec-title{ font-size:clamp(20px,2vw,30px); font-weight:400; letter-spacing:-0.04em; line-height:1.15; color:var(--ink); }
@@ -1705,13 +1721,13 @@
 
   /* GradEX showcase row — video + photos, equal height, natural widths (near-zero crop) */
   .gradex-row{ display:flex; gap:clamp(8px,1vw,14px); height:clamp(150px,20vw,320px); margin-top:clamp(20px,2.4vw,32px); }
-  .gradex-row figure{ margin:0; position:relative; overflow:hidden; background:transparent; min-width:0; }
+  .gradex-row figure{ margin:0; position:relative; overflow:hidden; background:transparent; min-width:0; flex:var(--w) 1 0; }
   .gradex-row img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
   .gradex-row video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
-  .gradex-row .v{ flex:1.333 1 0; }
-  .gradex-row .a{ flex:1.333 1 0; }
-  .gradex-row .b{ flex:0.749 1 0; }
-  .gradex-row .c{ flex:1.333 1 0; }
+  .gradex-row .v{ --w:1.333; }
+  .gradex-row .a{ --w:1.333; }
+  .gradex-row .b{ --w:0.749; }
+  .gradex-row .c{ --w:1.333; }
   .gradex-cap{ margin-top:12px; font-size:clamp(11px,0.85vw,13px); color:var(--muted); letter-spacing:-0.01em; }
   /* method footnote: the how-it-was-measured detail, kept out of the reading line */
   .fine-print{ margin-top:clamp(16px,1.8vw,24px); font-size:clamp(11px,0.85vw,13px); color:var(--muted); letter-spacing:-0.01em; line-height:1.6; }
@@ -1739,7 +1755,9 @@
        (justify leaves ugly word-gaps in a narrow column) */
     .phase-desc{ font-size:15px; letter-spacing:-0.015em; line-height:1.45; margin-top:16px; }
     .phase-desc.statement{ font-size:19px; line-height:1.3; }
-    .feature-trio{ grid-template-columns:1fr; gap:28px; }
+    .feature-trio{ flex-direction:column; gap:28px; }
+    .feature-trio figcaption{ width:auto; }
+    .feature-trio img{ height:auto; }
     .feature-trio .v{ font-size:13px; }
     .subsec-lead{ font-size:15px; letter-spacing:-0.015em; line-height:1.45; }
     .phase-note{ font-size:13px; letter-spacing:-0.005em; line-height:1.55; text-align:left; }

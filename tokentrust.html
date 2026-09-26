@@ -1642,22 +1642,29 @@
   .phase-note em{ font-style:normal; color:var(--ink); }
   /* two photos + showcase video, equal height, natural widths (near-zero crop) */
   .chapter-media-duo{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(200px,26vw,376px); margin-bottom:clamp(32px,4vw,48px); }
-  .chapter-media-duo .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; }
+  .chapter-media-duo .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; flex:var(--w) 1 0; }
   .chapter-media-duo .cell img, .chapter-media-duo .cell video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
-  .chapter-media-duo .m1{ flex:1.777 1 0; }  /* IMG_5507 16:9 */
-  .chapter-media-duo .m2{ flex:0.75 1 0; }   /* IMG_5493(1) portrait 3:4 */
-  .chapter-media-duo .m3{ flex:1.2 1 0; }    /* showcase video 6:5 */
+  .chapter-media-duo .m1{ --w:1.777; }  /* IMG_5507 16:9 */
+  .chapter-media-duo .m2{ --w:0.75; }   /* IMG_5493(1) portrait 3:4 */
+  .chapter-media-duo .m3{ --w:1.2; }    /* showcase video 6:5 */
   /* subsection within a chapter (e.g. Snapshot inside Overview) */
   .subsec{ margin-top:clamp(48px,6vw,88px); }
   /* the three research questions as cards, dressed in the logo's own parts:
      the star in TokenTrust blue at the corner and the question in its serif */
-  .qcards{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(24px,3vw,48px);
-    margin:clamp(40px,4.4vw,68px) 0 clamp(32px,3.6vw,56px); }
+  /* a flex row so one card can widen on hover; the picture height and the text
+     measure both come off the resting column, so neither moves while it does */
+  .qcards{ display:flex; align-items:flex-start; gap:var(--q-gap);
+    margin:clamp(40px,4.4vw,68px) 0 clamp(32px,3.6vw,56px);
+    --q-gap:clamp(24px,3vw,48px);
+    --q-col:calc((min(100vw, var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--q-gap)) / 3);
+    --q-h:calc(var(--q-col) / 1.7778); }
   /* picture first, the logo star sitting in its top corner, then the words */
-  .qcard{ position:relative; display:grid; grid-template-columns:minmax(0,1fr);
+  .qcard{ position:relative; flex:1 1 0; min-width:0; display:grid; grid-template-columns:minmax(0,1fr);
     align-content:start; row-gap:clamp(16px,1.8vw,24px); padding:0; background:transparent; border:0; }
   .qshot{ position:relative; }
-  .qshot img{ display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; }
+  .qshot img{ display:block; width:100%; height:var(--q-h); object-fit:cover; }
+  /* the words set to the width a squeezed column has, so they never rewrap */
+  .qtext, .qdesc{ width:calc(var(--q-col) * 0.857); max-width:100%; }
   .qstar{ position:absolute; top:clamp(10px,1vw,16px); right:clamp(10px,1vw,16px);
     width:clamp(22px,2vw,32px); height:auto; color:var(--brand); }
   .qbody{ min-width:0; }
@@ -1668,8 +1675,13 @@
   /* hover focus: the card under the pointer stays, the other two step back.
      Mouse only, and the return waits a beat so crossing the gap does not flash. */
   @media (hover:hover) and (pointer:fine){
-    .qcard{ transition:opacity .35s ease .12s; }
-    .qcard:hover{ transition-delay:0s; }
+    .qcard{ transition:opacity .35s ease .12s, flex-grow .45s cubic-bezier(.2,.7,.2,1); }
+    /* the frame under the pointer widens and squeezes the rest of the row aside */
+    .chapter-media-duo .cell, .chapter-media-quad .cell, .gradex-row figure{
+      transition:opacity .35s ease .12s, flex-grow .45s cubic-bezier(.2,.7,.2,1); }
+    .chapter-media-duo .cell:hover, .chapter-media-quad .cell:hover, .gradex-row figure:hover{
+      flex-grow:calc(var(--w) * 1.5); transition-delay:0s; }
+    .qcard:hover{ flex-grow:1.5; transition-delay:0s; }
     .qcards:has(.qcard:hover) .qcard:not(:hover){ opacity:.25; transition-delay:0s; }
   }
   .subsec-title{ font-size:clamp(20px,2vw,30px); font-weight:400; letter-spacing:-0.04em; line-height:1.15; color:var(--ink); }
@@ -1709,13 +1721,13 @@
 
   /* GradEX showcase row — video + photos, equal height, natural widths (near-zero crop) */
   .gradex-row{ display:flex; gap:clamp(8px,1vw,14px); height:clamp(150px,20vw,320px); margin-top:clamp(20px,2.4vw,32px); }
-  .gradex-row figure{ margin:0; position:relative; overflow:hidden; background:transparent; min-width:0; }
+  .gradex-row figure{ margin:0; position:relative; overflow:hidden; background:transparent; min-width:0; flex:var(--w) 1 0; }
   .gradex-row img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
   .gradex-row video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
-  .gradex-row .v{ flex:1.333 1 0; }
-  .gradex-row .a{ flex:1.333 1 0; }
-  .gradex-row .b{ flex:0.749 1 0; }
-  .gradex-row .c{ flex:1.333 1 0; }
+  .gradex-row .v{ --w:1.333; }
+  .gradex-row .a{ --w:1.333; }
+  .gradex-row .b{ --w:0.749; }
+  .gradex-row .c{ --w:1.333; }
   .gradex-cap{ margin-top:12px; font-size:clamp(11px,0.85vw,13px); color:var(--muted); letter-spacing:-0.01em; }
   .build-list .k{ font-size:clamp(13px,1.05vw,16px); color:var(--ink); letter-spacing:-0.02em; }
   .build-list .v{ font-size:clamp(13px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.5; }
@@ -1742,7 +1754,9 @@
     .phase-desc{ font-size:15px; letter-spacing:-0.015em; line-height:1.45; margin-top:16px; }
     /* on a phone the star sits beside its question rather than over it, so a
        one-line question does not leave a hole under the corner */
-    .qcards{ grid-template-columns:1fr; gap:34px; margin:38px 0 34px; }
+    .qcards{ flex-direction:column; gap:34px; margin:38px 0 34px; }
+    .qshot img{ height:auto; aspect-ratio:16/9; }
+    .qtext, .qdesc{ width:auto; }
     .qcard{ row-gap:14px; }
     .qstar{ width:22px; top:10px; right:10px; }
     .qbody{ flex:1 1 auto; min-width:0; }
