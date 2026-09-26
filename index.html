@@ -526,12 +526,46 @@
     padding-bottom:12px; border-bottom:1px solid var(--line);
     font-weight:400;
   }
-  .tool-grp ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .tool-grp ul{ list-style:none; display:flex; flex-direction:column; align-items:flex-start; gap:18px; }
   .tool-grp li{
-    display:flex; justify-content:space-between; align-items:baseline;
-    font-size:14px;
+    display:flex; flex-direction:column; align-items:flex-start;
+    font-size:14px; gap:3px;
   }
-  .tool-grp li span{ font-size:12px; color:var(--muted); }
+  /* sits under the name, clear of the mark */
+  .tool-grp li .use{ margin-left:26px; font-size:12.5px; line-height:1.45; color:var(--muted); }
+  .tool-grp li .n{ display:flex; align-items:center; gap:8px; min-width:0; }
+  /* the slot is always there, so a tool without a mark still lines up */
+  /* every mark is a single-colour glyph, so one width lines the names up */
+  .tool-grp li .ico{ flex:none; display:flex; align-items:center; justify-content:center; width:18px; height:16px; }
+  .tool-grp li .ico img{
+    display:block; width:16px; height:16px; object-fit:contain;
+    transition:transform .5s cubic-bezier(.2,.7,.2,1);
+  }
+  @media (hover:hover) and (pointer:fine){
+    .tool-grp li{
+      transform-origin:left center;
+      transition:transform .45s cubic-bezier(.2,.7,.2,1);
+    }
+    .tool-grp li:hover{
+      transform:scale(1.6);
+      transition:transform .4s cubic-bezier(.34,1.4,.55,1);
+    }
+    /* the rest leans away, hardest right next to the pointer */
+    .tool-grp li:has(~ li:hover){ transform:translateY(-3px); }
+    .tool-grp li:hover ~ li{ transform:translateY(3px); }
+    .tool-grp li:has(+ li + li:hover){ transform:translateY(-6px); }
+    .tool-grp li:hover + li + li{ transform:translateY(6px); }
+    .tool-grp li:has(+ li:hover){ transform:translateY(-11px); }
+    .tool-grp li:hover + li{ transform:translateY(11px); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .tool-grp li{ transition-duration:.01s; }
+  }
+  :root[data-theme="dark"] .tool-grp li .ico img{ filter:invert(1); }
+  /* these three are a white tile with the letters cut out of it, so they arrive
+     inverted: black tile on light, white tile on dark */
+  .tool-grp li .ico img.knockout{ filter:invert(1); }
+  :root[data-theme="dark"] .tool-grp li .ico img.knockout{ filter:none; }
 
   /* CONTACT */
   .contact{ padding:140px var(--pad) 120px; }
@@ -1214,8 +1248,25 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <section class="wrap">
   <div class="sec-head reveal">
     <div>
+      <div class="label">Recognition</div>
+      <h2>Awards</h2>
+    </div>
+  </div>
+
+  <div class="xp-list awards reveal">
+    <div class="xp">
+      <div class="yr">2026 / Jun</div>
+      <div class="role">Ongen Radio<span><a href="https://acido.info/ongen-radio/" target="_blank" rel="noopener">ACIDO</a> &mdash; Nominated (Finalist)</span></div>
+      <div class="place">Toronto, Ontario</div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="sec-head reveal">
+    <div>
       <div class="label">Toolkit</div>
-      <h2>Tools of the trade</h2>
+      <h2>What I use</h2>
     </div>
   </div>
 
@@ -1223,33 +1274,80 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <div class="tool-grp">
       <h4>Design &amp; Web</h4>
       <ul>
-        <li>Figma <span>Professional</span></li>
-        <li>Framer <span>Pre-int.</span></li>
-        <li>HTML / CSS / JS <span>Tool-assisted/Intermediate</span></li>
-        <li>React <span>Tool-assisted</span></li>
-        <li>SQL Analysis <span>Tool-assisted/Pre-int.</span></li>
-      </ul>
-    </div>
-    <div class="tool-grp">
-      <h4>3D &amp; Prototyping</h4>
-      <ul>
-        <li>Fusion 360 <span>Professional</span></li>
-        <li>KeyShot <span>Professional</span></li>
-        <li>Onshape <span>Advanced</span></li>
-        <li>Blender <span>Advanced</span></li>
-        <li>Rhino 3D <span>Upper-int.</span></li>
-        <li>SolidWorks <span>Intermediate</span></li>
-        <li>Cinema 4D <span>Pre-int.</span></li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img src="./icons/figma.svg" alt="" width="16" height="16" loading="lazy" /></span>Figma</span>
+          <span class="use">Workflow &amp; prototyping</span>
+        </li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img src="./icons/framer.svg" alt="" width="16" height="16" loading="lazy" /></span>Framer</span>
+          <span class="use">Prototyping</span>
+        </li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img class="knockout" src="./icons/html.svg" alt="" width="16" height="16" loading="lazy" /></span>HTML</span>
+          <span class="use">AI-assisted</span>
+        </li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img class="knockout" src="./icons/css.svg" alt="" width="16" height="16" loading="lazy" /></span>CSS</span>
+          <span class="use">AI-assisted</span>
+        </li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img class="knockout" src="./icons/js.svg" alt="" width="16" height="16" loading="lazy" /></span>JavaScript</span>
+          <span class="use">AI-assisted</span>
+        </li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img src="./icons/python.svg" alt="" width="16" height="16" loading="lazy" /></span>Python</span>
+          <span class="use">Backend</span>
+        </li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img src="./icons/sql.svg" alt="" width="16" height="16" loading="lazy" /></span>SQL</span>
+          <span class="use">Querying &amp; data management</span>
+        </li>
       </ul>
     </div>
     <div class="tool-grp">
       <h4>Documentation</h4>
       <ul>
-        <li>Adobe Photoshop <span>Advanced</span></li>
-        <li>Adobe Premiere <span>Upper-int.</span></li>
-        <li>Adobe Illustrator <span>Intermediate</span></li>
-        <li>Microsoft PPT <span>Professional</span></li>
-        <li>Microsoft Excel <span>Intermediate</span></li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img src="./icons/photoshop.svg" alt="" width="16" height="16" loading="lazy" /></span>Adobe Photoshop</span>
+          <span class="use">In-situ mockups</span>
+        </li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img src="./icons/premiere.svg" alt="" width="16" height="16" loading="lazy" /></span>Adobe Premiere</span>
+          <span class="use">Sequence assembly</span>
+        </li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img src="./icons/illustrator.svg" alt="" width="16" height="16" loading="lazy" /></span>Adobe Illustrator</span>
+          <span class="use">Vector &amp; design components</span>
+        </li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img src="./icons/powerpoint.svg" alt="" width="16" height="16" loading="lazy" /></span>Microsoft PPT</span>
+          <span class="use">Corporate client pitches</span>
+        </li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img src="./icons/excel.svg" alt="" width="16" height="16" loading="lazy" /></span>Microsoft Excel</span>
+          <span class="use">Research data analysis</span>
+        </li>
+      </ul>
+    </div>
+    <div class="tool-grp">
+      <h4>3D &amp; Prototyping</h4>
+      <ul>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img src="./icons/fusion360.svg" alt="" width="16" height="16" loading="lazy" /></span>Fusion 360</span>
+          <span class="use">3D prototyping (concept)</span>
+        </li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img src="./icons/keyshot.svg" alt="" width="16" height="16" loading="lazy" /></span>KeyShot</span>
+          <span class="use">Product rendering</span>
+        </li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img src="./icons/blender.svg" alt="" width="16" height="16" loading="lazy" /></span>Blender</span>
+          <span class="use">Animation &amp; VFX</span>
+        </li>
+        <li>
+          <span class="n"><span class="ico" aria-hidden="true"><img src="./icons/solidworks.svg" alt="" width="16" height="16" loading="lazy" /></span>SolidWorks</span>
+          <span class="use">3D prototyping (fabrication)</span>
+        </li>
       </ul>
     </div>
   </div>
