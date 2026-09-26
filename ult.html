@@ -1649,7 +1649,8 @@
   }
   .tldr-list > div:first-child{ border-top:0; padding-top:2px; }
   .tldr-list dt{ font-size:11.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); line-height:1.7; }
-  .tldr-list dd{ margin:0; font-size:14.5px; line-height:1.55; }
+  .tldr-list dd{ margin:0; font-size:14.5px; line-height:1.55; text-wrap:pretty; }
+  .tldr-list dd .nb{ white-space:nowrap; }
   @media (max-width:880px){
     .tldr{ grid-template-columns:1fr; gap:clamp(14px,3vw,22px); padding-top:34px; padding-bottom:40px; }
     .tldr-mark{ font-size:clamp(40px,13vw,64px); }

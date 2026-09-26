@@ -1651,7 +1651,8 @@
   }
   .tldr-list > div:first-child{ border-top:0; padding-top:2px; }
   .tldr-list dt{ font-size:11.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); line-height:1.7; }
-  .tldr-list dd{ margin:0; font-size:14.5px; line-height:1.55; }
+  .tldr-list dd{ margin:0; font-size:14.5px; line-height:1.55; text-wrap:pretty; }
+  .tldr-list dd .nb{ white-space:nowrap; }
   @media (max-width:880px){
     .tldr{ grid-template-columns:1fr; gap:clamp(14px,3vw,22px); padding-top:34px; padding-bottom:40px; }
     .tldr-mark{ font-size:clamp(40px,13vw,64px); }
@@ -2073,7 +2074,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="hero-row">
     <dl class="hero-side">
       <div class="pair"><dt>Year</dt><dd>2026 / Jul</dd></div>
-      <div class="pair"><dt>Type</dt><dd>Native App, UX Research, WCAG 2.2 AA</dd></div>
+      <div class="pair"><dt>Type</dt><dd>Native App, UX Research, WCAG 2.2 AA (AODA)</dd></div>
       <div class="pair"><dt>Platform</dt><dd>iOS · Widgets · Live Activity</dd></div>
       <div class="pair"><dt>Skills</dt><dd>Product Design, Interaction Design, iOS Design, Prototyping, Usability Testing</dd></div>
     </dl>
@@ -2087,7 +2088,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <div><dt>Team</dt><dd>Solo</dd></div>
       <div><dt>Timeline</dt><dd>Jul 2026</dd></div>
       <div><dt>Problem</dt><dd>Early-career adults cannot read their own spending. The number is already there, and the interface is what makes it unreadable.</dd></div>
-      <div><dt>Outcome</dt><dd>An iOS-native app built on widgets and a Live Activity, designed and then audited against WCAG 2.2 AA.</dd></div>
+      <div><dt>Outcome</dt><dd>An iOS-native app built on widgets and a Live Activity, designed and then audited against WCAG 2.2 AA (AODA).</dd></div>
   </dl>
 </section>
 
@@ -2252,9 +2253,10 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <section class="phase-flat" id="design-audit">
   <div class="phase-name">Design Audit</div>
-  <div class="phase-sub">WCAG 2.2 AA</div>
+  <div class="phase-sub">WCAG 2.2 AA (AODA)</div>
   <p class="phase-desc">I took the finished screens back into Figma and measured every layer against WCAG 2.2 AA, instead of judging the contrast by eye.</p>
   <p class="phase-note">A redesign only counts if it could actually ship, so the question I wanted answered was whether these screens hold up as an accessible product rather than as a portfolio image. WCAG 2.2 AA gave me a frame to test that against. It turns "is this grey readable" into a number I either meet or I do not, and it is the standard the work would be held to in practice anyway.</p>
+  <p class="phase-note">In Ontario that is a legal floor rather than a preference. The AODA sets WCAG AA as the bar for public-facing digital services, and I held the screens to 2.2, the current version of it.</p>
   <img class="subsec-img" width="2811" height="810" src="./finboarddynamicislandaudit.png" alt="Audit overlay on the Dynamic Island stages, flagging contrast and text size on each layer" loading="lazy" srcset="./light/finboarddynamicislandaudit.webp 1440w, ./finboarddynamicislandaudit.png 2811w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <img class="subsec-img" width="4463" height="1530" src="./finboardInappaudit.png" alt="Audit overlay on the in-app screens, flagging contrast and text size on each layer" loading="lazy" style="margin-top:clamp(20px,2.4vw,32px);" srcset="./light/finboardInappaudit.webp 1440w, ./finboardInappaudit.png 4463w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <div class="subsec">

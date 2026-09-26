@@ -1666,7 +1666,8 @@
   }
   .tldr-list > div:first-child{ border-top:0; padding-top:2px; }
   .tldr-list dt{ font-size:11.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); line-height:1.7; }
-  .tldr-list dd{ margin:0; font-size:14.5px; line-height:1.55; }
+  .tldr-list dd{ margin:0; font-size:14.5px; line-height:1.55; text-wrap:pretty; }
+  .tldr-list dd .nb{ white-space:nowrap; }
   @media (max-width:880px){
     .tldr{ grid-template-columns:1fr; gap:clamp(14px,3vw,22px); padding-top:34px; padding-bottom:40px; }
     .tldr-mark{ font-size:clamp(40px,13vw,64px); }
@@ -2121,11 +2122,11 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <section class="tldr" aria-label="Summary">
   <h2 class="tldr-mark">TLDR</h2>
   <dl class="tldr-list">
-      <div><dt>Role</dt><dd>Sole designer and researcher</dd></div>
+      <div><dt>Role</dt><dd>AR experience design, research, AI-assisted prototyping</dd></div>
       <div><dt>Team</dt><dd>Solo, with faculty critique from Alexander Manu and Bernard Dietz</dd></div>
       <div><dt>Timeline</dt><dd>Sep 2025 &ndash; Mar 2026 &middot; 6 months</dd></div>
       <div><dt>Problem</dt><dd>AR glasses already exist, but the interaction is still a phone stretched across your face, so the space around you stays inert.</dd></div>
-      <div><dt>Outcome</dt><dd>A real-time geolocational AR platform, tested live at GradEX 111 &mdash; 408 sessions from 147 users, 35.6s median interaction. ACIDO 2026 finalist.</dd></div>
+      <div><dt>Outcome</dt><dd>A real-time geolocational AR platform, tested live at GradEX 111 &mdash; 408 sessions from 147 users, 35.6s median interaction. <span class="nb">ACIDO 2026 finalist.</span></dd></div>
   </dl>
 </section>
 

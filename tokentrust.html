@@ -1653,7 +1653,8 @@
   }
   .tldr-list > div:first-child{ border-top:0; padding-top:2px; }
   .tldr-list dt{ font-size:11.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); line-height:1.7; }
-  .tldr-list dd{ margin:0; font-size:14.5px; line-height:1.55; }
+  .tldr-list dd{ margin:0; font-size:14.5px; line-height:1.55; text-wrap:pretty; }
+  .tldr-list dd .nb{ white-space:nowrap; }
   @media (max-width:880px){
     .tldr{ grid-template-columns:1fr; gap:clamp(14px,3vw,22px); padding-top:34px; padding-bottom:40px; }
     .tldr-mark{ font-size:clamp(40px,13vw,64px); }
@@ -2163,7 +2164,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <p class="phase-note">The unit of analysis is where I spent the most time as lead. I fixed it at one median text prompt, then multiplied out by volume and by default distribution to reach the system-level effect. Without that ladder every statistic the team found would have been an anecdote. Chip fabrication, enterprise API workloads, and copyright licensing went outside the boundary on purpose, because auditing them properly was a different project, and saying so protected the credibility of what we did claim.</p>
   <img class="subsec-img" width="2838" height="1470" src="./tokentrustresearch2.png" alt="Research synthesis board: market landscape, six statistical axes with cited sources and contributor initials, and pitch-level numbers" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/tokentrustresearch2.webp 1440w, ./tokentrustresearch2.png 2838w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">The audit framework was where we started, not what we concluded. With the boundary and the unit of analysis fixed, I had the team widen out from it and split the evidence into energy, water, carbon, labour, disclosure, and behaviour, so the read would be system-level instead of a list of complaints about one product. Every card carried a citation and the initials of whoever found it, because when a team researches in parallel it stops being clear who stands behind a number.</p>
-  <p class="phase-note">Synthesis was the part I kept for myself, and it is where I turned the analysis back toward the person using these tools. The system-level numbers are real, but none of them reach the user, who sees no cost, no destination, and no return for what they hand over. I defined the problem there rather than at the infrastructure layer, and that decision set the direction for everything after it: the main strategy is to solve what is broken from the user's point of view, and the service has to be composed around that rather than around the audit that led us to it.</p>
+  <p class="phase-note">I took the synthesis, and it is where I turned the analysis back toward the person using these tools. The system-level numbers are real, but none of them reach the user, who sees no cost, no destination, and no return for what they hand over. I defined the problem there rather than at the infrastructure layer, and that decision set the direction for everything after it: the main strategy is to solve what is broken from the user's point of view, and the service has to be composed around that rather than around the audit that led us to it.</p>
 
   <div class="subsec">
     <div class="subsec-title">Confirmed Direction</div>
@@ -2214,11 +2215,11 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <section class="phase-flat" id="prototyping">
   <div class="phase-name">Prototyping</div>
   <p class="phase-desc">A governance framework is easy to nod along to and hard to argue with, which is a problem. I built the prototype so the team had something concrete to disagree about, and so DQI, Reward Token, and Data Credit stopped being three boxes on a slide and became screens with numbers in them.</p>
-  <p class="phase-note">I set the direction here rather than dividing it up. With five people and six weeks, an interface designed by committee would have drifted, so I drew the flows and the component library myself and used the team's critique to correct them. Everything below traces back to a decision made in research: the privacy slider exists because consent has to be adjustable, the receipt exists because DQI has to be legible, and the data flow screens exist because traceability is the axis everything else depends on.</p>
+  <p class="phase-note">I held the interface decisions rather than splitting them across the team. With five people and six weeks, a design settled by vote would have drifted, so I set the flow structure and the rules each component had to follow, then took it back to the team for critique. They came out of graphic design, so they built the layouts out against that structure and led the visual side of the final pitch, including the film. Everything below traces back to a decision made in research: the privacy slider exists because consent has to be adjustable, the receipt exists because DQI has to be legible, and the data flow screens exist because traceability is the axis everything else depends on.</p>
 
   <div class="subsec">
     <div class="subsec-title">Low-fidelity Prototype</div>
-    <p class="subsec-lead">Three journeys, each wireframed beside the flow that drives it. I drew these myself before any visual decision was made, because what I wanted the team arguing about was branching, not colour.</p>
+    <p class="subsec-lead">Three journeys, each wireframed beside the flow that drives it. I wireframed these before any visual decision was made, so the team's attention went to branching rather than colour.</p>
     <div class="shots" data-label="Journey" style="--shot-ar:3320/1712">
       <div class="shots-track">
       <figure class="shot">

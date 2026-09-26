@@ -1649,7 +1649,8 @@
   }
   .tldr-list > div:first-child{ border-top:0; padding-top:2px; }
   .tldr-list dt{ font-size:11.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); line-height:1.7; }
-  .tldr-list dd{ margin:0; font-size:14.5px; line-height:1.55; }
+  .tldr-list dd{ margin:0; font-size:14.5px; line-height:1.55; text-wrap:pretty; }
+  .tldr-list dd .nb{ white-space:nowrap; }
   @media (max-width:880px){
     .tldr{ grid-template-columns:1fr; gap:clamp(14px,3vw,22px); padding-top:34px; padding-bottom:40px; }
     .tldr-mark{ font-size:clamp(40px,13vw,64px); }
@@ -2052,7 +2053,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="phase-name">Overview</div>
   <div class="phase-sub">Two audits, one argument</div>
   <p class="phase-desc">Audit I maps what Amazon actually is, a commerce layer, a cloud layer, and a content layer that reinforce each other. Audit II takes the failure that survey exposed and proposes a fix: connect the buyer-side AI to the seller-side AI so demand is verified before production starts.</p>
-  <p class="phase-note">I led the team and took the data analysis and the service framework myself. The reason the two audits belong on one page is that the second only makes sense if you accept the first: Amazon's problem is not that it moves too slowly, it is that its speed is built on manufacturing things nobody has committed to buying.</p>
+  <p class="phase-note">I led the team and took the data analysis and the service framework, with the rest of the audit split across the other four. The reason the two audits belong on one page is that the second only makes sense if you accept the first: Amazon's problem is not that it moves too slowly, it is that its speed is built on manufacturing things nobody has committed to buying.</p>
 
   <div class="subsec">
     <h3 class="subsec-title">Snapshot</h3>
