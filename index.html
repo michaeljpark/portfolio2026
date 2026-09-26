@@ -386,7 +386,13 @@
   .work.cnpt-work .cnpt-mark{
     width:min(34%, 260px); height:auto;
     object-fit:contain;
-    transition:filter .35s ease;
+    /* its own easing: the card-wide 1.03 nudge is too small and too stiff here */
+    transition:transform .55s cubic-bezier(.2,.7,.2,1), filter .35s ease;
+  }
+  a:hover .work.cnpt-work .cnpt-mark{ transform:scale(1.14); }
+  @media (prefers-reduced-motion: reduce){
+    .work.cnpt-work .cnpt-mark{ transition:filter .35s ease; }
+    a:hover .work.cnpt-work .cnpt-mark{ transform:none; }
   }
   /* dark: a grey plate, and the same file inverted to white */
   :root[data-theme="dark"] .work.cnpt-work{ background:#131313; box-shadow:none; }
