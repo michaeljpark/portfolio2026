@@ -1630,6 +1630,33 @@
   .phase-name{ font-size:clamp(22px,3vw,42px); font-weight:400; letter-spacing:-0.04em; line-height:1.1; transition:opacity .2s; margin-bottom:4px; }
   .phase-sub{ font-size:13px; color:var(--muted); letter-spacing:-0.02em; line-height:1.4; }
   /* Flat chapter headers (content rebuilt from scratch) */
+  /* TL;DR band: the word on the left, the five lines that matter on the right */
+  .tldr{
+    max-width:var(--max); margin:0 auto;
+    padding:clamp(40px,5vw,76px) var(--pad);
+    border-top:1px solid var(--line);
+    display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.45fr);
+    gap:clamp(20px,4vw,64px); align-items:start;
+  }
+  .tldr-mark{
+    margin:0; font-weight:500; line-height:.92;
+    font-size:clamp(44px,7.4vw,104px); letter-spacing:-0.05em;
+  }
+  .tldr-list{ display:flex; flex-direction:column; }
+  .tldr-list > div{
+    display:grid; grid-template-columns:96px minmax(0,1fr); gap:20px;
+    padding:13px 0; border-top:1px solid var(--line);
+  }
+  .tldr-list > div:first-child{ border-top:0; padding-top:2px; }
+  .tldr-list dt{ font-size:11.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); line-height:1.7; }
+  .tldr-list dd{ margin:0; font-size:14.5px; line-height:1.55; }
+  @media (max-width:880px){
+    .tldr{ grid-template-columns:1fr; gap:clamp(14px,3vw,22px); padding-top:34px; padding-bottom:40px; }
+    .tldr-mark{ font-size:clamp(40px,13vw,64px); }
+    .tldr-list > div{ grid-template-columns:1fr; gap:3px; padding:12px 0; }
+    .tldr-list dt{ line-height:1.5; }
+    .tldr-list dd{ font-size:14px; }
+  }
   .phase-flat{ max-width:var(--max); margin:0 auto; padding:clamp(56px,8vw,110px) var(--pad) clamp(28px,3.5vw,44px); border-top:1px solid var(--line); }
   .phase-flat .phase-num{ margin-bottom:10px; }
   .phase-flat .phase-name{ margin-bottom:8px; }
@@ -1987,7 +2014,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <a href="./index.html#work">Work</a>
       <a href="./index.html#about">About</a>
       <a href="./index.html#contact">Contact</a>
-      <a href="./Joongmin_Park_Resume_2026.pdf" target="_blank" rel="noopener">Résumé</a>
+      <a href="./Joongmin_Park_Resume.pdf" target="_blank" rel="noopener">Résumé</a>
     </div>
   </div>
 </nav>
@@ -2009,6 +2036,17 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     </dl>
   </div>
 </header>
+
+<section class="tldr" aria-label="Summary">
+  <h2 class="tldr-mark">TLDR</h2>
+  <dl class="tldr-list">
+      <div><dt>Role</dt><dd>Service design, concept direction</dd></div>
+      <div><dt>Team</dt><dd>Solo</dd></div>
+      <div><dt>Timeline</dt><dd>Jun 2026 &mdash; in progress</dd></div>
+      <div><dt>Problem</dt><dd>In renovation the evidence stops travelling between steps, so the owner re-explains the job to every new person and every price stays a claim.</dd></div>
+      <div><dt>Outcome</dt><dd>A six-step pipeline from a phone scan to a signed contract, where each price is a measured, auditable claim. Stage walkthroughs still in production.</dd></div>
+  </dl>
+</section>
 
 <section class="phase-flat" id="overview">
   <div class="phase-name">Overview</div>
