@@ -1638,6 +1638,9 @@
   .phase-flat .phase-num{ margin-bottom:10px; }
   .phase-flat .phase-name{ margin-bottom:8px; }
   .phase-desc{ margin-top:clamp(20px,2.2vw,30px); font-size:clamp(16px,1.5vw,22px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
+  /* the line that opens a chapter: a size up from the paragraph under it */
+  .phase-desc.statement{ font-size:clamp(20px,2.2vw,32px); letter-spacing:-0.03em; line-height:1.25; }
+  .phase-desc.statement + .phase-desc{ margin-top:clamp(12px,1.2vw,16px); }
   .phase-note{ margin-top:clamp(16px,1.8vw,24px); font-size:clamp(14px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.65; max-width:none; text-align:justify; }
   .phase-note em{ font-style:normal; color:var(--ink); }
   /* two photos + showcase video, equal height, natural widths (near-zero crop) */
@@ -1668,7 +1671,7 @@
   .qstar{ position:absolute; top:clamp(10px,1vw,16px); right:clamp(10px,1vw,16px);
     width:clamp(22px,2vw,32px); height:auto; color:var(--brand); }
   .qbody{ min-width:0; }
-  .qtext{ margin:0; font-family:"Times New Roman",Times,serif; font-weight:700; font-size:clamp(21px,2.05vw,32px);
+  .qtext{ margin:0; font-weight:400; font-size:clamp(21px,2.05vw,32px);
     line-height:1.25; letter-spacing:-0.03em; color:var(--ink); }
   .qdesc{ margin:10px 0 0; font-size:clamp(14px,1.05vw,16px); color:var(--muted);
     letter-spacing:-0.01em; line-height:1.5; }
@@ -1752,6 +1755,7 @@
     /* body copy: smaller, looser tracking, left-aligned
        (justify leaves ugly word-gaps in a narrow column) */
     .phase-desc{ font-size:15px; letter-spacing:-0.015em; line-height:1.45; margin-top:16px; }
+    .phase-desc.statement{ font-size:19px; line-height:1.3; }
     /* on a phone the star sits beside its question rather than over it, so a
        one-line question does not leave a hole under the corner */
     .qcards{ flex-direction:column; gap:34px; margin:38px 0 34px; }
@@ -2076,6 +2080,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="subsec-video">
     <video class="snap-vid" data-src="./tokentrustproblemdefinition.mp4?v=20260921" data-poster="./posters/tokentrustproblemdefinition.jpg?v=20260921" loop muted playsinline preload="none"></video>
   </div>
+  <p class="phase-desc statement">You don&rsquo;t own tokens. You only give data.</p>
   <p class="phase-desc">Most AI companies treat tokens as an internal meter for usage. People have almost no sense of what their data is worth, no view of where it goes, and no say in who profits from it.</p>
   <p class="phase-note">Consent and control are already guaranteed in law. GDPR gives people the right to withdraw permission and to access, change, and delete what has been collected. What no law says is that the value has to come back. I decided early that this gap, not privacy in general, was where the project would sit, because it is the one part of the problem nobody had built a mechanism for.</p>
 
