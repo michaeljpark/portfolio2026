@@ -261,37 +261,59 @@
     font-size:14px; color:var(--muted); max-width:38ch; line-height:1.5;
   }
 
-  /* SELECTED — 3 big full-bleed rows, then the 6 small pieces as one
-     scrollable carousel row. `order` keeps the DOM untouched. */
-  .selected{
-    display:grid;
-    grid-template-columns:repeat(6,minmax(0,1fr));
-    column-gap:20px; row-gap:56px;
-    align-items:start;
+  /* SELECTED — the four main pieces as two rows of two, then the venture band
+     and the small pieces as one scrollable carousel row. */
+  .selected{ display:flex; flex-direction:column; row-gap:56px; }
+  /* each row is a flex pair, so the card under the pointer can widen and push its
+     partner aside while the row itself keeps its width */
+  .work-row{
+    display:flex; gap:var(--row-gap); align-items:flex-start;
+    --row-gap:20px;
+    /* the resting column: the picture height comes off it, so widening a card
+       crops its picture instead of making the row taller, and the words below
+       stay on this two-column grid however wide the picture gets */
+    --card-w:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * var(--pad) - var(--row-gap)) / 2);
+    --card-h:calc(var(--card-w) / 2);
+    /* how much the hovered card takes, and what the two widths become as a share
+       of the resting column: the caption is scaled by the same numbers, so it
+       tracks its picture without a single line ever rewrapping */
+    --card-grow:1.35;
+    --card-up:calc(2 * var(--card-grow) / (var(--card-grow) + 1));
+    --card-down:calc(2 / (var(--card-grow) + 1));
+  }
+  .work-row .work-block{ flex:1 1 0; min-width:0; }
+  .work-row > .work-block > a{ display:block; }
+  .work-row .work-block.is-big .work{ height:var(--card-h); aspect-ratio:auto; }
+  /* the caption keeps the resting column's width and edge: the left one is pinned
+     to the left of the row, the right one to its right */
+  .work-row .w-info{ width:var(--card-w); }
+  .work-row .work-block:last-child .w-info{ margin-left:calc(100% - var(--card-w)); }
+  @media (hover:hover) and (pointer:fine){
+    .work-row .work-block{ transition:flex-grow .45s cubic-bezier(.2,.7,.2,1); }
+    .work-row .work-block:hover{ flex-grow:var(--card-grow); }
+    /* the words scale with their picture instead of rewrapping, anchored to the
+       row's outer edge so the caption and the picture keep the same edge */
+    .work-row .w-info{ transform-origin:left top; transition:transform .45s cubic-bezier(.2,.7,.2,1); }
+    .work-row .work-block:last-child .w-info{ transform-origin:right top; }
+    .work-row .work-block:hover .w-info{ transform:scale(var(--card-up)); }
+    .work-row:has(.work-block:hover) .work-block:not(:hover) .w-info{ transform:scale(var(--card-down)); }
   }
   /* BIG: the four main pieces two across, 2:1 each */
-  .work-block.is-big{ grid-column:span 3; }
   .work-block.is-big .work{ aspect-ratio:2/1; }
   .work-block.is-big .w-info{ margin-top:18px; }
   .work-block.is-big .w-info .t{ font-size:clamp(18px,1.7vw,26px); }
   /* cnpt is not one of the four: it sits in its own band under them */
   .startup-wrap{
-    grid-column:1 / -1; order:5;
     margin-top:48px; padding-top:64px;
     border-top:1px solid var(--line);
   }
   .startup-wrap .carousel-head{ margin-bottom:28px; }
   /* the same size as one of the four above, just on its own row */
-  .startup-wrap .work-block.is-big{ grid-column:auto; width:calc((100% - 20px) / 2); }
-  /* explicit order: bigs first (ongen→token→cf→finboard→cnpt), carousel last */
-  .work-block.o1{ order:1 } .work-block.o2{ order:2 }
-  .work-block.o3{ order:3 } .work-block.o4{ order:4 }
-  .work-block.o5{ order:5 }
+  .startup-wrap .work-block.is-big{ width:calc((100% - 20px) / 2); }
 
   /* SMALL: one-row carousel — 3 cards in view, scroll/arrows for the rest */
   /* set the carousel apart from the three main pieces above it */
   .carousel-wrap{
-    grid-column:1 / -1; order:6;
     margin-top:48px; padding-top:64px;
     border-top:1px solid var(--line);
   }
@@ -845,9 +867,12 @@
     .hero-info-mobile{ display:flex; flex-direction:column; gap:14px; font-size:13px; margin-top:24px; }
     .hero-info-mobile .pair{ display:flex; flex-direction:column; gap:2px; }
     .hero-info-mobile dt{ color:var(--muted); }
-    .selected{ column-gap:12px; row-gap:36px; }
+    .selected{ row-gap:36px; }
     /* one main piece per row once half-width cards get too small to read */
-    .work-block.is-big{ grid-column:1 / -1; }
+    .work-row{ flex-direction:column; align-items:stretch; gap:36px; }
+    .work-row .work{ height:auto; aspect-ratio:2/1; }
+    .work-row .w-info,
+    .work-row .work-block:last-child .w-info{ width:auto; margin-left:0; }
     .startup-wrap .work-block.is-big{ width:100%; }
     /* carousel: 2 cards in view on tablet */
     .carousel{ gap:14px; }
@@ -966,33 +991,8 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
 
   <div class="selected">
-    <div class="work-block reveal is-big o3">
-      <a href="./cf-sherway.html">
-        <div class="work" style="background:#ffffff;" data-cursor="UX Research B2C" data-cursor-icon="arrow-up-right">
-          <video class="lazy-vid" data-src="./Sherwaystampsnapshot.mp4" data-poster="./posters/Sherwaystampsnapshot.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-          <div class="card-tags"><span class="tag core">Client Project</span><span class="tag">Public Realm</span><span class="tag">UX Research</span></div>
-        </div>
-        <div class="w-info">
-          <div class="t"><span>CF Sherway Gardens : A Public Realm for Newcomers</span><span class="arrow">→</span></div>
-          <div class="w-meta"><div class="m"><span>2024</span><span>UX Design</span><span>Cadillac Fairview</span></div><div class="w-tags"><span class="w-tag">UX Research</span><span class="w-tag">Public Realm</span></div></div>
-        </div>
-      </a>
-    </div>
-
-    <div class="work-block reveal is-big o4">
-      <a href="./finboard.html">
-        <div class="work" style="background:#0a0a0a;" data-cursor="Fintech UI/UX" data-cursor-icon="arrow-up-right">
-          <video class="lazy-vid" data-src="./finboardcard.mp4?v=20260925b" data-poster="./posters/finboardcard.jpg?v=20260925b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-          <div class="card-tags"><span class="tag core">iOS Native</span><span class="tag">Banking App</span><span class="tag">Design Audit</span><span class="tag">Concept</span></div>
-        </div>
-        <div class="w-info">
-          <div class="t"><span>finboard : Live Personal-Finance Dashboard</span><span class="arrow">→</span></div>
-          <div class="w-meta"><div class="m"><span>2026</span><span>Product Design</span></div><div class="w-tags"><span class="w-tag">WCAG 2.2 AA</span><span class="w-tag">Native App Design</span></div></div>
-        </div>
-      </a>
-    </div>
-
-    <div class="work-block reveal is-big o1">
+    <div class="work-row reveal">
+      <div class="work-block reveal is-big o1">
       <a href="./ongenradio.html">
         <div class="work ongen-work" data-cursor="AI in AR" data-cursor-icon="arrow-up-right">
           <div class="ongen-img">
@@ -1007,9 +1007,8 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
           <div class="w-meta"><div class="m"><span>2025-2026</span><span>Thesis Project</span><span>6 Months</span></div><div class="w-tags"><span class="w-tag">AR</span><span class="w-tag">Web</span><span class="w-tag">Mobile App</span></div></div>
         </div>
       </a>
-    </div>
-
-    <div class="work-block reveal is-big o2">
+      </div>
+      <div class="work-block reveal is-big o2">
       <a href="./tokentrust.html">
         <div class="work" data-cursor="AI B2B" data-cursor-icon="arrow-up-right"><video class="lazy-vid" data-src="./tokentrustcard.mp4?v=20260925b" data-poster="./posters/tokentrustcard.jpg?v=20260925b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video><div class="card-tags"><span class="tag core">Team Lead</span><span class="tag">AI Governance</span><span class="tag">Concept</span></div></div>
         <div class="w-info">
@@ -1017,7 +1016,37 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
           <div class="w-meta"><div class="m"><span>2026</span><span>Service Design</span><span>3 Weeks</span></div><div class="w-tags"><span class="w-tag">Service Proposal</span><span class="w-tag">Web App</span></div></div>
         </div>
       </a>
+      </div>
     </div>
+    <div class="work-row reveal">
+      <div class="work-block reveal is-big o3">
+      <a href="./cf-sherway.html">
+        <div class="work" style="background:#ffffff;" data-cursor="UX Research B2C" data-cursor-icon="arrow-up-right">
+          <video class="lazy-vid" data-src="./Sherwaystampsnapshot.mp4" data-poster="./posters/Sherwaystampsnapshot.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+          <div class="card-tags"><span class="tag core">Client Project</span><span class="tag">Public Realm</span><span class="tag">UX Research</span></div>
+        </div>
+        <div class="w-info">
+          <div class="t"><span>CF Sherway Gardens : A Public Realm for Newcomers</span><span class="arrow">→</span></div>
+          <div class="w-meta"><div class="m"><span>2024</span><span>UX Design</span><span>Cadillac Fairview</span></div><div class="w-tags"><span class="w-tag">UX Research</span><span class="w-tag">Public Realm</span></div></div>
+        </div>
+      </a>
+      </div>
+      <div class="work-block reveal is-big o4">
+      <a href="./finboard.html">
+        <div class="work" style="background:#0a0a0a;" data-cursor="Fintech UI/UX" data-cursor-icon="arrow-up-right">
+          <video class="lazy-vid" data-src="./finboardcard.mp4?v=20260925b" data-poster="./posters/finboardcard.jpg?v=20260925b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+          <div class="card-tags"><span class="tag core">iOS Native</span><span class="tag">Banking App</span><span class="tag">Design Audit</span><span class="tag">Concept</span></div>
+        </div>
+        <div class="w-info">
+          <div class="t"><span>finboard : Live Personal-Finance Dashboard</span><span class="arrow">→</span></div>
+          <div class="w-meta"><div class="m"><span>2026</span><span>Product Design</span></div><div class="w-tags"><span class="w-tag">WCAG 2.2 AA</span><span class="w-tag">Native App Design</span></div></div>
+        </div>
+      </a>
+      </div>
+    </div>
+
+
+
 
     <!-- ongoing venture, no case page: the card goes straight to the studio site -->
     <div class="startup-wrap reveal">

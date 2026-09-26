@@ -1711,14 +1711,14 @@
   .feature-trio{
     display:flex; align-items:flex-start; gap:var(--trio-gap); margin-top:clamp(20px,2.4vw,32px);
     --trio-gap:clamp(12px,1.4vw,20px);
-    --trio-col:calc((min(100vw, var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--trio-gap)) / 3);
+    --trio-col:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--trio-gap)) / 3);
     --trio-h:calc(var(--trio-col) / 1.7778);
   }
   .feature-trio figure{ margin:0; min-width:0; flex:1 1 0; }
   .feature-trio img{ display:block; width:100%; height:var(--trio-h); object-fit:cover; }
   /* the caption always sets to the width a squeezed column has, so widening the
      picture beside it never rewraps the text and the row keeps its height */
-  .feature-trio figcaption{ margin-top:14px; width:calc(var(--trio-col) * 0.857); max-width:100%; }
+  .feature-trio figcaption{ margin-top:14px; width:calc(var(--trio-col) * 0.845); max-width:100%; }
   .feature-trio .k{ display:block; font-size:clamp(13px,1.05vw,16px); color:var(--ink); letter-spacing:-0.02em; }
   .feature-trio .v{ display:block; margin-top:4px; font-size:clamp(13px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.5; }
   .feature-trio.hmw img{ aspect-ratio:16/9; object-fit:cover; }
@@ -2320,6 +2320,19 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
 </footer>
 
+<script>
+  /* Publish the classic-scrollbar width, so the rows that work their own column
+     width out in CSS subtract it instead of guessing from 100vw. Overlay
+     scrollbars (macOS, touch) measure 0, which is the right answer there. */
+  (function () {
+    function measure() {
+      var w = window.innerWidth - document.documentElement.clientWidth;
+      document.documentElement.style.setProperty("--sbw", (w > 0 ? w : 0) + "px");
+    }
+    measure();
+    window.addEventListener("resize", measure);
+  })();
+</script>
 <script src="./lazy-video.js?v=20260818"></script>
 <script src="./phase-nav.js?v=20260919b"></script>
 <script src="./cursor-pill.js?v=20260921"></script>

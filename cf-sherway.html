@@ -1645,7 +1645,7 @@
      own ratio, so the row height falls out of the width and nothing is cropped */
   .chapter-media-duo{ display:flex; gap:var(--row-gap); margin-bottom:clamp(32px,4vw,48px);
     --row-gap:clamp(8px,1vw,16px);
-    height:calc((min(100vw, var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--row-gap)) / 4.388); }
+    height:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--row-gap)) / 4.388); }
   .chapter-media-duo .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; flex:var(--w) 1 0; }
   .chapter-media-duo .cell img, .chapter-media-duo .cell video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
   .chapter-media-duo .m1{ --w:0.982; }
@@ -1658,7 +1658,7 @@
      so all four resolve to one shared height and object-fit:cover never has to crop */
   .chapter-media-quad{ display:flex; gap:var(--row-gap); margin-bottom:clamp(32px,4vw,48px);
     --row-gap:clamp(8px,1vw,16px);
-    height:calc((min(100vw, var(--max)) - 2 * clamp(12px,2vw,28px) - 3 * var(--row-gap)) / 3.752); }
+    height:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * clamp(12px,2vw,28px) - 3 * var(--row-gap)) / 3.752); }
   .chapter-media-quad .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; flex:var(--w) 1 0; }
   .chapter-media-quad .cell img{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
   .chapter-media-quad .q1{ --w:0.706; }
@@ -1700,14 +1700,14 @@
   .feature-trio{
     display:flex; align-items:flex-start; gap:var(--trio-gap); margin-top:clamp(20px,2.4vw,32px);
     --trio-gap:clamp(12px,1.4vw,20px);
-    --trio-col:calc((min(100vw, var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--trio-gap)) / 3);
+    --trio-col:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--trio-gap)) / 3);
     --trio-h:calc(var(--trio-col) / 1.7778);
   }
   .feature-trio figure{ margin:0; min-width:0; flex:1 1 0; }
   .feature-trio img{ display:block; width:100%; height:var(--trio-h); object-fit:cover; }
   /* the caption always sets to the width a squeezed column has, so widening the
      picture beside it never rewraps the text and the row keeps its height */
-  .feature-trio figcaption{ margin-top:14px; width:calc(var(--trio-col) * 0.857); max-width:100%; }
+  .feature-trio figcaption{ margin-top:14px; width:calc(var(--trio-col) * 0.845); max-width:100%; }
   .feature-trio .v{ display:block; font-size:clamp(13px,1.05vw,16px); color:var(--muted); letter-spacing:-0.01em; line-height:1.5; }
   /* hover focus: the photo under the pointer stays, the rest of the row steps back */
   @media (hover:hover) and (pointer:fine){
@@ -2250,6 +2250,19 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <p style="font-size:13px; color:var(--muted);">&copy; 2026 Michael Joongmin Park</p>
 </footer>
 
+<script>
+  /* Publish the classic-scrollbar width, so the rows that work their own column
+     width out in CSS subtract it instead of guessing from 100vw. Overlay
+     scrollbars (macOS, touch) measure 0, which is the right answer there. */
+  (function () {
+    function measure() {
+      var w = window.innerWidth - document.documentElement.clientWidth;
+      document.documentElement.style.setProperty("--sbw", (w > 0 ? w : 0) + "px");
+    }
+    measure();
+    window.addEventListener("resize", measure);
+  })();
+</script>
 <script src="./lazy-video.js?v=20260828"></script>
 <script src="./phase-nav.js?v=20260919b"></script>
 <script src="./cursor-pill.js?v=20260921"></script>

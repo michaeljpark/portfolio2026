@@ -1656,7 +1656,7 @@
   .qcards{ display:flex; align-items:flex-start; gap:var(--q-gap);
     margin:clamp(40px,4.4vw,68px) 0 clamp(32px,3.6vw,56px);
     --q-gap:clamp(24px,3vw,48px);
-    --q-col:calc((min(100vw, var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--q-gap)) / 3);
+    --q-col:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--q-gap)) / 3);
     --q-h:calc(var(--q-col) / 1.7778); }
   /* picture first, the logo star sitting in its top corner, then the words */
   .qcard{ position:relative; flex:1 1 0; min-width:0; display:grid; grid-template-columns:minmax(0,1fr);
@@ -1664,7 +1664,7 @@
   .qshot{ position:relative; }
   .qshot img{ display:block; width:100%; height:var(--q-h); object-fit:cover; }
   /* the words set to the width a squeezed column has, so they never rewrap */
-  .qtext, .qdesc{ width:calc(var(--q-col) * 0.857); max-width:100%; }
+  .qtext, .qdesc{ width:calc(var(--q-col) * 0.845); max-width:100%; }
   .qstar{ position:absolute; top:clamp(10px,1vw,16px); right:clamp(10px,1vw,16px);
     width:clamp(22px,2vw,32px); height:auto; color:var(--brand); }
   .qbody{ min-width:0; }
@@ -2273,6 +2273,19 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <p style="font-size:13px; color:var(--muted);">© 2026 Michael Joongmin Park</p>
 </footer>
 
+<script>
+  /* Publish the classic-scrollbar width, so the rows that work their own column
+     width out in CSS subtract it instead of guessing from 100vw. Overlay
+     scrollbars (macOS, touch) measure 0, which is the right answer there. */
+  (function () {
+    function measure() {
+      var w = window.innerWidth - document.documentElement.clientWidth;
+      document.documentElement.style.setProperty("--sbw", (w > 0 ? w : 0) + "px");
+    }
+    measure();
+    window.addEventListener("resize", measure);
+  })();
+</script>
 <script src="./lazy-video.js?v=20260818"></script>
 <script src="./phase-nav.js?v=20260919b"></script>
 <script src="./swipe-shots.js?v=20260921"></script>
