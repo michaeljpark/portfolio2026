@@ -6,3 +6,11 @@
 # Build logs from generating the light/ and mid/ variants
 light/_build.log
 mid/_build.log
+
+# Local agent config: paths and tool permissions, not part of the site
+.claude/
+
+# OS / editor droppings
+.DS_Store
+Thumbs.db
+desktop.ini
