@@ -227,6 +227,7 @@
     font-size:13px; font-weight:500; letter-spacing:-0.01em;
     white-space:nowrap;
     background:var(--card); color:var(--muted);
+    transition:background-color .3s ease, color .3s ease;
   }
   /* hovering swaps the relative label for the date it stands for. The two
      labels are grid tracks that trade 1fr for 0fr, so the pill grows to the
@@ -239,17 +240,17 @@
   }
   .upd-swap > span{
     overflow:hidden; white-space:nowrap; text-align:right;
-    transition:opacity .2s ease;
+    transition:opacity .26s ease;
   }
   .upd-abs{ opacity:0; }
   @media (hover:hover) and (pointer:fine){
-    .updated-tag:hover{ color:var(--ink); }
+    .updated-tag:hover{ background:var(--ink); color:var(--bg); }
     .updated-tag:hover .upd-swap{ grid-template-columns:0fr 1fr; }
     .updated-tag:hover .upd-rel{ opacity:0; }
     .updated-tag:hover .upd-abs{ opacity:1; }
   }
   /* and the same tap-to-open state a phone gets (see the script below) */
-  .updated-tag.is-open{ color:var(--ink); }
+  .updated-tag.is-open{ background:var(--ink); color:var(--bg); }
   .updated-tag.is-open .upd-swap{ grid-template-columns:0fr 1fr; }
   .updated-tag.is-open .upd-rel{ opacity:0; }
   .updated-tag.is-open .upd-abs{ opacity:1; }
@@ -574,14 +575,13 @@
     .kw, .kw-note{ transition-duration:.01s; }
   }
 
+  /* the row grows into reserved empty space instead of pushing past the column */
+  .xp-list{ padding-right:5%; }
+  .xp{
+    transform-origin:left center;
+    transition:transform .45s cubic-bezier(.2,.7,.2,1), opacity .35s ease;
+  }
   @media (hover:hover) and (pointer:fine){
-    /* same reserve trick as the TL;DR rows: the row grows into empty space
-       instead of pushing past the column */
-    .xp-list{ padding-right:5%; }
-    .xp{
-      transform-origin:left center;
-      transition:transform .45s cubic-bezier(.2,.7,.2,1), opacity .35s ease;
-    }
     .xp:hover{
       transform:scale(1.05);
       transition:transform .4s cubic-bezier(.34,1.4,.55,1);
@@ -590,6 +590,14 @@
     .xp:has(+ .xp:hover){ transform:translateY(-3px); }
     .xp:hover + .xp{ transform:translateY(3px); }
   }
+  /* a tap does the same thing on a phone: it lifts, it does not invert */
+  .xp.is-open{
+    transform:scale(1.05);
+    transition:transform .4s cubic-bezier(.34,1.4,.55,1);
+  }
+  .xp-list:has(.xp.is-open) .xp:not(.is-open){ opacity:.42; }
+  .xp:has(+ .xp.is-open){ transform:translateY(-3px); }
+  .xp.is-open + .xp{ transform:translateY(3px); }
   @media (prefers-reduced-motion: reduce){
     .xp{ transition-duration:.01s; }
   }
@@ -618,11 +626,11 @@
     display:block; width:16px; height:16px; object-fit:contain;
     transition:transform .5s cubic-bezier(.2,.7,.2,1);
   }
+  .tool-grp li{
+    transform-origin:left center;
+    transition:transform .45s cubic-bezier(.2,.7,.2,1);
+  }
   @media (hover:hover) and (pointer:fine){
-    .tool-grp li{
-      transform-origin:left center;
-      transition:transform .45s cubic-bezier(.2,.7,.2,1);
-    }
     .tool-grp li:hover{
       transform:scale(1.6);
       transition:transform .4s cubic-bezier(.34,1.4,.55,1);
@@ -634,6 +642,18 @@
     .tool-grp li:hover + li + li{ transform:translateY(6px); }
     .tool-grp li:has(+ li:hover){ transform:translateY(-11px); }
     .tool-grp li:hover + li{ transform:translateY(11px); }
+  }
+  /* and the same on a tap, in the same order: the generic rule first, then the
+     more specific neighbours, so source order settles the ties */
+  .tool-grp li:has(~ li.is-open){ transform:translateY(-3px); }
+  .tool-grp li.is-open ~ li{ transform:translateY(3px); }
+  .tool-grp li:has(+ li + li.is-open){ transform:translateY(-6px); }
+  .tool-grp li.is-open + li + li{ transform:translateY(6px); }
+  .tool-grp li:has(+ li.is-open){ transform:translateY(-11px); }
+  .tool-grp li.is-open + li{ transform:translateY(11px); }
+  .tool-grp li.is-open{
+    transform:scale(1.6);
+    transition:transform .4s cubic-bezier(.34,1.4,.55,1);
   }
   @media (prefers-reduced-motion: reduce){
     .tool-grp li{ transition-duration:.01s; }
@@ -1001,6 +1021,9 @@
     .contact .links{ font-size:15px; }
     .contact .links a{ flex-direction:column; align-items:flex-start; gap:3px; }
     .tools{ grid-template-columns:1fr; gap:32px; }
+    /* one column: the heading is no longer the right measure for the body */
+    .about-col p.lead,
+    .about-col .small{ max-width:none; }
     .xp{ grid-template-columns: 80px 1fr; }
     .xp .place{ display:none; }
     .nav-links{ display:none; }
@@ -1650,7 +1673,8 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
      The media query is checked at click time rather than at load, so a hybrid
      device or a resize behaves correctly. */
   (function () {
-    var kws = [].slice.call(document.querySelectorAll('.kw, .updated-tag'));
+    var kws = [].slice.call(document.querySelectorAll(
+      '.kw, .updated-tag, .xp, .tool-grp li'));
     if (!kws.length) return;
     var fine = window.matchMedia('(hover:hover) and (pointer:fine)');
     var open = null;
@@ -1664,6 +1688,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     kws.forEach(function (k) {
       k.addEventListener('click', function (e) {
         if (fine.matches) return;          /* hover already handles it */
+        if (e.target.closest('a')) return; /* let a link inside the row win */
         e.stopPropagation();
         var wasOpen = (k === open);
         close();
