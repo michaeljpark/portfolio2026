@@ -346,14 +346,14 @@
   .work-block.is-big .work{ aspect-ratio:2/1; }
   .work-block.is-big .w-info{ margin-top:18px; }
   .work-block.is-big .w-info .t{ font-size:clamp(18px,1.7vw,26px); }
-  /* cnpt is not one of the four: it sits in its own band under them */
+  /* the practice is not one of the four: it sits in its own band under them.
+     It is a .work-row like the ones above, so the pair widens and pushes the
+     same way and needs no width of its own. */
   .startup-wrap{
     margin-top:48px; padding-top:64px;
     border-top:1px solid var(--line);
   }
   .startup-wrap .carousel-head{ margin-bottom:28px; }
-  /* the same size as one of the four above, just on its own row */
-  .startup-wrap .work-block.is-big{ width:calc((100% - 20px) / 2); }
 
   /* SMALL: one-row carousel — 3 cards in view, scroll/arrows for the rest */
   /* set the carousel apart from the three main pieces above it */
@@ -425,22 +425,22 @@
 
   .work-block{ position:relative; }
 
-  /* cnpt: no clip, just the wordmark on a plain plate */
-  .work.cnpt-work{ background:#ffffff; display:grid; place-items:center; }
-  .work.cnpt-work .cnpt-mark{
+  /* the practice cards: no clip, just a wordmark on a plain plate */
+  .work.mark-work{ background:#ffffff; display:grid; place-items:center; }
+  .work.mark-work .mark-img{
     width:min(34%, 260px); height:auto;
     object-fit:contain;
     /* its own easing: the card-wide 1.03 nudge is too small and too stiff here */
     transition:transform .55s cubic-bezier(.2,.7,.2,1), filter .35s ease;
   }
-  a:hover .work.cnpt-work .cnpt-mark{ transform:scale(1.14); }
+  a:hover .work.mark-work .mark-img{ transform:scale(1.14); }
   @media (prefers-reduced-motion: reduce){
-    .work.cnpt-work .cnpt-mark{ transition:filter .35s ease; }
-    a:hover .work.cnpt-work .cnpt-mark{ transform:none; }
+    .work.mark-work .mark-img{ transition:filter .35s ease; }
+    a:hover .work.mark-work .mark-img{ transform:none; }
   }
-  /* dark: a grey plate, and the same file inverted to white */
-  :root[data-theme="dark"] .work.cnpt-work{ background:#131313; box-shadow:none; }
-  :root[data-theme="dark"] .work.cnpt-work .cnpt-mark{ filter:invert(1); }
+  /* dark: a grey plate, and the same black wordmark inverted to white */
+  :root[data-theme="dark"] .work.mark-work{ background:#131313; box-shadow:none; }
+  :root[data-theme="dark"] .work.mark-work .mark-img{ filter:invert(1); }
 
   /* ULT featured card */
   .work.ult-work{ background:#B6B6ED; }
@@ -1032,10 +1032,14 @@
     .selected{ row-gap:36px; }
     /* one main piece per row once half-width cards get too small to read */
     .work-row{ flex-direction:column; align-items:stretch; gap:36px; }
-    .work-row .work{ height:auto; aspect-ratio:2/1; }
+    /* the resting height is set by .work-row .work-block.is-big .work, which is
+       more specific than this rule used to be - a media query adds no
+       specificity of its own, so the desktop height won here and every big card
+       squashed to about 4:1. Match that selector so the phone gets 2:1 back. */
+    .work-row .work,
+    .work-row .work-block.is-big .work{ height:auto; aspect-ratio:2/1; }
     .work-row .w-info,
     .work-row .work-block:last-child .w-info{ width:auto; margin-left:0; }
-    .startup-wrap .work-block.is-big{ width:100%; }
     /* carousel: 2 cards in view on tablet */
     .carousel{ gap:14px; }
     .carousel .work-block{ flex-basis:calc((100% - 14px) / 2); }
@@ -1219,10 +1223,11 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
         <div class="label">Independent</div>
         <h2>Practice</h2>
       </div>
+      <div class="work-row reveal">
       <div class="work-block reveal is-big o5">
         <a href="https://cnpt.ca/" target="_blank" rel="noopener">
-          <div class="work cnpt-work" data-cursor="Design Studio" data-cursor-icon="arrow-up-right">
-            <img class="cnpt-mark" src="./cnpt_logo_extended_black.svg" alt="CNPT" width="590" height="136" loading="lazy" decoding="async" />
+          <div class="work mark-work" data-cursor="Design Studio" data-cursor-icon="arrow-up-right">
+            <img class="mark-img" src="./cnpt_logo_extended_black.svg" alt="CNPT" width="590" height="136" loading="lazy" decoding="async" />
             <div class="card-tags"><span class="tag core">Co-owner</span><span class="tag">Design Consultation</span><span class="tag">Startup</span></div>
           </div>
           <div class="w-info">
@@ -1230,6 +1235,19 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
             <div class="w-meta"><div class="m"><span>2026</span><span>Design Consultancy</span><span>Co-owner</span></div><div class="w-tags"><span class="w-tag">Concept Development</span><span class="w-tag">Market Entry</span></div></div>
           </div>
         </a>
+      </div>
+      <div class="work-block reveal is-big o6">
+        <a href="https://www.instagram.com/mkpk.exp/" target="_blank" rel="noopener">
+          <div class="work mark-work" data-cursor="Freelance" data-cursor-icon="arrow-up-right">
+            <img class="mark-img" src="./mkpklogo.svg" alt="MKPK" width="774" height="176" loading="lazy" decoding="async" />
+            <div class="card-tags"><span class="tag core">Freelancing</span><span class="tag">Indie Designer</span><span class="tag">Commission</span></div>
+          </div>
+          <div class="w-info">
+            <div class="t"><span>MKPK : Michael Joongmin Park Design</span><span class="arrow">→</span></div>
+            <div class="w-meta"><div class="m"><span>2026</span><span>Freelance</span><span>Owner</span></div><div class="w-tags"><span class="w-tag">Commission</span><span class="w-tag">Visual Design</span></div></div>
+          </div>
+        </a>
+      </div>
       </div>
     </div>
 
