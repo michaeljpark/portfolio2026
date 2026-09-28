@@ -234,28 +234,38 @@
      date instead of sitting in a box padded out to the wider of the two. It is
      the last item in a space-between row, so its right edge stays put and the
      growth runs leftward. */
-  .upd-swap{
-    display:inline-grid; grid-template-columns:1fr 0fr; align-items:center;
-    transition:grid-template-columns .42s cubic-bezier(.2,.7,.2,1);
+  .upd-swap{ display:inline-flex; align-items:center; }
+  /* Each label sits in its own single-track grid that trades 1fr for 0fr, so
+     the pill's width is the sum of two tracks that each ease to nothing. One
+     grid swapping "1fr 0fr" for "0fr 1fr" cannot be interpolated - its
+     intrinsic width is not a linear function of the two flex factors, so it
+     snaps - which is why this is two grids rather than one. */
+  .upd-slot{
+    display:inline-grid; grid-template-columns:1fr;
+    transition:grid-template-columns .5s cubic-bezier(.45,.05,.25,1);
   }
-  .upd-swap > span{
-    overflow:hidden; white-space:nowrap; text-align:right;
-    transition:opacity .26s ease;
-  }
-  .upd-abs{ opacity:0; }
+  .upd-slot-abs{ grid-template-columns:0fr; }
+  .upd-slot > span{ overflow:hidden; white-space:nowrap; text-align:right; }
+  /* the two labels never share the middle of the stretch: the one leaving is
+     gone before the box is half way, the one arriving lands as it settles.
+     Each direction is timed by the rule that owns the state it moves into. */
+  .upd-rel{ opacity:1; transition:opacity .22s ease .26s; }
+  .upd-abs{ opacity:0; transition:opacity .16s ease; }
   @media (hover:hover) and (pointer:fine){
     .updated-tag:hover{ background:var(--ink); color:var(--bg); }
-    .updated-tag:hover .upd-swap{ grid-template-columns:0fr 1fr; }
-    .updated-tag:hover .upd-rel{ opacity:0; }
-    .updated-tag:hover .upd-abs{ opacity:1; }
+    .updated-tag:hover .upd-slot-rel{ grid-template-columns:0fr; }
+    .updated-tag:hover .upd-slot-abs{ grid-template-columns:1fr; }
+    .updated-tag:hover .upd-rel{ opacity:0; transition:opacity .16s ease; }
+    .updated-tag:hover .upd-abs{ opacity:1; transition:opacity .22s ease .26s; }
   }
   /* and the same tap-to-open state a phone gets (see the script below) */
   .updated-tag.is-open{ background:var(--ink); color:var(--bg); }
-  .updated-tag.is-open .upd-swap{ grid-template-columns:0fr 1fr; }
-  .updated-tag.is-open .upd-rel{ opacity:0; }
-  .updated-tag.is-open .upd-abs{ opacity:1; }
+  .updated-tag.is-open .upd-slot-rel{ grid-template-columns:0fr; }
+  .updated-tag.is-open .upd-slot-abs{ grid-template-columns:1fr; }
+  .updated-tag.is-open .upd-rel{ opacity:0; transition:opacity .16s ease; }
+  .updated-tag.is-open .upd-abs{ opacity:1; transition:opacity .22s ease .26s; }
   @media (prefers-reduced-motion: reduce){
-    .upd-swap, .upd-swap > span{ transition-duration:.01s; }
+    .upd-slot, .upd-rel, .upd-abs{ transition-duration:.01s; transition-delay:0s; }
   }
   .hero-row{
     margin-top:36px; padding-top:24px; border-top:1px solid var(--line);
@@ -1110,7 +1120,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <h1 class="hero-name reveal">Michael Joongmin Park</h1>
   <div class="hero-lede reveal">
     <p class="hero-tagline">I am a <span class="kw">product designer<span class="kw-note"><span>,&nbsp;industrial designer</span></span></span>. My priority is defining <span class="kw">design strategies<span class="kw-note"><span>,&nbsp;conceptual foresight</span></span></span>, <span class="kw">solutions<span class="kw-note"><span>,&nbsp;consultation</span></span></span>, and possibility through <span class="kw">data-driven research<span class="kw-note"><span>,&nbsp;AI-assisted coding</span></span></span>, and building them into products <span class="kw">people actually use<span class="kw-note"><span>,&nbsp;fast MVP prototyping</span></span></span>.</p>
-    <span class="updated-tag" id="lastUpdated" data-pushed="2026-08-28T20:11:28Z"><span class="upd-swap"><span class="upd-rel">Updated today</span><span class="upd-abs">August 28, 2026</span></span></span>
+    <span class="updated-tag" id="lastUpdated" data-pushed="2026-08-28T20:11:28Z"><span class="upd-swap"><span class="upd-slot upd-slot-rel"><span class="upd-rel">Updated today</span></span><span class="upd-slot upd-slot-abs"><span class="upd-abs">August 28, 2026</span></span></span></span>
   </div>
 
   <div class="hero-row reveal">
