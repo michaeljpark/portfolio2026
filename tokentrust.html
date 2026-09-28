@@ -1652,22 +1652,43 @@
     padding:13px 0; border-top:1px solid var(--line);
   }
   .tldr-list > div:first-child{ border-top:0; padding-top:2px; }
-  .tldr-list dt{ font-size:11.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); line-height:1.7; }
+  .tldr-list dt{
+    font-size:11.5px; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--muted); line-height:1.7;
+    position:relative; white-space:nowrap;
+  }
+  /* the mark sits out in the gutter between the TLDR word and the list, so it
+     costs no layout: absolute, and hidden until the row is under the pointer */
+  .tldr-list .tico{
+    position:absolute; right:auto; left:-26px; top:2px;
+    width:15px; height:15px; display:block;
+    color:var(--ink); opacity:0;
+    transform:translateX(-5px) scale(.7);
+    pointer-events:none;
+  }
   .tldr-list dd{ margin:0; font-size:14.5px; line-height:1.55; text-wrap:pretty; }
   .tldr-list dd .nb{ white-space:nowrap; }
   @media (hover:hover) and (pointer:fine){
-    /* the 5% reserve is the room a row grows into, so a lift never breaks the margin */
-    .tldr-list{ padding-right:5%; }
+    /* the reserve is the room a row grows into, so a lift never breaks the margin:
+       1 - 1/1.09 = 8.26%, so 8.5% clears the scaled row with a hair to spare */
+    .tldr-list{ padding-right:8.5%; }
     .tldr-list > div{
       transform-origin:left center;
       transition:transform .45s cubic-bezier(.2,.7,.2,1), opacity .35s ease;
     }
     .tldr-list dt{ transition:color .35s ease; }
     .tldr-list > div:hover{
-      transform:scale(1.05);
+      transform:scale(1.09);
       transition:transform .4s cubic-bezier(.34,1.35,.6,1);
     }
     .tldr-list > div:hover dt{ color:var(--ink); }
+    .tldr-list .tico{
+      transition:opacity .26s ease, transform .5s cubic-bezier(.34,1.5,.5,1);
+    }
+    .tldr-list > div:hover .tico{
+      opacity:1; transform:translateX(0) scale(1);
+      transition-delay:.07s;
+    }
     /* the rest steps back, and the two neighbours lean out of the way */
     .tldr-list:hover > div:not(:hover){ opacity:.42; }
     .tldr-list > div:has(+ div:hover){ transform:translateY(-3px); }
@@ -1681,6 +1702,7 @@
     .tldr-mark{ font-size:clamp(40px,13vw,64px); }
     .tldr-list > div{ grid-template-columns:1fr; gap:3px; padding:12px 0; }
     .tldr-list dt{ line-height:1.5; }
+    .tldr-list .tico{ display:none; }   /* no label column to hang it in */
     .tldr-list dd{ font-size:14px; }
   }
   .phase-flat{ max-width:var(--max); margin:0 auto; padding:clamp(56px,8vw,110px) var(--pad) clamp(28px,3.5vw,44px); border-top:1px solid var(--line); }
@@ -2104,11 +2126,11 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <section class="tldr" aria-label="Summary">
   <h2 class="tldr-mark">TLDR</h2>
   <dl class="tldr-list">
-      <div><dt>Role</dt><dd>Team lead, research&nbsp;direction,&nbsp;service&nbsp;framework,&nbsp;prototyping</dd></div>
-      <div><dt>Team</dt><dd>Five, industrial and graphic design &middot; advised by Alexander&nbsp;Manu&nbsp;and&nbsp;Mahnoor&nbsp;Hasan</dd></div>
-      <div><dt>Timeline</dt><dd>Mar&nbsp;2026&nbsp;&middot;&nbsp;6&nbsp;weeks</dd></div>
-      <div><dt>Problem</dt><dd>People have no sense of what their data is worth, no view of where it goes, and no say in&nbsp;who&nbsp;profits&nbsp;from&nbsp;it.</dd></div>
-      <div><dt>Outcome</dt><dd>A governance platform built on DQI, a measurement layer that gives contributed data a value, pays that value back, and carries&nbsp;a&nbsp;Canadian&nbsp;regulatory&nbsp;path.</dd></div>
+      <div><dt>Role<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg></dt><dd>Team lead, research&nbsp;direction,&nbsp;service&nbsp;framework,&nbsp;prototyping</dd></div>
+      <div><dt>Team<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></dt><dd>Five, industrial and graphic design &middot; advised by Alexander&nbsp;Manu&nbsp;and&nbsp;Mahnoor&nbsp;Hasan</dd></div>
+      <div><dt>Timeline<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg></dt><dd>Mar&nbsp;2026&nbsp;&middot;&nbsp;6&nbsp;weeks</dd></div>
+      <div><dt>Problem<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5c0-1.1.9-2 2-2h2"/><path d="M17 3h2c1.1 0 2 .9 2 2v2"/><path d="M21 17v2c0 1.1-.9 2-2 2h-2"/><path d="M7 21H5c-1.1 0-2-.9-2-2v-2"/><rect width="7" height="5" x="7" y="7" rx="1"/><rect width="7" height="5" x="10" y="12" rx="1"/></svg></dt><dd>People have no sense of what their data is worth, no view of where it goes, and no say in&nbsp;who&nbsp;profits&nbsp;from&nbsp;it.</dd></div>
+      <div><dt>Outcome<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></dt><dd>A governance platform built on DQI, a measurement layer that gives contributed data a value, pays that value back, and carries&nbsp;a&nbsp;Canadian&nbsp;regulatory&nbsp;path.</dd></div>
   </dl>
 </section>
 
