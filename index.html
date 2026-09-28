@@ -43,6 +43,8 @@
     --muted: #8a8a8a;
     --line:  #e6e6e6;
     --card:  #f4f4f4;
+    /* keyword plate in the intro copy: light grey at rest, inverted on hover */
+    --kw-bg: #ececec;
     --max:   1440px;
     --pad:   clamp(20px, 4vw, 56px);
     --sbw:   0px;
@@ -60,6 +62,7 @@
     --muted: #9a9a9a;
     --line:  #222222;
     --card:  #0e0e0e;
+    --kw-bg: #1c1c1c;
   }
   html{ background:var(--bg); }
 
@@ -212,7 +215,7 @@
   }
   .hero-tagline{
     font-size:16px; color:var(--muted); margin:0;
-    line-height:1.5; max-width:64ch;
+    line-height:1.7; max-width:64ch;
   }
   /* same box as the chips that appear on a work card hover: matched height,
      padding, corner radius and type, so the two read as one component */
@@ -224,6 +227,34 @@
     font-size:13px; font-weight:500; letter-spacing:-0.01em;
     white-space:nowrap;
     background:var(--card); color:var(--muted);
+  }
+  /* hovering swaps the relative label for the date it stands for. The two
+     labels are grid tracks that trade 1fr for 0fr, so the pill grows to the
+     date instead of sitting in a box padded out to the wider of the two. It is
+     the last item in a space-between row, so its right edge stays put and the
+     growth runs leftward. */
+  .upd-swap{
+    display:inline-grid; grid-template-columns:1fr 0fr; align-items:center;
+    transition:grid-template-columns .42s cubic-bezier(.2,.7,.2,1);
+  }
+  .upd-swap > span{
+    overflow:hidden; white-space:nowrap; text-align:right;
+    transition:opacity .2s ease;
+  }
+  .upd-abs{ opacity:0; }
+  @media (hover:hover) and (pointer:fine){
+    .updated-tag:hover{ color:var(--ink); }
+    .updated-tag:hover .upd-swap{ grid-template-columns:0fr 1fr; }
+    .updated-tag:hover .upd-rel{ opacity:0; }
+    .updated-tag:hover .upd-abs{ opacity:1; }
+  }
+  /* and the same tap-to-open state a phone gets (see the script below) */
+  .updated-tag.is-open{ color:var(--ink); }
+  .updated-tag.is-open .upd-swap{ grid-template-columns:0fr 1fr; }
+  .updated-tag.is-open .upd-rel{ opacity:0; }
+  .updated-tag.is-open .upd-abs{ opacity:1; }
+  @media (prefers-reduced-motion: reduce){
+    .upd-swap, .upd-swap > span{ transition-duration:.01s; }
   }
   .hero-row{
     margin-top:36px; padding-top:24px; border-top:1px solid var(--line);
@@ -489,7 +520,7 @@
     max-width:30ch;
   }
   .about-col .small{
-    font-size:14px; color:var(--muted); line-height:1.55;
+    font-size:14px; color:var(--muted); line-height:1.75;
     /* right edge lines up with the end of the "A short introduction" heading
        (--about-measure is measured in JS; 42ch is the pre-JS fallback) */
     max-width: var(--about-measure, 42ch);
@@ -516,6 +547,52 @@
   }
   .xp .role span a:hover{ color:var(--fg); }
   .xp .place{ font-size:13px; color:var(--muted); text-align:right; }
+
+  /* KEYWORDS: a light plate on the phrase. On hover the plate inverts and the
+     qualifier opens out inline, pushing the rest of the sentence along, rather
+     than floating over the line above. 0fr -> 1fr animates to the natural width. */
+  .kw{
+    display:inline; background:var(--kw-bg); color:var(--ink);
+    border-radius:5px; padding:.09em .26em;
+    -webkit-box-decoration-break:clone; box-decoration-break:clone;
+    transition:background-color .26s ease, color .26s ease;
+  }
+  .kw-note{
+    display:inline-grid; grid-template-columns:0fr;
+    opacity:0; vertical-align:baseline;
+    transition:grid-template-columns .45s cubic-bezier(.2,.7,.2,1), opacity .24s ease;
+  }
+  .kw-note > span{ overflow:hidden; white-space:nowrap; }
+  @media (hover:hover) and (pointer:fine){
+    .kw:hover{ background:var(--ink); color:var(--bg); }
+    .kw:hover .kw-note{ grid-template-columns:1fr; opacity:1; }
+  }
+  /* a phone has no hover, so a tap sets this instead (see the script below) */
+  .kw.is-open{ background:var(--ink); color:var(--bg); }
+  .kw.is-open .kw-note{ grid-template-columns:1fr; opacity:1; }
+  @media (prefers-reduced-motion: reduce){
+    .kw, .kw-note{ transition-duration:.01s; }
+  }
+
+  @media (hover:hover) and (pointer:fine){
+    /* same reserve trick as the TL;DR rows: the row grows into empty space
+       instead of pushing past the column */
+    .xp-list{ padding-right:5%; }
+    .xp{
+      transform-origin:left center;
+      transition:transform .45s cubic-bezier(.2,.7,.2,1), opacity .35s ease;
+    }
+    .xp:hover{
+      transform:scale(1.05);
+      transition:transform .4s cubic-bezier(.34,1.4,.55,1);
+    }
+    .xp-list:hover > .xp:not(:hover){ opacity:.42; }
+    .xp:has(+ .xp:hover){ transform:translateY(-3px); }
+    .xp:hover + .xp{ transform:translateY(3px); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .xp{ transition-duration:.01s; }
+  }
 
   /* TOOLKIT */
   .tools{
@@ -1009,8 +1086,8 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="hero-greeting reveal">Hi! I'm</div>
   <h1 class="hero-name reveal">Michael Joongmin Park</h1>
   <div class="hero-lede reveal">
-    <p class="hero-tagline">I am a product designer. My priority is defining design strategies, solutions, and possibility through data-driven research, and building them into products people actually use.</p>
-    <span class="updated-tag" id="lastUpdated" data-pushed="2026-08-28T20:11:28Z">Updated today</span>
+    <p class="hero-tagline">I am a <span class="kw">product designer<span class="kw-note"><span>,&nbsp;industrial designer</span></span></span>. My priority is defining <span class="kw">design strategies<span class="kw-note"><span>,&nbsp;conceptual foresight</span></span></span>, <span class="kw">solutions<span class="kw-note"><span>,&nbsp;consultation</span></span></span>, and possibility through <span class="kw">data-driven research<span class="kw-note"><span>,&nbsp;AI-assisted coding</span></span></span>, and building them into products <span class="kw">people actually use<span class="kw-note"><span>,&nbsp;fast MVP prototyping</span></span></span>.</p>
+    <span class="updated-tag" id="lastUpdated" data-pushed="2026-08-28T20:11:28Z"><span class="upd-swap"><span class="upd-rel">Updated today</span><span class="upd-abs">August 28, 2026</span></span></span>
   </div>
 
   <div class="hero-row reveal">
@@ -1213,8 +1290,8 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <div class="about-col reveal">
       <h3>Approach</h3>
       <p class="lead">I focus on function rather than how it looks.</p>
-      <p class="small">I am a product designer. I gather human-centred research, design thinking, and strategy, and use them to explore interaction and put it into a working product. Form follows that work rather than leading it, so a decision has to earn its place by what it does for the person using it.</p>
-      <p class="small">In practice that means structuring qualitative and quantitative research, setting clear KPIs, and turning findings into artifacts stakeholders can act on. Research and documentation are how I keep a team aligned and a project pointed in the right direction.</p>
+      <p class="small">I am a <span class="kw">product designer<span class="kw-note"><span>,&nbsp;industrial designer</span></span></span>. I gather <span class="kw">human-centred research<span class="kw-note"><span>,&nbsp;TCPS 2 certified</span></span></span>, <span class="kw">design thinking<span class="kw-note"><span>,&nbsp;multidisciplinary teams</span></span></span>, and <span class="kw">strategy<span class="kw-note"><span>,&nbsp;user-oriented</span></span></span>, and use them to explore interaction and put it into a working product. Form follows that work rather than leading it, so a decision has to earn its place by what it does for the person using it.</p>
+      <p class="small">In practice that means structuring <span class="kw">qualitative<span class="kw-note"><span>,&nbsp;interviews and deep analysis</span></span></span> and <span class="kw">quantitative<span class="kw-note"><span>,&nbsp;surveys and spreadsheet analysis</span></span></span> research, setting clear <span class="kw">KPIs<span class="kw-note"><span>,&nbsp;market goals</span></span></span>, and turning findings into artifacts <span class="kw">stakeholders<span class="kw-note"><span>,&nbsp;clients and investors</span></span></span> can act on. Research and <span class="kw">documentation<span class="kw-note"><span>,&nbsp;process and handover</span></span></span> are how I keep a team aligned and a project pointed in the right direction.</p>
     </div>
 
     <div class="about-col reveal">
@@ -1565,6 +1642,38 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </script>
 
 <script>
+  /* Keyword notes and the "last updated" pill on touch.
+
+     A pointer device opens them on hover. A phone has none, so a tap opens one
+     at a time and a tap anywhere else closes it. The hidden text is only
+     clipped, never display:none, so a screen reader reads it either way.
+     The media query is checked at click time rather than at load, so a hybrid
+     device or a resize behaves correctly. */
+  (function () {
+    var kws = [].slice.call(document.querySelectorAll('.kw, .updated-tag'));
+    if (!kws.length) return;
+    var fine = window.matchMedia('(hover:hover) and (pointer:fine)');
+    var open = null;
+
+    function close() {
+      if (!open) return;
+      open.classList.remove('is-open');
+      open = null;
+    }
+
+    kws.forEach(function (k) {
+      k.addEventListener('click', function (e) {
+        if (fine.matches) return;          /* hover already handles it */
+        e.stopPropagation();
+        var wasOpen = (k === open);
+        close();
+        if (!wasOpen) { k.classList.add('is-open'); open = k; }
+      });
+    });
+
+    document.addEventListener('click', close);
+  })();
+
   /* "Last updated" pill.
 
      data-pushed on the element is the push date baked in at edit time, so the pill is
@@ -1603,12 +1712,18 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       return 'Updated ' + years + ' year' + (years === 1 ? '' : 's') + ' ago';
     }
 
+    var rel = el.querySelector('.upd-rel');
+    var abs = el.querySelector('.upd-abs');
+
     function paint(iso) {
       var text = label(iso);
       if (!text) return;
-      el.textContent = text;
-      el.title = new Date(iso).toLocaleDateString(undefined,
+      var when = new Date(iso);
+      if (rel) rel.textContent = text; else el.textContent = text;
+      /* date only, no clock time: that is what the hover is for */
+      if (abs) abs.textContent = when.toLocaleDateString(undefined,
         { year: 'numeric', month: 'long', day: 'numeric' });
+      el.removeAttribute('title');
       el.setAttribute('datetime', iso);
     }
 
