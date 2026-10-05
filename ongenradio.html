@@ -13,7 +13,7 @@
   :root{
     /* dark theme: same token contract as the other pages, inverted */
     --bg:#0a0a0a; --ink:#ffffff; --muted:#8f8f8f; --line:#242424;
-    --max:1440px; --pad:clamp(12px,2vw,28px);
+    --max:1440px; --pad:clamp(20px,6vw,132px);
     --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
@@ -109,7 +109,7 @@
     line-height:1.05; letter-spacing:-0.05em;
   }
   .hero-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }
-  .hero-row{ margin-top:36px; padding-top:24px; border-top:1px solid var(--line); }
+  .hero-row{ margin-top:36px; padding-top:24px; }
   .hero-side{
     display:flex; flex-direction:row; justify-content:space-between;
     flex-wrap:wrap; font-size:13px; gap:16px;
@@ -1651,7 +1651,6 @@
   .tldr{
     max-width:var(--max); margin:0 auto;
     padding:clamp(40px,5vw,76px) var(--pad);
-    border-top:1px solid var(--line);
     display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.45fr);
     gap:clamp(20px,4vw,64px); align-items:start;
   }
@@ -1662,9 +1661,9 @@
   .tldr-list{ display:flex; flex-direction:column; }
   .tldr-list > div{
     display:grid; grid-template-columns:96px minmax(0,1fr); gap:20px;
-    padding:13px 0; border-top:1px solid var(--line);
+    padding:13px 0;
   }
-  .tldr-list > div:first-child{ border-top:0; padding-top:2px; }
+  .tldr-list > div:first-child{ padding-top:2px; }
   .tldr-list dt{
     font-size:11.5px; letter-spacing:.07em; text-transform:uppercase;
     color:var(--muted); line-height:1.7;
@@ -1718,7 +1717,7 @@
     .tldr-list .tico{ display:none; }   /* no label column to hang it in */
     .tldr-list dd{ font-size:14px; }
   }
-  .phase-flat{ max-width:var(--max); margin:0 auto; padding:clamp(56px,8vw,110px) var(--pad) clamp(28px,3.5vw,44px); border-top:1px solid var(--line); }
+  .phase-flat{ max-width:var(--max); margin:0 auto; padding:clamp(56px,8vw,110px) var(--pad) clamp(28px,3.5vw,44px); }
   .phase-flat .phase-num{ margin-bottom:10px; }
   .phase-flat .phase-name{ margin-bottom:8px; }
   .phase-desc{ margin-top:clamp(20px,2.2vw,30px); font-size:clamp(16px,1.5vw,22px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
@@ -1782,7 +1781,7 @@
   .feature-trio{
     display:flex; align-items:flex-start; gap:var(--trio-gap); margin-top:clamp(20px,2.4vw,32px);
     --trio-gap:clamp(12px,1.4vw,20px);
-    --trio-col:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--trio-gap)) / 3);
+    --trio-col:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * var(--pad) - 2 * var(--trio-gap)) / 3);
     --trio-h:calc(var(--trio-col) / 1.7778);
   }
   .feature-trio figure{ margin:0; min-width:0; flex:1 1 0; }
@@ -2008,7 +2007,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 /* ===== Value Architecture · Propositional Model, manifesto, On-Air ===== */
 .prop-section{ padding-top:8px; padding-bottom:8px; }
 .prop-lede{ font-size:clamp(18px,1.9vw,28px); font-weight:400; letter-spacing:-0.03em; line-height:1.4; color:var(--ink); max-width:62ch; }
-.prop-model{ display:grid; grid-template-columns:96px 1fr; gap:clamp(24px,3.5vw,56px); align-items:start; margin-top:clamp(40px,5vw,72px); padding-top:clamp(32px,4vw,48px); border-top:1px solid var(--line); }
+.prop-model{ display:grid; grid-template-columns:96px 1fr; gap:clamp(24px,3.5vw,56px); align-items:start; margin-top:clamp(40px,5vw,72px); padding-top:clamp(32px,4vw,48px); }
 .prop-ico{ width:80px; height:80px; color:var(--ink); }
 .prop-ico svg{ width:100%; height:100%; display:block; overflow:visible; }
 .prop-title{ font-size:clamp(22px,2.4vw,38px); font-weight:400; letter-spacing:-0.04em; line-height:1.12; color:var(--ink); margin:0 0 20px; }
@@ -2026,7 +2025,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .manifesto-p{ font-size:clamp(22px,2.8vw,42px); font-weight:400; letter-spacing:-0.04em; line-height:1.34; color:var(--muted); }
 .manifesto-p b{ color:var(--ink); font-weight:400; }
 .manifesto-p + .manifesto-p{ margin-top:clamp(28px,3.5vw,56px); }
-.onair{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(56px,7vw,110px); border-top:1px solid var(--line); text-align:center; }
+.onair{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(56px,7vw,110px); text-align:center; }
 .onair-badge{ display:inline-flex; align-items:center; gap:10px; margin-bottom:22px; }
 .onair-dot{ width:11px; height:11px; border-radius:50%; background:var(--accent,#007aff); animation:onairpulse 1.7s ease-in-out infinite; }
 .onair-live{ font-size:12px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
@@ -2174,20 +2173,19 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </section>
 
 <section class="phase-flat" id="overview">
+  <div class="phase-name">Overview</div>
+  <div class="phase-sub">Reimagined radio in augmented reality</div>
+  <p class="phase-desc">OnGen is a real-time geolocational platform for AR users.</p>
+  <p class="phase-note">In the AR era, AI already reads our surroundings and summarizes them for us, acting as an assistant that interprets the world on our behalf. But what if the AR experience could go beyond that assistant role? <em>What if space itself were mapped into the user's own world, and reshaped to match each person's interests?</em> OnGen began as a thesis project exploring that question.</p>
+  <p class="phase-note">At GradEX 111, the graduate exhibition hosted by OCAD University, OnGen drew 408 sessions from 147 test users (121 guests and 26 registered), with a median interaction time of 35.6 seconds. These real numbers let me validate whether the service could hold up in real-world use.</p>
   <div class="chapter-media-duo">
     <div class="cell m1" data-cursor="GradEX 111 Overview"><img src="./IMG_5507.jpg" alt="" loading="lazy" srcset="./light/IMG_5507.webp 1440w, ./IMG_5507.jpg 2250w" sizes="(max-width: 880px) 95vw, 46vw" /></div>
     <div class="cell m2" data-cursor="Audience"><img src="./IMG_5493_1.jpg" alt="" loading="lazy" /></div>
     <div class="cell m3" data-cursor="Public Presentation"><video class="snap-vid" data-src="./Showcasingongen1.mp4?v=20260721" data-poster="./posters/showcasingongen1.jpg?v=20260721" loop muted playsinline preload="none"></video></div>
   </div>
-  <div class="phase-name">Overview</div>
-  <div class="phase-sub">Reimagined radio in augmented reality</div>
   <div class="subsec-video">
     <video class="snap-vid" data-src="./ongenoverviewvid.mp4?v=20260919" data-poster="./posters/ongenoverviewvid.jpg?v=20260919" loop muted playsinline preload="none" data-cursor="AR Experience Design"></video>
   </div>
-  <p class="phase-desc">OnGen is a real-time geolocational platform for AR users.</p>
-  <p class="phase-note">In the AR era, AI already reads our surroundings and summarizes them for us, acting as an assistant that interprets the world on our behalf. But what if the AR experience could go beyond that assistant role? <em>What if space itself were mapped into the user's own world, and reshaped to match each person's interests?</em> OnGen began as a thesis project exploring that question.</p>
-  <p class="phase-note">At GradEX 111, the graduate exhibition hosted by OCAD University, OnGen drew 408 sessions from 147 test users (121 guests and 26 registered), with a median interaction time of 35.6 seconds. These real numbers let me validate whether the service could hold up in real-world use.</p>
-
   <div class="subsec">
     <h3 class="subsec-title">Snapshot</h3>
     <p class="subsec-lead">OnGen AR is a geolocation intelligence that reconstructs the city you might miss, or the one you care about, and brings it closer.</p>
@@ -2202,12 +2200,11 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <section class="phase-flat" id="problem-definition">
   <div class="phase-name">Problem Definition</div>
+  <p class="phase-desc">AR devices already exist, but AR interaction is still an extension of the smartphone. So what new modes of interaction could maximize immersion in a user's augmented reality environment?</p>
+  <p class="phase-note">OnGen AR maps social media and local information onto real buildings, raising immersion and making space itself both content and context. Through the AR display, the project focuses on the user as a spectator and uses that role as an effective mode of interaction.</p>
   <div class="subsec-video">
     <video class="snap-vid" data-src="./ongeproblemdefinition.mp4?v=20260919" data-poster="./posters/ongeproblemdefinition.jpg?v=20260919" loop muted playsinline preload="none" data-cursor="Why AR Glasses are still Secondary?"></video>
   </div>
-  <p class="phase-desc">AR devices already exist, but AR interaction is still an extension of the smartphone. So what new modes of interaction could maximize immersion in a user's augmented reality environment?</p>
-  <p class="phase-note">OnGen AR maps social media and local information onto real buildings, raising immersion and making space itself both content and context. Through the AR display, the project focuses on the user as a spectator and uses that role as an effective mode of interaction.</p>
-
   <div class="subsec">
     <h3 class="subsec-title">Potential Clients</h3>
     <p class="phase-note">The OS providers OnGen AR could realistically run on.</p>
@@ -2218,6 +2215,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <section class="phase-flat" id="discovery">
   <div class="phase-name">Discovery</div>
+  <p class="phase-note">The AR display market is growing quickly, and it points to strong potential demand, yet today's AR glasses still sit as an accessory to the phone. To move past that limit, I set the project's research direction toward maximizing the user's AR experience.</p>
   <div class="feature-trio hmw">
     <figure>
       <img data-cursor="Integration" width="1694" height="933" src="./ongenhmw1.png" alt="A visitor in AR glasses looking up at a white gallery wall" loading="lazy" srcset="./light/ongenhmw1.webp 1200w, ./ongenhmw1.png 1694w" sizes="(max-width: 640px) 95vw, 32vw" />
@@ -2232,12 +2230,10 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <figcaption><span class="k">How might we enable AI to understand users' physical context naturally, rather than relying on mandatory user input in AR?</span></figcaption>
     </figure>
   </div>
-  <p class="phase-note">The AR display market is growing quickly, and it points to strong potential demand, yet today's AR glasses still sit as an accessory to the phone. To move past that limit, I set the project's research direction toward maximizing the user's AR experience.</p>
   <img class="subsec-img" width="2856" height="958" src="./ongenresearch0.png" alt="User journey and experience strategy" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/ongenresearch0.webp 1440w, ./ongenresearch0.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">I mapped the user journey and the possibilities a user might experience, and built a strategy to optimize that experience. Five peers and two supervising faculty, Alexander Manu and Bernard Dietz, critiqued the work, and I used their feedback to design the actual survey, shaping it in line with TCPS 2. Together with existing research, Survey Phase 1 gave a baseline read on user behavior and set up Phase 2.</p>
   <img class="subsec-img" width="2856" height="1146" src="./ongensurveyplan.png" alt="Survey plan and MVP prototype context" loading="lazy" srcset="./light/ongensurveyplan.webp 1440w, ./ongensurveyplan.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">Building on the points confirmed in the earlier stage, I ran the hypothesis validation through a Google Form survey with 22 respondents. To ground their answers, I published an MVP prototype that supported basic interaction and provided it as context.</p>
-
   <div class="subsec">
     <div class="subsec-title">Low-fidelity Conceptual MVP</div>
     <div class="subsec-video native">
@@ -2259,13 +2255,11 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       </figure>
     </div>
   </div>
-
   <div class="subsec">
     <div class="subsec-title">Survey Result - Phase 1</div>
     <img class="subsec-img" width="3794" height="1716" src="./ongen-survey-panel@2x.png" alt="Phase 1 survey dashboard: audio habits, community information sources, comfort with AI data collection, interest in local audio, ad tolerance, wanted content, a comfort-by-interest cross-tab, and mean scores" loading="lazy" srcset="./light/ongen-survey-panel@2x.webp 1440w, ./ongen-survey-panel@2x.png 3794w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">I built statistics and a dashboard to gauge how ready real users are for AR experiences and how they feel about AI being part of them. As part of the qualitative research, I collected a range of user prompts that surfaced concrete excitement and concerns.</p>
   </div>
-
   <div class="subsec">
     <div class="subsec-title">Confirmed Concept Direction</div>
     <div class="subsec-video native">
@@ -2291,15 +2285,14 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     </div>
   </div>
   <p class="phase-desc">The prototype was built from computer-science components. Because the service runs on AI, I set up an environment that connects to AI APIs and runs a local AI, and carried out the experiments there.</p>
-  <img class="subsec-img" width="2856" height="1284" src="./ongenresearch2.png" alt="VS Code build of the OnGen AR prototype" loading="lazy" srcset="./light/ongenresearch2.webp 1440w, ./ongenresearch2.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">Built entirely in VS Code, the prototype runs as a small full-stack app.</p>
+  <img class="subsec-img" width="2856" height="1284" src="./ongenresearch2.png" alt="VS Code build of the OnGen AR prototype" loading="lazy" srcset="./light/ongenresearch2.webp 1440w, ./ongenresearch2.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <ul class="build-list">
     <li><span class="k">Python</span><span class="v">Server for the local AI and the backend.</span></li>
     <li><span class="k">HTML &amp; CSS</span><span class="v">Flattened frontend that renders the interface.</span></li>
     <li><span class="k">JavaScript app</span><span class="v">Backend logic that runs the experience.</span></li>
     <li><span class="k">Prompter</span><span class="v">Podcast Generator AI instructions that generate each broadcast.</span></li>
   </ul>
-
   <div class="subsec">
     <div class="title-row">
       <div class="subsec-title">Figma Design System</div>
@@ -2310,7 +2303,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <img class="subsec-img" width="2800" height="1154" src="./ongenprototype2.png" alt="Figma design system: dashboard, components, type ramp, and the downtown Toronto map" loading="lazy" srcset="./light/ongenprototype2.webp 1440w, ./ongenprototype2.png 2800w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">I built the OnGen interface as a design system in Figma, a web-based resource that gathers the dashboard, components, type ramp, and the downtown map in one place. It cannot run inside an actual AR device, but it let me design the whole interface as a single coherent concept and use it as the visual reference for the build. Along the way, I took critique at Gate 5 and Gate 6, which let me refine the finer interaction details.</p>
   </div>
-
   <div class="subsec">
     <div class="subsec-title">Gate 5 Mid-point Showcase</div>
     <div class="subsec-video">
@@ -2318,7 +2310,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     </div>
     <p class="phase-note">Before I published to Firebase, I showed this build as a mid-point check at Gate 5, around February, during the faculty and peer critique. The showcase made clear that the interaction still fell short of the AR premise in many places, and I used that feedback to reset the project's direction.</p>
   </div>
-
   <div class="subsec">
     <div class="title-row">
       <div class="subsec-title">Firebase Data Pipeline</div>
@@ -2329,7 +2320,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <img class="subsec-img" width="2868" height="782" src="./ongenfirebaseoverview.png" alt="Firestore collections holding AR interaction sessions and community radio data" loading="lazy" srcset="./light/ongenfirebaseoverview.webp 1440w, ./ongenfirebaseoverview.png 2868w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">Through Firebase, I captured user interaction data in detail, from micro-interactions to retention and how users responded, and set the project up to update itself recursively from that data. I designed it to parse and extract the data as well, so the interactions could be analyzed directly.</p>
   </div>
-
   <div class="subsec">
     <div class="title-row">
       <div class="subsec-title">Tracking Process</div>
@@ -2343,7 +2333,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     </div>
     <p class="phase-note">This breaks the overlay into its steps. I start from the raw scene, scan the site into a rough 3D model, build the digital layer against that model, and composite it back into the viewpoint, so the content lines up with the real buildings.</p>
   </div>
-
   <div class="subsec">
     <div class="subsec-title">Spatial Feed</div>
     <div class="subsec-video">
@@ -2357,13 +2346,13 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <section class="phase-flat" id="conclusion">
   <div class="phase-name">Conclusion</div>
   <div class="phase-sub">GradEX 111 Showcase</div>
+  <p class="gradex-cap">OnGen AR on show at GradEX 111, OCAD University.</p>
   <div class="gradex-row">
     <figure class="v" data-cursor="Showcase Booth"><img src="./ongenrad1.png" alt="OnGen AR on show at GradEX 111, with the Reimagined Radio in AR board and the ON AIR sign" loading="lazy" srcset="./light/ongenrad1.webp 1024w, ./ongenrad1.png 1024w" sizes="(max-width: 880px) 95vw, 28vw" /></figure>
     <figure class="a" data-cursor="Session"><img src="./gradex1.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" /></figure>
     <figure class="b" data-cursor="Booth Overview"><img src="./gradex2.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" srcset="./light/gradex2.webp 1440w, ./gradex2.jpg 2054w" sizes="(max-width: 880px) 95vw, 33vw" /></figure>
     <figure class="c" data-cursor="Project Advisor"><img src="./gradex3.jpg" alt="OnGen AR on show at GradEX 111" loading="lazy" srcset="./light/gradex3.webp 1440w, ./gradex3.jpg 2696w" sizes="(max-width: 880px) 95vw, 33vw" /></figure>
   </div>
-  <p class="gradex-cap">OnGen AR on show at GradEX 111, OCAD University.</p>
   <img class="subsec-img" width="1920" height="810" src="./gradex111label.png" alt="GradEX 111" loading="lazy" style="margin-top:clamp(32px,4vw,56px);" srcset="./light/gradex111label.webp 1440w, ./gradex111label.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <div class="insta-row">
     <a class="insta-card" style="--ar:0.8004" href="https://www.instagram.com/p/DXb0kfGllzA/" target="_blank" rel="noopener">
@@ -2381,7 +2370,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   </div>
   <img class="subsec-img" width="2856" height="1282" src="./ongenresearch1.png" alt="Final research: system value and analysis" loading="lazy" style="margin-top:clamp(48px,7vw,90px);" srcset="./light/ongenresearch1.webp 1440w, ./ongenresearch1.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">This board brings together the internal research methods and results I used to build the project. I designed the final academic research for realizing Audio Augmented Reality, and secured the data that follow-up research will need. Establishing a new user flow for AR interaction let me confirm this as a market from a new product-design perspective.</p>
-
   <div class="subsec">
     <div class="subsec-title">Spatial Intelligence</div>
     <div class="subsec-video">
@@ -2389,7 +2377,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     </div>
     <p class="phase-note">Building spatial intelligence was the core of the OnGen project. It is a product meant to widen the practical use of AR hardware, and a project that connects the digital and the physical. As AR glasses are expected to gain more capability, it holds real room to grow.</p>
   </div>
-
   <div class="subsec">
     <div class="subsec-title">Limitations</div>
     <p class="phase-note">SDK access to AR display hardware during the project period.</p>

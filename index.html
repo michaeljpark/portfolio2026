@@ -570,21 +570,13 @@
     -webkit-box-decoration-break:clone; box-decoration-break:clone;
     transition:background-color .26s ease, color .26s ease;
   }
-  .kw-note{
-    display:inline-grid; grid-template-columns:0fr;
-    opacity:0; vertical-align:baseline;
-    transition:grid-template-columns .45s cubic-bezier(.2,.7,.2,1), opacity .24s ease;
-  }
-  .kw-note > span{ overflow:hidden; white-space:nowrap; }
   @media (hover:hover) and (pointer:fine){
     .kw:hover{ background:var(--ink); color:var(--bg); }
-    .kw:hover .kw-note{ grid-template-columns:1fr; opacity:1; }
   }
   /* a phone has no hover, so a tap sets this instead (see the script below) */
   .kw.is-open{ background:var(--ink); color:var(--bg); }
-  .kw.is-open .kw-note{ grid-template-columns:1fr; opacity:1; }
   @media (prefers-reduced-motion: reduce){
-    .kw, .kw-note{ transition-duration:.01s; }
+    .kw{ transition-duration:.01s; }
   }
 
   /* the row grows into reserved empty space instead of pushing past the column */
@@ -1136,7 +1128,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="hero-greeting reveal">Hi! I'm</div>
   <h1 class="hero-name reveal">Michael Joongmin Park</h1>
   <div class="hero-lede reveal">
-    <p class="hero-tagline">I am a <span class="kw">product designer<span class="kw-note"><span>,&nbsp;industrial designer</span></span></span>. My priority is defining <span class="kw">design strategies<span class="kw-note"><span>,&nbsp;conceptual foresight</span></span></span>, <span class="kw">solutions<span class="kw-note"><span>,&nbsp;consultation</span></span></span>, and possibility through <span class="kw">data-driven research<span class="kw-note"><span>,&nbsp;AI-assisted coding</span></span></span>, and building them into products <span class="kw">people actually use<span class="kw-note"><span>,&nbsp;fast MVP prototyping</span></span></span>.</p>
+    <p class="hero-tagline">I am a <span class="kw">product designer</span>. My priority is defining <span class="kw">design strategies</span>, <span class="kw">solutions</span>, and possibility through <span class="kw">data-driven research</span>, and building them into products <span class="kw">people actually use</span>.</p>
     <span class="updated-tag" id="lastUpdated" data-pushed="2026-08-28T20:11:28Z"><span class="upd-swap"><span class="upd-slot upd-slot-rel"><span class="upd-rel">Updated today</span></span><span class="upd-slot upd-slot-abs"><span class="upd-abs">August 28, 2026</span></span></span></span>
   </div>
 
@@ -1354,8 +1346,8 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <div class="about-col reveal">
       <h3>Approach</h3>
       <p class="lead">I focus on function rather than how it looks.</p>
-      <p class="small">I am a <span class="kw">product designer<span class="kw-note"><span>,&nbsp;industrial designer</span></span></span>. I gather <span class="kw">human-centred research<span class="kw-note"><span>,&nbsp;TCPS 2 certified</span></span></span>, <span class="kw">design thinking<span class="kw-note"><span>,&nbsp;multidisciplinary teams</span></span></span>, and <span class="kw">strategy<span class="kw-note"><span>,&nbsp;user-oriented</span></span></span>, and use them to explore interaction and put it into a working product. Form follows that work rather than leading it, so a decision has to earn its place by what it does for the person using it.</p>
-      <p class="small">In practice that means structuring <span class="kw">qualitative<span class="kw-note"><span>,&nbsp;interviews and deep analysis</span></span></span> and <span class="kw">quantitative<span class="kw-note"><span>,&nbsp;surveys and spreadsheet analysis</span></span></span> research, setting clear <span class="kw">KPIs<span class="kw-note"><span>,&nbsp;market goals</span></span></span>, and turning findings into artifacts <span class="kw">stakeholders<span class="kw-note"><span>,&nbsp;clients and investors</span></span></span> can act on. Research and <span class="kw">documentation<span class="kw-note"><span>,&nbsp;process and handover</span></span></span> are how I keep a team aligned and a project pointed in the right direction.</p>
+      <p class="small">I am a <span class="kw">product designer</span>. I gather <span class="kw">human-centred research</span>, <span class="kw">design thinking</span>, and <span class="kw">strategy</span>, and use them to explore interaction and put it into a working product. Form follows that work rather than leading it, so a decision has to earn its place by what it does for the person using it.</p>
+      <p class="small">In practice that means structuring <span class="kw">qualitative</span> and <span class="kw">quantitative</span> research, setting clear <span class="kw">KPIs</span>, and turning findings into artifacts <span class="kw">stakeholders</span> can act on. Research and <span class="kw">documentation</span> are how I keep a team aligned and a project pointed in the right direction.</p>
     </div>
 
     <div class="about-col reveal">

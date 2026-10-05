@@ -14,7 +14,7 @@
     --brand:#006197;            /* the blue on the Sherway Stamp boards */
     --pill-bg:var(--brand); --pill-ink:#ffffff; --pill-border:transparent;
     --bg:#ffffff; --ink:#0a0a0a; --muted:#6a6a6a; --line:#e6e6e6;
-    --max:1440px; --pad:clamp(12px,2vw,28px);
+    --max:1440px; --pad:clamp(20px,6vw,132px);
     --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
@@ -94,7 +94,7 @@
     line-height:1.05; letter-spacing:-0.05em;
   }
   .hero-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }
-  .hero-row{ margin-top:36px; padding-top:24px; border-top:1px solid var(--line); }
+  .hero-row{ margin-top:36px; padding-top:24px; }
   .hero-side{
     display:flex; flex-direction:row; justify-content:space-between;
     flex-wrap:wrap; font-size:13px; gap:16px;
@@ -1636,7 +1636,6 @@
   .tldr{
     max-width:var(--max); margin:0 auto;
     padding:clamp(40px,5vw,76px) var(--pad);
-    border-top:1px solid var(--line);
     display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.45fr);
     gap:clamp(20px,4vw,64px); align-items:start;
   }
@@ -1647,9 +1646,9 @@
   .tldr-list{ display:flex; flex-direction:column; }
   .tldr-list > div{
     display:grid; grid-template-columns:96px minmax(0,1fr); gap:20px;
-    padding:13px 0; border-top:1px solid var(--line);
+    padding:13px 0;
   }
-  .tldr-list > div:first-child{ border-top:0; padding-top:2px; }
+  .tldr-list > div:first-child{ padding-top:2px; }
   .tldr-list dt{
     font-size:11.5px; letter-spacing:.07em; text-transform:uppercase;
     color:var(--muted); line-height:1.7;
@@ -1703,7 +1702,7 @@
     .tldr-list .tico{ display:none; }   /* no label column to hang it in */
     .tldr-list dd{ font-size:14px; }
   }
-  .phase-flat{ max-width:var(--max); margin:0 auto; padding:clamp(56px,8vw,110px) var(--pad) clamp(28px,3.5vw,44px); border-top:1px solid var(--line); }
+  .phase-flat{ max-width:var(--max); margin:0 auto; padding:clamp(56px,8vw,110px) var(--pad) clamp(28px,3.5vw,44px); }
   .phase-flat .phase-num{ margin-bottom:10px; }
   .phase-flat .phase-name{ margin-bottom:8px; }
   .phase-desc{ margin-top:clamp(20px,2.2vw,30px); font-size:clamp(16px,1.5vw,22px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
@@ -1716,7 +1715,7 @@
      own ratio, so the row height falls out of the width and nothing is cropped */
   .chapter-media-duo{ display:flex; gap:var(--row-gap); margin-bottom:clamp(32px,4vw,48px);
     --row-gap:clamp(8px,1vw,16px);
-    height:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--row-gap)) / 4.388); }
+    height:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * var(--pad) - 2 * var(--row-gap)) / 4.388); }
   .chapter-media-duo .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; flex:var(--w) 1 0; }
   .chapter-media-duo .cell img, .chapter-media-duo .cell video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
   .chapter-media-duo .m1{ --w:0.982; }
@@ -1729,7 +1728,7 @@
      so all four resolve to one shared height and object-fit:cover never has to crop */
   .chapter-media-quad{ display:flex; gap:var(--row-gap); margin-bottom:clamp(32px,4vw,48px);
     --row-gap:clamp(8px,1vw,16px);
-    height:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * clamp(12px,2vw,28px) - 3 * var(--row-gap)) / 3.752); }
+    height:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * var(--pad) - 3 * var(--row-gap)) / 3.752); }
   .chapter-media-quad .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; flex:var(--w) 1 0; }
   .chapter-media-quad .cell img{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
   .chapter-media-quad .q1{ --w:0.706; }
@@ -1771,7 +1770,7 @@
   .feature-trio{
     display:flex; align-items:flex-start; gap:var(--trio-gap); margin-top:clamp(20px,2.4vw,32px);
     --trio-gap:clamp(12px,1.4vw,20px);
-    --trio-col:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--trio-gap)) / 3);
+    --trio-col:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * var(--pad) - 2 * var(--trio-gap)) / 3);
     --trio-h:calc(var(--trio-col) / 1.7778);
   }
   .feature-trio figure{ margin:0; min-width:0; flex:1 1 0; }
@@ -2010,7 +2009,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 /* ===== Value Architecture · Propositional Model, manifesto, On-Air ===== */
 .prop-section{ padding-top:8px; padding-bottom:8px; }
 .prop-lede{ font-size:clamp(18px,1.9vw,28px); font-weight:400; letter-spacing:-0.03em; line-height:1.4; color:var(--ink); max-width:62ch; }
-.prop-model{ display:grid; grid-template-columns:96px 1fr; gap:clamp(24px,3.5vw,56px); align-items:start; margin-top:clamp(40px,5vw,72px); padding-top:clamp(32px,4vw,48px); border-top:1px solid var(--line); }
+.prop-model{ display:grid; grid-template-columns:96px 1fr; gap:clamp(24px,3.5vw,56px); align-items:start; margin-top:clamp(40px,5vw,72px); padding-top:clamp(32px,4vw,48px); }
 .prop-ico{ width:80px; height:80px; color:var(--ink); }
 .prop-ico svg{ width:100%; height:100%; display:block; overflow:visible; }
 .prop-title{ font-size:clamp(22px,2.4vw,38px); font-weight:400; letter-spacing:-0.04em; line-height:1.12; color:var(--ink); margin:0 0 20px; }
@@ -2028,7 +2027,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .manifesto-p{ font-size:clamp(22px,2.8vw,42px); font-weight:400; letter-spacing:-0.04em; line-height:1.34; color:var(--muted); }
 .manifesto-p b{ color:var(--ink); font-weight:400; }
 .manifesto-p + .manifesto-p{ margin-top:clamp(28px,3.5vw,56px); }
-.onair{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(56px,7vw,110px); border-top:1px solid var(--line); text-align:center; }
+.onair{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(56px,7vw,110px); text-align:center; }
 .onair-badge{ display:inline-flex; align-items:center; gap:10px; margin-bottom:22px; }
 .onair-dot{ width:11px; height:11px; border-radius:50%; background:var(--accent,#007aff); animation:onairpulse 1.7s ease-in-out infinite; }
 .onair-live{ font-size:12px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
@@ -2149,11 +2148,14 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </section>
 
 <section class="phase-flat" id="overview">
+  <div class="phase-name">Overview</div>
+  <div class="phase-sub">A mall you can only reach by car, asked to become a place</div>
+  <p class="phase-desc">CF Sherway Gardens sits in Etobicoke at Highway 427 and the Gardiner, ringed on all sides by parking lots and arterial roads. The access that makes it work by car is the same thing that makes it unwelcoming on foot, and that contradiction is the project.</p>
+  <p class="phase-note">Cadillac Fairview is building three phases around the mall, so the user base shifts from commuter to resident over 7 to 15 years. My team and I worked on what the building has to become before they arrive. Research and prototyping were my part of it.</p>
   <div class="subsec" style="margin-top:0;">
     <div class="subsec-title">Meet the team</div>
     <img class="subsec-img" width="3314" height="932" src="./cfteam.png" alt="The project team, five industrial design students" loading="lazy" style="margin-bottom:clamp(32px,4vw,48px);" srcset="./light/cfteam.webp 1440w, ./cfteam.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
   </div>
-
   <div class="subsec" style="margin-top:clamp(40px,5vw,72px);">
     <div class="subsec-title">Gallery</div>
     <div class="chapter-media-quad" style="margin-top:clamp(20px,2.4vw,32px);">
@@ -2163,12 +2165,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <div class="cell q4" data-cursor="Retention"><img src="./Sherwaystampov4.png" alt="Lock screen prompt pointing to the first stamp two minutes away" loading="lazy" srcset="./light/Sherwaystampov4.webp 1200w, ./Sherwaystampov4.png 1267w" sizes="(max-width: 640px) 95vw, 22vw" /></div>
     </div>
   </div>
-  <div class="phase-name">Overview</div>
-  <div class="phase-sub">A mall you can only reach by car, asked to become a place</div>
   <img class="subsec-img strip-img" width="1600" height="1067" src="./sherwaygardens.png" alt="The CF Sherway Gardens entrance at dusk: the canopy over the valet drive, the mall sign, and cars at the door" loading="lazy" srcset="./light/sherwaygardens.webp 1200w, ./sherwaygardens.png 1600w" sizes="(max-width: 1500px) 95vw, 1425px" />
-  <p class="phase-desc">CF Sherway Gardens sits in Etobicoke at Highway 427 and the Gardiner, ringed on all sides by parking lots and arterial roads. The access that makes it work by car is the same thing that makes it unwelcoming on foot, and that contradiction is the project.</p>
-  <p class="phase-note">Cadillac Fairview is building three phases around the mall, so the user base shifts from commuter to resident over 7 to 15 years. My team and I worked on what the building has to become before they arrive. Research and prototyping were my part of it.</p>
-
   <div class="subsec">
     <h3 class="subsec-title">Snapshot</h3>
     <p class="subsec-lead">Scan the poster, hear the story, collect the stamp. The concept the research led to, before the reasoning behind it.</p>
@@ -2183,12 +2180,11 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <section class="phase-flat" id="problem-definition">
   <div class="phase-name">Problem Definition</div>
+  <p class="phase-desc statement">Rebuild the mall as destination</p>
+  <p class="phase-note">Three findings held across everything my team and I recorded on site, and they are physical rather than attitudinal. The mall is legible as a shop and illegible as a place. There is no reason to go unless you already know what you want from the stores, which means every visit has to be justified by a purchase.</p>
   <div class="subsec-video">
     <video class="snap-vid" data-src="./cfProblem%20Definition.mp4?v=20260923" data-poster="./posters/cfproblemdefinition.jpg?v=20260923" loop muted playsinline preload="none" data-cursor="The third place - where people connect"></video>
   </div>
-  <p class="phase-desc statement">Rebuild the mall as destination</p>
-  <p class="phase-note">Three findings held across everything my team and I recorded on site, and they are physical rather than attitudinal. The mall is legible as a shop and illegible as a place. There is no reason to go unless you already know what you want from the stores, which means every visit has to be justified by a purchase.</p>
-
   <div class="subsec">
     <div class="subsec-title">What is actually wrong</div>
     <div class="feature-trio">
@@ -2212,9 +2208,9 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <section class="phase-flat" id="discovery">
   <div class="phase-name">Discovery</div>
   <p class="phase-desc">Two phases, one to record the building as it behaves and one to hear how people describe it.</p>
-  <img class="subsec-img" width="3314" height="1157" src="./cfresaerch1.png" alt="Phase I onsite observation and Phase II interview comments" loading="lazy" srcset="./light/cfresaerch1.webp 1440w, ./cfresaerch1.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">One walk through the mall on a weekday, then interviews with seven people. Orientation turned out to be the quiet problem: corridors look alike, and a visitor who cannot form a mental map never develops a habit.</p>
   <p class="phase-note">Counting the signals rather than reading them settled our direction. Cultural wants and welcoming came up 13 times, wanting to shop in person 10. People still want to come in person, which meant the retail side was the asset to build on, not the problem.</p>
+  <img class="subsec-img" width="3314" height="1157" src="./cfresaerch1.png" alt="Phase I onsite observation and Phase II interview comments" loading="lazy" srcset="./light/cfresaerch1.webp 1440w, ./cfresaerch1.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <div class="chapter-media-duo" style="margin-top:clamp(20px,2.4vw,32px);">
     <div class="cell m1" data-cursor="On-site"><img src="./cfdiscovery1.png" alt="Onsite observation in the mall, recorded on a weekday during work and school hours" loading="lazy" srcset="./light/cfdiscovery1.webp 1200w, ./cfdiscovery1.png 1767w" sizes="(max-width: 640px) 95vw, 30vw" /></div>
     <div class="cell m2" data-cursor="Synthesis"><img src="./cfdiscovery2.png" alt="Interview comments on sticky notes, then the same notes sorted into themes and tallied" loading="lazy" srcset="./light/cfdiscovery2.webp 1200w, ./cfdiscovery2.png 3147w" sizes="(max-width: 640px) 95vw, 30vw" /></div>
@@ -2321,11 +2317,11 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <section class="phase-flat" id="conclusion">
   <div class="phase-name">Conclusion</div>
-  <img class="subsec-img" width="1800" height="600" src="./sherway%20banner.png" alt="CF Sherway Gardens seen from the street, with the Cadillac Fairview mark over it" loading="lazy" style="margin-top:clamp(20px,2.2vw,30px);" srcset="./light/sherway%20banner.webp 1440w, ./sherway%20banner.png 1800w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-desc">The useful move was refusing to treat this as a branding problem. Every observation we made was spatial, so the test became whether a proposal changes the room.</p>
   <p class="phase-note">Sherway Stamp is not the direction my team confirmed at the end. The New Roots is, and Sherway Stamp was reorganised into a supporting function inside it. What it contributed was the skeleton of the digital experience and the basic interaction direction that confirmed concept builds on.</p>
   <p class="phase-note">Two questions were left open: what makes someone scan in the first place, and whether the scan technology is shippable today rather than soon.</p>
   <p class="phase-note">Sherway already runs plenty of events, and the potential programming is already there. The next problem is not adding more, it is retention, how you hold people across those programs and manage them as one thing.</p>
+  <img class="subsec-img" width="1800" height="600" src="./sherway%20banner.png" alt="CF Sherway Gardens seen from the street, with the Cadillac Fairview mark over it" loading="lazy" style="margin-top:clamp(20px,2.2vw,30px);" srcset="./light/sherway%20banner.webp 1440w, ./sherway%20banner.png 1800w" sizes="(max-width: 1500px) 95vw, 1425px" />
 </section>
 
 <footer style="padding:clamp(64px,8vw,120px) var(--pad) clamp(48px,6vw,80px); text-align:center;">

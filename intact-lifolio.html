@@ -12,7 +12,7 @@
 <style>
   :root{
     --bg:#ffffff; --ink:#0a0a0a; --muted:#6a6a6a; --line:#e6e6e6;
-    --max:1440px; --pad:clamp(12px,2vw,28px);
+    --max:1440px; --pad:clamp(20px,6vw,132px);
     --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
@@ -92,7 +92,7 @@
     line-height:1.05; letter-spacing:-0.05em;
   }
   .hero-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }
-  .hero-row{ margin-top:36px; padding-top:24px; border-top:1px solid var(--line); }
+  .hero-row{ margin-top:36px; padding-top:24px; }
   .hero-side{
     display:flex; flex-direction:row; justify-content:space-between;
     flex-wrap:wrap; font-size:13px; gap:16px;
@@ -1634,7 +1634,6 @@
   .tldr{
     max-width:var(--max); margin:0 auto;
     padding:clamp(40px,5vw,76px) var(--pad);
-    border-top:1px solid var(--line);
     display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.45fr);
     gap:clamp(20px,4vw,64px); align-items:start;
   }
@@ -1645,9 +1644,9 @@
   .tldr-list{ display:flex; flex-direction:column; }
   .tldr-list > div{
     display:grid; grid-template-columns:96px minmax(0,1fr); gap:20px;
-    padding:13px 0; border-top:1px solid var(--line);
+    padding:13px 0;
   }
-  .tldr-list > div:first-child{ border-top:0; padding-top:2px; }
+  .tldr-list > div:first-child{ padding-top:2px; }
   .tldr-list dt{
     font-size:11.5px; letter-spacing:.07em; text-transform:uppercase;
     color:var(--muted); line-height:1.7;
@@ -1701,7 +1700,7 @@
     .tldr-list .tico{ display:none; }   /* no label column to hang it in */
     .tldr-list dd{ font-size:14px; }
   }
-  .phase-flat{ max-width:var(--max); margin:0 auto; padding:clamp(56px,8vw,110px) var(--pad) clamp(28px,3.5vw,44px); border-top:1px solid var(--line); }
+  .phase-flat{ max-width:var(--max); margin:0 auto; padding:clamp(56px,8vw,110px) var(--pad) clamp(28px,3.5vw,44px); }
   .phase-flat .phase-num{ margin-bottom:10px; }
   .phase-flat .phase-name{ margin-bottom:8px; }
   .phase-desc{ margin-top:clamp(20px,2.2vw,30px); font-size:clamp(16px,1.5vw,22px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
@@ -1955,7 +1954,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 /* ===== Value Architecture · Propositional Model, manifesto, On-Air ===== */
 .prop-section{ padding-top:8px; padding-bottom:8px; }
 .prop-lede{ font-size:clamp(18px,1.9vw,28px); font-weight:400; letter-spacing:-0.03em; line-height:1.4; color:var(--ink); max-width:62ch; }
-.prop-model{ display:grid; grid-template-columns:96px 1fr; gap:clamp(24px,3.5vw,56px); align-items:start; margin-top:clamp(40px,5vw,72px); padding-top:clamp(32px,4vw,48px); border-top:1px solid var(--line); }
+.prop-model{ display:grid; grid-template-columns:96px 1fr; gap:clamp(24px,3.5vw,56px); align-items:start; margin-top:clamp(40px,5vw,72px); padding-top:clamp(32px,4vw,48px); }
 .prop-ico{ width:80px; height:80px; color:var(--ink); }
 .prop-ico svg{ width:100%; height:100%; display:block; overflow:visible; }
 .prop-title{ font-size:clamp(22px,2.4vw,38px); font-weight:400; letter-spacing:-0.04em; line-height:1.12; color:var(--ink); margin:0 0 20px; }
@@ -1973,7 +1972,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .manifesto-p{ font-size:clamp(22px,2.8vw,42px); font-weight:400; letter-spacing:-0.04em; line-height:1.34; color:var(--muted); }
 .manifesto-p b{ color:var(--ink); font-weight:400; }
 .manifesto-p + .manifesto-p{ margin-top:clamp(28px,3.5vw,56px); }
-.onair{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(56px,7vw,110px); border-top:1px solid var(--line); text-align:center; }
+.onair{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(56px,7vw,110px); text-align:center; }
 .onair-badge{ display:inline-flex; align-items:center; gap:10px; margin-bottom:22px; }
 .onair-dot{ width:11px; height:11px; border-radius:50%; background:var(--accent,#007aff); animation:onairpulse 1.7s ease-in-out infinite; }
 .onair-live{ font-size:12px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
@@ -2112,9 +2111,8 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="phase-name">Problem Definition</div>
   <p class="phase-desc">Insurance, as the world knows it, is reactive, transactional, and invisible until disaster strikes. So where is the insurance for the decisions that shape what comes next?</p>
   <p class="phase-note">Insurance resolves uncertainty after the fact, but the uncertainty that shapes a person's financial trajectory happens before any claim is filed. A home purchase, a marriage, a job change: each carries legal and financial obligations that most people navigate blind.</p>
-  <img class="subsec-img" width="1672" height="941" src="./lifolioimg2.png" alt="The gap between reactive protection and the decisions that come before a claim" loading="lazy" srcset="./light/lifolioimg2.webp 1440w, ./lifolioimg2.png 1672w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">For young adults and first-time earners the gap is wider. Financial literacy is not a given, and the systems built to help, lawyers and advisors and accountants, are priced out of reach at exactly the moments they are needed most.</p>
-
+  <img class="subsec-img" width="1672" height="941" src="./lifolioimg2.png" alt="The gap between reactive protection and the decisions that come before a claim" loading="lazy" srcset="./light/lifolioimg2.webp 1440w, ./lifolioimg2.png 1672w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <div class="subsec">
     <div class="subsec-title">Three structural gaps insurance does not address</div>
     <ul class="build-list features">

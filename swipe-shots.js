@@ -11,8 +11,9 @@
 
    The track is a horizontal scroll-snap strip: on a phone that is a swipe, on a
    trackpad a two-finger slide. This file adds what a scroller cannot say for
-   itself: dots that show where you are and jump when tapped, and small chevrons
-   for mouse users. Accent comes from --brand on the .shots element. */
+   itself: a pill laid over the foot of the picture holding a chevron each side
+   and dots between them, showing where you are and jumping when tapped. Accent
+   comes from --brand on the .shots element. */
 (function () {
   'use strict';
 
@@ -35,19 +36,30 @@
     /* the slides off to the side never enter the viewport, so the page's
        scroll-reveal must not be the thing that decides they are visible */
     '.reveal-on .shots .phase-note,.reveal-on .shots .subsec-lead{opacity:1;transform:none;}' +
-    '.shots-ui{display:flex;align-items:center;justify-content:center;gap:clamp(10px,1.2vw,16px);margin-bottom:clamp(12px,1.4vw,18px);}' +
+    /* the control sits ON the picture, at its foot, so it stays with what it
+       moves instead of drifting off-screen above a tall set */
+    '.shots-ui{position:absolute;z-index:3;left:50%;' +
+      'top:calc(var(--shots-img-top,0px) + var(--shots-img-h,0px));' +
+      'transform:translate(-50%,calc(-100% - clamp(12px,1.4vw,20px)));' +
+      'display:flex;align-items:center;gap:2px;padding:4px 6px;border-radius:999px;' +
+      'background:rgba(16,16,16,.52);-webkit-backdrop-filter:blur(14px) saturate(1.4);' +
+      'backdrop-filter:blur(14px) saturate(1.4);box-shadow:0 6px 22px rgba(0,0,0,.26);' +
+      'opacity:0;transition:opacity .35s ease;}' +
+    /* held back until the picture has been measured, or it flashes at the top left */
+    '.shots.is-ready .shots-ui{opacity:1;}' +
     '.shots-dots{display:flex;align-items:center;}' +
     /* the dot people see is 6px; the target a thumb has to hit is 18x30 */
-    '.shots-dots button{-webkit-appearance:none;appearance:none;border:0;margin:0;padding:12px 6px;background:none;' +
+    '.shots-dots button{-webkit-appearance:none;appearance:none;border:0;margin:0;padding:10px 5px;background:none;' +
       'display:block;cursor:pointer;line-height:0;-webkit-tap-highlight-color:transparent;}' +
-    '.shots-dots button::before{content:"";display:block;width:6px;height:6px;border-radius:999px;background:var(--line);' +
+    '.shots-dots button::before{content:"";display:block;width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,.42);' +
       'transition:width .4s ' + EASE + ',background-color .3s ease;}' +
-    '.shots-dots button[aria-current="true"]::before{width:22px;background:var(--brand,var(--ink));}' +
-    '.shots-dots button:focus-visible,.shots-nav:focus-visible{outline:1px solid var(--ink);outline-offset:3px;}' +
+    '.shots-dots button[aria-current="true"]::before{width:20px;background:var(--brand,#fff);}' +
+    '.shots-dots button:focus-visible,.shots-nav:focus-visible{outline:1px solid #fff;outline-offset:2px;}' +
     '.shots-nav{-webkit-appearance:none;appearance:none;border:0;padding:0;margin:0;background:none;width:26px;height:26px;' +
-      'display:none;place-items:center;border-radius:999px;color:var(--muted);cursor:pointer;transition:color .2s,opacity .2s;}' +
-    '.shots-nav:hover{color:var(--ink);}' +
-    '.shots-nav:disabled{opacity:.25;cursor:default;}' +
+      'display:grid;place-items:center;border-radius:999px;color:rgba(255,255,255,.74);cursor:pointer;' +
+      '-webkit-tap-highlight-color:transparent;transition:color .2s,opacity .2s,background-color .2s;}' +
+    '.shots-nav:hover{color:#fff;background:rgba(255,255,255,.16);}' +
+    '.shots-nav:disabled{opacity:.26;cursor:default;background:none;}' +
     '.shots-nav svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;' +
       'transition:transform .2s ' + EASE + ';}' +
     '.shots-nav.prev:not(:disabled):active svg{transform:translateX(-2px);}' +
@@ -72,7 +84,7 @@
       'transition:transform .22s ' + EASE + ';}' +
     '.shots-cursor.back svg{transform:scaleX(-1);}' +
     /* chevrons and edge zones are for a pointer; a finger has the swipe */
-    '@media (hover:hover) and (pointer:fine){.shots-nav{display:grid;}.shots-edge{display:block;}}' +
+    '@media (hover:hover) and (pointer:fine){.shots-edge{display:block;}}' +
     '@media (prefers-reduced-motion: reduce){.shots-cursor span{transform:translate(-50%,-50%);transition:opacity .18s ease;}' +
       '.shots-cursor.on span{transform:translate(-50%,-50%);}}' +
     '@media (prefers-reduced-motion: reduce){.shots-dots button::before{transition:background-color .2s ease;}}';
@@ -150,9 +162,9 @@
       b.setAttribute('aria-controls', s.id);
       return b;
     });
-    /* above the screens, not under the caption: the set is tall enough that
-       controls at the bottom would be off the screen while you look at it */
-    root.insertBefore(ui, track);
+    /* laid over the foot of the picture rather than above it or under the
+       caption, so it is always on the thing it scrolls */
+    root.appendChild(ui);
 
     /* click zones down the left and right of the picture itself */
     var edges = ['prev', 'next'].map(function (dir) {
@@ -172,6 +184,8 @@
       var r = img.getBoundingClientRect(), rr = root.getBoundingClientRect();
       if (!r.height) return;
       root.style.setProperty('--shots-img-h', Math.round(r.height) + 'px');
+      root.style.setProperty('--shots-img-top', Math.round(r.top - rr.top) + 'px');
+      root.classList.add('is-ready');
       edges.forEach(function (e) { e.style.top = Math.round(r.top - rr.top) + 'px'; });
     }
 

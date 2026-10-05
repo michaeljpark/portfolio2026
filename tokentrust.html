@@ -16,7 +16,7 @@
     --pill-bg:var(--brand);
     --pill-border:transparent;
     --bg:#ffffff; --ink:#0a0a0a; --muted:#6a6a6a; --line:#e6e6e6;
-    --max:1440px; --pad:clamp(12px,2vw,28px);
+    --max:1440px; --pad:clamp(20px,6vw,132px);
     --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
@@ -96,7 +96,7 @@
     line-height:1.05; letter-spacing:-0.05em;
   }
   .hero-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }
-  .hero-row{ margin-top:36px; padding-top:24px; border-top:1px solid var(--line); }
+  .hero-row{ margin-top:36px; padding-top:24px; }
   .hero-side{
     display:flex; flex-direction:row; justify-content:space-between;
     flex-wrap:wrap; font-size:13px; gap:16px;
@@ -1638,7 +1638,6 @@
   .tldr{
     max-width:var(--max); margin:0 auto;
     padding:clamp(40px,5vw,76px) var(--pad);
-    border-top:1px solid var(--line);
     display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.45fr);
     gap:clamp(20px,4vw,64px); align-items:start;
   }
@@ -1649,9 +1648,9 @@
   .tldr-list{ display:flex; flex-direction:column; }
   .tldr-list > div{
     display:grid; grid-template-columns:96px minmax(0,1fr); gap:20px;
-    padding:13px 0; border-top:1px solid var(--line);
+    padding:13px 0;
   }
-  .tldr-list > div:first-child{ border-top:0; padding-top:2px; }
+  .tldr-list > div:first-child{ padding-top:2px; }
   .tldr-list dt{
     font-size:11.5px; letter-spacing:.07em; text-transform:uppercase;
     color:var(--muted); line-height:1.7;
@@ -1705,7 +1704,7 @@
     .tldr-list .tico{ display:none; }   /* no label column to hang it in */
     .tldr-list dd{ font-size:14px; }
   }
-  .phase-flat{ max-width:var(--max); margin:0 auto; padding:clamp(56px,8vw,110px) var(--pad) clamp(28px,3.5vw,44px); border-top:1px solid var(--line); }
+  .phase-flat{ max-width:var(--max); margin:0 auto; padding:clamp(56px,8vw,110px) var(--pad) clamp(28px,3.5vw,44px); }
   .phase-flat .phase-num{ margin-bottom:10px; }
   .phase-flat .phase-name{ margin-bottom:8px; }
   .phase-desc{ margin-top:clamp(20px,2.2vw,30px); font-size:clamp(16px,1.5vw,22px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
@@ -1730,7 +1729,7 @@
   .qcards{ display:flex; align-items:flex-start; gap:var(--q-gap);
     margin:clamp(40px,4.4vw,68px) 0 clamp(32px,3.6vw,56px);
     --q-gap:clamp(24px,3vw,48px);
-    --q-col:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--q-gap)) / 3);
+    --q-col:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * var(--pad) - 2 * var(--q-gap)) / 3);
     --q-h:calc(var(--q-col) / 1.7778); }
   /* picture first, the logo star sitting in its top corner, then the words */
   .qcard{ position:relative; flex:1 1 0; min-width:0; display:grid; grid-template-columns:minmax(0,1fr);
@@ -1995,7 +1994,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 /* ===== Value Architecture · Propositional Model, manifesto, On-Air ===== */
 .prop-section{ padding-top:8px; padding-bottom:8px; }
 .prop-lede{ font-size:clamp(18px,1.9vw,28px); font-weight:400; letter-spacing:-0.03em; line-height:1.4; color:var(--ink); max-width:62ch; }
-.prop-model{ display:grid; grid-template-columns:96px 1fr; gap:clamp(24px,3.5vw,56px); align-items:start; margin-top:clamp(40px,5vw,72px); padding-top:clamp(32px,4vw,48px); border-top:1px solid var(--line); }
+.prop-model{ display:grid; grid-template-columns:96px 1fr; gap:clamp(24px,3.5vw,56px); align-items:start; margin-top:clamp(40px,5vw,72px); padding-top:clamp(32px,4vw,48px); }
 .prop-ico{ width:80px; height:80px; color:var(--ink); }
 .prop-ico svg{ width:100%; height:100%; display:block; overflow:visible; }
 .prop-title{ font-size:clamp(22px,2.4vw,38px); font-weight:400; letter-spacing:-0.04em; line-height:1.12; color:var(--ink); margin:0 0 20px; }
@@ -2013,7 +2012,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .manifesto-p{ font-size:clamp(22px,2.8vw,42px); font-weight:400; letter-spacing:-0.04em; line-height:1.34; color:var(--muted); }
 .manifesto-p b{ color:var(--ink); font-weight:400; }
 .manifesto-p + .manifesto-p{ margin-top:clamp(28px,3.5vw,56px); }
-.onair{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(56px,7vw,110px); border-top:1px solid var(--line); text-align:center; }
+.onair{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(56px,7vw,110px); text-align:center; }
 .onair-badge{ display:inline-flex; align-items:center; gap:10px; margin-bottom:22px; }
 .onair-dot{ width:11px; height:11px; border-radius:50%; background:var(--accent,#007aff); animation:onairpulse 1.7s ease-in-out infinite; }
 .onair-live{ font-size:12px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
@@ -2135,19 +2134,18 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </section>
 
 <section class="phase-flat" id="overview">
+  <div class="phase-name">Overview</div>
+  <div class="phase-sub">Leading five people through a six-week question</div>
+  <p class="phase-desc">TokenTrust is a governance platform that measures the quality of the data people give to AI, pays them back for it, and lets that value move between platforms. I led a team of five, and my job was less about drawing screens than about deciding what we were actually asking.</p>
+  <p class="phase-note">We had six weeks. My first call as lead was that we would not spend them on another privacy complaint. Plenty of work already says AI companies take too much. I wanted us to answer a harder question: if data has value, what would it take to actually pay someone for it? That reframing set everything that followed, because it turned a moral argument into a measurement problem.</p>
+  <p class="phase-note">Five of us, drawn from industrial design and graphic design, and none of us a governance specialist. I split the work so it could run in parallel. Two of the team took the primary desk research, one on regulation and one on market and cost data, and two more came in as second researchers on the axes that needed another pass. I kept the framework and the argument, which meant I was the one who had to make the pieces agree with each other. Alexander Manu and Mahnoor Hasan advised, and I used their critiques as checkpoints rather than approvals.</p>
   <div class="subsec" style="margin-top:0;">
     <div class="subsec-title">Meet the team</div>
     <img class="subsec-img" width="3314" height="932" src="./tokentrustteam.png" alt="Team board: five members across industrial design and graphic design, made up of the team lead, two researchers, and two second researchers" loading="lazy" style="margin-bottom:clamp(32px,4vw,48px);" srcset="./light/tokentrustteam.webp 1440w, ./tokentrustteam.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
   </div>
-  <div class="phase-name">Overview</div>
-  <div class="phase-sub">Leading five people through a six-week question</div>
   <div class="subsec-video">
     <video class="snap-vid" data-src="./TokentrustOverview.mp4?v=20260921" data-poster="./posters/tokentrustoverview.jpg?v=20260921" loop muted playsinline preload="none" data-cursor="Data Governance"></video>
   </div>
-  <p class="phase-desc">TokenTrust is a governance platform that measures the quality of the data people give to AI, pays them back for it, and lets that value move between platforms. I led a team of five, and my job was less about drawing screens than about deciding what we were actually asking.</p>
-  <p class="phase-note">We had six weeks. My first call as lead was that we would not spend them on another privacy complaint. Plenty of work already says AI companies take too much. I wanted us to answer a harder question: if data has value, what would it take to actually pay someone for it? That reframing set everything that followed, because it turned a moral argument into a measurement problem.</p>
-  <p class="phase-note">Five of us, drawn from industrial design and graphic design, and none of us a governance specialist. I split the work so it could run in parallel. Two of the team took the primary desk research, one on regulation and one on market and cost data, and two more came in as second researchers on the axes that needed another pass. I kept the framework and the argument, which meant I was the one who had to make the pieces agree with each other. Alexander Manu and Mahnoor Hasan advised, and I used their critiques as checkpoints rather than approvals.</p>
-
   <div class="subsec">
     <h3 class="subsec-title">Snapshot</h3>
     <p class="subsec-lead">Data is scored, contribution is paid back in tokens, and that value stays worth something when it moves to another platform.</p>
@@ -2159,13 +2157,12 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <section class="phase-flat" id="problem-definition">
   <div class="phase-name">Problem Definition</div>
-  <div class="subsec-video">
-    <video class="snap-vid" data-src="./tokentrustproblemdefinition.mp4?v=20260921" data-poster="./posters/tokentrustproblemdefinition.jpg?v=20260921" loop muted playsinline preload="none" data-cursor="Data Transparency"></video>
-  </div>
   <p class="phase-desc statement">You don&rsquo;t own tokens. You only give data.</p>
   <p class="phase-desc">Most AI companies treat tokens as an internal meter for usage. People have almost no sense of what their data is worth, no view of where it goes, and no say in who profits from it.</p>
   <p class="phase-note">Consent and control are already guaranteed in law. GDPR gives people the right to withdraw permission and to access, change, and delete what has been collected. What no law says is that the value has to come back. I decided early that this gap, not privacy in general, was where the project would sit, because it is the one part of the problem nobody had built a mechanism for.</p>
-
+  <div class="subsec-video">
+    <video class="snap-vid" data-src="./tokentrustproblemdefinition.mp4?v=20260921" data-poster="./posters/tokentrustproblemdefinition.jpg?v=20260921" loop muted playsinline preload="none" data-cursor="Data Transparency"></video>
+  </div>
   <div class="subsec">
     <div class="subsec-title">The three questions I put in front of the team</div>
     <p class="subsec-lead">I opened the project with these, and we kept coming back to them whenever the scope started drifting.</p>
@@ -2202,20 +2199,18 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <section class="phase-flat" id="discovery">
   <div class="phase-name">Discovery</div>
   <p class="phase-desc">I gave the research a shape before it started. I put the regulatory side with one researcher and market and cost with another, and asked the team for evidence that would either kill the idea or force it to get specific.</p>
-  <img class="subsec-img" width="2838" height="804" src="./tokentrustresearch1.png" alt="AI service audit board: why audit AI services, the three assistants as objects of study, and the audit scope and unit of analysis" loading="lazy" srcset="./light/tokentrustresearch1.webp 1440w, ./tokentrustresearch1.png 2838w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">Before anyone went looking for numbers, I made the team agree on what we were auditing and what we were not. I picked ChatGPT, Claude, and Gemini as the objects because they are three different corporate shapes doing the same job, a capped-profit lab, a public-benefit corporation, and a division of a trillion-dollar advertising company. Comparing them tells you what is a company choice and what is structural to the category.</p>
   <p class="phase-note">The unit of analysis is where I spent the most time as lead. I fixed it at one median text prompt, then multiplied out by volume and by default distribution to reach the system-level effect. Without that ladder every statistic the team found would have been an anecdote. Chip fabrication, enterprise API workloads, and copyright licensing went outside the boundary on purpose, because auditing them properly was a different project, and saying so protected the credibility of what we did claim.</p>
+  <img class="subsec-img" width="2838" height="804" src="./tokentrustresearch1.png" alt="AI service audit board: why audit AI services, the three assistants as objects of study, and the audit scope and unit of analysis" loading="lazy" srcset="./light/tokentrustresearch1.webp 1440w, ./tokentrustresearch1.png 2838w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <img class="subsec-img" width="2838" height="1470" src="./tokentrustresearch2.png" alt="Research synthesis board: market landscape, six statistical axes with cited sources and contributor initials, and pitch-level numbers" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/tokentrustresearch2.webp 1440w, ./tokentrustresearch2.png 2838w" sizes="(max-width: 1500px) 95vw, 1425px" />
   <p class="phase-note">The audit framework was where we started, not what we concluded. With the boundary and the unit of analysis fixed, I had the team widen out from it and split the evidence into energy, water, carbon, labour, disclosure, and behaviour, so the read would be system-level instead of a list of complaints about one product. Every card carried a citation and the initials of whoever found it, because when a team researches in parallel it stops being clear who stands behind a number.</p>
   <p class="phase-note">I took the synthesis, and it is where I turned the analysis back toward the person using these tools. The system-level numbers are real, but none of them reach the user, who sees no cost, no destination, and no return for what they hand over. I defined the problem there rather than at the infrastructure layer, and that decision set the direction for everything after it: the main strategy is to solve what is broken from the user's point of view, and the service has to be composed around that rather than around the audit that led us to it.</p>
-
   <div class="subsec">
     <div class="subsec-title">Confirmed Direction</div>
     <p class="subsec-lead"><em>How might we build one AI token ecosystem that gives both platforms and people a reason to take part across boundaries?</em> I wrote this as the working question at the end of research, and these three moves are how I answered it.</p>
     <img class="subsec-img" width="1920" height="810" src="./Tokentrust%20Confirmed%20Direction1.png" alt="Confirmed direction: reward as consent-based incentive, AI token as a receipt-generating asset, and interplatform pricing that responds to demand" loading="lazy" srcset="./light/Tokentrust%20Confirmed%20Direction1.webp 1440w, ./Tokentrust%20Confirmed%20Direction1.png 1920w" sizes="(max-width: 1500px) 95vw, 1425px" />
     <p class="phase-note">Reward turns consent into something with a price attached, so every step of the loop can be audited. The token stops being a meter for compute and starts generating a receipt. Pulling the siloed units into one framework is what lets pricing answer to demand instead of to whichever platform issued it.</p>
   </div>
-
   <div class="subsec">
     <div class="subsec-title">Three components, one loop</div>
     <p class="subsec-lead">The obstacle to paying people for data was never technical. It was that nobody agreed on how to measure the thing being paid for. I kept the service to three parts, because anything more and the team could not explain it in a single pass.</p>
@@ -2345,14 +2340,14 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <section class="phase-flat" id="conclusion">
   <div class="phase-name">Conclusion</div>
   <div class="phase-sub">What leading this taught me</div>
-  <div class="subsec-video">
-    <video class="snap-vid" data-src="./tokentrustconclusion.mp4?v=20260921" data-poster="./posters/tokentrustconclusion.jpg?v=20260921" loop muted playsinline preload="none" data-cursor="User-centric AI Data Governance"></video>
-  </div>
   <p class="phase-desc">TokenTrust began as a question about where our data goes and ended as a framework with a measurement layer, a compensation loop, and a regulatory path someone could actually follow.</p>
   <p class="phase-note">The lesson I keep from it is that the barrier to paying people for their data was definitional, not technical. As soon as DQI gave data a measurable identity, refund stopped being a promise and became something you could calculate, and compliance stopped being a cost and became the floor the whole system stands on.</p>
   <p class="phase-note">Leading five people through six weeks taught me most of what I took away. Splitting research across the team only worked because I had decided in advance what would count as evidence, and the parts I had to redo were the parts where I had not. Bringing critique from Alexander Manu and Mahnoor Hasan in as checkpoints, rather than as approval at the end, is what kept the scope from drifting. I also learned to protect one person's time for synthesis, because in a six-week project nobody else has room to hold the whole argument.</p>
   <p class="phase-note">If I ran it again I would spend week one on the regulatory map instead of week four. Mapping PIPEDA, FINTRAC, and CBPR against the three horizons is what turned this from a concept into something a company could build toward, and I found that out later than I should have. <em>The work is published and continues at michaeljpark.github.io/tokentrust.</em></p>
   <p class="phase-note" style="margin-top:clamp(28px,3vw,44px);">Full working documentation, including the market positioning, the component specifications, and the Canadian regulatory blueprint from Phase II, is kept in the <a href="./tokentrust-detail.html" style="border-bottom:1px solid var(--line);">project detail</a>.</p>
+  <div class="subsec-video">
+    <video class="snap-vid" data-src="./tokentrustconclusion.mp4?v=20260921" data-poster="./posters/tokentrustconclusion.jpg?v=20260921" loop muted playsinline preload="none" data-cursor="User-centric AI Data Governance"></video>
+  </div>
 </section>
 
 
@@ -2375,7 +2370,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </script>
 <script src="./lazy-video.js?v=20260818"></script>
 <script src="./phase-nav.js?v=20260919b"></script>
-<script src="./swipe-shots.js?v=20260921"></script>
+<script src="./swipe-shots.js?v=20261005"></script>
 <script src="./cursor-pill.js?v=20260921"></script>
 <script>
 (function(){

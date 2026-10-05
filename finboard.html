@@ -14,7 +14,7 @@
     --bg:#ffffff; --ink:#0a0a0a; --muted:#6a6a6a; --line:#e6e6e6;
     /* the label that rides under the pointer: black plate, white text */
     --pill-bg:#0a0a0a; --pill-ink:#ffffff; --pill-border:rgba(255,255,255,.14);
-    --max:1440px; --pad:clamp(12px,2vw,28px);
+    --max:1440px; --pad:clamp(20px,6vw,132px);
     --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
@@ -94,7 +94,7 @@
     line-height:1.05; letter-spacing:-0.05em;
   }
   .hero-tagline{ font-size:16px; color:var(--muted); margin-top:14px; line-height:1.5; }
-  .hero-row{ margin-top:36px; padding-top:24px; border-top:1px solid var(--line); }
+  .hero-row{ margin-top:36px; padding-top:24px; }
   .hero-side{
     display:flex; flex-direction:row; justify-content:space-between;
     flex-wrap:wrap; font-size:13px; gap:16px;
@@ -1636,7 +1636,6 @@
   .tldr{
     max-width:var(--max); margin:0 auto;
     padding:clamp(40px,5vw,76px) var(--pad);
-    border-top:1px solid var(--line);
     display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.45fr);
     gap:clamp(20px,4vw,64px); align-items:start;
   }
@@ -1647,9 +1646,9 @@
   .tldr-list{ display:flex; flex-direction:column; }
   .tldr-list > div{
     display:grid; grid-template-columns:96px minmax(0,1fr); gap:20px;
-    padding:13px 0; border-top:1px solid var(--line);
+    padding:13px 0;
   }
-  .tldr-list > div:first-child{ border-top:0; padding-top:2px; }
+  .tldr-list > div:first-child{ padding-top:2px; }
   .tldr-list dt{
     font-size:11.5px; letter-spacing:.07em; text-transform:uppercase;
     color:var(--muted); line-height:1.7;
@@ -1703,7 +1702,7 @@
     .tldr-list .tico{ display:none; }   /* no label column to hang it in */
     .tldr-list dd{ font-size:14px; }
   }
-  .phase-flat{ max-width:var(--max); margin:0 auto; padding:clamp(56px,8vw,110px) var(--pad) clamp(28px,3.5vw,44px); border-top:1px solid var(--line); }
+  .phase-flat{ max-width:var(--max); margin:0 auto; padding:clamp(56px,8vw,110px) var(--pad) clamp(28px,3.5vw,44px); }
   .phase-flat .phase-num{ margin-bottom:10px; }
   .phase-flat .phase-name{ margin-bottom:8px; }
   .phase-desc{ margin-top:clamp(20px,2.2vw,30px); font-size:clamp(16px,1.5vw,22px); color:var(--ink); letter-spacing:-0.02em; line-height:1.5; max-width:none; }
@@ -1715,7 +1714,7 @@
   .feature-trio{
     display:flex; align-items:flex-start; gap:var(--trio-gap); margin-top:clamp(36px,4.2vw,64px);
     --trio-gap:clamp(12px,1.4vw,20px);
-    --trio-col:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * clamp(12px,2vw,28px) - 2 * var(--trio-gap)) / 3);
+    --trio-col:calc((min(100vw - var(--sbw, 0px), var(--max)) - 2 * var(--pad) - 2 * var(--trio-gap)) / 3);
     --trio-h:calc(var(--trio-col) / 1.7778);
   }
   .feature-trio figure{ margin:0; min-width:0; flex:1 1 0; }
@@ -1995,7 +1994,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 /* ===== Value Architecture · Propositional Model, manifesto, On-Air ===== */
 .prop-section{ padding-top:8px; padding-bottom:8px; }
 .prop-lede{ font-size:clamp(18px,1.9vw,28px); font-weight:400; letter-spacing:-0.03em; line-height:1.4; color:var(--ink); max-width:62ch; }
-.prop-model{ display:grid; grid-template-columns:96px 1fr; gap:clamp(24px,3.5vw,56px); align-items:start; margin-top:clamp(40px,5vw,72px); padding-top:clamp(32px,4vw,48px); border-top:1px solid var(--line); }
+.prop-model{ display:grid; grid-template-columns:96px 1fr; gap:clamp(24px,3.5vw,56px); align-items:start; margin-top:clamp(40px,5vw,72px); padding-top:clamp(32px,4vw,48px); }
 .prop-ico{ width:80px; height:80px; color:var(--ink); }
 .prop-ico svg{ width:100%; height:100%; display:block; overflow:visible; }
 .prop-title{ font-size:clamp(22px,2.4vw,38px); font-weight:400; letter-spacing:-0.04em; line-height:1.12; color:var(--ink); margin:0 0 20px; }
@@ -2013,7 +2012,7 @@ html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .manifesto-p{ font-size:clamp(22px,2.8vw,42px); font-weight:400; letter-spacing:-0.04em; line-height:1.34; color:var(--muted); }
 .manifesto-p b{ color:var(--ink); font-weight:400; }
 .manifesto-p + .manifesto-p{ margin-top:clamp(28px,3.5vw,56px); }
-.onair{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(56px,7vw,110px); border-top:1px solid var(--line); text-align:center; }
+.onair{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(56px,7vw,110px); text-align:center; }
 .onair-badge{ display:inline-flex; align-items:center; gap:10px; margin-bottom:22px; }
 .onair-dot{ width:11px; height:11px; border-radius:50%; background:var(--accent,#007aff); animation:onairpulse 1.7s ease-in-out infinite; }
 .onair-live{ font-size:12px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
@@ -2136,32 +2135,33 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </section>
 
 <section class="phase-flat" id="overview">
+  <div class="phase-name">Overview</div>
+  <div class="phase-sub">A widget-first banking dashboard for financial cognition</div>
+  <p class="phase-desc">finboard is an iOS-native app that lets early-career adults read their own spending at a glance.</p>
+  <p class="phase-note">As payments go cashless, the felt sense of spending money fades, and budgeting apps that are good at collecting data rarely turn it into self-understanding. finboard reframes spending as something to explore rather than track, and puts it where this group already looks, on the Home Screen, the Lock Screen, and the Dynamic Island. I treated native widgets as new interaction points and designed them to optimize financial cognition, so a person can understand their money without opening an app or logging in.</p>
   <div class="chapter-media-quad">
     <div class="cell q1" data-cursor="Dashboard"><img src="./finboardprev1.png" alt="The finboard Today screen on a phone, close up" loading="lazy" srcset="./light/finboardprev1.webp 1440w, ./finboardprev1.png 3000w" sizes="(max-width: 640px) 95vw, 14vw" /></div>
     <div class="cell q2" data-cursor="At a glance"><img src="./finboardprev2.png" alt="A phone being lifted out of a pocket, the widget stack on screen" loading="lazy" srcset="./light/finboardprev2.webp 1440w, ./finboardprev2.png 1800w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
     <div class="cell q3" data-cursor="Guide"><img src="./finboardprev3.png" alt="The onboarding screen explaining how to put finboard on the home screen" loading="lazy" srcset="./light/finboardprev3.webp 1440w, ./finboardprev3.png 1449w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
     <div class="cell q4" data-cursor="Add widget"><img src="./finboardprev4.png" alt="iOS's Add Widget sheet with the finboard widget in it" loading="lazy" srcset="./light/finboardprev4.webp 1440w, ./finboardprev4.png 1448w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
   </div>
-  <div class="phase-name">Overview</div>
-  <div class="phase-sub">A widget-first banking dashboard for financial cognition</div>
   <div class="subsec-video">
     <video class="snap-vid" data-src="./finboardprev.mp4?v=20260805f" data-poster="./posters/finboardprev.jpg?v=20260805f" loop muted playsinline preload="none" data-cursor="iOS native - finance made visible"></video>
   </div>
-  <p class="phase-desc">finboard is an iOS-native app that lets early-career adults read their own spending at a glance.</p>
-  <p class="phase-note">As payments go cashless, the felt sense of spending money fades, and budgeting apps that are good at collecting data rarely turn it into self-understanding. finboard reframes spending as something to explore rather than track, and puts it where this group already looks, on the Home Screen, the Lock Screen, and the Dynamic Island. I treated native widgets as new interaction points and designed them to optimize financial cognition, so a person can understand their money without opening an app or logging in.</p>
 </section>
 
 <section class="phase-flat" id="problem-definition">
   <div class="phase-name">Problem Definition</div>
+  <p class="phase-desc statement">Your Receipt is Not Visible.</p>
+  <p class="phase-note">Canadian bank apps already ship personal-finance tools, but they sit deep inside the app and go unused, and no major bank surfaces spending across institutions. I framed the problem around access rather than features: how do you put a person's own financial picture in front of them, at the moment and place they would actually glance at it? There is no simple way to understand your spending quickly. Banking apps collect the data but keep it behind a login, so it never becomes self-understanding.</p>
   <div class="subsec-video">
     <video class="snap-vid" data-src="./finboardProblem%20Definition.mp4?v=20260923" data-poster="./posters/finboardproblemdefinition.jpg?v=20260923" loop muted playsinline preload="none" data-cursor="As-is - always locked behind the app"></video>
   </div>
-  <p class="phase-desc statement">Your Receipt is Not Visible.</p>
-  <p class="phase-note">Canadian bank apps already ship personal-finance tools, but they sit deep inside the app and go unused, and no major bank surfaces spending across institutions. I framed the problem around access rather than features: how do you put a person's own financial picture in front of them, at the moment and place they would actually glance at it? There is no simple way to understand your spending quickly. Banking apps collect the data but keep it behind a login, so it never becomes self-understanding.</p>
 </section>
 
 <section class="phase-flat" id="discovery">
   <div class="phase-name">Discovery</div>
+  <p class="phase-note">I opened the research by fixing the target and the bet. finboard would be an iOS-native widget dashboard for students and early-career adults in the Canadian banking context, and the working hypothesis was that surfacing bank data as a widget, outside the login, would improve how people see their own spending.</p>
   <div class="subsec-video">
     <video class="snap-vid" data-src="./finboardDiscovery.mp4?v=20260923" data-poster="./posters/finboarddiscovery.jpg?v=20260923" loop muted playsinline preload="none" data-cursor="A more visible, accessible dashboard"></video>
   </div>
@@ -2179,7 +2179,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <figcaption><span class="v">A widgetized app experience from the banking app improves a person’s own spending habits.</span></figcaption>
     </figure>
   </div>
-  <p class="phase-note">I opened the research by fixing the target and the bet. finboard would be an iOS-native widget dashboard for students and early-career adults in the Canadian banking context, and the working hypothesis was that surfacing bank data as a widget, outside the login, would improve how people see their own spending.</p>
   <div class="shots" data-label="Board" style="--shot-ar:2840/1234">
     <div class="shots-track">
       <figure class="shot">
@@ -2344,7 +2343,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </script>
 <script src="./lazy-video.js?v=20260818"></script>
 <script src="./phase-nav.js?v=20260919b"></script>
-<script src="./swipe-shots.js?v=20260921"></script>
+<script src="./swipe-shots.js?v=20261005"></script>
 <script src="./cursor-pill.js?v=20260921"></script>
 <script>
 (function(){
