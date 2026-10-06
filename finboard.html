@@ -1755,7 +1755,7 @@
   .chapter-media-quad{ display:flex; gap:clamp(8px,1vw,16px); height:clamp(150px,19.7vw,284px); margin-bottom:clamp(32px,4vw,48px); }
   .chapter-media-quad .cell{ position:relative; overflow:hidden; background:transparent; min-width:0; flex:var(--w) 1 0; }
   .chapter-media-quad .cell img{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
-  .chapter-media-quad .q1{ --w:0.667; } /* 3000x4500, 2:3  */
+  .chapter-media-quad .q1{ --w:1.333; } /* 2400x1800, 4:3  */
   .chapter-media-quad .q2{ --w:1.335; } /* 1800x1348, 4:3  */
   .chapter-media-quad .q3{ --w:1.335; } /* 1449x1085, 4:3  */
   .chapter-media-quad .q4{ --w:1.333; } /* 1448x1086, 4:3  */
@@ -1847,8 +1847,9 @@
     .chapter-media-quad{ flex-direction:column; height:auto; gap:10px; }
     .chapter-media-quad .q1,.chapter-media-quad .q2,
     .chapter-media-quad .q3,.chapter-media-quad .q4{ flex:none; }
-    .chapter-media-quad .q1{ aspect-ratio:2/3; }
-    .chapter-media-quad .q2,.chapter-media-quad .q3,.chapter-media-quad .q4{ aspect-ratio:4/3; }
+    /* all four are 4:3 now; q1 used to be the one portrait shot */
+    .chapter-media-quad .q1,.chapter-media-quad .q2,
+    .chapter-media-quad .q3,.chapter-media-quad .q4{ aspect-ratio:4/3; }
     /* stack the GradEX photos on phones */
     .gradex-row{ flex-direction:column; height:auto; gap:10px; }
     .gradex-row figure{ flex:none; }
@@ -2143,7 +2144,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <p class="phase-desc">finboard is an iOS-native app that lets early-career adults read their own spending at a glance.</p>
   <p class="phase-note">As payments go cashless, the felt sense of spending money fades, and budgeting apps that are good at collecting data rarely turn it into self-understanding. finboard reframes spending as something to explore rather than track, and puts it where this group already looks, on the Home Screen, the Lock Screen, and the Dynamic Island. I treated native widgets as new interaction points and designed them to optimize financial cognition, so a person can understand their money without opening an app or logging in.</p>
   <div class="chapter-media-quad">
-    <div class="cell q1" data-cursor="Dashboard"><img src="./finboardprev1.png" alt="The finboard Today screen on a phone, close up" loading="lazy" srcset="./light/finboardprev1.webp 1440w, ./finboardprev1.png 3000w" sizes="(max-width: 640px) 95vw, 14vw" /></div>
+    <div class="cell q1" data-cursor="Dashboard"><img src="./finboardprev1.png" alt="The finboard Today screen on a phone, close up" loading="lazy" srcset="./light/finboardprev1.webp 1440w, ./finboardprev1.png 2400w" sizes="(max-width: 640px) 95vw, 14vw" /></div>
     <div class="cell q2" data-cursor="At a glance"><img src="./finboardprev2.png" alt="A phone being lifted out of a pocket, the widget stack on screen" loading="lazy" srcset="./light/finboardprev2.webp 1440w, ./finboardprev2.png 1800w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
     <div class="cell q3" data-cursor="Guide"><img src="./finboardprev3.png" alt="The onboarding screen explaining how to put finboard on the home screen" loading="lazy" srcset="./light/finboardprev3.webp 1440w, ./finboardprev3.png 1449w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
     <div class="cell q4" data-cursor="Add widget"><img src="./finboardprev4.png" alt="iOS's Add Widget sheet with the finboard widget in it" loading="lazy" srcset="./light/finboardprev4.webp 1440w, ./finboardprev4.png 1448w" sizes="(max-width: 640px) 95vw, 27vw" /></div>
