@@ -75,8 +75,13 @@
     '.shots-edge:disabled{cursor:default;}' +
     '.shots-edge:focus-visible{outline:1px solid var(--ink);outline-offset:-3px;}' +
     '.shots-cursor{position:fixed;left:0;top:0;z-index:100;pointer-events:none;}' +
+    /* the disc takes the accent, so the mark on it has to take the page's
+       background or it vanishes: on a dark page --ink is white, and a white
+       mark on a white disc is invisible. A page whose accent is light can
+       override --shots-cursor-ink. */
     '.shots-cursor span{display:grid;place-items:center;width:46px;height:46px;border-radius:999px;' +
-      'background:var(--brand,var(--ink));color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.14);' +
+      'background:var(--brand,var(--ink));color:var(--shots-cursor-ink,var(--bg,#fff));' +
+      'box-shadow:0 8px 24px rgba(0,0,0,.14);' +
       'opacity:0;transform:translate(-50%,-50%) scale(.6);' +
       'transition:transform .22s ' + EASE + ',opacity .18s ease;}' +
     '.shots-cursor.on span{opacity:1;transform:translate(-50%,-50%) scale(1);}' +

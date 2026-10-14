@@ -2226,10 +2226,70 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <figcaption><span class="k">How might we enable AI to understand users' physical context naturally, rather than relying on mandatory user input in AR?</span></figcaption>
     </figure>
   </div>
-  <img class="subsec-img" width="2856" height="958" src="./ongenresearch0.png" alt="User journey and experience strategy" loading="lazy" style="margin-top:clamp(48px,6vw,88px);" srcset="./light/ongenresearch0.webp 1440w, ./ongenresearch0.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
-  <p class="phase-note">I mapped the user journey and the possibilities a user might experience, and built a strategy to optimize that experience. Five peers and two supervising faculty, Alexander Manu and Bernard Dietz, critiqued the work, and I used their feedback to design the actual survey, shaping it in line with TCPS 2. Together with existing research, Survey Phase 1 gave a baseline read on user behavior and set up Phase 2.</p>
-  <img class="subsec-img" width="2856" height="1146" src="./ongensurveyplan.png" alt="Survey plan and MVP prototype context" loading="lazy" srcset="./light/ongensurveyplan.webp 1440w, ./ongensurveyplan.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
-  <p class="phase-note">Building on the points confirmed in the earlier stage, I ran the hypothesis validation through a Google Form survey with 22 respondents. To ground their answers, I published an MVP prototype that supported basic interaction and provided it as context.</p>
+  <div class="subsec">
+    <h3 class="subsec-title">Research</h3>
+    <p class="subsec-lead">Seven boards, in the order the work actually ran: map the service, map the journeys, decide what to test, then go and test it.</p>
+    <div class="shots" data-label="Board" style="--shot-ar:1920/1080">
+      <div class="shots-track">
+      <figure class="shot">
+        <img class="shot-img" width="1920" height="1080" src="./ongenSystem%20mapping.png" alt="Service architecture: 14 entities and 17 relations rooted in the User, across regional hub data, the AI pipeline, personal radio and community radio"
+             loading="lazy" srcset="./light/ongenSystem%20mapping.webp 1440w, ./ongenSystem%20mapping.png 1920w"
+             sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+          <p class="phase-note">I mapped the service before designing any of it, so the team could argue about one picture instead of four descriptions. Solid lines carry data, dashed lines carry consent and feedback, and the whole thing resolves to one sentence: every User podcast becomes audio in a regional playlist. Drawing it is what surfaced the open questions I could not answer yet, including what happens to a context snapshot once consent is revoked.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="1920" height="1080" src="./ongenJourney%20mapping.png" alt="User and regional journeys side by side, from creating a channel through to reactions arriving"
+             loading="lazy" srcset="./light/ongenJourney%20mapping.webp 1440w, ./ongenJourney%20mapping.png 1920w"
+             sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+          <p class="phase-note">Two journeys run in parallel: the User who publishes and the regional listener who tunes in. Laying them on one timeline is what showed me the loop closes at reactions, not at publishing, and that what regional users react to decides what plays next. Each step carries the interview, hypothesis or metric attached to it, so the research had somewhere to land before it started.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="1920" height="1080" src="./ongenResearch%20plan.png" alt="Phase 2 research plan: one hypothesis, survey question and target metric for each of the four journey steps"
+             loading="lazy" srcset="./light/ongenResearch%20plan.webp 1440w, ./ongenResearch%20plan.png 1920w"
+             sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+          <p class="phase-note">I mapped the user journey and the possibilities a user might experience, and built a strategy to optimize that experience. Five peers and two supervising faculty, Alexander Manu and Bernard Dietz, critiqued the work, and I used their feedback to design the actual survey, shaping it in line with TCPS&nbsp;2. Each step of the journey gets one number to test, so a result could move the design rather than just describe it.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="1920" height="1080" src="./ongenSurvey%20and%20risks.png" alt="Phase 2 survey structure from intro and consent through to optional contact, with next steps, open questions, risks and assumptions"
+             loading="lazy" srcset="./light/ongenSurvey%20and%20risks.webp 1440w, ./ongenSurvey%20and%20risks.png 1920w"
+             sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+          <p class="phase-note">The survey is ordered the way the product is: consent is tested first, since that is where people are most likely to drop off. Writing the risks and assumptions beside it kept me honest about what a small beta can actually show, which is direction rather than proof.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="1920" height="1080" src="./ongenConcept%20survey.png" alt="Concept survey results, 22 respondents: data comfort against interest in local audio, averages on each question, and acceptable advertising"
+             loading="lazy" srcset="./light/ongenConcept%20survey.webp 1440w, ./ongenConcept%20survey.png 1920w"
+             sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+          <p class="phase-note">Building on the points confirmed in the earlier stage, I ran the hypothesis validation through a Google Form survey with 22 respondents. To ground their answers, I published an MVP prototype that supported basic interaction and provided it as context. Every average sits within half a point of neutral and only 4 of 22 score high on both comfort and interest, which reads as open to it, but not excited yet.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="1920" height="1080" src="./ongenOpen%20responses.png" alt="Open-ended survey responses grouped into what excites people and what worries them"
+             loading="lazy" srcset="./light/ongenOpen%20responses.webp 1440w, ./ongenOpen%20responses.png 1920w"
+             sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+          <p class="phase-note">The numbers said neutral, so the free text is where the signal was. Sorting 13 responses on each side gave the same split every time: people want useful local information in one place, and they worry about how much is being listened to. That tension is what the consent copy had to answer.</p>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <img class="shot-img" width="1920" height="1080" src="./ongenField%20pilot.png" alt="Field pilot at GradEx 111: 147 users, 408 sessions, 35.6 second median session, and time-in-app distribution"
+             loading="lazy" srcset="./light/ongenField%20pilot.webp 1440w, ./ongenField%20pilot.png 1920w"
+             sizes="(max-width: 1500px) 95vw, 1425px" />
+        <figcaption>
+          <p class="phase-note">At GradEX 111 the concept met people who had not agreed to be research subjects, which is a harder test. 147 users ran 408 sessions, but nearly half left within 30 seconds and one heavy user accounted for 58% of total app time. Registered users spent 20 times longer than guests. The gap between a curious look and real use is the number I took into the build.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </div>
+  </div>
   <div class="subsec">
     <div class="subsec-title">Low-fidelity Conceptual MVP</div>
     <div class="feature-trio">
@@ -2250,11 +2310,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <video class="snap-vid" data-src="./OngenConceptualMVP.mp4?v=20261006" data-poster="./posters/OngenConceptualMVP.jpg?v=20261006" loop muted playsinline preload="none" data-cursor="AI Curated Contents - Personalization"></video>
     </div>
     <p class="phase-note">I ran a digital showcase of what OnGen AR does, so people could respond to something concrete instead of a description. Each person went through the interaction first and answered the survey afterward. Thirteen of the 22 respondents interacted with the working app directly.</p>
-  </div>
-  <div class="subsec">
-    <div class="subsec-title">Survey Result - Phase 1</div>
-    <img class="subsec-img" width="3794" height="1716" src="./ongen-survey-panel@2x.png" alt="Phase 1 survey dashboard: audio habits, community information sources, comfort with AI data collection, interest in local audio, ad tolerance, wanted content, a comfort-by-interest cross-tab, and mean scores" loading="lazy" srcset="./light/ongen-survey-panel@2x.webp 1440w, ./ongen-survey-panel@2x.png 3794w" sizes="(max-width: 1500px) 95vw, 1425px" />
-    <p class="phase-note">I built statistics and a dashboard to gauge how ready real users are for AR experiences and how they feel about AI being part of them. As part of the qualitative research, I collected a range of user prompts that surfaced concrete excitement and concerns.</p>
   </div>
   <div class="subsec">
     <div class="subsec-title">Confirmed Concept Direction</div>
@@ -2406,6 +2461,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </script>
 <script src="./lazy-video.js?v=20260818"></script>
 <script src="./phase-nav.js?v=20260919b"></script>
+<script src="./swipe-shots.js?v=20261014"></script>
 <script src="./cursor-pill.js?v=20260921"></script>
 <script>
 (function(){
