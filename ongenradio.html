@@ -1790,21 +1790,27 @@
     .rwall-col, .rwall-row, .rboard{
       transition:flex-grow .45s cubic-bezier(.2,.7,.2,1), opacity .35s ease;
     }
+    /* while the overlay is up the wall holds still: releasing a hover behind it
+       is a half-second of movement the viewer should never catch */
+    html.rlight-open .rwall-col,
+    html.rlight-open .rwall-row,
+    html.rlight-open .rboard,
+    html.rlight-open .rboard img{ transition:none; }
     .rboard img{ transition:transform .55s cubic-bezier(.2,.7,.2,1); }
     /* the board under the pointer takes the room, its line-mates give it up */
-    .rwall-row > .rboard:hover,
-    .rw-right > .rboard:hover{ flex-grow:calc(var(--w) * var(--rw-grow)); }
+    html:not(.rlight-open) .rwall-row > .rboard:hover,
+    html:not(.rlight-open) .rw-right > .rboard:hover{ flex-grow:calc(var(--w) * var(--rw-grow)); }
     /* the row holding the pointer takes height from its siblings, so a bottom
        row grows up into the ones above instead of pushing the wall taller */
-    .rw-mid > .rwall-row:has(.rboard:hover){ flex-grow:calc(var(--h) * 1.42); }
-    .rw-mid > .rwall-row:not(:has(.rboard:hover)){ flex-grow:calc(var(--h) * 0.86); }
-    .rboard:hover img{ transform:scale(1.03); }
+    html:not(.rlight-open) .rw-mid > .rwall-row:has(.rboard:hover){ flex-grow:calc(var(--h) * 1.42); }
+    html:not(.rlight-open) .rw-mid > .rwall-row:not(:has(.rboard:hover)){ flex-grow:calc(var(--h) * 0.86); }
+    html:not(.rlight-open) .rboard:hover img{ transform:scale(1.03); }
     /* and the column it lives in leans wider, so the growth is not all stolen
        from one neighbour */
-    .rwall:has(.rw-mid .rboard:hover) > .rw-mid{ flex-grow:5.60; }
-    .rwall:has(.rw-right .rboard:hover) > .rw-right{ flex-grow:4.05; }
-    .rwall:has(.rw-left .rboard:hover) > .rw-left{ flex-grow:4.35; }
-    .rwall:has(.rboard:hover) .rboard:not(:hover){ opacity:.42; }
+    html:not(.rlight-open) .rwall:has(.rw-mid .rboard:hover) > .rw-mid{ flex-grow:5.60; }
+    html:not(.rlight-open) .rwall:has(.rw-right .rboard:hover) > .rw-right{ flex-grow:4.05; }
+    html:not(.rlight-open) .rwall:has(.rw-left .rboard:hover) > .rw-left{ flex-grow:4.35; }
+    html:not(.rlight-open) .rwall:has(.rboard:hover) .rboard:not(:hover){ opacity:.42; }
   }
   @media (prefers-reduced-motion: reduce){
     .rwall-col, .rwall-row, .rboard, .rboard img{ transition-duration:.01s; }
@@ -1846,8 +1852,7 @@
        the close button. A 0 minimum lets max-height:100% actually bite. */
     grid-template-columns:minmax(0,1fr); grid-template-rows:minmax(0,1fr);
     padding:clamp(14px,3vw,52px) clamp(14px,3vw,52px) clamp(88px,9vw,116px);
-    background:rgba(0,0,0,.94);
-    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+    background:#000;
     opacity:0; visibility:hidden;
     transition:opacity .3s ease, visibility 0s linear .3s;
   }
@@ -2691,6 +2696,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       box.setAttribute('aria-label', b.getAttribute('data-cursor') || 'Board');
       box.classList.add('on');
       document.documentElement.style.overflow = 'hidden';
+      document.documentElement.classList.add('rlight-open');
       opener = b;
       close.focus();
     }
@@ -2698,6 +2704,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       if (!box.classList.contains('on')) return;
       box.classList.remove('on');
       document.documentElement.style.overflow = '';
+      document.documentElement.classList.remove('rlight-open');
       if (opener) { opener.focus && opener.focus(); opener = null; }
     }
     /* On a pointer the hover already previews the board, so a click goes
