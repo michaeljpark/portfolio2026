@@ -17,6 +17,11 @@
     /* the bar is the one thing that carries across pages, so it keeps the
        home page’s gutter while the reading column gets the wider one */
     --nav-pad:clamp(20px,4vw,56px);
+    /* the hover pill: white plate, black label. The default would take --ink,
+       which is white on this page, so it has to be said explicitly. */
+    --pill-bg:#ffffff;
+    --pill-ink:#0a0a0a;
+    --pill-border:rgba(0,0,0,.10);
     --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
