@@ -1737,13 +1737,23 @@
      Flex, not grid, so a hovered board can take room from its own line and the
      wall keeps its width - the same mechanism as .work-row. --w is the board's
      aspect ratio, so at a shared line height every board keeps its own shape. */
+  /* a 16:9 black field behind the mosaic; the wall keeps its own proportions
+     and is centred on it, so the leftover reads as backing, not stretch */
+  .rwall-frame{
+    aspect-ratio:16/9; background:#000;
+    display:grid; place-items:center;
+    padding:clamp(10px,1.5vw,28px);
+    margin-top:clamp(20px,2.4vw,32px);
+    border-radius:10px; overflow:hidden;
+  }
   .rwall{
+    width:100%; max-height:100%;
     display:flex; align-items:stretch;
-    gap:var(--rw-gap); margin-top:clamp(20px,2.4vw,32px);
-    /* an explicit height, like the quad strip: it is what lets each board's
-       width be read off its own aspect rather than fall out of the content */
-    height:clamp(330px,41.1vw,600px);
-    --rw-gap:clamp(9px,1.05vw,17px);
+    gap:var(--rw-gap);
+    /* its own aspect, solved so every card equals its board's: with contain any
+       mismatch would show as dead space inside the card */
+    aspect-ratio:2.141;
+    --rw-gap:clamp(12px,1.35vw,22px);
     --rw-grow:1.5;
   }
   .rwall-col{ display:flex; flex-direction:column; gap:var(--rw-gap); min-width:0; }
@@ -1752,8 +1762,10 @@
     position:relative; overflow:hidden; min-width:0; min-height:0;
     flex:var(--w) 1 0;
     background:#000;
-    border-radius:6px;
+    border:1px solid rgba(255,255,255,.13);
+    border-radius:8px;
     padding:clamp(6px,0.6vw,11px);
+    transition:border-color .3s ease;
   }
   /* contain, not cover: every board is meant to be read whole, the way the
      reference sheet shows them */
@@ -1777,6 +1789,7 @@
     /* the board under the pointer takes the room, its line-mates give it up */
     .rwall-row > .rboard:hover,
     .rw-right > .rboard:hover{ flex-grow:calc(var(--w) * var(--rw-grow)); }
+    .rboard:hover{ border-color:rgba(255,255,255,.42); }
     .rboard:hover img{ transform:scale(1.03); }
     /* and the column it lives in leans wider, so the growth is not all stolen
        from one neighbour */
@@ -1792,11 +1805,12 @@
   /* Phone: a two-up wall of 3:4 tiles. A tap opens one across the full width at
      its own shape, which is the only size these boards can actually be read at. */
   @media (max-width:880px){
-    .rwall{ display:grid; grid-template-columns:1fr 1fr; gap:8px; height:auto; }
+    .rwall-frame{ aspect-ratio:auto; padding:10px; border-radius:8px; }
+    .rwall{ display:grid; grid-template-columns:1fr 1fr; gap:8px; aspect-ratio:auto; }
     .rwall > .rw-left, .rwall > .rw-mid, .rwall > .rw-right,
     .rwall-col, .rwall-row{ display:contents; }
     .rboard{
-      aspect-ratio:3/4; width:auto; padding:6px; border-radius:6px;
+      aspect-ratio:3/4; width:auto; padding:6px; border-radius:8px;
       transition:aspect-ratio .5s cubic-bezier(.2,.7,.2,1);
     }
     /* a tile is a legible crop of the board's own top-left; opening it shows
@@ -1805,6 +1819,7 @@
     .rboard.is-open{
       grid-column:1 / -1;
       aspect-ratio:var(--w);
+      border-color:rgba(255,255,255,.42);
     }
     .rboard.is-open img{ object-fit:contain; object-position:center; }
     .rwall:has(.rboard.is-open) .rboard:not(.is-open){ opacity:.5; }
@@ -2370,7 +2385,8 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <div class="subsec">
     <h3 class="subsec-title">Research boards</h3>
     <p class="subsec-lead">The full working set behind the project, from the ecosystem map through to the personas. Hover any board to bring it forward; on a phone, tap one to open it.</p>
-    <div class="rwall">
+    <div class="rwall-frame">
+      <div class="rwall">
       <div class="rwall-col rw-left">
         <div class="rboard" style="--w:0.6408" data-cursor="Project outline">
           <img width="744" height="1161" src="./ongerb1.png" alt="Project outline: the AR radio ecosystem mapped across providers, with the 2026 to 2030 validation roadmap" loading="lazy"
@@ -2418,6 +2434,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
           <img width="1384" height="1152" src="./ongerb7.png" alt="User behaviour research: business model canvas, MECE, VRIO and BCG frameworks beside three personas" loading="lazy"
                srcset="./light/ongerb7.webp 1384w, ./ongerb7.png 1384w" sizes="(max-width:880px) 46vw, 30vw" />
         </div>
+      </div>
       </div>
     </div>
   </div>
