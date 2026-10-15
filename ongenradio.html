@@ -1756,16 +1756,16 @@
     --rw-gap:clamp(12px,1.35vw,22px);
     --rw-grow:1.5;
   }
-  .rwall-col{ display:flex; flex-direction:column; gap:var(--rw-gap); min-width:0; }
-  .rwall-row{ display:flex; gap:var(--rw-gap); min-width:0; }
+  .rwall-col{ display:flex; flex-direction:column; gap:var(--rw-gap); min-width:0; min-height:0; }
+  /* min-height:0 or a column flex item refuses to shrink under its content,
+     and the row that gives way pushes the wall downward instead */
+  .rwall-row{ display:flex; gap:var(--rw-gap); min-width:0; min-height:0; }
   .rboard{
     position:relative; overflow:hidden; min-width:0; min-height:0;
     flex:var(--w) 1 0;
     background:#000;
-    border:1px solid rgba(255,255,255,.13);
     border-radius:8px;
     padding:clamp(6px,0.6vw,11px);
-    transition:border-color .3s ease;
   }
   /* contain, not cover: every board is meant to be read whole, the way the
      reference sheet shows them */
@@ -1789,7 +1789,10 @@
     /* the board under the pointer takes the room, its line-mates give it up */
     .rwall-row > .rboard:hover,
     .rw-right > .rboard:hover{ flex-grow:calc(var(--w) * var(--rw-grow)); }
-    .rboard:hover{ border-color:rgba(255,255,255,.42); }
+    /* the row holding the pointer takes height from its siblings, so a bottom
+       row grows up into the ones above instead of pushing the wall taller */
+    .rw-mid > .rwall-row:has(.rboard:hover){ flex-grow:calc(var(--h) * 1.42); }
+    .rw-mid > .rwall-row:not(:has(.rboard:hover)){ flex-grow:calc(var(--h) * 0.86); }
     .rboard:hover img{ transform:scale(1.03); }
     /* and the column it lives in leans wider, so the growth is not all stolen
        from one neighbour */
@@ -1819,7 +1822,6 @@
     .rboard.is-open{
       grid-column:1 / -1;
       aspect-ratio:var(--w);
-      border-color:rgba(255,255,255,.42);
     }
     .rboard.is-open img{ object-fit:contain; object-position:center; }
     .rwall:has(.rboard.is-open) .rboard:not(.is-open){ opacity:.5; }
@@ -2567,8 +2569,6 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <span class="meta"><span class="likes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>82 likes</span><span class="credit">Instagram - @ocadu.id</span></span>
     </a>
   </div>
-  <img class="subsec-img" width="2856" height="1282" src="./ongenresearch1.png" alt="Final research: system value and analysis" loading="lazy" style="margin-top:clamp(48px,7vw,90px);" srcset="./light/ongenresearch1.webp 1440w, ./ongenresearch1.png 2856w" sizes="(max-width: 1500px) 95vw, 1425px" />
-  <p class="phase-note">This board brings together the internal research methods and results I used to build the project. I designed the final academic research for realizing Audio Augmented Reality, and secured the data that follow-up research will need. Establishing a new user flow for AR interaction let me confirm this as a market from a new product-design perspective.</p>
   <div class="subsec">
     <div class="subsec-title">Spatial Intelligence</div>
     <div class="subsec-video">
