@@ -1813,23 +1813,58 @@
   /* Phone: a two-up wall of 3:4 tiles. A tap opens one across the full width at
      its own shape, which is the only size these boards can actually be read at. */
   @media (max-width:880px){
-    .rwall-frame{ aspect-ratio:auto; padding:10px; border-radius:8px; }
-    .rwall{ display:grid; grid-template-columns:1fr 1fr; gap:8px; aspect-ratio:auto; }
+    .rwall-frame{ aspect-ratio:auto; padding:8px; border-radius:8px; }
+    /* three across: the tile is only a way in now, the overlay does the reading */
+    .rwall{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; aspect-ratio:auto; }
     .rwall > .rw-left, .rwall > .rw-mid, .rwall > .rw-right,
     .rwall-col, .rwall-row{ display:contents; }
     .rboard{
-      aspect-ratio:3/4; width:auto; padding:6px; border-radius:8px;
+      aspect-ratio:3/4; width:auto; padding:4px; border-radius:6px;
       transition:aspect-ratio .5s cubic-bezier(.2,.7,.2,1);
     }
-    /* a tile is a legible crop of the board's own top-left; opening it shows
-       the whole thing at its real shape */
+    /* a tile is a legible crop of the board's own top-left; a tap opens the
+       overlay, same as a click on a pointer */
     .rboard img{ object-fit:cover; object-position:top left; transition:none; }
-    .rboard.is-open{
-      grid-column:1 / -1;
-      aspect-ratio:var(--w);
-    }
-    .rboard.is-open img{ object-fit:contain; object-position:center; }
-    .rwall:has(.rboard.is-open) .rboard:not(.is-open){ opacity:.5; }
+  }
+
+  /* OVERLAY: a board opened large, with its own close button. One element,
+     reused for whichever board was picked. */
+  .rboard{ cursor:zoom-in; }
+  .rlight{
+    position:fixed; inset:0; z-index:200;
+    display:grid; place-items:center;
+    /* minmax(0,1fr), not 1fr: a bare 1fr takes the picture's own height as the
+       row's minimum, so the row outgrows the overlay and the picture runs under
+       the close button. A 0 minimum lets max-height:100% actually bite. */
+    grid-template-columns:minmax(0,1fr); grid-template-rows:minmax(0,1fr);
+    padding:clamp(14px,3vw,52px) clamp(14px,3vw,52px) clamp(88px,9vw,116px);
+    background:rgba(0,0,0,.94);
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+    opacity:0; visibility:hidden;
+    transition:opacity .3s ease, visibility 0s linear .3s;
+  }
+  .rlight.on{ opacity:1; visibility:visible; transition:opacity .3s ease, visibility 0s; }
+  .rlight img{
+    display:block; max-width:100%; max-height:100%;
+    object-fit:contain;
+    transform:scale(.965); transition:transform .4s cubic-bezier(.2,.7,.2,1);
+  }
+  .rlight.on img{ transform:scale(1); }
+  .rlight-close{
+    position:absolute; left:50%; bottom:clamp(22px,3.4vw,44px);
+    transform:translateX(-50%);
+    width:52px; height:52px; border:0; border-radius:999px; cursor:pointer;
+    background:#fff; color:#0a0a0a;
+    display:grid; place-items:center;
+    box-shadow:0 8px 28px rgba(0,0,0,.4);
+    -webkit-tap-highlight-color:transparent;
+    transition:transform .22s cubic-bezier(.2,.7,.2,1), opacity .2s ease;
+  }
+  .rlight-close svg{ width:21px; height:21px; display:block; }
+  .rlight-close:hover{ transform:translateX(-50%) scale(1.07); }
+  .rlight-close:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
+  @media (prefers-reduced-motion: reduce){
+    .rlight, .rlight img, .rlight-close{ transition-duration:.01s; }
   }
 
   /* subsection within a chapter (e.g. Snapshot inside Overview) */
@@ -2616,27 +2651,58 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <script src="./phase-nav.js?v=20260919b"></script>
 <script src="./swipe-shots.js?v=20261014"></script>
 <script>
-  /* Phone: a board is a 3:4 tile until it is tapped, then it opens across the
-     wall at its own shape. Only one is open at a time, and a tap anywhere else
-     closes it. On a pointer the hover rules already do this, so the handler
-     checks at tap time rather than at load, which keeps hybrid devices right. */
+  /* A board opens in an overlay, on pointer and on touch alike: these sheets
+     are too dense to read in the wall. One overlay is built and reused; the
+     close button sits under the picture so it never covers the content. */
   (function () {
     var boards = [].slice.call(document.querySelectorAll('.rboard'));
     if (!boards.length) return;
-    var fine = window.matchMedia('(hover:hover) and (pointer:fine)');
-    var open = null;
-    function close(){ if (open) { open.classList.remove('is-open'); open = null; } }
+
+    var box = document.createElement('div');
+    box.className = 'rlight';
+    box.setAttribute('role', 'dialog');
+    box.setAttribute('aria-modal', 'true');
+    box.hidden = false;
+    var img = document.createElement('img');
+    var close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'rlight-close';
+    close.setAttribute('aria-label', 'Close');
+    close.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+      'stroke-width="2" stroke-linecap="round" aria-hidden="true">' +
+      '<path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+    box.appendChild(img);
+    box.appendChild(close);
+    document.body.appendChild(box);
+
+    var opener = null;
+    function open(b) {
+      var source = b.querySelector('img');
+      img.src = source.getAttribute('src');          /* the full plate, not the thumb */
+      img.alt = source.getAttribute('alt') || '';
+      box.setAttribute('aria-label', b.getAttribute('data-cursor') || 'Board');
+      box.classList.add('on');
+      document.documentElement.style.overflow = 'hidden';
+      opener = b;
+      close.focus();
+    }
+    function shut() {
+      if (!box.classList.contains('on')) return;
+      box.classList.remove('on');
+      document.documentElement.style.overflow = '';
+      if (opener) { opener.focus && opener.focus(); opener = null; }
+    }
     boards.forEach(function (b) {
-      b.addEventListener('click', function (e) {
-        if (fine.matches) return;
-        e.stopPropagation();
-        var was = (b === open);
-        close();
-        if (!was) { b.classList.add('is-open'); open = b;
-          b.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+      b.setAttribute('tabindex', '0');
+      b.setAttribute('role', 'button');
+      b.addEventListener('click', function () { open(b); });
+      b.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(b); }
       });
     });
-    document.addEventListener('click', close);
+    close.addEventListener('click', shut);
+    box.addEventListener('click', function (e) { if (e.target === box) shut(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') shut(); });
   })();
 </script>
 <script src="./cursor-pill.js?v=20260921"></script>
