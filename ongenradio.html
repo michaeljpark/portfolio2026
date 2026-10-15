@@ -1733,6 +1733,83 @@
   .chapter-media-duo .m1{ --w:1.777; }  /* IMG_5507 16:9 */
   .chapter-media-duo .m2{ --w:0.75; }   /* IMG_5493(1) portrait 3:4 */
   .chapter-media-duo .m3{ --w:1.2; }    /* showcase video 6:5 */
+  /* RESEARCH WALL: nine boards in the shape of the reference sheet.
+     Flex, not grid, so a hovered board can take room from its own line and the
+     wall keeps its width - the same mechanism as .work-row. --w is the board's
+     aspect ratio, so at a shared line height every board keeps its own shape. */
+  .rwall{
+    display:flex; align-items:stretch;
+    gap:var(--rw-gap); margin-top:clamp(20px,2.4vw,32px);
+    /* an explicit height, like the quad strip: it is what lets each board's
+       width be read off its own aspect rather than fall out of the content */
+    height:clamp(330px,41.1vw,600px);
+    --rw-gap:clamp(9px,1.05vw,17px);
+    --rw-grow:1.5;
+  }
+  .rwall-col{ display:flex; flex-direction:column; gap:var(--rw-gap); min-width:0; }
+  .rwall-row{ display:flex; gap:var(--rw-gap); min-width:0; }
+  .rboard{
+    position:relative; overflow:hidden; min-width:0; min-height:0;
+    flex:var(--w) 1 0;
+    background:#000;
+    border-radius:6px;
+    padding:clamp(6px,0.6vw,11px);
+  }
+  /* contain, not cover: every board is meant to be read whole, the way the
+     reference sheet shows them */
+  .rboard img{
+    display:block; width:100%; height:100%;
+    object-fit:contain; object-position:center;
+  }
+  /* the three macro columns hold the proportions of the reference sheet */
+  .rwall > .rw-left{ flex:3.722 1 0; }
+  .rwall > .rw-mid{ flex:5.047 1 0; }
+  .rwall > .rw-right{ flex:3.411 1 0; }
+  .rwall .rw-left .rboard{ flex:1 1 auto; }
+  .rwall .rw-mid > .rwall-row{ flex:var(--h) 1 0; }
+  .rwall .rw-right > .rboard{ flex:1 1 0; }
+
+  @media (hover:hover) and (pointer:fine){
+    .rwall-col, .rwall-row, .rboard{
+      transition:flex-grow .45s cubic-bezier(.2,.7,.2,1), opacity .35s ease;
+    }
+    .rboard img{ transition:transform .55s cubic-bezier(.2,.7,.2,1); }
+    /* the board under the pointer takes the room, its line-mates give it up */
+    .rwall-row > .rboard:hover,
+    .rw-right > .rboard:hover{ flex-grow:calc(var(--w) * var(--rw-grow)); }
+    .rboard:hover img{ transform:scale(1.03); }
+    /* and the column it lives in leans wider, so the growth is not all stolen
+       from one neighbour */
+    .rwall:has(.rw-mid .rboard:hover) > .rw-mid{ flex-grow:5.60; }
+    .rwall:has(.rw-right .rboard:hover) > .rw-right{ flex-grow:4.05; }
+    .rwall:has(.rw-left .rboard:hover) > .rw-left{ flex-grow:4.35; }
+    .rwall:has(.rboard:hover) .rboard:not(:hover){ opacity:.42; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .rwall-col, .rwall-row, .rboard, .rboard img{ transition-duration:.01s; }
+  }
+
+  /* Phone: a two-up wall of 3:4 tiles. A tap opens one across the full width at
+     its own shape, which is the only size these boards can actually be read at. */
+  @media (max-width:880px){
+    .rwall{ display:grid; grid-template-columns:1fr 1fr; gap:8px; height:auto; }
+    .rwall > .rw-left, .rwall > .rw-mid, .rwall > .rw-right,
+    .rwall-col, .rwall-row{ display:contents; }
+    .rboard{
+      aspect-ratio:3/4; width:auto; padding:6px; border-radius:6px;
+      transition:aspect-ratio .5s cubic-bezier(.2,.7,.2,1);
+    }
+    /* a tile is a legible crop of the board's own top-left; opening it shows
+       the whole thing at its real shape */
+    .rboard img{ object-fit:cover; object-position:top left; transition:none; }
+    .rboard.is-open{
+      grid-column:1 / -1;
+      aspect-ratio:var(--w);
+    }
+    .rboard.is-open img{ object-fit:contain; object-position:center; }
+    .rwall:has(.rboard.is-open) .rboard:not(.is-open){ opacity:.5; }
+  }
+
   /* subsection within a chapter (e.g. Snapshot inside Overview) */
   .subsec{ margin-top:clamp(48px,6vw,88px); }
   .subsec-title{ font-size:clamp(20px,2vw,30px); font-weight:400; letter-spacing:-0.04em; line-height:1.15; color:var(--ink); }
@@ -2291,6 +2368,60 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     </div>
   </div>
   <div class="subsec">
+    <h3 class="subsec-title">Research boards</h3>
+    <p class="subsec-lead">The full working set behind the project, from the ecosystem map through to the personas. Hover any board to bring it forward; on a phone, tap one to open it.</p>
+    <div class="rwall">
+      <div class="rwall-col rw-left">
+        <div class="rboard" style="--w:0.6408" data-cursor="Project outline">
+          <img width="744" height="1161" src="./ongerb1.png" alt="Project outline: the AR radio ecosystem mapped across providers, with the 2026 to 2030 validation roadmap" loading="lazy"
+               srcset="./light/ongerb1.webp 744w, ./ongerb1.png 744w" sizes="(max-width:880px) 46vw, 30vw" />
+        </div>
+      </div>
+      <div class="rwall-col rw-mid">
+        <div class="rwall-row" style="--h:1.880">
+        <div class="rboard" style="--w:0.8723" data-cursor="Pre-pilot peer review">
+          <img width="649" height="744" src="./ongerb2.png" alt="Pre-pilot peer review: concept clarity, flow predictability, trust and value, with the interaction flow behind them" loading="lazy"
+               srcset="./light/ongerb2.webp 649w, ./ongerb2.png 649w" sizes="(max-width:880px) 46vw, 30vw" />
+        </div>
+        <div class="rboard" style="--w:0.8764" data-cursor="Interview coding">
+          <img width="688" height="785" src="./ongerb3.png" alt="Qualitative interview coding: four categories scored 50, 64, 74 and 62 per cent" loading="lazy"
+               srcset="./light/ongerb3.webp 688w, ./ongerb3.png 688w" sizes="(max-width:880px) 46vw, 30vw" />
+        </div>
+        <div class="rboard" style="--w:0.7971" data-cursor="Journey curves">
+          <img width="656" height="823" src="./ongerb4.png" alt="Five user journey maps tracking cognitive load, emotional experience and motivation across the session" loading="lazy"
+               srcset="./light/ongerb4.webp 656w, ./ongerb4.png 656w" sizes="(max-width:880px) 46vw, 30vw" />
+        </div>
+        </div>
+        <div class="rwall-row" style="--h:1.757">
+        <div class="rboard" style="--w:1.0650" data-cursor="Pilot 1 KPIs">
+          <img width="1294" height="1215" src="./ongerb5.png" alt="Pilot 1 usability KPIs: 3 minute average session, 68 per cent feature usage, System Usability Scale of 73" loading="lazy"
+               srcset="./light/ongerb5.webp 1294w, ./ongerb5.png 1294w" sizes="(max-width:880px) 46vw, 30vw" />
+        </div>
+        <div class="rboard" style="--w:1.7333" data-cursor="Usability statistics">
+          <img width="2645" height="1526" src="./ongerb.png" alt="Usability test statistics: session time and touchpoint regressions, box plots, SUS item frequencies and the raw log table" loading="lazy"
+               srcset="./light/ongerb.webp 1440w, ./ongerb.png 2645w" sizes="(max-width:880px) 46vw, 30vw" />
+        </div>
+        </div>
+        <div class="rwall-row" style="--h:1.911">
+        <div class="rboard" style="--w:2.6408" data-cursor="Market analysis">
+          <img width="1632" height="618" src="./ongerb8.png" alt="Market analysis: four positioning matrices across radio platform, delivery, revenue and intelligence" loading="lazy"
+               srcset="./light/ongerb8.webp 1440w, ./ongerb8.png 1632w" sizes="(max-width:880px) 46vw, 30vw" />
+        </div>
+        </div>
+      </div>
+      <div class="rwall-col rw-right">
+        <div class="rboard" style="--w:1.2016" data-cursor="System value">
+          <img width="1383" height="1151" src="./ongerb6.png" alt="System value and analysis: the value radial, the HAX process flowchart and the entity relationship diagrams" loading="lazy"
+               srcset="./light/ongerb6.webp 1383w, ./ongerb6.png 1383w" sizes="(max-width:880px) 46vw, 30vw" />
+        </div>
+        <div class="rboard" style="--w:1.2014" data-cursor="Behaviour and personas">
+          <img width="1384" height="1152" src="./ongerb7.png" alt="User behaviour research: business model canvas, MECE, VRIO and BCG frameworks beside three personas" loading="lazy"
+               srcset="./light/ongerb7.webp 1384w, ./ongerb7.png 1384w" sizes="(max-width:880px) 46vw, 30vw" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="subsec">
     <div class="subsec-title">Low-fidelity Conceptual MVP</div>
     <div class="feature-trio">
       <figure>
@@ -2462,6 +2593,30 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <script src="./lazy-video.js?v=20260818"></script>
 <script src="./phase-nav.js?v=20260919b"></script>
 <script src="./swipe-shots.js?v=20261014"></script>
+<script>
+  /* Phone: a board is a 3:4 tile until it is tapped, then it opens across the
+     wall at its own shape. Only one is open at a time, and a tap anywhere else
+     closes it. On a pointer the hover rules already do this, so the handler
+     checks at tap time rather than at load, which keeps hybrid devices right. */
+  (function () {
+    var boards = [].slice.call(document.querySelectorAll('.rboard'));
+    if (!boards.length) return;
+    var fine = window.matchMedia('(hover:hover) and (pointer:fine)');
+    var open = null;
+    function close(){ if (open) { open.classList.remove('is-open'); open = null; } }
+    boards.forEach(function (b) {
+      b.addEventListener('click', function (e) {
+        if (fine.matches) return;
+        e.stopPropagation();
+        var was = (b === open);
+        close();
+        if (!was) { b.classList.add('is-open'); open = b;
+          b.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+      });
+    });
+    document.addEventListener('click', close);
+  })();
+</script>
 <script src="./cursor-pill.js?v=20260921"></script>
 <script>
 (function(){
