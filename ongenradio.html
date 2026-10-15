@@ -1822,9 +1822,17 @@
       aspect-ratio:3/4; width:auto; padding:4px; border-radius:6px;
       transition:aspect-ratio .5s cubic-bezier(.2,.7,.2,1);
     }
-    /* a tile is a legible crop of the board's own top-left; a tap opens the
-       overlay, same as a click on a pointer */
+    /* a tile is a legible crop of the board's own top-left. A phone has no
+       hover, so the first tap does what a hover does on a pointer - opens the
+       board where it sits - and the second tap goes to the overlay. */
     .rboard img{ object-fit:cover; object-position:top left; transition:none; }
+    .rboard{ transition:aspect-ratio .42s cubic-bezier(.2,.7,.2,1), opacity .3s ease; }
+    .rboard.is-active{
+      grid-column:1 / -1;
+      aspect-ratio:var(--w);
+    }
+    .rboard.is-active img{ object-fit:contain; object-position:center; }
+    .rwall:has(.rboard.is-active) .rboard:not(.is-active){ opacity:.4; }
   }
 
   /* OVERLAY: a board opened large, with its own close button. One element,
@@ -2692,14 +2700,30 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       document.documentElement.style.overflow = '';
       if (opener) { opener.focus && opener.focus(); opener = null; }
     }
+    /* On a pointer the hover already previews the board, so a click goes
+       straight to the overlay. A phone has no hover: the first tap opens the
+       board in place, the second takes it to the overlay. */
+    var fine = window.matchMedia('(hover:hover) and (pointer:fine)');
+    var active = null;
+    function setActive(b) {
+      if (active) active.classList.remove('is-active');
+      active = b;
+      if (b) b.classList.add('is-active');
+    }
     boards.forEach(function (b) {
       b.setAttribute('tabindex', '0');
       b.setAttribute('role', 'button');
-      b.addEventListener('click', function () { open(b); });
+      b.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (fine.matches || b === active) { setActive(null); open(b); return; }
+        setActive(b);
+        b.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      });
       b.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(b); }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(null); open(b); }
       });
     });
+    document.addEventListener('click', function () { if (!box.classList.contains('on')) setActive(null); });
     close.addEventListener('click', shut);
     box.addEventListener('click', function (e) { if (e.target === box) shut(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') shut(); });
