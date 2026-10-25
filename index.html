@@ -417,15 +417,24 @@
     border-radius: 0;
   }
   :root[data-theme="dark"] .work{ box-shadow:inset 0 0 0 1px var(--line); }
-  /* bleed 1px past every edge: while a hovered card widens and pushes its
-     partner, both sit at fractional widths for the length of the transition,
-     and a clip that stops exactly at 100% lets the video element's default
-     black show through as a hairline down the seam */
+  /* A clip has to overrun its card on every side: cards sit at fractional sizes
+     (always on a phone, and mid-push on a desktop), and iOS Safari snaps a
+     video's layer to whole device pixels, so a clip that stops at 100% leaves a
+     sliver down the right and bottom edges. It is scaled rather than widened by
+     a fixed 2px, because adding 2px to both sides bends the box off the card's
+     2:1, and a 2:1 poster that Safari draws "contain" then has a band to leave.
+     1.012 is just over 1px a side on the shortest card (175px tall on a phone). */
   .work > video{
-    position:absolute; inset:-1px;
-    width:calc(100% + 2px); height:calc(100% + 2px);
+    position:absolute; inset:0; width:100%; height:100%;
     object-fit:cover; display:block;
+    transform:scale(1.012); transform-origin:50% 50%;
   }
+  /* whatever sliver is still left uncovered shows the clip's own poster, which
+     the card paints behind it (see the poster script), never the card colour;
+     the dark theme's inner hairline would sit in that same sliver, so a card
+     with a clip goes without it */
+  .work:has(video){ background-size:cover; background-position:center; }
+  :root[data-theme="dark"] .work:has(video){ box-shadow:none; }
   .work img{
     width:100%; height:100%; object-fit:cover;
     transition: transform .6s cubic-bezier(.7,0,.2,1);
@@ -1019,6 +1028,9 @@
        frame to pure white; 1.1 is the most lift this clip takes cleanly */
     filter:brightness(1.1);
   }
+  /* the clip overruns proportionally like every other card (see .work > video);
+     the still keeps the fixed 1px bleed below */
+  .ongen-img > video{ top:0; left:0; width:100%; height:100%; transform:scale(1.012); transform-origin:50% 50%; }
   /* Resume animations when work-block enters viewport */
   .work-block.in-view .ar-bubble-shape,
   .work-block.in-view .ar-bubble-content,
@@ -1735,6 +1747,30 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </script>
 
 <script>
+  /* Each card paints its clip's poster behind the clip, so a sliver the video
+     layer leaves uncovered (iOS Safari snaps it to whole device pixels) shows
+     the picture rather than the card colour. The poster is whatever the media
+     governor picked, so this is the file it already fetched: no extra request.
+     Set inline, because two cards carry an inline background colour. */
+  (function(){
+    function paint(v){
+      var p = v.getAttribute('poster'), card = v.closest('.work');
+      if(!p || !card) return;
+      card.style.backgroundImage = 'url("' + p.replace(/"/g, '%22') + '")';
+      card.style.backgroundSize = 'cover';
+      card.style.backgroundPosition = 'center';
+    }
+    var mo = new MutationObserver(function(list){ list.forEach(function(m){ paint(m.target); }); });
+    window.watchCardPosters = function(root){
+      root.querySelectorAll('.work video').forEach(function(v){
+        paint(v); mo.observe(v, { attributes:true, attributeFilter:['poster'] });
+      });
+    };
+    watchCardPosters(document);
+  })();
+</script>
+
+<script>
   /* Load more: brings the last highlight into the page, then hands the new
      markup to the observers that already ran for the rest of it. */
   (function(){
@@ -1749,6 +1785,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       btn.closest('.load-more').remove();
       if(window.observeReveal) slot.querySelectorAll('.reveal').forEach(window.observeReveal);
       if(window.observeLazyVid) slot.querySelectorAll('video').forEach(window.observeLazyVid);
+      if(window.watchCardPosters) window.watchCardPosters(slot);
     });
   })();
 </script>
