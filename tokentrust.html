@@ -86,6 +86,7 @@
   }
   /* bleed 1px past every edge so sub-pixel rounding never exposes the
      video element's default black background as a hairline */
+  .banner-band .hero-video{ margin-bottom:0; }
   .hero-video video{
     position:absolute; inset:-1px;
     width:calc(100% + 2px); height:calc(100% + 2px);
@@ -2110,7 +2111,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <header class="hero wrap">
   <div class="hero-video">
-    <video class="lazy-vid" data-src="./tktrustbanner.mp4?v=20261015" data-poster="./posters/tktrustbanner.jpg?v=20261015"
+    <video class="lazy-vid" data-src="./tktrstbanner.mp4?v=20261025" data-poster="./posters/tktrstbanner.jpg?v=20261025"
            loop muted playsinline preload="none"></video>
   </div>
   <div class="hero-greeting">Team Project &middot; Team Lead</div>
@@ -2137,6 +2138,14 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <div><dt>Outcome<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></dt><dd>A governance platform built on DQI, a measurement layer that gives contributed data a value, pays that value back, and carries&nbsp;a&nbsp;Canadian&nbsp;regulatory&nbsp;path.</dd></div>
   </dl>
 </section>
+
+<!-- the previous hero clip, set directly above Overview in the same band as the hero -->
+<div class="banner-band wrap">
+  <div class="hero-video">
+    <video class="lazy-vid" data-src="./tktrustbanner.mp4?v=20261015" data-poster="./posters/tktrustbanner.jpg?v=20261015"
+           loop muted playsinline preload="none"></video>
+  </div>
+</div>
 
 <section class="phase-flat" id="overview">
   <div class="phase-name">Overview</div>
