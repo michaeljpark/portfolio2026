@@ -343,6 +343,20 @@
     .work-row .work-block:hover .w-info{ transform:scale(var(--card-up)); }
     .work-row:has(.work-block:hover) .work-block:not(:hover) .w-info{ transform:scale(var(--card-down)); }
   }
+  /* the last card would otherwise sit alone in its row. An empty partner holds
+     the second column so the row keeps the rhythm of the two above it, and the
+     real card still widens and pushes exactly as a paired one does. */
+  .work-block.is-ghost{ pointer-events:none; }
+  .work-block.is-ghost .work{ background:transparent; box-shadow:none; }
+  /* LOAD MORE: plain underlined text on the centre line under the highlights */
+  .load-more{ display:flex; justify-content:center; }
+  .load-more button{
+    font:inherit; font-size:15px; letter-spacing:-0.02em; color:var(--muted);
+    background:none; border:0; padding:6px 2px; cursor:pointer;
+    text-decoration:underline; text-underline-offset:4px;
+    transition:color .25s ease;
+  }
+  .load-more button:hover{ color:var(--ink); }
   /* BIG: the four main pieces two across, 2:1 each */
   .work-block.is-big .work{ aspect-ratio:2/1; }
   .work-block.is-big .w-info{ margin-top:18px; }
@@ -403,6 +417,15 @@
     border-radius: 0;
   }
   :root[data-theme="dark"] .work{ box-shadow:inset 0 0 0 1px var(--line); }
+  /* bleed 1px past every edge: while a hovered card widens and pushes its
+     partner, both sit at fractional widths for the length of the transition,
+     and a clip that stops exactly at 100% lets the video element's default
+     black show through as a hairline down the seam */
+  .work > video{
+    position:absolute; inset:-1px;
+    width:calc(100% + 2px); height:calc(100% + 2px);
+    object-fit:cover; display:block;
+  }
   .work img{
     width:100%; height:100%; object-fit:cover;
     transition: transform .6s cubic-bezier(.7,0,.2,1);
@@ -446,8 +469,8 @@
   /* ULT featured card */
   .work.ult-work{ background:#B6B6ED; }
   .ult-work .ult-vid{
-    position:absolute; inset:0;
-    width:100%; height:100%;
+    position:absolute; inset:-1px;
+    width:calc(100% + 2px); height:calc(100% + 2px);
     object-fit:cover; display:block;
   }
 
@@ -1025,6 +1048,8 @@
     .selected{ row-gap:36px; }
     /* one main piece per row once half-width cards get too small to read */
     .work-row{ flex-direction:column; align-items:stretch; gap:36px; }
+    /* stacked, the empty partner is just a gap, so it goes away */
+    .work-block.is-ghost{ display:none; }
     /* the resting height is set by .work-row .work-block.is-big .work, which is
        more specific than this rule used to be - a media query adds no
        specificity of its own, so the desktop height won here and every big card
@@ -1149,12 +1174,21 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
       <div class="label">Selected Work</div>
       <h2>Recent highlights</h2>
     </div>
-    <p class="desc">Four projects from the past two years: a six-month thesis, a client project with Cadillac Fairview, and two self-directed concepts.</p>
+    <p class="desc">Five projects from the past two years: a product in incubation, a six-month thesis, a client project with Cadillac Fairview, and two self-directed concepts.</p>
   </div>
 
   <div class="selected">
     <div class="work-row reveal">
       <div class="work-block reveal is-big o1">
+      <a href="./clink-afterwork.html">
+        <div class="work" data-cursor="Co-work App" data-cursor-icon="arrow-up-right"><video class="lazy-vid" data-src="./clinkthumbvid.mp4?v=20261025" data-poster="./posters/clinkthumbvid.jpg?v=20261025" muted loop playsinline preload="none"></video><div class="card-tags"><span class="tag core">Co-owner</span><span class="tag">Full-Stack</span><span class="tag">Incubating</span></div></div>
+        <div class="w-info">
+          <div class="t"><span>Clink &amp; Afterwork : Co-work App for Work</span><span class="arrow">&rarr;</span></div>
+          <div class="w-meta"><div class="m"><span>2026</span><span>Work in Process</span></div><div class="w-tags"><span class="w-tag">Fullstack Development</span><span class="w-tag">Web App</span></div></div>
+        </div>
+      </a>
+      </div>
+      <div class="work-block reveal is-big o2">
       <a href="./ongenradio.html">
         <div class="work ongen-work" data-cursor="AI in AR" data-cursor-icon="arrow-up-right">
           <div class="ongen-img">
@@ -1170,21 +1204,21 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
         </div>
       </a>
       </div>
-      <div class="work-block reveal is-big o2">
+    </div>
+    <div class="work-row reveal">
+      <div class="work-block reveal is-big o3">
       <a href="./tokentrust.html">
-        <div class="work" data-cursor="AI B2B" data-cursor-icon="arrow-up-right"><video class="lazy-vid" data-src="./tktrustthumb.mp4?v=20261015b" data-poster="./posters/tktrustthumb.jpg?v=20261016b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video><div class="card-tags"><span class="tag core">Team Lead</span><span class="tag">AI Governance</span><span class="tag">Concept</span></div></div>
+        <div class="work" data-cursor="AI B2B" data-cursor-icon="arrow-up-right"><video class="lazy-vid" data-src="./tktrustthumb.mp4?v=20261015b" data-poster="./posters/tktrustthumb.jpg?v=20261016b" muted loop playsinline preload="none"></video><div class="card-tags"><span class="tag core">Team Lead</span><span class="tag">AI Governance</span><span class="tag">Concept</span></div></div>
         <div class="w-info">
           <div class="t"><span>Token Trust : AI Transparency &amp; User Data Governance</span><span class="arrow">→</span></div>
           <div class="w-meta"><div class="m"><span>2026</span><span>Service Design</span><span>3 Weeks</span></div><div class="w-tags"><span class="w-tag">Service Proposal</span><span class="w-tag">Web App</span></div></div>
         </div>
       </a>
       </div>
-    </div>
-    <div class="work-row reveal">
-      <div class="work-block reveal is-big o3">
+      <div class="work-block reveal is-big o4">
       <a href="./cf-sherway.html">
         <div class="work" style="background:#ffffff;" data-cursor="UX Research B2C" data-cursor-icon="arrow-up-right">
-          <video class="lazy-vid" data-src="./sherway-stamp-composite.mp4?v=20261005" data-poster="./posters/sherway-stamp-composite.jpg?v=20261016b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+          <video class="lazy-vid" data-src="./sherway-stamp-composite.mp4?v=20261005" data-poster="./posters/sherway-stamp-composite.jpg?v=20261016b" muted loop playsinline preload="none"></video>
           <div class="card-tags"><span class="tag core">Client Project</span><span class="tag">Public Realm</span><span class="tag">UX Research</span></div>
         </div>
         <div class="w-info">
@@ -1193,10 +1227,21 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
         </div>
       </a>
       </div>
-      <div class="work-block reveal is-big o4">
+    </div>
+
+    <div class="load-more reveal">
+      <button type="button" id="loadMore" aria-expanded="false" aria-controls="moreWork">Load more&hellip;</button>
+    </div>
+
+    <!-- finboard waits behind Load more, paired with an empty card so it is
+         not left standing on its own half of the row. -->
+    <div id="moreWork"></div>
+    <template id="more-work">
+    <div class="work-row reveal">
+      <div class="work-block reveal is-big o5">
       <a href="./finboard.html">
         <div class="work" style="background:#0a0a0a;" data-cursor="Fintech UI/UX" data-cursor-icon="arrow-up-right">
-          <video class="lazy-vid" data-src="./finboard-composite.mp4?v=20261016" data-poster="./posters/finboard-composite.jpg?v=20261016b" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+          <video class="lazy-vid" data-src="./finboard-composite.mp4?v=20261016" data-poster="./posters/finboard-composite.jpg?v=20261016b" muted loop playsinline preload="none"></video>
           <div class="card-tags"><span class="tag core">iOS Native</span><span class="tag">Banking App</span><span class="tag">Design Audit</span><span class="tag">Concept</span></div>
         </div>
         <div class="w-info">
@@ -1205,10 +1250,9 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
         </div>
       </a>
       </div>
+      <div class="work-block is-big is-ghost" aria-hidden="true"><div class="work"></div></div>
     </div>
-
-
-
+    </template>
 
     <!-- the practice itself, no case page: the card goes straight to the studio site -->
     <div class="startup-wrap reveal">
@@ -1257,7 +1301,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     <div class="work-block is-small">
       <a href="./gridone.html">
         <div class="work">
-          <video class="lazy-vid" data-hover data-src="./gridoneprev.mp4" data-poster="./posters/gridoneprev.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+          <video class="lazy-vid" data-hover data-src="./gridoneprev.mp4" data-poster="./posters/gridoneprev.jpg" muted loop playsinline preload="none"></video>
           <div class="card-tags"><span class="tag core">Service Design</span><span class="tag">Service Proposal</span><span class="tag">Mobile App</span></div>
         </div>
         <div class="w-info">
@@ -1286,7 +1330,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
     <div class="work-block is-small">
       <a href="./intact-lifolio.html">
-        <div class="work"><video class="lazy-vid" data-hover data-src="./intactlifoliothumb.mp4" data-poster="./posters/intactlifoliothumb.jpg" muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;"></video><div class="card-tags"><span class="tag core">Product Design</span><span class="tag">Service Proposal</span><span class="tag">Web App</span></div></div>
+        <div class="work"><video class="lazy-vid" data-hover data-src="./intactlifoliothumb.mp4" data-poster="./posters/intactlifoliothumb.jpg" muted loop playsinline preload="none"></video><div class="card-tags"><span class="tag core">Product Design</span><span class="tag">Service Proposal</span><span class="tag">Web App</span></div></div>
         <div class="w-info">
           <div class="t"><span>intact lifolio</span><span class="arrow">→</span></div>
           <div class="w-meta"><div class="m"><span>2026</span><span>Product Design</span></div><div class="w-tags"><span class="w-tag">Service Proposal</span><span class="w-tag">Web App</span></div></div>
@@ -1539,6 +1583,8 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .1, rootMargin: '0px 0px 300px 0px' });
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  /* markup added after load (the parked carousel) needs the same observer */
+  window.observeReveal = el => io.observe(el);
 
 
 
@@ -1657,8 +1703,10 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 </script>
 
 <script>
-  /* Other-projects carousel: arrows step one card; native scroll/swipe still works. */
-  (function(){
+  /* Other-projects carousel: arrows step one card; native scroll/swipe still works.
+     Named rather than anonymous because the markup starts life in a <template>
+     and is only put into the page when Load more is pressed. */
+  window.initCarousel = function(){
     var track = document.getElementById('carousel');
     var prev  = document.getElementById('cPrev');
     var next  = document.getElementById('cNext');
@@ -1682,6 +1730,26 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
     track.addEventListener('scroll', update, { passive:true });
     window.addEventListener('resize', update);
     update();
+  };
+  initCarousel();
+</script>
+
+<script>
+  /* Load more: brings the last highlight into the page, then hands the new
+     markup to the observers that already ran for the rest of it. */
+  (function(){
+    var btn  = document.getElementById('loadMore');
+    var slot = document.getElementById('moreWork');
+    var tpl  = document.getElementById('more-work');
+    if(!btn || !slot || !tpl) return;
+    btn.addEventListener('click', function(){
+      slot.appendChild(tpl.content.cloneNode(true));
+      tpl.remove();
+      btn.setAttribute('aria-expanded', 'true');
+      btn.closest('.load-more').remove();
+      if(window.observeReveal) slot.querySelectorAll('.reveal').forEach(window.observeReveal);
+      if(window.observeLazyVid) slot.querySelectorAll('video').forEach(window.observeLazyVid);
+    });
   })();
 </script>
 
