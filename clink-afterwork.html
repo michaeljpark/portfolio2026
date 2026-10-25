@@ -1759,6 +1759,22 @@
   .subsec-video video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
   /* full-width image at natural aspect ratio (e.g. logo row) */
   .subsec-img{ display:block; width:100%; height:auto; margin-top:clamp(20px,2.4vw,32px); }
+  /* the running app, embedded through its public /embed route at the size the
+     app's own embed snippet gives (600px tall, 16px corners, no border) */
+  .live-frame{
+    position:relative; height:600px; overflow:hidden;
+    margin-top:clamp(20px,2.4vw,32px);
+    /* the board renders on its own dark ground, so the frame takes that colour
+       before it loads instead of flashing the page's light card */
+    border-radius:16px; background:#141414;
+  }
+  .live-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; display:block; }
+  .live-band .live-frame{ margin-top:0; }
+  .frame-note{
+    margin-top:12px; font-size:13px; color:var(--muted); letter-spacing:-0.01em;
+    display:flex; flex-wrap:wrap; gap:4px 10px; align-items:baseline;
+  }
+  .frame-note a{ color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
 
   /* labelled build/stack breakdown (label | role) */
   .build-list{ list-style:none; padding:0; margin:clamp(20px,2.4vw,32px) 0 0; }
@@ -1794,6 +1810,9 @@
     .hero-tagline{ font-size:14px; margin-top:12px; }
     .phase-flat .phase-name{ font-size:clamp(19px,6vw,26px); }
     .phase-desc.statement{ font-size:19px; line-height:1.3; }
+    /* a phone cannot drive a canvas tool through a frame, and the embed costs
+       more than it gives at that size, so it stands down to its link */
+    .live-frame{ display:none; }
     .subsec-title{ font-size:clamp(17px,5vw,22px); }
     .subsec{ margin-top:clamp(36px,9vw,56px); }
 
@@ -2075,17 +2094,17 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <header class="hero wrap">
   <div class="hero-video">
-    <video class="lazy-vid" data-src="./clinkoverview.mp4?v=20261025" data-poster="./posters/clinkoverview.jpg?v=20261025"
+    <video class="lazy-vid" data-src="./clinkthumbvid.mp4?v=20261025" data-poster="./posters/clinkthumbvid.jpg?v=20261025"
            loop muted playsinline preload="none"></video>
   </div>
   <div class="hero-greeting">Product Design &amp; Full-Stack Development &middot; CNPT</div>
   <h1 class="hero-name">Clink &amp; Afterwork</h1>
-  <p class="hero-tagline">A co-work app for work. It links people into teams, clips their ideas together, and gives a small team one place where the thinking and the doing sit side by side.</p>
+  <p class="hero-tagline">A co-work app for work. It links people into teams and clips their ideas together, so a small team&rsquo;s thinking and its doing sit on the same canvas.</p>
   <div class="hero-row">
     <dl class="hero-side">
       <div class="pair"><dt>Year</dt><dd>2026&ndash;2027, currently incubating</dd></div>
       <div class="pair"><dt>Type</dt><dd>Product Design</dd></div>
-      <div class="pair"><dt>Team</dt><dd>Three, with a researcher and marketer</dd></div>
+      <div class="pair"><dt>Team</dt><dd>Three, including a researcher and a marketer</dd></div>
       <div class="pair"><dt>Live</dt><dd><a href="https://plak-1a653.web.app/" target="_blank" rel="noopener">Open the build &rarr;</a></dd></div>
     </dl>
   </div>
@@ -2095,59 +2114,72 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   <h2 class="tldr-mark">TLDR</h2>
   <dl class="tldr-list">
       <div><dt>Role<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg></dt><dd>Full-stack developer and designer, co-owner, product technical manager,&nbsp;UX&nbsp;designer</dd></div>
-      <div><dt>Team<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></dt><dd>Three of us, with a researcher and&nbsp;marketer</dd></div>
+      <div><dt>Team<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></dt><dd>Three, including a researcher and&nbsp;a&nbsp;marketer</dd></div>
       <div><dt>Timeline<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg></dt><dd>2026&ndash;2027,&nbsp;currently&nbsp;incubating</dd></div>
-      <div><dt>Problem<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5c0-1.1.9-2 2-2h2"/><path d="M17 3h2c1.1 0 2 .9 2 2v2"/><path d="M21 17v2c0 1.1-.9 2-2 2h-2"/><path d="M7 21H5c-1.1 0-2-.9-2-2v-2"/><rect width="7" height="5" x="7" y="7" rx="1"/><rect width="7" height="5" x="10" y="12" rx="1"/></svg></dt><dd>A small team&rsquo;s thinking scatters across tools nobody owns, and work that cannot be reached when it is needed may as&nbsp;well&nbsp;not&nbsp;exist.</dd></div>
-      <div><dt>Outcome<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></dt><dd>A canvas workspace we built to run our own studio, now being taken out as a product in&nbsp;its&nbsp;own&nbsp;right.</dd></div>
+      <div><dt>Problem<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5c0-1.1.9-2 2-2h2"/><path d="M17 3h2c1.1 0 2 .9 2 2v2"/><path d="M21 17v2c0 1.1-.9 2-2 2h-2"/><path d="M7 21H5c-1.1 0-2-.9-2-2v-2"/><rect width="7" height="5" x="7" y="7" rx="1"/><rect width="7" height="5" x="10" y="12" rx="1"/></svg></dt><dd>A small team&rsquo;s context scatters across its tools, and what cannot be reached when it is needed might as&nbsp;well&nbsp;not&nbsp;exist.</dd></div>
+      <div><dt>Outcome<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></dt><dd>A dashboard built inside our own mentorship service, run as our internal workflow tool, and now being expanded into a product of&nbsp;its&nbsp;own.</dd></div>
   </dl>
 </section>
 
+<!-- the running build, shown before the story so the reader meets the thing first -->
+<div class="live-band wrap">
+  <div class="live-frame">
+    <iframe src="https://plak-1a653.web.app/embed/vt6sa0gLlEMBwZIcCzKx"
+            title="Clink &amp; Afterwork, live board"
+            allow="fullscreen" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+  <p class="frame-note">
+    <span>A live board, embedded from plak-1a653.web.app.</span>
+    <a href="https://plak-1a653.web.app/embed/vt6sa0gLlEMBwZIcCzKx" target="_blank" rel="noopener">Open it in its own tab &rarr;</a>
+  </p>
+</div>
+
 <section class="phase-flat" id="overview">
   <div class="phase-name">Overview</div>
-  <div class="phase-sub">A tool we built for ourselves, then could not stop using</div>
-  <p class="phase-desc">Clink &amp; Afterwork is a canvas workspace for small teams. Ideas, documents, decisions and the people attached to them all live on one surface, so the context never has to be reassembled from memory. It was never meant to be a product. It became one because we kept reaching for it.</p>
-  <p class="phase-note">The path to it was not a straight line, and the detours are the interesting part. CNPT began as a design consultancy doing client work, which is a good way to pay for a studio and a poor way to build one. Client work ends when the client says it ends. We wanted something of our own, so we set out to develop CNPT&rsquo;s first service.</p>
-  <p class="phase-note">That first service was a mentorship program: a way to put people who had done the thing in front of people about to attempt it. While we were designing how a mentor and a mentee would actually work together week to week, afterwork showed up as a side thought. Mentorship is not a conversation, it is a shared body of work that accumulates, and there was nowhere sensible to put it.</p>
-  <p class="phase-note">So we started building a dashboard as one component inside the mentorship service. The dashboard was supposed to be the smallest piece of the project. It was the piece we opened every morning. Somewhere in there we stopped using it to run the mentorship program and started using it to run ourselves, and the thing that had been a sub-component turned into the internal workflow tool the studio actually operated on.</p>
-  <p class="phase-note">That is when the question changed. We were not asking how to finish a feature any more, we were asking whether what we had built for our own project management had value for anyone outside the room. We thought it did, so we took it out of the mentorship service and gave it its own name, its own roadmap and its own scope. Clink &amp; Afterwork is that project, expanded on purpose rather than by accident.</p>
+  <div class="phase-sub">It started as a small part of something else</div>
+  <p class="phase-desc">Clink &amp; Afterwork is two products that grew out of one project. Afterwork is a social network where students and junior professionals find their way into co-driven work. Clink is the dashboard for organising those co-driven projects, and it was never planned as a product at all.</p>
+  <p class="phase-note">CNPT started out doing client work. After a stretch of building things for other people, we wanted something under our own name, so we set out to develop CNPT&rsquo;s first service of its own.</p>
+  <p class="phase-note">That service was a mentorship program. Working out how to bring students and junior professionals into work they would drive together is where Afterwork was conceived: a social network for getting into that field.</p>
+  <p class="phase-note">One of the parts the program needed was a dashboard app, a sub-component for organising the projects people would run together. Building it is where the project turned. Read against the market as it stands, and from where anyone managing a project sits, it was not just a screen our program needed. It was a tool on its own.</p>
+  <p class="phase-note">So we built it first as an internal workflow app, for our own use, and that dashboard became Clink. From there the strategy was to let it stand without the program around it, and it has been expanded into a project in its own right, alongside Afterwork rather than inside it.</p>
 
   <div class="subsec">
     <div class="subsec-title">Meet the team</div>
     <img class="subsec-img" width="3314" height="932" src="./clinkafterworkteam.png" alt="Team board: three co-owners covering UX design and full-stack development, branding and graphic design, and design audit and management" loading="lazy" style="margin-bottom:clamp(32px,4vw,48px);" srcset="./light/clinkafterworkteam.webp 1440w, ./clinkafterworkteam.png 3314w" sizes="(max-width: 1500px) 95vw, 1425px" />
   </div>
-  <p class="phase-note">Three co-owners, each holding a different edge of the thing. Brandon carries branding and graphic design, Kenny carries design audit and management, and I carry UX design and the full stack, which in practice means I am the one who has to make the product decision and the implementation agree with each other. A researcher and a marketer work alongside us on where this goes next.</p>
+  <p class="phase-note">Three co-owners. I lead UX design and the full stack, Brandon leads branding and graphic design, and Kenny leads design audit and management. Holding both the design and the code means the product decision and its implementation have to agree in one place, which is most of what the technical manager role comes down to.</p>
+
 </section>
 
 <section class="phase-flat" id="problem-definition">
   <div class="phase-name">Problem Definition</div>
-  <p class="phase-desc statement">Thousands of sticky notes, and not one of them findable.</p>
-  <p class="phase-desc">Every small team has the same quiet failure. The work gets done, the thinking behind it does not survive, and six weeks later nobody can reconstruct why the decision was made.</p>
-  <p class="phase-note">We were living it. A studio of three runs on a document tool, a chat tool, a file drive and a whiteboard, and not one of them knows about the others. The brief sits in one place, the critique that changed the brief sits in another, and the file that resulted from the critique sits in a third. None of them is lost, exactly. They are just far enough apart that reassembling the context costs more than redoing the work.</p>
+  <p class="phase-desc statement">Thousands of sticky notes?</p>
+  <p class="phase-desc">Every team has its own culture, its own way of talking and its own principles. The tools it works in know none of that, and its context ends up spread across all of them.</p>
+  <p class="phase-note">We met this while building the mentorship program. The work passing between a mentor and a mentee, and the decisions about running the program, sat in different places, and pulling them back together became a job of its own. That is the problem the dashboard was first meant to solve.</p>
   <p class="phase-desc statement">The information is out there somewhere. But if you can&rsquo;t reach it when you need it, it might as well not exist.</p>
-  <p class="phase-note">That line became the brief. Not storage, not search, but reach: the distance between needing a piece of context and having it in front of you. Everything we built after that was judged against whether it shortened that distance.</p>
+  <p class="phase-note">That line became the brief. The question was not where to store things or how to search them, but how far a piece of context sits from the moment it is needed.</p>
   <div class="subsec">
-    <div class="subsec-title">Three things a small team keeps losing</div>
+    <div class="subsec-title">What a small team keeps losing</div>
     <ul class="build-list features">
-      <li><span class="k">The reasoning</span><span class="v">The artefact survives and the argument that produced it does not, so every revisit starts by re-litigating a decision that was already made.</span></li>
-      <li><span class="k">The thread</span><span class="v">A comment lives in the tool it was typed into. Pull the file out and the conversation attached to it stays behind.</span></li>
-      <li><span class="k">The culture</span><span class="v">Every team has its own way of talking and its own principles, and generic tooling flattens all of it into folders named &ldquo;final&rdquo;.</span></li>
+      <li><span class="k">The reasoning</span><span class="v">The file survives and the argument that produced it does not, so every revisit starts by reopening a decision that was already made.</span></li>
+      <li><span class="k">The thread</span><span class="v">A comment stays in the tool it was typed into. Move the file and the conversation about it is left behind.</span></li>
+      <li><span class="k">The culture</span><span class="v">How a team talks and what it agrees on rarely has anywhere to live, so it stays in people&rsquo;s heads.</span></li>
     </ul>
   </div>
 </section>
 
 <section class="phase-flat" id="discovery">
   <div class="phase-name">Discovery</div>
-  <div class="phase-sub">Why an internal tool was worth taking outside</div>
-  <p class="phase-desc">The decision to turn a workflow tool into a product is a market question, not a craft one. We had something we liked using. That is not evidence.</p>
-  <p class="phase-note">What persuaded us was the shape of who was underserved. The tools in this category are built either for individuals, where the whole value is personal organisation, or for companies large enough to have someone whose job is configuring them. The team of three to ten, which is most studios, most early startups and most internal pods, gets handed the enterprise product and told to grow into it.</p>
-  <p class="phase-note">There was a second argument, and it came from project management rather than design. A small team cannot afford a dedicated manager, so the management has to be a property of the workspace itself. If the surface where the work happens also shows who is on what and what is blocked, the coordination overhead stops being somebody&rsquo;s job. That is the part we had accidentally proven on ourselves for months.</p>
-  <p class="phase-note">The third was simply that we had already paid the build cost. Taking it out meant hardening and naming what existed, not starting over, which is the cheapest possible way to test whether a thesis has legs.</p>
+  <div class="phase-sub">Why an internal tool was worth expanding</div>
+  <p class="phase-desc">Turning an internal tool into a product is a strategic call, not a design one. Two things made the case.</p>
+  <p class="phase-note">The first was market value. Read against the tools teams already use, a workspace shaped around how a small team actually works together still looked worth making.</p>
+  <p class="phase-note">The second came from project management. A small team rarely has someone whose whole job is coordinating it, so the coordinating has to live in the workspace itself. The dashboard was already doing that inside the mentorship program, which is what made it worth lifting out.</p>
+  <p class="phase-note">The strategy that followed was to expand it independently: keep it as our internal workflow tool, and grow it from there into something other teams can pick up.</p>
   <div class="subsec">
     <div class="subsec-title">What the shift changed</div>
     <ul class="build-list features">
-      <li><span class="k">From feature to product</span><span class="v">The dashboard stopped being scoped by the mentorship service and got a roadmap that answers to its own users.</span></li>
-      <li><span class="k">From internal to legible</span><span class="v">Conventions we carried in our heads had to become things the interface states, because a new team arrives without our context.</span></li>
-      <li><span class="k">From tool to position</span><span class="v">Deciding we serve small teams rather than individuals or enterprises settled a long list of arguments in advance.</span></li>
+      <li><span class="k">From sub-component to product</span><span class="v">The dashboard stopped being scoped by the mentorship program and needed a direction of its own.</span></li>
+      <li><span class="k">From our habits to the interface</span><span class="v">Conventions we carried in our heads had to become things the interface states, because another team arrives without our context.</span></li>
     </ul>
   </div>
 </section>
@@ -2155,33 +2187,33 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 <section class="phase-flat" id="prototyping">
   <div class="phase-name">Prototyping</div>
   <div class="phase-sub">One surface, many kinds of block</div>
-  <p class="phase-desc">Clink &amp; Afterwork is an infinite canvas where a block can be a document, a code snippet, a poll, an availability grid, a reference card or a conversation, and all of them sit in the same space at the same time.</p>
-  <p class="phase-note">The core bet is that separating &ldquo;where you think&rdquo; from &ldquo;where you keep things&rdquo; is what breaks the thread. So the canvas holds both. A proposal can sit next to the critique that shaped it and the availability grid that decided when it ships, and the spatial relationship between them carries meaning that a folder structure cannot.</p>
-  <p class="phase-note">I built this end to end, which changed how the design decisions were made. When the person drawing the interaction is also the person implementing it, the expensive ideas get found in an afternoon instead of a sprint, and the cheap ones that look unremarkable in a mockup get a fair hearing because they are trivial to try.</p>
+  <p class="phase-desc">Clink is an infinite canvas where a block can be a document, a code snippet, a poll, an availability grid, a reference card or a conversation, all on the same surface at once.</p>
+  <p class="phase-note">The idea underneath is that keeping &ldquo;where you think&rdquo; apart from &ldquo;where you keep things&rdquo; is what breaks the thread. So the canvas holds both. A proposal can sit next to the critique that shaped it and the grid that decided when it ships, and where they sit relative to each other says something a folder cannot.</p>
+  <p class="phase-note">I built it end to end, and that changed how the design decisions got made. When the person drawing an interaction is also the one implementing it, an expensive idea shows itself in an afternoon instead of a sprint, and a cheap one that looks unremarkable in a mockup gets a fair try because trying it costs almost nothing.</p>
   <div class="subsec">
     <h3 class="subsec-title">Walkthrough</h3>
-    <p class="subsec-lead">From an empty canvas to a team working on it: blocks, inline comment threads, document review and the shared state underneath.</p>
+    <p class="subsec-lead">From an empty canvas to a team working on it: blocks, comment threads, document review and the team&rsquo;s shared state.</p>
     <div class="subsec-video wide">
-      <video class="snap-vid" data-src="./clinkoverview.mp4?v=20261025" data-poster="./posters/clinkoverview.jpg?v=20261025" loop muted playsinline preload="none" data-cursor="afterwork"></video>
+      <video class="snap-vid" data-src="./clinkoverview.mp4?v=20261025" data-poster="./posters/clinkoverview.jpg?v=20261025" loop muted playsinline preload="none" data-cursor="Walkthrough"></video>
     </div>
   </div>
   <div class="subsec">
     <div class="subsec-title">What is built so far</div>
     <ul class="build-list features">
-      <li><span class="k">Canvas and blocks</span><span class="v">An infinite surface with typed blocks, multi-column layout and inline formatting, so a page and a whiteboard stop being different places.</span></li>
-      <li><span class="k">Comments in place</span><span class="v">Threads attach to the thing being discussed and travel with it, which is what keeps the reasoning next to the artefact.</span></li>
-      <li><span class="k">Document review</span><span class="v">Proposals and PDFs open on the canvas with per-page comments, so review happens where the project already lives.</span></li>
-      <li><span class="k">Team state</span><span class="v">Availability, ownership and progress are blocks like anything else, which is how a three-person team gets project management without a project manager.</span></li>
+      <li><span class="k">Canvas and blocks</span><span class="v">An infinite surface with typed blocks, column layout and inline formatting, so a page and a whiteboard stop being different places.</span></li>
+      <li><span class="k">Comments in place</span><span class="v">Threads attach to what they are about and travel with it, which keeps the reasoning next to the work.</span></li>
+      <li><span class="k">Document review</span><span class="v">Proposals open on the canvas with comments page by page, so review happens where the project already lives.</span></li>
+      <li><span class="k">Team state</span><span class="v">Availability, progress and ownership are blocks like anything else, which is how a three-person team gets project management without a project manager.</span></li>
     </ul>
   </div>
 </section>
 
 <section class="phase-flat" id="conclusion">
   <div class="phase-name">Conclusion</div>
-  <p class="phase-desc">Clink &amp; Afterwork is live and in use, and it is still the tool we run our own work on. That is the part I trust most about it.</p>
-  <p class="phase-note">The lesson I would carry forward is about where products actually come from. We did not find this one by looking for it. We found it by building something we needed badly enough to finish, then noticing that the need was not unique to us. The mentorship service was a real goal and afterwork was a sub-component of a sub-component, and the sub-component is the thing with a future.</p>
-  <p class="phase-note">What is unresolved is the hardest part and we know it. A tool that is obvious to the three people who invented its conventions has to become obvious to a team that was not in the room, and nothing we believe about that is proven yet. The next phase is incubation, which means putting it in front of teams who owe us no patience and watching what they cannot find.</p>
-  <p class="phase-note">The current build is open at <a href="https://plak-1a653.web.app/" target="_blank" rel="noopener" style="text-decoration:underline; text-underline-offset:3px;">plak-1a653.web.app</a>. It is a work in process, and it moves most weeks.</p>
+  <p class="phase-desc">Clink &amp; Afterwork is a work in process, incubating through 2026 and 2027.</p>
+  <p class="phase-note">The lesson I would carry forward is about where products come from. We did not set out to make this one. It came out of building something else carefully enough to notice what we kept needing, and the sub-component turned out to be the part with a future of its own.</p>
+  <p class="phase-note">The open question is the one every internal tool meets on the way out. Conventions that are obvious to the people who made them have to become obvious to a team that was not in the room, and that is what incubation is for.</p>
+  <p class="phase-note">The current build is at <a href="https://plak-1a653.web.app/" target="_blank" rel="noopener" style="text-decoration:underline; text-underline-offset:3px;">plak-1a653.web.app</a>.</p>
 </section>
 
 <footer style="padding:clamp(64px,8vw,120px) var(--pad) clamp(48px,6vw,80px); text-align:center;">
