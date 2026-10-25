@@ -1759,14 +1759,15 @@
   .subsec-video video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
   /* full-width image at natural aspect ratio (e.g. logo row) */
   .subsec-img{ display:block; width:100%; height:auto; margin-top:clamp(20px,2.4vw,32px); }
-  /* the running app, embedded through its public /embed route at the size the
-     app's own embed snippet gives (600px tall, 16px corners, no border) */
+  /* the running app, embedded through its public /embed route as the app's own
+     snippet gives it (16px corners, no border), 600px tall on a desktop column
+     and scaling down with the width to a 420px floor on a phone */
   .live-frame{
-    position:relative; height:600px; overflow:hidden;
+    position:relative; height:clamp(420px, 42vw, 600px); overflow:hidden;
     margin-top:clamp(20px,2.4vw,32px);
     /* the board is pinned to its light theme (?theme=light), so the frame holds
        the board's own light ground until it loads */
-    border-radius:16px; background:#F3F2EE;
+    border-radius:clamp(12px,1.2vw,16px); background:#F3F2EE;
   }
   .live-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; display:block; }
   .live-band .live-frame{ margin-top:0; }
@@ -1810,9 +1811,6 @@
     .hero-tagline{ font-size:14px; margin-top:12px; }
     .phase-flat .phase-name{ font-size:clamp(19px,6vw,26px); }
     .phase-desc.statement{ font-size:19px; line-height:1.3; }
-    /* a phone cannot drive a canvas tool through a frame, and the embed costs
-       more than it gives at that size, so it stands down to its link */
-    .live-frame{ display:none; }
     .subsec-title{ font-size:clamp(17px,5vw,22px); }
     .subsec{ margin-top:clamp(36px,9vw,56px); }
 
