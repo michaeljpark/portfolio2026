@@ -434,6 +434,17 @@
      the dark theme's inner hairline would sit in that same sliver, so a card
      with a clip goes without it */
   .work:has(video){ background-size:cover; background-position:center; }
+  /* Chrome on Windows hands a playing clip to a hardware overlay, which it
+     places on whole pixels and fills with black where the scaled frame falls
+     short; while a card is pushed and its width is fractional, that black shows
+     as a hairline down the right edge. A mask keeps the clip in ordinary
+     compositing (the ongen card's filter does the same for it), and gives iOS a
+     real clipping layer too. White and black are both fully opaque, so nothing
+     fades: the same fix the case pages use on their clips. */
+  .work:has(video){
+    -webkit-mask-image:-webkit-radial-gradient(white,black);
+    mask-image:radial-gradient(white,black);
+  }
   :root[data-theme="dark"] .work:has(video){ box-shadow:none; }
   .work img{
     width:100%; height:100%; object-fit:cover;
