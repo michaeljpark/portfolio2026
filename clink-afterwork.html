@@ -89,10 +89,6 @@
   @media(max-width:640px){
     .hero-video{ aspect-ratio:16/9; }
   }
-  /* the overview clip is 2:1 and the product it shows is a canvas, so the
-     band keeps the clip’s own shape instead of cropping a third of it away */
-  .hero-video{ aspect-ratio:2/1; }
-  @media(max-width:640px){ .hero-video{ aspect-ratio:2/1; } }
   .hero-side .pair a{ text-decoration:underline; text-underline-offset:3px; }
   .hero-greeting{ font-size:17px; color:var(--muted); margin-bottom:6px; }
   .hero-name{
@@ -2092,7 +2088,7 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
 
 <header class="hero wrap">
   <div class="hero-video">
-    <video class="lazy-vid" data-src="./clinkthumbvid.mp4?v=20261025" data-poster="./posters/clinkthumbvid.jpg?v=20261025"
+    <video class="lazy-vid" data-src="./clinkbanner.mp4?v=20261025" data-poster="./posters/clinkbanner.jpg?v=20261025"
            loop muted playsinline preload="none"></video>
   </div>
   <div class="hero-greeting">Product Design &amp; Full-Stack Development &middot; CNPT</div>
