@@ -267,7 +267,7 @@
     var need = boxWidth(v) * Math.min(window.devicePixelRatio || 1, 1.5);
     if (!need) return 'mid';
     if (need <= 1300) return 'light';
-    if (need <= 2600 || P.tier <= 2) return 'mid';
+    if (need <= 2600 || P.tier <= 2 || v._forceMid) return 'mid';
     return null;                                     /* original */
   }
 
@@ -457,7 +457,15 @@
     var v = e.target;
     if (!v || v.tagName !== 'VIDEO' || !v._governed || v._noLight) return;
     if (!v.getAttribute('src')) return;              /* released, not broken */
-    if (!v._loadedSrc || !/(^|\/)(light|mid)\//.test(v._loadedSrc)) return;
+    /* The published site leaves out an original that has both a mid/ and a
+       light/ copy (see .github/workflows/static.yml), so if one is ever asked
+       for and is not there, go back to a trimmed copy (mid/ at most) rather
+       than go blank. */
+    if (v._loadedSrc && !/(^|\/)(light|mid)\//.test(v._loadedSrc)) {
+      if (v.error && v.error.code === 4 && !v._forceMid) { v._forceMid = 1; v._mounted = 0; mount(v); play(v); }
+      return;
+    }
+    if (!v._loadedSrc) return;
     /* Only a genuinely unusable source means the trimmed copy is missing;
        an abort just means the governor moved on while it was loading. */
     if (!v.error || v.error.code !== 4) return;

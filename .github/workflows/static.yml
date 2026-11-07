@@ -33,11 +33,25 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Assemble the published site
+        # The repository keeps every original clip, but the site only ever plays
+        # the trimmed mid/ and light/ copies (lazy-video.js picks one by the width
+        # the clip plays at, and falls back to a trimmed copy if an original is missing).
+        # A top-level .mp4 that has both copies is therefore left out of the
+        # upload, which keeps the site under the 1 GB GitHub Pages limit.
+        run: |
+          rsync -a --exclude='.git' --exclude='.github' ./ _site/
+          shopt -s nullglob
+          for f in *.mp4; do
+            if [ -f "mid/$f" ] && [ -f "light/$f" ]; then rm "_site/$f"; echo "left out: $f"; fi
+          done
+          du -sh _site
+          size=$(du -sb _site | cut -f1)
+          if [ "$size" -gt 1000000000 ]; then echo "::error::_site is $size bytes, over the 1 GB Pages limit"; exit 1; fi
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          path: '_site'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
