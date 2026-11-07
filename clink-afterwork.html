@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Clink &amp; Afterwork — Michael Joongmin Park</title>
-<link rel="icon" type="image/svg+xml" href="./mkpk.svg" />
+<link rel="icon" href="data:," />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
@@ -1755,27 +1755,41 @@
   .subsec-video video{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); object-fit:cover; display:block; }
   /* full-width image at natural aspect ratio (e.g. logo row) */
   .subsec-img{ display:block; width:100%; height:auto; margin-top:clamp(20px,2.4vw,32px); }
-  /* the running app, embedded through its public /embed route as the app's own
-     snippet gives it (16px corners, no border), 600px tall on a desktop column
-     and scaling down with the width to a 420px floor on a phone */
+  /* the running app, embedded through its public /embed route, 600px tall on a
+     desktop column and scaling down with the width to a 420px floor on a phone.
+     On its own page the board sits inside a grey margin with rounded corners
+     (10px and 30px; 6px and 24px once the frame is 560px wide or less). The frame
+     is drawn 1px larger than that margin on every side and its corners take the
+     board's radius less 1px, so the margin and the board's hairline ring fall
+     outside the clip and the two curves are concentric: one rounded edge, not
+     three. The band is a size container so the switch follows the frame's own
+     width, the same width the board measures. */
+  .live-band{ container-type:inline-size; }
   .live-frame{
     position:relative; height:clamp(420px, 42vw, 600px); overflow:hidden;
     margin-top:clamp(20px,2.4vw,32px);
-    /* the board is pinned to its light theme (?theme=light), so the frame holds
-       the board's own light ground until it loads */
-    border-radius:clamp(12px,1.2vw,16px); background:#F3F2EE;
+    /* pinned to the light theme (?theme=light), so before it loads the frame
+       holds the board's own light canvas */
+    border-radius:29px; background:#F4F4F3;
+    -webkit-mask-image:-webkit-radial-gradient(white,black); mask-image:radial-gradient(white,black);
   }
-  .live-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; display:block; }
+  .live-frame iframe{ position:absolute; top:-11px; left:-11px; width:calc(100% + 22px); height:calc(100% + 22px); border:0; display:block; }
   .live-band .live-frame{ margin-top:0; }
   /* the walkthrough film above the board: Vimeo's own player, 16:9, with its
      controls and sound, since it is narrated rather than a silent loop. Its
-     corners follow the board frame below so the two read as one band. */
+     corners follow the board below (29px, 23px on a narrow band) so the two
+     read as one band. */
   .film-frame{
     position:relative; aspect-ratio:16/9; overflow:hidden;
-    border-radius:clamp(12px,1.2vw,16px); background:#000;
+    border-radius:29px; background:#000;
+    -webkit-mask-image:-webkit-radial-gradient(white,black); mask-image:radial-gradient(white,black);
   }
   .film-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; display:block; }
   .live-band .film-frame + .live-frame{ margin-top:clamp(20px,2.4vw,32px); }
+  @container (max-width:546px){
+    .live-frame iframe{ top:-7px; left:-7px; width:calc(100% + 14px); height:calc(100% + 14px); }
+    .live-frame, .film-frame{ border-radius:23px; }
+  }
   .frame-note{
     margin-top:12px; font-size:13px; color:var(--muted); letter-spacing:-0.01em;
     display:flex; flex-wrap:wrap; gap:4px 10px; align-items:baseline;
