@@ -176,16 +176,19 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 
 /* ---------- strip nav: centred under the row, steps either side of one dot per project ---------- */
 .w-nav{display:flex;align-items:center;justify-content:center;gap:4px;padding:18px var(--m) 0}
-.w-nav button{width:32px;height:32px;display:grid;place-items:center;color:var(--ink);transition:opacity .3s}
+.w-nav > button{width:32px;height:32px;display:grid;place-items:center;color:var(--ink);transition:opacity .3s}
 .w-nav svg{width:7px;height:12px;transition:transform .35s var(--ease)}
 .w-nav .prev:hover svg{transform:translateX(-3px)}
 .w-nav .next:hover svg{transform:translateX(3px)}
-.w-nav button:disabled{opacity:.2;cursor:default}
-.w-nav button:disabled svg{transform:none}
-.w-dots{display:flex;align-items:center;gap:6px;padding:0 6px}
-.w-dots i{width:6px;height:6px;border-radius:999px;background:var(--ink);opacity:.2;transition:width .4s var(--ease),opacity .4s}
-.w-dots i.on{width:18px;opacity:1}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.w-nav > button:disabled{opacity:.2;cursor:default}
+.w-nav > button:disabled svg{transform:none}
+/* each dot is a button with a tall hit area; the visible dot is its ::before */
+.w-dots{display:flex;align-items:center;padding:0 3px}
+.w-dots button{height:32px;padding:0 3px;display:grid;place-items:center}
+.w-dots button::before{content:"";width:6px;height:6px;border-radius:999px;background:var(--ink);opacity:.2;transition:width .4s var(--ease),opacity .3s}
+.w-dots button:hover::before{opacity:.5}
+.w-dots button.on{cursor:default}
+.w-dots button.on::before{width:18px;opacity:1}
 .stage.is-dragging{-webkit-user-select:none;user-select:none}
 .stage.is-dragging,.stage.is-dragging *{cursor:grabbing}
 .m-lead,.m-steps{display:none}

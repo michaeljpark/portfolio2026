@@ -46,17 +46,36 @@ function setOffset(x, animate = true) {
   if (!animate) { track.offsetHeight; track.style.transition = ''; }
   updateChev();
 }
-/* Steps and dots under the strip. The long dot is the open project, or,
-   with the panel closed, the first card fully in view. */
-const dots = PROJECTS.map(() => $('wDots').appendChild(document.createElement('i')));
+/* Steps and dots under the strip. The long dot is the open project. With the
+   panel closed it is the card last aimed at (a clicked dot, or the project
+   just closed) while that card is fully in view, else the first card in full
+   view. Clicking a dot works like the chevrons: open, it switches project;
+   closed, it moves the strip to that card. */
+let aim = -1;
+const dots = PROJECTS.map((p, j) => {
+  const d = document.createElement('button');
+  d.type = 'button';
+  d.setAttribute('aria-label', p.title);
+  d.addEventListener('click', () => goTo(j));
+  return $('wDots').appendChild(d);
+});
+function goTo(j) {
+  if (cur > -1) { if (j !== cur) open(j); return; }
+  if (mq.matches) return;
+  aim = j;
+  setOffset(Math.min(maxOffset(), Math.max(0, works[j].offsetLeft - padPx())));
+}
 function updateChev() {
   const open = cur > -1;
   $('prev').disabled = !open && offset <= 1;
   $('next').disabled = !open && offset >= maxOffset() - 1;
-  const first = Math.ceil((offset - padPx() - 1) / (cw + gapPx()));
-  const at = open ? cur : Math.min(PROJECTS.length - 1, Math.max(0, first));
-  dots.forEach((d, j) => d.classList.toggle('on', j === at));
-  $('wIdx').textContent = `${pad2(at + 1)} / ${pad2(PROJECTS.length)}`;
+  const inView = j => { const l = works[j].offsetLeft - offset; return l >= -1 && l + works[j].offsetWidth <= strip.clientWidth + 1; };
+  const first = Math.min(PROJECTS.length - 1, Math.max(0, Math.ceil((offset - padPx() - 1) / (cw + gapPx()))));
+  const at = open ? cur : aim > -1 && inView(aim) ? aim : first;
+  dots.forEach((d, j) => {
+    d.classList.toggle('on', j === at);
+    if (j === at) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
+  });
 }
 function placePanel() {
   if (mq.matches) {
@@ -205,6 +224,7 @@ async function close() {
   panel.classList.remove('is-open');
   panel.setAttribute('aria-hidden', 'true');
   push(-1);
+  aim = cur;
   cur = -1;
   await wait(mq.matches ? 520 : DUR);
   mark();
@@ -216,6 +236,7 @@ async function close() {
 function step(dir) {
   if (cur > -1) return open((cur + dir + PROJECTS.length) % PROJECTS.length);
   if (mq.matches) return;
+  aim = -1;
   setOffset(Math.min(maxOffset(), Math.max(0, offset + dir * (cw + gapPx()))));
 }
 
