@@ -46,14 +46,16 @@ function setOffset(x, animate = true) {
   if (!animate) { track.offsetHeight; track.style.transition = ''; }
   updateChev();
 }
-/* Steps and index under the strip. Open, the index is the open project;
-   closed, it is the first card fully in view. */
+/* Steps and dots under the strip. The long dot is the open project, or,
+   with the panel closed, the first card fully in view. */
+const dots = PROJECTS.map(() => $('wDots').appendChild(document.createElement('i')));
 function updateChev() {
   const open = cur > -1;
   $('prev').disabled = !open && offset <= 1;
   $('next').disabled = !open && offset >= maxOffset() - 1;
   const first = Math.ceil((offset - padPx() - 1) / (cw + gapPx()));
   const at = open ? cur : Math.min(PROJECTS.length - 1, Math.max(0, first));
+  dots.forEach((d, j) => d.classList.toggle('on', j === at));
   $('wIdx').textContent = `${pad2(at + 1)} / ${pad2(PROJECTS.length)}`;
 }
 function placePanel() {
