@@ -88,6 +88,13 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .frame .art-mark{position:static;inset:auto;width:30cqw;height:auto;object-fit:contain;display:block}
 .art-title{font-family:"Figtree","Proxima Nova",var(--sans);font-size:max(11px,2.6cqw);font-weight:400;letter-spacing:0;line-height:1}
 .frame video{opacity:0;transition:opacity .4s}
+/* Mobile Safari snaps a video layer to whole device pixels, so on a frame with a
+   fractional height (339 x 254.25 on a 375px phone) a hairline of the poster showed
+   along the right and bottom edges. The clip now runs 1px past every edge, clipped
+   by the frame, and once it has faded in the poster is taken out from under it.
+   The poster comes back at once when the clip stops, before the clip fades out. */
+.frame video{inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px)}
+.work.is-playing .frame img{visibility:hidden;transition:visibility 0s .4s}
 .tags{position:absolute;right:10px;bottom:10px;left:10px;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;pointer-events:none}
 .tag{
   padding:6px 11px 6px;border-radius:999px;
