@@ -46,16 +46,21 @@ function setOffset(x, animate = true) {
   if (!animate) { track.offsetHeight; track.style.transition = ''; }
   updateChev();
 }
+/* Steps and index under the strip. Open, the index is the open project;
+   closed, it is the first card fully in view. */
 function updateChev() {
   const open = cur > -1;
   $('prev').disabled = !open && offset <= 1;
   $('next').disabled = !open && offset >= maxOffset() - 1;
+  const first = Math.ceil((offset - padPx() - 1) / (cw + gapPx()));
+  const at = open ? cur : Math.min(PROJECTS.length - 1, Math.max(0, first));
+  $('wIdx').textContent = `${pad2(at + 1)} / ${pad2(PROJECTS.length)}`;
 }
 function placePanel() {
   if (mq.matches) {
     if (cur > -1) works[cur].after(panel);
   } else if (panel.parentElement !== stage) {
-    stage.insertBefore(panel, $('prev'));
+    strip.after(panel);
   }
 }
 function layout() {

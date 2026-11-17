@@ -136,8 +136,10 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .panel.is-open .panel-inner > :nth-child(4){transition-delay:.46s}
 .panel-inner.is-swapping > *{opacity:0!important;transform:translateX(-10px)!important;transition-delay:0s!important;transition-duration:.18s!important}
 
+/* the project index lives in the strip nav on desktop; the panel keeps it on mobile */
+.p-top > #pIdx{display:none}
 .p-top{
-  display:grid;grid-template-columns:22% 1fr auto;align-items:baseline;gap:12px;
+  display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:12px;
   padding:clamp(12px,2.2cqi,20px) 0 clamp(12px,2.2cqi,20px) clamp(14px,2.6cqi,24px);
   border-bottom:1px solid var(--rule);
 }
@@ -172,19 +174,16 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .cta svg{width:11px;height:11px;transition:transform .25s var(--ease)}
 .cta:hover svg{transform:translate(2px,-2px)}
 
-/* ---------- edge chevrons ---------- */
-.chev{
-  position:absolute;top:calc(var(--h) / 2);transform:translateY(-50%);
-  z-index:6;width:40px;height:64px;display:grid;place-items:center;
-  color:var(--ink);transition:opacity .3s;
-}
-.chev svg{width:12px;height:22px;transition:transform .35s var(--ease)}
-.chev.prev:hover svg{transform:translateX(-4px)}
-.chev.next:hover svg{transform:translateX(4px)}
-.chev:disabled{opacity:.2;cursor:default}
-.chev:disabled svg{transform:none}
-.chev.prev{left:max(0px,calc(var(--m) / 2 - 20px))}
-.chev.next{right:max(0px,calc(var(--m) / 2 - 20px))}
+/* ---------- strip nav: index on the left, steps on the right, under the row ---------- */
+.w-nav{display:flex;align-items:center;justify-content:space-between;padding:18px var(--m) 0}
+.w-nav #wIdx{font-variant-numeric:tabular-nums}
+.w-steps{display:flex;margin-right:-12px}
+.w-steps button{width:36px;height:32px;display:grid;place-items:center;color:var(--ink);transition:opacity .3s}
+.w-steps svg{width:7px;height:12px;transition:transform .35s var(--ease)}
+.w-steps .prev:hover svg{transform:translateX(-3px)}
+.w-steps .next:hover svg{transform:translateX(3px)}
+.w-steps button:disabled{opacity:.2;cursor:default}
+.w-steps button:disabled svg{transform:none}
 .stage.is-dragging{-webkit-user-select:none;user-select:none}
 .stage.is-dragging,.stage.is-dragging *{cursor:grabbing}
 .m-lead,.m-steps{display:none}
@@ -370,7 +369,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .m-pitch{grid-column:1 / -1}
 
   .p-top{display:flex;align-items:center;gap:4px;padding:4px 0;margin-top:4px}
-  .p-top > .small:first-child{flex:1}
+  .p-top > #pIdx{display:block;flex:1}
   .p-top .p-title{display:none}
   .m-steps{display:flex}
   .m-steps button{width:40px;height:36px;display:grid;place-items:center}
@@ -386,7 +385,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .kpi dd{font-size:24px}
   .kpi dt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.35}
   #pTldr{-webkit-line-clamp:4}
-  .chev{display:none}
+  .w-nav{display:none}
 
   .block .body{grid-column:1 / -1}
   .list li{grid-template-columns:1fr auto;row-gap:2px}
