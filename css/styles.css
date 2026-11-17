@@ -186,6 +186,8 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .chev:disabled svg{transform:none}
 .chev.prev{left:max(0px,calc(var(--m) / 2 - 20px))}
 .chev.next{right:max(0px,calc(var(--m) / 2 - 20px))}
+.stage.is-dragging{-webkit-user-select:none;user-select:none}
+.stage.is-dragging,.stage.is-dragging *{cursor:grabbing}
 .m-lead,.m-steps{display:none}
 
 /* ---------- info sections ---------- */
