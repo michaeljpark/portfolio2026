@@ -29,12 +29,12 @@ const PROJECTS = [
     category: "Full-stack web app, incubating",
     video: "assets/video/clink.mp4", poster: "assets/images/clink.webp",
     problem: "A small team's context is scattered across its tools, and information that can't be reached when it's needed is effectively lost.",
-    kpi: [{ v: "3", l: "Team members" }, { v: "4", l: "Roles, from UX to full-stack" }, { v: "1", l: "Shared canvas for the team" }],
+    kpi: [{ v: "3", l: "Team members" }, { v: "4", l: "Roles, from UX to full-stack" }, { v: "20+", l: "Active users, closed beta" }],
     tldr: "An infinite canvas of typed blocks, comment threads, and document review that keeps a small team's reasoning next to its work.",
     href: BASE + "clink-afterwork.html"
   },
   {
-    title: "OnGen Radio", pitch: "Reimagined radio in augmented reality", year: "2026",
+    title: "OnGen Radio", pitch: "Personalized, curated radio experience driven by AI", year: "2026",
     category: "Thesis project, AR app",
     video: "assets/video/ongen-radio.mp4", poster: "assets/images/ongen-radio.webp",
     problem: "AR glasses exist, but their interaction still extends the smartphone, which leaves the space around the user inert.",
