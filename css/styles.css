@@ -196,8 +196,6 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .w-dots button:hover::before{opacity:.5}
 .w-dots button.on{cursor:default}
 .w-dots button.on::before{width:18px;opacity:1}
-.stage.is-dragging{-webkit-user-select:none;user-select:none}
-.stage.is-dragging,.stage.is-dragging *{cursor:grabbing}
 .m-lead,.m-steps{display:none}
 
 /* ---------- info sections ---------- */

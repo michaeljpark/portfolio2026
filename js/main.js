@@ -293,54 +293,6 @@ stage.addEventListener('wheel', e => {
   }
 }, { passive: false });
 
-/* Mouse drag: press on the strip or the open panel and pull left or right.
-   Like a swipe, one drag is one step, taken as soon as it passes 60px so the
-   strip answers while the button is still down. A press that travels more than
-   a few pixels counts as a drag and does not also open the card it began on;
-   one that starts out vertical is left alone. Links and the other buttons keep
-   their own clicks. */
-let drag = null, dragClick = false;
-const dragOff = () => {
-  removeEventListener('pointermove', dragMove);
-  removeEventListener('pointerup', dragEnd);
-  removeEventListener('pointercancel', dragEnd);
-};
-function dragMove(e) {
-  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
-  if (!drag.on) {
-    if (Math.hypot(dx, dy) < 6) return;
-    if (Math.abs(dx) <= Math.abs(dy)) { dragOff(); drag = null; return; }
-    drag.on = true;
-    stage.classList.add('is-dragging');
-    getSelection().removeAllRanges();
-  }
-  if (!drag.stepped && Math.abs(dx) >= 60) { drag.stepped = true; step(dx < 0 ? 1 : -1); }
-}
-function dragEnd() {
-  dragOff();
-  if (drag && drag.on) {
-    stage.classList.remove('is-dragging');
-    /* the click that follows this pointerup belongs to the drag */
-    dragClick = true;
-    setTimeout(() => { dragClick = false; });
-  }
-  drag = null;
-}
-stage.addEventListener('pointerdown', e => {
-  if (e.pointerType !== 'mouse' || e.button !== 0 || e.ctrlKey || e.metaKey || mq.matches) return;
-  if (e.target.closest('a, input, textarea, select, button:not(.work)')) return;
-  dragOff();
-  drag = { x: e.clientX, y: e.clientY, on: false, stepped: false };
-  addEventListener('pointermove', dragMove);
-  addEventListener('pointerup', dragEnd);
-  addEventListener('pointercancel', dragEnd);
-});
-stage.addEventListener('click', e => {
-  if (dragClick) { dragClick = false; e.preventDefault(); e.stopPropagation(); }
-}, true);
-/* keep the browser from picking up a poster image or selected text as a native drag */
-stage.addEventListener('dragstart', e => { if (!e.target.closest || !e.target.closest('a')) e.preventDefault(); });
-
 let sx = null;
 strip.addEventListener('touchstart', e => { sx = mq.matches ? null : e.touches[0].clientX; }, { passive: true });
 strip.addEventListener('touchend', e => {
