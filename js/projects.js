@@ -35,11 +35,11 @@ const PROJECTS = [
   },
   {
     title: "OnGen Radio", pitch: "Personalized, curated radio experience driven by AI", year: "2026",
-    category: "Thesis project, AR app",
+    category: "Thesis project, AI radio",
     video: "assets/video/ongen-radio.mp4", poster: "assets/images/ongen-radio.webp",
-    problem: "AR glasses exist, but their interaction still extends the smartphone, which leaves the space around the user inert.",
+    problem: "What shapes a person's day is spread across many apps and feeds, and radio, the one medium that works hands-free, still plays the same broadcast to everyone.",
     kpi: [{ v: "147", l: "Field pilot users, 408 sessions" }, { v: "35.6s", l: "Median interaction time" }, { v: "73", l: "SUS score, Pilot 1 (n=17)" }],
-    tldr: "A real-time geolocational AR platform that maps social media and local information onto real buildings, turning the surrounding space into both content and context.",
+    tldr: "A personalized AI radio that turns a person's calendar, reminders, traffic, and local news into short briefings scheduled through the day, mixed in with their own music.",
     href: BASE + "ongenradio.html"
   },
   {
