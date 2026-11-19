@@ -30,8 +30,11 @@ PROJECTS.forEach((p, i) => {
      shows, the title moves into the panel), tapping it again goes to the case
      study, the same as View case study. */
   b.addEventListener('click', () => {
-    if (cur !== i) open(i);
-    else if (mq.matches && !busy) location.href = p.href;
+    if (cur !== i) openCard(i);
+    else if (mq.matches && !busy) {
+      if (p.newTab) window.open(p.href, '_blank', 'noopener');
+      else location.href = p.href;
+    }
   });
   track.appendChild(b);
 });
@@ -66,7 +69,7 @@ const dots = PROJECTS.map((p, j) => {
   return $('wDots').appendChild(d);
 });
 function goTo(j) {
-  if (cur > -1) { if (j !== cur) open(j); return; }
+  if (cur > -1) { if (j !== cur) openCard(j); return; }
   if (mq.matches) return;
   aim = j;
   setOffset(Math.min(maxOffset(), Math.max(0, works[j].offsetLeft - padPx())));
@@ -115,8 +118,19 @@ function fill(i) {
   $('pProblem').textContent = p.problem;
   $('pKpi').innerHTML = p.kpi.map(k => `<div><dt class="small mid">${k.l}</dt><dd>${k.v}</dd></div>`).join('');
   $('pTldr').textContent = p.tldr;
-  $('pCta').href = p.href;
-  $('pCtaM').href = p.href;
+  ['pCta', 'pCtaM'].forEach(id => {
+    const a = $(id);
+    a.href = p.href;
+    if (p.newTab) {
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.setAttribute('aria-label', 'View case study (opens in a new tab)');
+    } else {
+      a.removeAttribute('target');
+      a.removeAttribute('rel');
+      a.removeAttribute('aria-label');
+    }
+  });
   $('mTitle').textContent = p.title;
   $('mYear').textContent = p.year;
   $('mPitch').textContent = p.pitch;
@@ -195,7 +209,8 @@ async function openMobile(i) {
   await wait(560);
 }
 
-async function open(i) {
+/* Named openCard, not open: a top-level open() would replace window.open. */
+async function openCard(i) {
   if (busy) return;
   busy = true;
   if (mq.matches) { await openMobile(i); busy = false; return; }
@@ -240,7 +255,7 @@ async function close() {
   busy = false;
 }
 function step(dir) {
-  if (cur > -1) return open((cur + dir + PROJECTS.length) % PROJECTS.length);
+  if (cur > -1) return openCard((cur + dir + PROJECTS.length) % PROJECTS.length);
   if (mq.matches) return;
   aim = -1;
   setOffset(Math.min(maxOffset(), Math.max(0, offset + dir * (cw + gapPx()))));
