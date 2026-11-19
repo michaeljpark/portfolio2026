@@ -26,7 +26,13 @@ PROJECTS.forEach((p, i) => {
       <b>${p.title}</b><span class="yr mid">${p.year}</span>
       <span class="pitch mid">${p.pitch}</span>
     </div>`;
-  b.addEventListener('click', () => { if (cur !== i) open(i); });
+  /* The first tap opens the card. On a phone, once it is open (only its video
+     shows, the title moves into the panel), tapping it again goes to the case
+     study, the same as View case study. */
+  b.addEventListener('click', () => {
+    if (cur !== i) open(i);
+    else if (mq.matches && !busy) location.href = p.href;
+  });
   track.appendChild(b);
 });
 const works = [...track.querySelectorAll('.work')];
