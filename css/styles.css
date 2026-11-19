@@ -114,6 +114,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .meta .pitch{grid-column:1 / -1}
 @media (hover:hover){.work:hover .meta b{text-decoration:underline;text-underline-offset:3px}}
 .work.is-active{cursor:default}
+.work.is-active .frame{cursor:pointer}
 .work.is-active:hover .meta b{text-decoration:none}
 .work.is-playing video{opacity:1}
 

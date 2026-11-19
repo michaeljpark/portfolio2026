@@ -26,15 +26,14 @@ PROJECTS.forEach((p, i) => {
       <b>${p.title}</b><span class="yr mid">${p.year}</span>
       <span class="pitch mid">${p.pitch}</span>
     </div>`;
-  /* The first tap opens the card. On a phone, once it is open (only its video
-     shows, the title moves into the panel), tapping it again goes to the case
-     study, the same as View case study. */
-  b.addEventListener('click', () => {
-    if (cur !== i) openCard(i);
-    else if (mq.matches && !busy) {
-      if (p.newTab) window.open(p.href, '_blank', 'noopener');
-      else location.href = p.href;
-    }
+  /* The first click opens the card. Once it is open, clicking its video (or
+     poster) again goes to the case study, the same as View case study, in a
+     new tab when the project asks for one. */
+  b.addEventListener('click', e => {
+    if (cur !== i) { openCard(i); return; }
+    if (busy || !e.target.closest('.frame')) return;
+    if (p.newTab) window.open(p.href, '_blank', 'noopener');
+    else location.href = p.href;
   });
   track.appendChild(b);
 });
