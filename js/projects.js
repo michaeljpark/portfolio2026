@@ -40,7 +40,7 @@ const PROJECTS = [
     problem: "What shapes a person's day is spread across many apps and feeds, and radio, the one medium that works hands-free, still plays the same broadcast to everyone.",
     kpi: [{ v: "147", l: "Field pilot users, 408 sessions" }, { v: "35.6s", l: "Median interaction time" }, { v: "73", l: "SUS score, Pilot 1 (n=17)" }],
     tldr: "A personalized AI radio that turns a person's calendar, reminders, traffic, and local news into short briefings scheduled through the day, mixed in with their own music.",
-    href: BASE + "ongenradio.html"
+    href: "ongenoverview.html"
   },
   {
     title: "TokenTrust", pitch: "AI transparency and user data governance", year: "2026",
