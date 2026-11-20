@@ -167,7 +167,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 }
 .kpi{margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .kpi div{display:flex;flex-direction:column;gap:4px;min-width:0}
-.kpi dt{order:2}
+.kpi dt{order:2;white-space:pre-line}
 .kpi dd{margin:0;font-size:clamp(24px,5cqi,44px);font-weight:500;letter-spacing:-.04em;line-height:1;white-space:nowrap}
 .row.last{grid-template-columns:22% 1fr auto;border-bottom:0}
 .cta{
@@ -413,7 +413,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .p-text{font-size:14.5px;line-height:1.45;-webkit-line-clamp:3}
   .kpi{gap:12px}
   .kpi dd{font-size:24px}
-  .kpi dt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.35}
+  .kpi dt{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;line-height:1.35}
   #pTldr{-webkit-line-clamp:4}
   .w-nav{display:none}
 

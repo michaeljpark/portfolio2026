@@ -9,7 +9,7 @@
    art      : optional HTML used instead of a poster (see SHERWAY_ART)
    video    : optional mp4, plays when the card is opened
    problem  : Problem definition row
-   kpi      : exactly three { v: value, l: label }
+   kpi      : exactly three { v: value, l: label }; \n in a label starts a new line
    tldr     : TL;DR row
    href     : case study page ("View case study")
    newTab   : optional, true opens href in a new tab
@@ -30,7 +30,7 @@ const PROJECTS = [
     category: "Full-stack web app, incubating",
     video: "assets/video/clink.mp4", poster: "assets/images/clink.webp",
     problem: "A small team's context is scattered across its tools, and information that can't be reached when it's needed is effectively lost.",
-    kpi: [{ v: "3", l: "Team members" }, { v: "4", l: "Roles, from UX to full-stack" }, { v: "20+", l: "Active users, closed beta" }],
+    kpi: [{ v: "3", l: "Team members" }, { v: "30+", l: "User feedback\n(from the feedback loop)" }, { v: "20+", l: "Active users, closed beta" }],
     tldr: "An infinite canvas of typed blocks, comment threads, and document review that keeps a small team's reasoning next to its work.",
     href: "https://plak-1a653.web.app/about", newTab: true
   },
