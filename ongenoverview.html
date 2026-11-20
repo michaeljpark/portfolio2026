@@ -18,7 +18,7 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Hanken+Grotesk:wght@600&display=swap" rel="stylesheet">
 <style>
 /* ===== The prototype, namespaced under #app (generated from the OnGen Radio artifact) ===== */
 .ogn{--body:#141414;
@@ -922,7 +922,11 @@ h1,h2,h3{margin:0;font-weight:400;letter-spacing:-.03em;text-wrap:balance}
 <style>
 /* ===== Top bar: a way back to the portfolio, and the light / dark switch ===== */
 .p-id{display:flex;align-items:center;gap:12px}
-.p-home{font-size:13px;font-weight:500;letter-spacing:-.005em;color:var(--ink);text-decoration:none;white-space:nowrap;transition:opacity .2s}
+/* same type and place as the name on the portfolio pages, so it does not move between pages */
+.p-home{font-family:"Hanken Grotesk",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;font-size:12.5px;font-weight:600;line-height:1.45;color:var(--ink);text-decoration:none;white-space:nowrap;transition:opacity .2s}
+/* the bar's height (55px including its 1px rule) puts the name's centre 27px down, as on the portfolio */
+:root{--pm:clamp(16px,3.2vw,48px);--nav:55px}
+.p-top .p-wrap{max-width:none;padding:0 var(--pm)}
 .p-home:hover{opacity:.65}
 .p-sep{flex:none;width:1px;height:14px;background:var(--dim)}
 .p-theme{flex:none;display:grid;place-items:center;width:34px;height:34px;padding:0;border:0;border-radius:10px;background:var(--key);color:var(--ink-2);cursor:pointer;transition:color .2s,transform .2s var(--ease);-webkit-tap-highlight-color:transparent}
@@ -937,9 +941,13 @@ html[data-theme="light"] .p-theme svg{transform:rotate(180deg)}
   .p-tabs{flex:0 1 auto}
 }
 @media (max-width:860px){
-  .p-home{font-size:12.5px}
   .p-acts{gap:6px}
   .p-theme{width:30px;height:30px;border-radius:9px}
+}
+@media (max-width:760px){
+  /* the portfolio's phone margin and bar height, so the name sits where it does there */
+  :root{--pm:max(18px,env(safe-area-inset-left),env(safe-area-inset-right));--nav:48px}
+  .p-home{font-size:13px}
 }
 @media (max-width:560px){
   /* phones keep the name; the OnGen mark gives way so the dial has room */

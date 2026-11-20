@@ -18,7 +18,7 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Hanken+Grotesk:wght@600&display=swap" rel="stylesheet">
 <style>
 :root{
   /* A radio as an app: light body, black screen, flat keys. Red marks what is live. */
@@ -272,11 +272,13 @@ svg{display:block}
 <style>
 /* ===== Top bar: back to the portfolio and to the OnGen page, plus the light / dark switch.
    The phone keeps its dark finish in both themes; only the page around it changes. ===== */
-body{padding-top:52px}
-.p-chrome{position:fixed;top:0;left:0;right:0;z-index:50;height:52px;display:flex;align-items:center;gap:12px;padding:0 24px;font-family:var(--font);font-size:13px;color:#F2F2EF;-webkit-font-smoothing:antialiased}
+:root{--chrome:54px;--pm:clamp(16px,3.2vw,48px)}
+body{padding-top:var(--chrome)}
+.p-chrome{position:fixed;top:0;left:0;right:0;z-index:50;height:var(--chrome);display:flex;align-items:center;gap:12px;padding:0 var(--pm);font-family:var(--font);font-size:13px;color:#F2F2EF;-webkit-font-smoothing:antialiased}
 .p-chrome a{color:inherit;text-decoration:none;white-space:nowrap;transition:opacity .2s}
 .p-chrome a:hover{opacity:.65}
-.pc-home{font-weight:500;letter-spacing:-.005em}
+/* same type and place as the name on the portfolio pages */
+.pc-home{font-family:"Hanken Grotesk",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;font-size:12.5px;font-weight:600;line-height:1.45}
 .p-chrome .pc-back{color:#8B8B88}
 .pc-sep{flex:none;width:1px;height:14px;background:#5E5E5B}
 .pc-theme{flex:none;margin-left:auto;display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#1E1E1E;color:#BDBDBA;transition:color .2s,transform .2s var(--ease)}
@@ -293,10 +295,13 @@ html[data-theme="light"] .pc-sep{background:#8E8E8A}
 html[data-theme="light"] .pc-theme{background:#E9E9E5;color:#4A4A47}
 html[data-theme="light"] .pc-theme:hover{color:#141414}
 html[data-theme="light"] .pc-theme svg{transform:rotate(180deg)}
+@media (max-width:760px){
+  :root{--chrome:47px;--pm:max(18px,env(safe-area-inset-left),env(safe-area-inset-right))}
+  .pc-home{font-size:13px}
+}
 @media (max-width:500px){
   /* on a phone the app is the whole screen, so the bar takes the phone's own body colour and the switch has nothing to change */
-  body{padding-top:44px}
-  .p-chrome,html[data-theme="light"] .p-chrome{height:44px;padding:0 20px;background:#141414;color:#F2F2EF}
+  .p-chrome,html[data-theme="light"] .p-chrome{background:#141414;color:#F2F2EF}
   html[data-theme="light"] .p-chrome .pc-back{color:#8B8B88}
   html[data-theme="light"] .pc-sep{background:#5E5E5B}
   .pc-theme{display:none}
@@ -305,8 +310,8 @@ html[data-theme="light"] .pc-theme svg{transform:rotate(180deg)}
   /* when the app is taller than the screen, the page scrolls instead of cutting off the top and bottom keys */
   html,body{height:auto}
   body,html[data-theme="light"] body{min-height:100%;background:#141414}
-  .fit{height:auto!important;min-height:calc(100vh - 44px);min-height:calc(100svh - 44px)}
-  .frame{height:auto;min-height:calc(100vh - 44px);min-height:calc(100svh - 44px)}
+  .fit{height:auto!important;min-height:calc(100vh - var(--chrome));min-height:calc(100svh - var(--chrome))}
+  .frame{height:auto;min-height:calc(100vh - var(--chrome));min-height:calc(100svh - var(--chrome))}
 }
 @media (prefers-reduced-motion:reduce){.pc-theme svg{transition:none}}
 </style>
@@ -481,8 +486,9 @@ html[data-theme="light"] .pc-theme svg{transform:rotate(180deg)}
   const fit = document.getElementById('fit'), fr = document.getElementById('frame');
   function size(){
     if (window.innerWidth <= 500) { fit.style.width = ''; fit.style.height = ''; fr.style.transform = ''; return; }
-    // leave room for the 52px top bar above the phone
-    const k = Math.min(1, (window.innerHeight - 52 - 32) / 844, (window.innerWidth - 32) / 390);
+    // leave room for the top bar above the phone
+    const top = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--chrome')) || 0;
+    const k = Math.min(1, (window.innerHeight - top - 32) / 844, (window.innerWidth - 32) / 390);
     fit.style.width = (390 * k) + 'px'; fit.style.height = (844 * k) + 'px';
     fr.style.transform = 'scale(' + k + ')';
   }

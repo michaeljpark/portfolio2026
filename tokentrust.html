@@ -6,10 +6,20 @@
 <title>TokenTrust — Michael Joongmin Park</title>
 <meta name="description" content="TokenTrust: a governance platform that gives user-contributed data a measurable value, and gives that value back. Case study by Michael Joongmin Park.">
 <meta name="theme-color" content="#FFFFFF">
+<script>
+  /* TokenTrust opens light; a dark choice made with the header switch is remembered. */
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('tokentrust-theme'); } catch (e) {}
+    var dark = t === 'dark';
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    if (dark) document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0E121A');
+  })();
+</script>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 <style>
 /* ==========================================================================
    TokenTrust case study
@@ -136,7 +146,8 @@ main{overflow-x:clip}
 .nav-links .ind{position:absolute;left:0;bottom:0;width:4px;height:4px;border-radius:50%;background:var(--ink);opacity:0;transition:transform .5s var(--ease),opacity .3s}
 /* name first, linking back to the portfolio, then the TokenTrust wordmark */
 .nav-id{justify-self:start;display:flex;align-items:center;gap:14px;min-width:0}
-.home{font-size:14px;font-weight:400;color:var(--ink);text-decoration:none;white-space:nowrap;transition:color .25s}
+/* same type as the name on the portfolio pages, so it does not change between pages */
+.home{font-family:"Hanken Grotesk",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;font-size:12.5px;font-weight:600;line-height:1.45;color:var(--ink);text-decoration:none;white-space:nowrap;transition:color .25s}
 .home:hover{color:var(--ink-3)}
 .nav-sep{flex:none;width:1px;height:16px;background:#C3CAD6}
 .nav-right{justify-self:end;display:flex;align-items:center;gap:4px}
@@ -784,6 +795,86 @@ main{overflow-x:clip}
 #ttv .v-ini{font-weight:600;color:#3A4256;letter-spacing:-.02em;line-height:1}
 
 </style>
+<style>
+/* ==========================================================================
+   Top bar lined up with the portfolio: the name keeps the same place and type
+   as on the portfolio pages (page margin, centre 27px down; 18px and 23px on phones)
+   ========================================================================== */
+:root{--pm:clamp(16px,3.2vw,48px)}
+.nav-in{max-width:none;height:54px;padding:0 var(--pm)}
+.brand{height:54px}
+.tt-theme{flex:none;display:grid;place-items:center;width:36px;height:36px;margin-right:4px;border-radius:8px;background:var(--sky);color:var(--ink-2);transition:color .2s,background .2s}
+.tt-theme:hover{color:var(--ink)}
+.tt-theme svg{width:16px;height:16px;transition:transform .5s var(--ease)}
+html[data-theme="dark"] .tt-theme svg{transform:rotate(180deg)}
+@media (max-width:760px){
+  :root{--pm:max(18px,env(safe-area-inset-left),env(safe-area-inset-right))}
+  .nav-in{height:47px;gap:12px}
+  .brand{height:47px}
+  .home{font-size:13px}
+  .nav-cta{height:34px;padding:0 14px}
+  .tt-theme{width:34px;height:34px}
+  [id]{scroll-margin-top:72px}
+}
+@media (prefers-reduced-motion:reduce){.tt-theme svg{transition:none}}
+
+/* ==========================================================================
+   Dark theme. The page, its bands, panels, controls and diagrams turn dark.
+   The TokenTrust card in the hero, the brand swatches and the photos keep
+   their own colours, since they are the product and its identity.
+   ========================================================================== */
+html[data-theme="dark"]{
+  --page:#0E121A;
+  --ink:#E6EAF2;
+  --ink-2:#A5AEC2;
+  --ink-3:#7D889E;
+  --brand-deep:#E6EAF2;
+  --sky:#171C27;
+  --sky-2:#262E3E;
+  --line:#262D3C;
+  --surface-2:var(--sky);
+  --card:#222A3A;
+  color-scheme:dark;
+}
+html[data-theme="dark"] .panel{--surface-2:var(--card);--line:#313A4D;--seg-track:#2A3244}
+html[data-theme="dark"] ::selection{color:#0E121A}
+
+/* white surfaces become the raised dark card */
+html[data-theme="dark"] .av,html[data-theme="dark"] .stage-note button,html[data-theme="dark"] .rights .row.gap,html[data-theme="dark"] .chat,
+html[data-theme="dark"] .sy-meter>div,html[data-theme="dark"] .sessions .row[aria-checked="true"],html[data-theme="dark"] .gate,html[data-theme="dark"] .hold.done,
+html[data-theme="dark"] .fbox,html[data-theme="dark"] .cell[data-s="usage"],html[data-theme="dark"] .cell[data-s="off"],html[data-theme="dark"] .blk,
+html[data-theme="dark"] .close-links a,html[data-theme="dark"] .bar,html[data-theme="dark"] .fb-track,html[data-theme="dark"] .strip i,
+html[data-theme="dark"] .lines.sum i,html[data-theme="dark"] .keys i,html[data-theme="dark"] .kv.over .sq,html[data-theme="dark"] .out2 .back.over .sq{background:var(--card)}
+/* ...but the filled variants of those keep their own fill */
+html[data-theme="dark"] .fbox.end,html[data-theme="dark"] .blk.reg,html[data-theme="dark"] .lines.sum .k-ink,html[data-theme="dark"] .keys .k-ink{background:var(--ink)}
+html[data-theme="dark"] .lines.sum .k-blue,html[data-theme="dark"] .keys .k-blue,html[data-theme="dark"] .strip i[data-s="share"]{background:var(--brand)}
+html[data-theme="dark"] .keys .k-enc,html[data-theme="dark"] .strip i[data-s="enc"]{background:var(--sky-2)}
+html[data-theme="dark"] .seg .thumb{background:#3A4458;box-shadow:none}
+html[data-theme="dark"] .av{color:var(--ink-2)}
+html[data-theme="dark"] .sessions .row:hover{background:rgba(255,255,255,.04)}
+
+/* text sitting on ink or Token Blue stays dark */
+html[data-theme="dark"] :is(.btn-ink,.toastmsg,.msg.me,.chat-in em,.hold,.fbox.end,.blk.reg,.nav-cta,.cell[data-s="share"]){color:#0E121A}
+html[data-theme="dark"] .btn-ink:hover{background:#FFFFFF}
+
+/* toggles: on is Token Blue, so the white knob stays visible */
+html[data-theme="dark"] .tg{background:#3A4357}
+html[data-theme="dark"] .tg[aria-checked="true"]{background:var(--brand)}
+
+/* hairlines and dividers */
+html[data-theme="dark"] .nav-sep,html[data-theme="dark"] .flow::before{background:#3A4458}
+html[data-theme="dark"] .hero .meta i{color:#3A4458}
+html[data-theme="dark"] .fbranch{border-color:#3A4458}
+html[data-theme="dark"] .nav.solid{background:rgba(14,18,26,.88);box-shadow:0 1px 0 rgba(255,255,255,.06)}
+
+/* product swatches keep their colour; a light ring separates the dark ones from the page */
+html[data-theme="dark"] .sw i{box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)!important}
+
+/* line drawings: some animate their stroke colours, which CSS cannot reach, so the
+   drawing is inverted as a whole and its hue turned back: ink lines read light,
+   pale lines read dark, and the motion carries on */
+html[data-theme="dark"] figure.diagram svg{filter:invert(1) hue-rotate(180deg)}
+</style>
 </head>
 <body>
 
@@ -817,6 +908,7 @@ main{overflow-x:clip}
     </nav>
     <div class="nav-right">
     <a class="work" href="index.html#work">All work</a>
+    <button type="button" class="tt-theme" id="themeBtn" aria-label="Switch to dark theme" title="Dark theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg></button>
     <a class="nav-cta" href="index.html#contact">Contact</a>
     </div>
   </div>
@@ -1872,6 +1964,26 @@ const tl=$('#tl'); tl.insertAdjacentHTML('beforeend',LANES.map((l,i)=>`<span cla
 const TLN=['As run, the regulatory map started in week four. Mapping PIPEDA, FINTRAC and CBPR against the three horizons is what turned this from a concept into something a company could build toward, and I found that out later than I should have.','Next time it starts in week one and runs alongside the desk research, so the regulatory constraints shape the framework instead of arriving after it.'];
 function setTl(x){ LANES.forEach((l,i)=>{ const [s,w]=x?l.b:l.a, el=$('#blk'+i); el.style.left=(s/6*100)+'%'; el.style.width=`calc(${w/6*100}% - 6px)`; }); $$('#tlNote p').forEach((p,i)=>p.classList.toggle('on',i===x)); }
 seg($('#tSeg'),{attr:'aria-pressed',onChange:setTl}); $$('#tlNote p').forEach((p,i)=>p.textContent=TLN[i]); setTl(0);
+})();
+</script>
+<script>
+/* light / dark switch in the top bar */
+(function(){
+  var root = document.documentElement, btn = document.getElementById('themeBtn'), meta = document.querySelector('meta[name="theme-color"]');
+  if (!btn) return;
+  function sync(){
+    var dark = root.getAttribute('data-theme') === 'dark';
+    btn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+    btn.title = dark ? 'Light theme' : 'Dark theme';
+    if (meta) meta.setAttribute('content', dark ? '#0E121A' : '#FFFFFF');
+  }
+  btn.addEventListener('click', function(){
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('tokentrust-theme', next); } catch (e) {}
+    sync();
+  });
+  sync();
 })();
 </script>
 </body>
