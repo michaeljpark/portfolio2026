@@ -139,7 +139,7 @@ main{overflow-x:clip}
 .nav.solid{background:rgba(255,255,255,.9);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);box-shadow:0 1px 0 rgba(29,36,51,.06)}
 .nav-in{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;height:64px;max-width:var(--wrap);margin:0 auto;padding:0 var(--gut)}
 .brand{justify-self:start;display:flex;align-items:center;height:64px;text-decoration:none}
-.brand .wm{display:block;height:18px;width:auto;aspect-ratio:673/102;overflow:visible;color:var(--ink);transform:translateY(-1px)}
+.brand .wm{display:block;height:14px;width:auto;aspect-ratio:673/102;overflow:visible;color:var(--ink);transform:translateY(-1px)}
 .nav-links{position:relative;display:flex;align-items:center;gap:clamp(18px,2vw,30px)}
 .nav-links button{font-size:14px;font-weight:400;color:var(--ink-3);padding:8px 0;transition:color .25s}
 .nav-links button:hover,.nav-links button[aria-current="true"]{color:var(--ink)}
@@ -812,6 +812,8 @@ html[data-theme="dark"] .tt-theme svg{transform:rotate(180deg)}
   .nav-in{height:47px;gap:12px}
   .brand{height:47px}
   .home{font-size:13px}
+  /* the spark rises above the wordmark, so it shrinks with the shorter bar and keeps ~7px clear of the top */
+  .brand .wm{height:12px}
   .nav-cta{height:34px;padding:0 14px}
   .tt-theme{width:34px;height:34px}
   [id]{scroll-margin-top:72px}
