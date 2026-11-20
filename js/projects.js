@@ -50,7 +50,7 @@ const PROJECTS = [
     problem: "People have no way to see what their data is worth, where it goes, or who profits from it, and no law requires that its value be returned to them.",
     kpi: [{ v: "81%", l: "Saw a pricing problem in AI (n=28)" }, { v: "86%", l: "Idea acceptance, ICE scoring" }, { v: "6", l: "Audit axes across 3 AI services" }],
     tldr: "A governance platform that scores the quality of user-contributed AI data, pays users tokens for it, and lets that value move across platforms.",
-    href: BASE + "tokentrust.html"
+    href: "tokentrust.html"
   },
   {
     title: "CF Sherway Gardens: The New Roots", pitch: "A public realm for newcomers", year: "2024",
