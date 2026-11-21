@@ -842,14 +842,16 @@ html[data-theme="dark"]{
   --ink-2:#A5AEC2;
   --ink-3:#7D889E;
   --brand-deep:#E6EAF2;
-  --sky:#171C27;
-  --sky-2:#262E3E;
+  /* one even step per layer, each lighter than the one it sits on:
+     page #0E121A > light-blue areas #1A2030 > cards #252E40 > controls #2F3A4F */
+  --sky:#1A2030;
+  --sky-2:#2F3A4F;
   --line:#262D3C;
   --surface-2:var(--sky);
-  --card:#222A3A;
+  --card:#252E40;
   color-scheme:dark;
 }
-html[data-theme="dark"] .panel{--surface-2:var(--card);--line:#313A4D;--seg-track:#2A3244}
+html[data-theme="dark"] .panel{--surface-2:var(--card);--line:#36405A;--seg-track:var(--sky-2)}
 html[data-theme="dark"] ::selection{color:#0E121A}
 
 /* white surfaces become the raised dark card */
@@ -862,7 +864,9 @@ html[data-theme="dark"] .lines.sum i,html[data-theme="dark"] .keys i,html[data-t
 html[data-theme="dark"] .fbox.end,html[data-theme="dark"] .blk.reg,html[data-theme="dark"] .lines.sum .k-ink,html[data-theme="dark"] .keys .k-ink{background:var(--ink)}
 html[data-theme="dark"] .lines.sum .k-blue,html[data-theme="dark"] .keys .k-blue,html[data-theme="dark"] .strip i[data-s="share"]{background:var(--brand)}
 html[data-theme="dark"] .keys .k-enc,html[data-theme="dark"] .strip i[data-s="enc"]{background:var(--sky-2)}
-html[data-theme="dark"] .seg .thumb{background:#3A4458;box-shadow:none}
+html[data-theme="dark"] .seg .thumb{background:#3F4A61;box-shadow:none}
+/* initials tiles in the team list take the card colour instead of staying white */
+html[data-theme="dark"] .mini-ini{background:var(--card)}
 html[data-theme="dark"] .av{color:var(--ink-2)}
 html[data-theme="dark"] .sessions .row:hover{background:rgba(255,255,255,.04)}
 
