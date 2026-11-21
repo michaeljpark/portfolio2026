@@ -48,7 +48,7 @@ const PROJECTS = [
     category: "Service design, team lead",
     video: "assets/video/tokentrust.mp4", poster: "assets/images/tokentrust.webp",
     problem: "People have no way to see what their data is worth, where it goes, or who profits from it, and no law requires that its value be returned to them.",
-    kpi: [{ v: "81%", l: "Saw a pricing problem in AI (n=28)" }, { v: "86%", l: "Idea acceptance, ICE scoring" }, { v: "6", l: "Audit axes across 3 AI services" }],
+    kpi: [{ v: "81%", l: "Saw a pricing problem in AI (n=28)" }, { v: "86%", l: "Idea acceptance, via Google Form" }, { v: "6", l: "Audit axes across 3 AI services" }],
     tldr: "A governance platform that scores the quality of user-contributed AI data, pays users tokens for it, and lets that value move across platforms.",
     href: "tokentrust.html"
   },
