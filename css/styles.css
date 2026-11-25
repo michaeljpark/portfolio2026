@@ -314,6 +314,9 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .m-fig img{display:block;width:100%;height:auto;filter:invert(1);mix-blend-mode:darken}
 [data-theme="dark"] .m-fig img{filter:none;mix-blend-mode:screen}
 .m-fig figcaption{margin-top:12px}
+/* photos and screenshots under the text: shown as they are, like About's photos */
+.a-right .a-body + .m-fig{margin-top:24px}
+.m-shot img,[data-theme="dark"] .m-shot img{filter:none;mix-blend-mode:normal;background:var(--frame)}
 /* About's AI literacy chain, three steps long, under the text: across on desktop, stacked on a phone */
 .a-left .ai{--n:3;margin-top:28px}
 
