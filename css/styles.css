@@ -305,6 +305,20 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 [data-theme="dark"] .tg .ico,.tg .ico.knockout{filter:invert(1)}
 [data-theme="dark"] .tg .ico.knockout{filter:none}
 
+/* ---------- Method ---------- */
+.m-no{margin-right:.4em;color:var(--mid);font-variant-numeric:tabular-nums}
+.m-sys{display:inline-block;margin:16px 0 0;padding:3px 10px;border:1px solid var(--rule);border-radius:999px}
+.m-sys + .a-body{margin-top:18px}
+.m-fig{margin:0}
+.m-letters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gap);max-width:540px}
+/* the report pages are white drawings on a transparent ground, with a black panel on page one.
+   Light theme: invert them and blend with darken, so the lines read black and the inverted
+   (now white) panel disappears into the paper. Dark theme: keep them white and blend with
+   screen, so the black panel disappears into the page instead. */
+.m-letters img{display:block;width:100%;height:auto;filter:invert(1);mix-blend-mode:darken}
+[data-theme="dark"] .m-letters img{filter:none;mix-blend-mode:screen}
+.m-src{margin:14px 0 0;font-size:11px;line-height:1.4;letter-spacing:.01em}
+
 /* ---------- tablet ---------- */
 @media (max-width:1000px){
   .hero h1{grid-column:1 / -1}
