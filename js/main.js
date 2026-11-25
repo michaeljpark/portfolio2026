@@ -10,6 +10,8 @@ const DUR = 700;
 let cur = -1, cw = 0, offset = 0, busy = false;
 
 /* cards */
+/* each pill starts with a capital, unless its first word is already cased on purpose (iOS) */
+const capTag = t => /^[a-z]+[A-Z]/.test(t) ? t : t.charAt(0).toUpperCase() + t.slice(1);
 $('count').textContent = `(${pad2(PROJECTS.length)})`;
 PROJECTS.forEach((p, i) => {
   const b = document.createElement('button');
@@ -20,7 +22,7 @@ PROJECTS.forEach((p, i) => {
     <div class="frame">
       ${p.art ? p.art : p.poster ? `<img src="${p.poster}" alt="" loading="lazy" onerror="this.remove()">` : ''}
       ${p.video ? `<video muted loop playsinline preload="none" disablepictureinpicture disableremoteplayback aria-hidden="true" tabindex="-1" data-src="${p.video}"></video>` : ''}
-      <span class="tags">${p.category.split(/,\s*/).map(t => `<span class="tag">${t.charAt(0).toUpperCase() + t.slice(1)}</span>`).join('')}</span>
+      <span class="tags">${p.category.split(/,\s*/).map(t => `<span class="tag">${capTag(t)}</span>`).join('')}</span>
     </div>
     <div class="meta small">
       <b>${p.title}</b><span class="yr mid">${p.year}</span>

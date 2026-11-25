@@ -4,7 +4,8 @@
    title    : project name (card caption and panel heading)
    pitch    : one-line summary under the card
    year     : shown on the right of the caption
-   category : comma-separated, each part becomes a pill on the card
+   category : comma-separated, each part becomes a pill on the card (first letter
+              capitalised, unless the first word is cased already, like iOS)
    poster   : 4:3 thumbnail image (path relative to index.html)
    art      : optional HTML used instead of a poster (see SHERWAY_ART)
    video    : optional mp4, plays when the card is opened
@@ -51,6 +52,15 @@ const PROJECTS = [
     kpi: [{ v: "81%", l: "Saw a pricing problem in AI (n=28)" }, { v: "86%", l: "Idea acceptance, via Google Form" }, { v: "6", l: "Audit axes across 3 AI services" }],
     tldr: "A governance platform that scores the quality of user-contributed AI data, pays users tokens for it, and lets that value move across platforms.",
     href: "tokentrust.html"
+  },
+  {
+    title: "Finboard", pitch: "Widget-first banking for early-career adults", year: "2026",
+    category: "Case study, iOS banking app",
+    video: "", poster: "assets/images/finboard.webp",
+    problem: "Early-career adults can't read their own spending. Bank apps already collect the data, but keep it behind a login, so it never becomes self-understanding.",
+    kpi: [{ v: "8", l: "Screens audited, WCAG 2.2 AA" }, { v: "224", l: "Text layers measured for contrast" }, { v: "105", l: "Below 4.5:1 before the redesign" }],
+    tldr: "An iOS banking app that puts spending on the Home Screen, Lock Screen and Dynamic Island, readable without opening the app, and audited to WCAG 2.2 AA.",
+    href: BASE + "finboard.html"
   },
   {
     title: "CF Sherway Gardens: The New Roots", pitch: "A public realm for newcomers", year: "2024",
