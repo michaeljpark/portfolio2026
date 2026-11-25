@@ -45,15 +45,6 @@ const PROJECTS = [
     href: "ongenoverview.html"
   },
   {
-    title: "TokenTrust", pitch: "AI transparency and user data governance", year: "2026",
-    category: "Service design, team lead",
-    video: "assets/video/tokentrust.mp4", poster: "assets/images/tokentrust.webp",
-    problem: "People have no way to see what their data is worth, where it goes, or who profits from it, and no law requires that its value be returned to them.",
-    kpi: [{ v: "81%", l: "Saw a pricing problem in AI (n=28)" }, { v: "86%", l: "Idea acceptance, via Google Form" }, { v: "6", l: "Audit axes across 3 AI services" }],
-    tldr: "A governance platform that scores the quality of user-contributed AI data, pays users tokens for it, and lets that value move across platforms.",
-    href: "tokentrust.html"
-  },
-  {
     title: "Finboard", pitch: "Widget-first banking for early-career adults", year: "2026",
     category: "Case study, iOS banking app",
     video: "assets/video/finboard.mp4", poster: "assets/images/finboard.webp",
@@ -61,6 +52,15 @@ const PROJECTS = [
     kpi: [{ v: "8", l: "Screens audited, WCAG 2.2 AA" }, { v: "224", l: "Text layers measured for contrast" }, { v: "105", l: "Below 4.5:1 before the redesign" }],
     tldr: "An iOS banking app that puts spending on the Home Screen, Lock Screen and Dynamic Island, readable without opening the app, and audited to WCAG 2.2 AA.",
     href: BASE + "finboard.html"
+  },
+  {
+    title: "TokenTrust", pitch: "AI transparency and user data governance", year: "2026",
+    category: "Service design, team lead",
+    video: "assets/video/tokentrust.mp4", poster: "assets/images/tokentrust.webp",
+    problem: "People have no way to see what their data is worth, where it goes, or who profits from it, and no law requires that its value be returned to them.",
+    kpi: [{ v: "81%", l: "Saw a pricing problem in AI (n=28)" }, { v: "86%", l: "Idea acceptance, via Google Form" }, { v: "6", l: "Audit axes across 3 AI services" }],
+    tldr: "A governance platform that scores the quality of user-contributed AI data, pays users tokens for it, and lets that value move across platforms.",
+    href: "tokentrust.html"
   },
   {
     title: "CF Sherway Gardens: The New Roots", pitch: "A public realm for newcomers", year: "2024",
