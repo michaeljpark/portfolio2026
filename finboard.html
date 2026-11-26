@@ -347,6 +347,14 @@ main{overflow-x:clip}
 .ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:10px;font-weight:600;font-variant-numeric:tabular-nums}
 .wave{display:flex;align-items:center;gap:2px;height:22px}
 .wave i{display:block;width:2px;border-radius:2px;background:#fff;opacity:.85}
+/* the read-aloud moves while it plays: the island's sound bars, as in the film, and the waveform; Reduce Motion stops every animation on the page, so they hold still */
+.isl-eq{display:flex;align-items:center;gap:2.5px;height:16px}
+.isl-eq i{display:block;width:3px;border-radius:999px;background:var(--brand)}
+.lay.on .isl-eq i{animation:wv .8s ease-in-out infinite alternate;animation-delay:calc(var(--i) * -130ms)}
+.lay.on .wave i{animation:wv .9s ease-in-out infinite alternate;animation-delay:calc(var(--i) * -53ms)}
+@keyframes wv{from{transform:scaleY(.35)}to{transform:scaleY(1)}}
+.isl-btn{height:36px;padding:0 14px;border-radius:18px;display:inline-flex;align-items:center;font-size:13px;font-weight:500}
+.tap-ring{position:absolute;left:0;top:0;overflow:visible;pointer-events:none;fill:none;stroke:var(--brand);stroke-linejoin:round}
 
 /* prototype: fidelity wipe */
 .wipe-hi{position:absolute;inset:0;clip-path:inset(0 0 0 var(--x,50%))}
@@ -1142,6 +1150,7 @@ main{overflow-x:clip}
         <div class="mini" style="--ar:393/392" data-w="393" data-h="392">
           <div class="mini-in" style="width:393px;height:392px">
             <div class="island" id="isl" style="left:72px;top:18px;width:250px;height:37.33px;border-radius:18.67px"></div>
+            <svg class="tap-ring" id="islRing" width="393" height="392" viewBox="0 0 393 392" aria-hidden="true"><path opacity="0"/><path opacity="0"/></svg>
             <div class="lbl12" id="islLbl" style="left:196.5px;top:65px">Compact</div>
             <div class="la-lock" id="laLock" style="top:100px"></div>
             <div class="lbl12" id="lockLbl" style="left:196.5px;top:220px">Lock Screen</div>
@@ -1149,9 +1158,9 @@ main{overflow-x:clip}
         </div>
         <div class="demo-side">
           <div class="t">Pick an activity, then a size</div>
-          <div class="seg" role="tablist" aria-label="Live Activity" id="islKind"><span class="thumb" aria-hidden="true"></span><button role="tab" aria-selected="true" data-k="tx">Transaction</button><button role="tab" aria-selected="false" data-k="wk">Weekly goal</button><button role="tab" aria-selected="false" data-k="ai">AI summary</button></div>
+          <div class="seg" role="tablist" aria-label="Live Activity" id="islKind"><span class="thumb" aria-hidden="true"></span><button role="tab" aria-selected="true" data-k="tx">Transaction</button><button role="tab" aria-selected="false" data-k="cap">Tonight’s cap</button><button role="tab" aria-selected="false" data-k="read">Read aloud</button></div>
           <div class="seg" role="tablist" aria-label="Size" id="islSize" style="margin-top:10px"><span class="thumb" aria-hidden="true"></span><button role="tab" aria-selected="false" data-s="min">Minimal</button><button role="tab" aria-selected="true" data-s="cmp">Compact</button><button role="tab" aria-selected="false" data-s="exp">Expanded</button></div>
-          <ul class="how" style="margin-top:24px"><li><svg class="fi" aria-hidden="true"><use href="#fb-maximize-2"/></svg><span><b>Three sizes, one fact</b><span class="pr"><span class="vh">Problem: </span>The island grows and shrinks with whatever else is running, so a long message gets cut off.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>Minimal, Compact and Expanded say the same thing at different lengths: −$4.75, 59% of the weekly goal, 0:12 of the summary. Tap the island to step through them.</span></span></span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-smartphone"/></svg><span><b>Lock Screen</b><span class="pr"><span class="vh">Problem: </span>Unlocking the phone just to check a number is a step people skip.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>Each activity also has a Lock Screen version that reads before the phone unlocks.</span></span></span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-accessibility"/></svg><span><b>Reduce Motion</b><span class="pr"><span class="vh">Problem: </span>A moving waveform can be uncomfortable for people who are sensitive to motion.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>With Reduce Motion on, the expanded audio summary keeps its waveform still.</span></span></span></li></ul>
+          <ul class="how" style="margin-top:24px"><li><svg class="fi" aria-hidden="true"><use href="#fb-maximize-2"/></svg><span><b>Every size, designed</b><span class="pr"><span class="vh">Problem: </span>iOS decides how much room the island gets, from a small circle to a full card, so a message written for one size breaks in the others.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>Each activity is drawn at every size: Minimal keeps the mark, the ring or the sound bars, Compact adds the number, and Expanded adds the detail and the one action, Set $40. Tap the island to step through them.</span></span></span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-smartphone"/></svg><span><b>Lock Screen</b><span class="pr"><span class="vh">Problem: </span>Unlocking the phone just to check a number is a step people skip.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>Each activity also has a Lock Screen version that reads before the phone unlocks, and today’s summary can set tonight’s cap from there.</span></span></span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-accessibility"/></svg><span><b>Reduce Motion</b><span class="pr"><span class="vh">Problem: </span>Moving sound bars can be uncomfortable for people who are sensitive to motion.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>With Reduce Motion on, the read-aloud’s sound bars and waveform hold still.</span></span></span></li></ul>
         </div>
       </div>
     </div>
@@ -1383,6 +1392,9 @@ function squircle(size, inset = 0, n = 4, steps = 160) {
   }
   return 'M' + pts.join('L') + 'Z';
 }
+/* a rounded rect as a path; offset outward by d it keeps its curvature at r + d (the touch rings) */
+const rrPath = (x, y, w, h, r) => { r = Math.min(r, w / 2, h / 2); const f = v => v.toFixed(2);
+  return `M${f(x + r)} ${f(y)}H${f(x + w - r)}A${f(r)} ${f(r)} 0 0 1 ${f(x + w)} ${f(y + r)}V${f(y + h - r)}A${f(r)} ${f(r)} 0 0 1 ${f(x + w - r)} ${f(y + h)}H${f(x + r)}A${f(r)} ${f(r)} 0 0 1 ${f(x)} ${f(y + h - r)}V${f(y + r)}A${f(r)} ${f(r)} 0 0 1 ${f(x + r)} ${f(y)}Z`; };
 /* the same squircle on a unit square, each point with its outward normal, so a ring can follow it at any offset */
 const SQN = (() => {
   const N = 120, p = [];
@@ -1683,8 +1695,7 @@ function FinStage(host, opt) {
   const box = (el, x, y, w, h, r) => { setS(el, 'left', x.toFixed(2) + 'px'); setS(el, 'top', y.toFixed(2) + 'px'); setS(el, 'width', w.toFixed(2) + 'px'); setS(el, 'height', h.toFixed(2) + 'px'); if (r != null) setS(el, 'borderRadius', r.toFixed(2) + 'px'); };
   const rectLerp = (a, b, k) => ({ x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k), w: lerp(a.w, b.w, k), h: lerp(a.h, b.h, k) });
   /* the touch ring: a rounded rect offset by d keeps its curvature at r + d; the play key's squircle is offset point by point along its normals */
-  const rr = (x, y, w, h, r) => { r = Math.min(r, w / 2, h / 2); const f = v => v.toFixed(2);
-    return `M${f(x + r)} ${f(y)}H${f(x + w - r)}A${f(r)} ${f(r)} 0 0 1 ${f(x + w)} ${f(y + r)}V${f(y + h - r)}A${f(r)} ${f(r)} 0 0 1 ${f(x + w - r)} ${f(y + h)}H${f(x + r)}A${f(r)} ${f(r)} 0 0 1 ${f(x)} ${f(y + h - r)}V${f(y + r)}A${f(r)} ${f(r)} 0 0 1 ${f(x + r)} ${f(y)}Z`; };
+  const rr = rrPath;
   /* s.k scales the target about (s.ox, s.oy) first, so the ring stays parallel to a key while it is pressed */
   const ringPath = (s, d) => {
     const k = s.k || 1, ox = s.ox || 0, oy = s.oy || 0, X = v => ox + (v - ox) * k, Y = v => oy + (v - oy) * k;
@@ -2281,12 +2292,13 @@ function seg(root, onPick) {
   const isl = document.getElementById('isl'), lock = document.getElementById('laLock'), lbl = document.getElementById('islLbl');
   const logoSvg = (h = 14) => `<svg width="${(h * 280 / 236).toFixed(1)}" height="${h}" viewBox="27 0 280 236" style="color:var(--brand)"><use href="#fbLogo"/></svg>`;
   const ring = (p, size, sw = 3) => { const r = (size - sw) / 2, c = 2 * Math.PI * r; return `<span class="ring" style="width:${size}px;height:${size}px"><svg width="${size}" height="${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="${sw}"/><circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="#D4FF4F" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${(c * p).toFixed(2)} ${c.toFixed(2)}"/></svg>${size > 30 ? `<b>${Math.round(p * 100)}%</b>` : ''}</span>`; };
-  const wave = n => `<span class="wave">${Array.from({ length: n }, (_, i) => `<i style="height:${(5 + 15 * Math.abs(Math.sin(i * 1.7) * Math.cos(i * .6))).toFixed(1)}px"></i>`).join('')}</span>`;
+  const wave = n => `<span class="wave">${Array.from({ length: n }, (_, i) => `<i style="--i:${i};height:${(5 + 15 * Math.abs(Math.sin(i * 1.7) * Math.cos(i * .6))).toFixed(1)}px"></i>`).join('')}</span>`;
+  /* the read-aloud's sound bars, the same five as the island in the film */
+  const eq = (n = 5) => `<span class="isl-eq">${[9, 14, 7, 16, 11].slice(0, n).map((h, i) => `<i style="--i:${i};height:${h}px"></i>`).join('')}</span>`;
+  const pill = (t, bg, c) => `<span class="isl-btn" style="background:${bg};color:${c}">${t}</span>`;
   const row = (l, r) => `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 14px 0 12px">${l}${r}</div>`;
   const center = c => `<div style="position:absolute;inset:0;display:grid;place-items:center">${c}</div>`;
   const tile = c => `<span class="tile">${c}</span>`;
-  const spark = s => `<svg width="${s}" height="${s}" style="color:#fff"><use href="#iSpark"/></svg>`;
-  const barsI = s => `<svg width="${s}" height="${s}" style="color:#fff"><use href="#iBars"/></svg>`;
   const meter = p => `<div class="w-bar" style="margin-top:12px"><i style="width:${p}%"></i></div>`;
   const A = {
     tx: {
@@ -2296,18 +2308,20 @@ function seg(root, onPick) {
       lock: `<div style="display:flex;gap:12px;align-items:center">${tile(logoSvg(15))}<div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600">−$4.75 at Jimmy’s Coffee</div><div style="font-size:13px;color:#A1A1A6">Today: $23.50 of $40 · $16.50 left</div></div></div>${meter(59)}`,
       h: 128
     },
-    wk: {
-      min: center(ring(.59, 24, 3)),
-      cmp: row(`<span style="display:flex;align-items:center;gap:7px;color:#fff">${barsI(14)}</span>`, `<span style="display:flex;align-items:center;gap:8px;font-size:15px;font-variant-numeric:tabular-nums">59%${ring(.59, 20, 2.6)}</span>`),
-      exp: `<div style="position:absolute;inset:0;padding:18px 20px"><div style="display:flex;gap:12px;align-items:center">${tile(barsI(15))}<div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600">This week</div><div style="font-size:13px;color:#A1A1A6">$88 of $150 goal · on pace</div></div>${ring(.59, 44, 4)}</div><div style="font-size:13px;color:#A1A1A6;margin-top:14px">3 days left · $62 to spend</div></div>`,
-      lock: `<div style="display:flex;gap:12px;align-items:center">${tile(barsI(15))}<div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600">This week · 59%</div><div style="font-size:13px;color:#A1A1A6">$88 of $150 goal · on pace</div></div>${ring(.59, 38, 3.5)}</div>`,
+    /* tonight's cap: what "Set $40" in the read-aloud turns on, tracked through the evening */
+    cap: {
+      min: center(ring(.46, 24, 3)),
+      cmp: row(logoSvg(14), `<span style="display:flex;align-items:center;gap:8px;font-size:15px;font-variant-numeric:tabular-nums">$21.60 left${ring(.46, 20, 2.6)}</span>`),
+      exp: `<div style="position:absolute;inset:0;padding:18px 20px"><div style="display:flex;gap:12px;align-items:center">${tile(logoSvg(15))}<div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600">Tonight’s $40 cap</div><div style="font-size:13px;color:#A1A1A6">$18.40 spent · dinner with Jay</div></div>${ring(.46, 44, 4)}</div><div style="font-size:13px;color:#A1A1A6;margin-top:14px">$21.60 left before the cap</div></div>`,
+      lock: `<div style="display:flex;gap:12px;align-items:center">${tile(logoSvg(15))}<div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600">Tonight · $18.40 of $40</div><div style="font-size:13px;color:#A1A1A6">$21.60 left under your cap</div></div>${ring(.46, 38, 3.5)}</div>`,
       h: 116
     },
-    ai: {
-      min: center(spark(15)),
-      cmp: row(spark(14), '<span style="font-size:15px;font-variant-numeric:tabular-nums">0:12</span>'),
-      exp: `<div style="position:absolute;inset:0;padding:18px 20px"><div style="display:flex;gap:12px;align-items:center">${tile(spark(15))}<div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600">AI spending summary</div><div style="font-size:13px;color:#A1A1A6">Audio · 0:12 of 0:34</div></div></div><div style="display:flex;align-items:center;gap:10px;margin-top:12px">${wave(34)}</div><div style="display:flex;gap:8px;margin-top:12px"><span style="width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center">${PAUSE.replace('width="14" height="16"', 'width="11" height="13"')}</span><span style="height:36px;padding:0 14px;border-radius:18px;background:rgba(255,255,255,.14);display:inline-flex;align-items:center;font-size:13px;font-weight:500">Read transcript</span></div></div>`,
-      lock: `<div style="display:flex;gap:12px;align-items:flex-start">${tile(spark(15))}<div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600">AI spending summary</div><div style="font-size:13px;line-height:17px;color:#EBEBF0;margin-top:2px">Brew at home 2× this week to save $7 and finish under goal.</div><span style="margin-top:10px;height:32px;padding:0 14px;border-radius:16px;background:#fff;color:#000;display:inline-flex;align-items:center;font-size:13px;font-weight:500">Play summary · 0:34</span></div></div>`,
+    /* the read-aloud: today's summary, its sound bars, and the one action it ends on */
+    read: {
+      min: center(eq(3)),
+      cmp: row(logoSvg(14), eq()),
+      exp: `<div style="position:absolute;inset:0;padding:18px 20px"><div style="display:flex;gap:12px;align-items:center">${tile(logoSvg(15))}<div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600">Today’s summary</div><div style="font-size:13px;color:#A1A1A6">Read aloud · 0:12 of 0:34</div></div></div><div style="display:flex;align-items:center;gap:10px;margin-top:12px">${wave(34)}</div><div style="display:flex;gap:8px;margin-top:12px"><span style="width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center">${PAUSE.replace('width="14" height="16"', 'width="11" height="13"')}</span>${pill('Set $40', 'var(--brand)', '#000')}</div></div>`,
+      lock: `<div style="display:flex;gap:12px;align-items:flex-start">${tile(logoSvg(15))}<div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600">Today’s summary</div><div style="font-size:13px;line-height:17px;color:#EBEBF0;margin-top:2px">Expect $35–55 tonight. Want to keep tonight under $40?</div><div style="display:flex;gap:8px;margin-top:10px">${pill('Play · 0:34', '#fff', '#000')}${pill('Set $40', 'var(--brand)', '#000')}</div></div></div>`,
       h: 172
     }
   };
@@ -2321,8 +2335,10 @@ function seg(root, onPick) {
     lays.forEach(l => { l.innerHTML = a[l.dataset.s]; l.classList.toggle('on', l.dataset.s === size); });
     Object.assign(isl.style, { width: z.w + 'px', height: h + 'px', borderRadius: z.r + 'px', left: (196.5 - z.w / 2) + 'px' });
     lbl.textContent = NAMES[size];
-    /* measure the Lock Screen card for this activity, then centre the whole group */
+    /* measure the Lock Screen card for this activity, then centre the whole group; always from the current size and
+       activity, so a late call from an earlier switch can't put the card back where the old size had it */
     const place = () => {
+      const h = size === 'exp' ? A[kind].h : SZ[size].h;
       const lh = lock.offsetHeight, total = h + 38 + lh + 10 + 14, top0 = Math.max(12, (392 - total) / 2);
       isl.style.top = top0 + 'px';
       lbl.style.top = (top0 + h + 10) + 'px';
@@ -2330,7 +2346,27 @@ function seg(root, onPick) {
       document.getElementById('lockLbl').style.top = (top0 + h + 38 + lh + 10) + 'px';
     };
     if (swapLock) { lock.classList.add('swap'); setTimeout(() => { lock.innerHTML = a.lock; lock.classList.remove('swap'); place(); }, 180); place(); } else { lock.innerHTML = a.lock; place(); }
+    idleT = performance.now();
   }
+  /* "tap the island": after a moment of rest, the same outline ring as the widget cards, following the island's own shape */
+  const ringSvg = document.getElementById('islRing'), ringP = [...ringSvg.children], mini = isl.closest('.mini');
+  let idleT = 0, raf = 0, onScreen = false;
+  function hintFrame(now) {
+    raf = onScreen ? requestAnimationFrame(hintFrame) : 0;
+    const z = SZ[size], h = size === 'exp' ? A[kind].h : z.h, s = { x: 196.5 - z.w / 2, y: parseFloat(isl.style.top) || z.top, w: z.w, h, r: z.r };
+    const idle = (now - idleT) / 1000 - 1.6;
+    ringSvg.style.strokeWidth = (1.5 * 393 / (mini.clientWidth || 393)).toFixed(3);
+    ringP.forEach((p, i) => {
+      if (idle < 0 || (REDUCED && i)) { p.style.opacity = 0; return; }
+      let d = 3, o = .9;   /* with Reduce Motion: one still ring */
+      if (!REDUCED) {
+        const ph = idle / 1.7 - i * .5; if (ph < 0) { p.style.opacity = 0; return; }
+        const g = ph % 1; d = 1.5 + 4.5 * eOut(g); o = .9 * Math.pow(1 - g, 1.4) * clamp(g * 8);
+      }
+      p.setAttribute('d', rrPath(s.x - d, s.y - d, s.w + 2 * d, s.h + 2 * d, s.r + d)); p.style.opacity = o.toFixed(3);
+    });
+  }
+  new IntersectionObserver(es => { onScreen = es[0].isIntersecting; if (onScreen && !raf) raf = requestAnimationFrame(hintFrame); }).observe(mini);
   const kSeg = seg(document.getElementById('islKind'), b => { kind = b.dataset.k; paint(true); });
   const sSeg = seg(document.getElementById('islSize'), b => { size = b.dataset.s; paint(false); });
   isl.parentElement.parentElement.addEventListener('click', () => {
