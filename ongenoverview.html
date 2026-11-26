@@ -630,6 +630,11 @@ h1,h2,h3{margin:0;font-weight:400;letter-spacing:-.03em;text-wrap:balance}
   .tile2{flex-direction:row;align-items:center;gap:10px;padding:13px 14px}
   .tile2 svg{flex-shrink:0}
 }
+/* the smallest phones: the icon goes back above the label, which then has the tile's full width */
+@container (max-width:300px){
+  .tile2{flex-direction:column;align-items:flex-start;gap:10px;padding:12px}
+  .tile2 svg{width:20px;height:20px}
+}
 
 /* a day of shows */
 .day-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
@@ -1330,6 +1335,10 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
   .cs-chapters{display:none}
   .cs-now{display:block}
 }
+/* below 360px the chapter name has no room between the name and the buttons */
+@media (max-width:359px){
+  .cs-now{display:none!important}
+}
 @media (max-width:1080px){
   :root{--cs-label:0px;--cs-col:0px}
   .cs-hero-grid{grid-template-columns:minmax(0,1fr)}
@@ -1415,9 +1424,10 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
 @media (max-width:640px){
   .cs-hero .cs-h1{font-size:38px}
   .cs-stage{border-radius:22px}
-  .cs-rail{display:flex;overflow-x:auto;scrollbar-width:none;gap:0;padding:4px 10px 0;scroll-snap-type:x proximity}
-  .cs-rail::-webkit-scrollbar{display:none}
-  .cs-rail button{flex:none;width:108px;scroll-snap-align:start}
+  /* on a phone the rail keeps all six moments in one row as numbered segments; the moment's name sits below it */
+  .cs-rail{gap:4px;padding:2px 12px 0}
+  .cs-rail button{align-items:center;padding:14px 0 13px;font-size:0;line-height:1}
+  .cs-rail button span{font-size:12px;line-height:16px}
   .cs-stage-foot .long{display:none}
   .cs-stage-foot .now{display:block}
   .cs-stage .cs-state{grid-template-columns:auto minmax(0,1fr);margin:12px 16px 0}
@@ -3280,12 +3290,17 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
   function layoutSnap(o){
     if (!o.snap) return;
     if (o.ch.id === 'ch-intro') {
-      var SW = o.el.clientWidth, SH = o.el.clientHeight, ss = Math.min(SW * .72 / o.rw, SH * .82 / o.rh, 1.75);
+      var SW = o.el.clientWidth, SH = o.el.clientHeight, ss = heroScale(o, o.rw, o.rh);
       o.snap.style.transform = 'translate(' + ((SW - o.rw * ss) / 2).toFixed(1) + 'px,' + ((SH - o.rh * ss) / 2).toFixed(1) + 'px) scale(' + ss.toFixed(4) + ')';
       return;
     }
     var b = boxFor(o, o.rw, o.rh);
     o.snap.style.transform = 'translate(' + b.x.toFixed(1) + 'px,' + b.y.toFixed(1) + 'px) scale(' + o.s.toFixed(4) + ')';
+  }
+  // the hero frames whatever the camera holds as large as its stage allows; on a phone the card spans nearly the full width
+  function heroScale(o, rw, rh){
+    var SW = o.el.clientWidth, SH = o.el.clientHeight, small = SW < 600;
+    return Math.min(SW * (small ? .92 : .72) / rw, SH * (small ? .88 : .82) / rh, 1.75);
   }
   function layoutAll(){ slots.forEach(function(o){ sizeSlot(o); layoutSnap(o); placePh(o); }); }
 
@@ -3403,7 +3418,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
     var sr = story.getBoundingClientRect(), eb = o.el.getBoundingClientRect();
     var rw = c.x1 - c.x0, rh = c.y1 - c.y0;
     // the hero frames whatever the camera holds, as large as the wide stage allows
-    if (hero) o.s = Math.min(o.el.clientWidth * .72 / rw, o.el.clientHeight * .82 / rh, 1.75);
+    if (hero) o.s = heroScale(o, rw, rh);
     var b = boxFor(o, rw, rh);
     // the Now Playing card keeps its top edge still: the panel grows down out of the bar, like on the phone
     if (o.card === 'now') b.y = (o.el.clientHeight - Math.max(o.h, o.hl || 0) * o.s) / 2;
