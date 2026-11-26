@@ -49,7 +49,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--page)}
-[id]{scroll-margin-top:84px}
+[id],.block{scroll-margin-top:84px}
 body{font-family:var(--font);background:var(--page);color:var(--ink);font-size:17px;line-height:1.6;letter-spacing:-.004em;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;letter-spacing:inherit}
 a{color:inherit}
@@ -89,6 +89,7 @@ main{overflow-x:clip}
 .btn-brand{background:var(--brand);color:#000}
 .btn-ctl{background:var(--ctl);color:#fff}
 .btn-ctl:hover{background:var(--ctl-2)}
+.btn[hidden]{display:none}
 .btn-text{padding:0 10px;color:var(--ink-2)}
 .btn-text:hover{color:#fff}
 .round{flex:none;width:36px;height:36px;border-radius:50%;background:var(--ctl);color:#fff;display:grid;place-items:center;transition:background .2s,transform .25s var(--spring)}
@@ -204,8 +205,12 @@ main{overflow-x:clip}
 .flow-h{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:26px}
 .flow-h .t{font-size:17px;font-weight:600;letter-spacing:-.02em}
 .flow-h .s{font-size:13.5px;color:var(--ink-3);margin-top:2px}
-.reach{display:grid}
+.reach{display:grid;position:relative}
 .reach>div{grid-area:1/1;transition:opacity .45s var(--ease),filter .45s var(--ease),visibility .45s}
+.reach>div.nofx{transition:none}
+.reach>.reach-fx{position:absolute;inset:0;pointer-events:none;z-index:2;transition:none}
+.reach-fx .node{position:absolute;margin:0;overflow:hidden;white-space:nowrap}
+.reach-fx .fx-c{display:flex;flex-direction:column}
 .reach>div[hidden]{display:block;opacity:0;filter:blur(8px);visibility:hidden;pointer-events:none}
 .chain{display:flex;flex-wrap:wrap;align-items:center;gap:10px 6px}
 .node{display:inline-flex;flex-direction:column;justify-content:center;min-height:44px;padding:8px 14px;border-radius:14px;background:var(--surface);font-size:14px;line-height:1.3;color:#fff}
@@ -531,7 +536,7 @@ main{overflow-x:clip}
 .fs .appicon{position:absolute;background:#D4FF4F;border-radius:14.5px;display:flex;align-items:center;justify-content:center}
 .fs .goo{position:absolute;left:0;top:0;width:393px;height:450px}
 .fs .goo div{position:absolute}
-.fs .tapdot{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:rgba(255,255,255,.22);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.55);pointer-events:none}
+.fs .ring{position:absolute;left:0;top:0;overflow:visible;pointer-events:none;fill:none;stroke:var(--brand);stroke-linejoin:round}
 
 /* ---------- responsive ---------- */
 @media (max-width:1260px){
@@ -676,10 +681,12 @@ main{overflow-x:clip}
   .aud-read{font-size:13.5px}
 }
 @media (pointer:coarse),(max-width:640px){.aud-layers button{height:40px}}
-/* the Final piece on a phone: all four views in one row of equal tabs, and its four numbers two by two */
+/* on a phone every segmented control fills its row with equal tabs that wrap their label, so no option hides off the edge;
+   the Final piece's four numbers sit two by two */
 @media (max-width:640px){
-  #audFseg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;overflow:visible}
-  #audFseg button{white-space:normal;text-align:center;line-height:1.2;padding:9px 4px;font-size:12.5px}
+  .seg{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);width:100%;overflow:visible}
+  .seg button{white-space:normal;text-align:center;line-height:1.2;padding:9px 6px;min-height:44px}
+  #audFseg button{padding:9px 4px;font-size:12.5px}
   #audFk{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 .aud .x-w{position:absolute;background:var(--surface);border-radius:22px;overflow:hidden;color:#fff;font-variant-numeric:tabular-nums}
@@ -1050,7 +1057,7 @@ main{overflow-x:clip}
         <div class="fs" style="--ar:4/3" aria-label="Interactive: a bank text alert that turns into a locked finboard widget and unlocks with Face ID"></div>
         <div class="demo-side">
           <div class="t">Tap the card, or use the button</div>
-          <ol class="steps"><li><span>01</span>A bank text lands over an ordinary widget</li><li><span>02</span>It becomes a locked finboard widget and pushes the old one down</li><li><span>03</span>Face ID unlocks it in the Dynamic Island</li></ol>
+          <ol class="steps"><li><span>01</span>A bank text alert lands on the Home Screen</li><li><span>02</span>It becomes a locked finboard widget</li><li><span>03</span>Face ID unlocks it in the Dynamic Island</li></ol>
           <div class="demo-act"><button class="btn btn-brand" type="button" data-act>Turn it into a widget</button></div>
           <ul class="how"><li><svg class="fi" aria-hidden="true"><use href="#fb-message-square-text"/></svg><span><b>Alert to widget</b><span class="pr"><span class="vh">Problem: </span>The bank’s text alert ends with “review your activity in the app”, so seeing anything means a login.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>The same alert becomes a finboard widget that shows the activity on the Home Screen.</span></span></span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-lock"/></svg><span><b>Private by default</b><span class="pr"><span class="vh">Problem: </span>Spending on the Home Screen can be read by anyone who picks up the phone.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>The summary stays locked until Face ID confirms it’s you.</span></span></span></li></ul>
         </div>
@@ -1376,7 +1383,17 @@ function squircle(size, inset = 0, n = 4, steps = 160) {
   }
   return 'M' + pts.join('L') + 'Z';
 }
-const PLAY = '<svg width="16" height="17" viewBox="0 0 11 12" fill="#000" style="transform:translateX(1px)"><path d="M2 1.3v9.4a.8.8 0 0 0 1.2.7l7.6-4.7a.8.8 0 0 0 0-1.4L3.2.6A.8.8 0 0 0 2 1.3z"/></svg>';
+/* the same squircle on a unit square, each point with its outward normal, so a ring can follow it at any offset */
+const SQN = (() => {
+  const N = 120, p = [];
+  for (let i = 0; i < N; i++) { const t = i / N * Math.PI * 2, ct = Math.cos(t), st = Math.sin(t); p.push([.5 + .5 * Math.sign(ct) * Math.sqrt(Math.abs(ct)), .5 + .5 * Math.sign(st) * Math.sqrt(Math.abs(st))]); }
+  return p.map((q, i) => {
+    const a = p[(i + N - 1) % N], b = p[(i + 1) % N]; let nx = b[1] - a[1], ny = a[0] - b[0]; const l = Math.hypot(nx, ny) || 1;
+    nx /= l; ny /= l; if (nx * (q[0] - .5) + ny * (q[1] - .5) < 0) { nx = -nx; ny = -ny; }
+    return [q[0], q[1], nx, ny];
+  });
+})();
+const PLAY ='<svg width="16" height="17" viewBox="0 0 11 12" fill="#000" style="transform:translateX(1px)"><path d="M2 1.3v9.4a.8.8 0 0 0 1.2.7l7.6-4.7a.8.8 0 0 0 0-1.4L3.2.6A.8.8 0 0 0 2 1.3z"/></svg>';
 const PAUSE = '<svg width="14" height="16" viewBox="0 0 10 12" fill="#000"><rect x="0.5" y="0.5" width="3.2" height="11" rx="1"/><rect x="6.3" y="0.5" width="3.2" height="11" rx="1"/></svg>';
 
 /* ---- static content, built once and copied into every stage ---- */
@@ -1580,7 +1597,7 @@ const WORLD = uid => `
       <path data-k="fidCheck" d="M19 33.5l8.5 8.5L45 24" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" stroke-width="3.8"/>
     </svg>
   </div>
-  <div class="tapdot" data-k="tap"></div>
+  <svg class="ring" data-k="ring" width="393" height="450" viewBox="0 0 393 450" aria-hidden="true"><path data-k="ringA" opacity="0"/><path data-k="ringB" opacity="0"/></svg>
 </div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="gooF-${uid}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur data-k="gooBlur" in="SourceGraphic" stdDeviation="0.01" result="b"/><feColorMatrix in="b" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10" result="g"/><feComposite in="SourceGraphic" in2="g" operator="atop"/></filter></svg>`;
 
@@ -1609,7 +1626,7 @@ function FinStage(host, opt) {
   /* a demo card shows only what its step is about */
   (opt.hide || []).forEach(k => { $(k).style.visibility = 'hidden'; });
 
-  let LINES = [], WLINE = [], hlGeo = null, hlScale = 2, lastHL = '', hlH = 0, RT = 0, CAM = { lt: 1, lb: 1 }, hint = null;
+  let LINES = [], WLINE = [], hlGeo = null, hlScale = 2, lastHL = '', hlH = 0, RT = 0, CAM = { lt: 1, lb: 1, z: 1 }, hint = null, hintT0 = 0, FK = 1;
   function measure() {
     LINES = []; WLINE = []; let prevTop = null, lineNo = 0;
     wordEls.forEach((w, i) => {
@@ -1665,6 +1682,15 @@ function FinStage(host, opt) {
   const setS = (el, k, v) => { const c = el._c || (el._c = {}); if (c[k] !== v) { c[k] = v; el.style[k] = v; } };
   const box = (el, x, y, w, h, r) => { setS(el, 'left', x.toFixed(2) + 'px'); setS(el, 'top', y.toFixed(2) + 'px'); setS(el, 'width', w.toFixed(2) + 'px'); setS(el, 'height', h.toFixed(2) + 'px'); if (r != null) setS(el, 'borderRadius', r.toFixed(2) + 'px'); };
   const rectLerp = (a, b, k) => ({ x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k), w: lerp(a.w, b.w, k), h: lerp(a.h, b.h, k) });
+  /* the touch ring: a rounded rect offset by d keeps its curvature at r + d; the play key's squircle is offset point by point along its normals */
+  const rr = (x, y, w, h, r) => { r = Math.min(r, w / 2, h / 2); const f = v => v.toFixed(2);
+    return `M${f(x + r)} ${f(y)}H${f(x + w - r)}A${f(r)} ${f(r)} 0 0 1 ${f(x + w)} ${f(y + r)}V${f(y + h - r)}A${f(r)} ${f(r)} 0 0 1 ${f(x + w - r)} ${f(y + h)}H${f(x + r)}A${f(r)} ${f(r)} 0 0 1 ${f(x)} ${f(y + h - r)}V${f(y + r)}A${f(r)} ${f(r)} 0 0 1 ${f(x + r)} ${f(y)}Z`; };
+  /* s.k scales the target about (s.ox, s.oy) first, so the ring stays parallel to a key while it is pressed */
+  const ringPath = (s, d) => {
+    const k = s.k || 1, ox = s.ox || 0, oy = s.oy || 0, X = v => ox + (v - ox) * k, Y = v => oy + (v - oy) * k;
+    if (s.sq) return 'M' + SQN.map(([x, y, nx, ny]) => `${(X(s.x + x * s.w) + nx * d).toFixed(2)} ${(Y(s.y + y * s.w) + ny * d).toFixed(2)}`).join('L') + 'Z';
+    return rr(X(s.x) - d, Y(s.y) - d, s.w * k + 2 * d, s.h * k + 2 * d, s.r * k + d);
+  };
   /* a rolling digit: the blur only while it rolls, so at rest the digit sits crisp and exactly on its row */
   const dial = (c, k) => {
     const d = +c.dataset.d, sp = c._s || (c._s = c.querySelector('.strip')), b = Math.sin(Math.PI * k) * 1.2;
@@ -1706,8 +1732,8 @@ function FinStage(host, opt) {
     const fb = $('fb'), nIn = spring(P(t, ...T.notifIn)), mo = eIO(P(t, ...T.morph));
     const bRect = { x: BANNER.x, y: lerp(-110, BANNER.y, nIn), w: BANNER.w, h: BANNER.h };
     const r = rectLerp(bRect, M, mo);
-    const tapK = Math.sin(Math.PI * P(t, 4.9, 5.15)) * .02;
-    box(fb, r.x + r.w * tapK / 2, r.y + r.h * tapK / 2, r.w * (1 - tapK), r.h * (1 - tapK), lerp(24, 22, mo));
+    /* "Tap to unlock" takes no press animation: Face ID in the island is the response */
+    box(fb, r.x, r.y, r.w, r.h, lerp(24, 22, mo));
     fb.style.opacity = t < T.notifIn[0] ? 0 : clamp(P(t, T.notifIn[0], T.notifIn[0] + .25));
     fb.style.background = `rgba(${Math.round(lerp(44, 22, mo))},${Math.round(lerp(44, 22, mo))},${Math.round(lerp(46, 24, mo))},${lerp(.92, 1, mo)})`;
     fb.style.backdropFilter = fb.style.webkitBackdropFilter = mo < 1 ? 'blur(20px) saturate(160%)' : 'none';
@@ -1759,7 +1785,8 @@ function FinStage(host, opt) {
     if (t >= ACT.tap[0] && t < ACT.tap[0] + .1) as = lerp(1, .92, eOut(P(t, ACT.tap[0], ACT.tap[0] + .1)));
     else if (t >= ACT.tap[0] + .1 && t < ACT.tap[0] + .28) as = lerp(.92, 1.06, eOut(P(t, ACT.tap[0] + .1, ACT.tap[0] + .28)));
     else if (t >= ACT.tap[0] + .28 && t < ACT.tap[0] + .6) { const x = P(t, ACT.tap[0] + .28, ACT.tap[0] + .6); as = 1 + .06 * Math.exp(-4 * x) * Math.cos(2.4 * Math.PI * x); }
-    act.style.width = lerp(lerp(48, 108, am), 132, eIO(P(t, ACT.tap[0] + .1, ACT.tap[0] + .45))) + 'px';
+    const actW = lerp(lerp(48, 108, am), 132, eIO(P(t, ACT.tap[0] + .1, ACT.tap[0] + .45)));
+    act.style.width = actW + 'px';
     act.style.transform = `scale(${as})`;
     const done = eOut(P(t, ACT.tap[0] + .15, ACT.tap[0] + .45));
     $('actSet').style.opacity = eOut(P(t, ACT.morph[0] + .2, ACT.morph[1] + .1)) * (1 - done);
@@ -1867,17 +1894,31 @@ function FinStage(host, opt) {
     ic.firstChild && (ic.firstChild.style.opacity = eOut(P(t, 21.95, 22.35)));
     cols.forEach((c, j) => dial(c, eOut(P(t, T.dial[0] + j * .12, T.dial[1] + j * .12))));
 
-    /* touch indicator: scripted taps in the film, a soft hint on the cards */
-    const tp = $('tap'); let tx = 0, ty = 0, to = 0, ts = 1;
+    /* touch indicator: the target's own outline, sent outward as a thin brand line; scripted taps in the film, a pulse on the cards */
+    const SH = {
+      banner: { x: BANNER.x, y: BANNER.y, w: BANNER.w, h: BANNER.h, r: 24 },
+      play: { x: M.x + 338 - 9 - 48, y: M.y + 158 - 9 - 48, w: 48, sq: true, k: ps, ox: M.x + 338 - 9 - 24, oy: M.y + 158 - 9 - 24 },
+      act: { x: M.x + 338 - 9 - actW, y: M.y + 158 - 9 - 48, w: actW, h: 48, r: 14, k: as, ox: M.x + 338 - 9, oy: M.y + 158 - 9 - 24 },
+      ord: { x: R2.x, y: R2.y, w: 338, h: 158, r: 22 },
+      card: { x: CARD.x, y: CARD.y, w: CARD.w, h: CARD.h, r: 14 }
+    };
+    let shape = null, waves = [];
     if (opt.film) {
-      const tapAt = (a, b, x, y) => { const k = P(t, a, b); if (k > 0 && k < 1) { tx = x; ty = y; to = Math.sin(Math.PI * k) * .9; ts = lerp(1.15, .85, eOut(k)); } };
-      tapAt(...T.tap1, CX, M.y + 79); tapAt(...T.tap2, M.x + 338 - 9 - 24, M.y + 158 - 9 - 24);
-      tapAt(ACT.tap[0] - .15, ACT.tap[1], M.x + 338 - 9 - 54, M.y + 158 - 9 - 24);
+      const tapAt = (a, k) => { const g = P(t, a, a + 1.1); if (g > 0 && g < 1) { shape = SH[k]; waves = [g, (g - .24) / .76]; } };
+      tapAt(T.tap2[0], 'play'); tapAt(ACT.tap[0] - .1, 'act');
     } else if (hint) {
-      const k = (RT * .8) % 1, g = clamp(k / .7);
-      tx = hint[0]; ty = hint[1]; to = .75 * Math.sin(Math.PI * g); ts = lerp(.7, 1.25, eOut(g));
+      shape = SH[hint];
+      const ph = (RT - hintT0) / 1.7;
+      waves = REDUCED ? [-1] : [ph % 1, ph < .5 ? 0 : (ph - .5) % 1];
     }
-    tp.style.left = tx + 'px'; tp.style.top = ty + 'px'; tp.style.opacity = to; tp.style.transform = `scale(${ts})`;
+    setS($('ring'), 'strokeWidth', (1.5 / (FK * WORLD_SCALE * CAM.z)).toFixed(3));
+    [$('ringA'), $('ringB')].forEach((p, i) => {
+      const g = waves[i];
+      if (!shape || g == null || (g !== -1 && (g <= 0 || g >= 1))) { setS(p, 'opacity', '0'); return; }
+      /* at most 6pt out: a ring round an inset key or card stays inside its widget */
+      const d = g === -1 ? 3 : 1.5 + 4.5 * eOut(g), o = g === -1 ? .9 : .9 * Math.pow(1 - g, 1.4) * clamp(g * 8);
+      p.setAttribute('d', ringPath(shape, d)); setS(p, 'opacity', o.toFixed(3));
+    });
   }
 
   function applyCam(t) {
@@ -1900,7 +1941,7 @@ function FinStage(host, opt) {
   function fit() {
     const w = host.clientWidth, h = host.clientHeight; if (!w || !h) return;
     if (opt.fluid) { W = Math.round(H * w / h); inner.style.width = W + 'px'; }
-    const k = h / H; inner.style.transform = `scale(${k})`;
+    const k = h / H; FK = k; inner.style.transform = `scale(${k})`;
     hlScale = (window.devicePixelRatio || 1) * k * WORLD_SCALE * (opt.film ? 2.2 : opt.cam.z * 1.1); lastHL = '';
   }
   new ResizeObserver(fit).observe(host);
@@ -1909,7 +1950,7 @@ function FinStage(host, opt) {
     host, K,
     measure,
     draw(t, rt) { RT = rt; applyCam(t); render(t); applyLit(t); },
-    setHint(h) { hint = h; }
+    setHint(h) { if (h !== hint) { hint = h; hintT0 = RT; } }
   };
 }
 
@@ -1969,8 +2010,31 @@ function Demo(id, cfg) {
   function sync() {
     const s = S(), cur = cfg.stepOf ? cfg.stepOf(t, si) : si;
     steps.forEach((li, i) => { li.classList.toggle('on', i === cur); li.classList.toggle('done', i < cur); });
-    if (actBtn && actBtn._l !== s.btn) { actBtn._l = s.btn; actBtn.textContent = s.btn; }
+    /* the end state shows Next and Replay; once Replay is pressed the first step's label is back at once */
+    const end = atEnd(), lab = end ? 'next' : s.last ? cfg.states[s.next].btn : s.btn;
+    if (actBtn && actBtn._l !== lab) {
+      actBtn._l = lab;
+      actBtn.innerHTML = end ? 'Next<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 3l4 4-4 4"/></svg>' : lab;
+      if (end && nextBlock) actBtn.setAttribute('aria-label', 'Next: ' + nextBlock.querySelector('h3').textContent); else actBtn.removeAttribute('aria-label');
+      if (replayBtn) replayBtn.hidden = !end;
+    }
     cfg.sync && cfg.sync(si, !!q.length);
+  }
+  /* at the end the brand button moves on to the next card, and Replay sits to its right in dark grey */
+  const nextBlock = el.closest('.block').nextElementSibling;
+  let replayBtn = null;
+  if (actBtn && cfg.states.some(s => s.last)) {
+    replayBtn = document.createElement('button');
+    replayBtn.type = 'button'; replayBtn.className = 'btn btn-ctl'; replayBtn.textContent = 'Replay'; replayBtn.hidden = true;
+    actBtn.after(replayBtn);
+    replayBtn.addEventListener('click', advance);
+  }
+  function atEnd() { return !!S().last && !q.length && !busy; }
+  function onAct() {
+    if (!atEnd()) { advance(); return; }
+    if (!nextBlock) return;
+    nextBlock.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
+    const f = nextBlock.querySelector('[data-act],[data-next],button'); f && f.focus({ preventScroll: true });
   }
   const ctl = {
     onShow() { if (!shown) { shown = true; if (cfg.intro && !REDUCED) { t = cfg.intro[0]; q = [{ to: cfg.intro[1] }]; } } },
@@ -1993,7 +2057,7 @@ function Demo(id, cfg) {
       st.draw(t, rt); sync();
     }
   };
-  if (actBtn) actBtn.addEventListener('click', advance);
+  if (actBtn) actBtn.addEventListener('click', onAct);
   const prev = el.querySelector('[data-prev]'), next = el.querySelector('[data-next]');
   prev && prev.addEventListener('click', back);
   next && next.addEventListener('click', advance);
@@ -2015,29 +2079,29 @@ function Demo(id, cfg) {
 const DEMOS = [];
 function buildDemos() {
   DEMOS.push(Demo('demoAlert', {
-    /* the alert, the widget it becomes and the island; the old widget leaves the frame as it is pushed down */
-    cam: { x: 196.5, y: 132, z: 2.5 }, start: 0, intro: [0, 2.6], fade: [['ord', 3.3, 4.1], ['ordLab', 3.1, 3.6]],
+    /* only the alert, the widget it becomes and the island: no market widget underneath; the lock takes no touch hint */
+    cam: { x: 196.5, y: 132, z: 2.5 }, start: .9, intro: [.9, 2.6], hide: ['ord', 'ordLab'],
     states: [
-      { hint: [196.5, 112], btn: 'Turn it into a widget', go: [{ to: 4.5 }], next: 1 },
-      { hint: [196.5, 151], btn: 'Unlock with Face ID', go: [{ to: 8.3 }], next: 2 },
-      { btn: 'Replay', go: [{ jump: 0, fade: true }, { to: 2.6 }], next: 0 }
+      { hint: 'banner', btn: 'Turn it into a widget', go: [{ to: 4.5 }], next: 1 },
+      { btn: 'Unlock with Face ID', go: [{ to: 8.3 }], next: 2 },
+      { last: true, go: [{ jump: .9, fade: true }, { to: 2.6 }], next: 0 }
     ],
     stepOf: t => t < 3.0 ? 0 : t < 5.0 ? 1 : 2
   }));
   DEMOS.push(Demo('demoRead', {
     cam: { x: 196.5, y: 132, z: 2.5 }, start: 8.3, hide: ['ord', 'ordLab'],
     states: [
-      { hint: [M.x + 338 - 9 - 24, M.y + 158 - 9 - 24], btn: "Play today's summary", go: [{ to: ACT.morph[1] + .3, speed: 1.35 }], next: 1 },
-      { hint: [M.x + 338 - 9 - 54, M.y + 158 - 9 - 24], btn: 'Set $40', go: [{ jump: ACT.tap[0] - .05 }, { to: ACT.tap[1] + .7 }], next: 2 },
-      { btn: 'Replay', go: [{ jump: 8.3, fade: true }], next: 0 }
+      { hint: 'play', btn: "Play today's summary", go: [{ to: ACT.morph[1] + .3, speed: 1.35 }], next: 1 },
+      { hint: 'act', btn: 'Set $40', go: [{ jump: ACT.tap[0] - .05 }, { to: ACT.tap[1] + .7 }], next: 2 },
+      { last: true, go: [{ jump: 8.3, fade: true }], next: 0 }
     ],
     stepOf: t => t < 8.6 ? 0 : t < wordT(KW[0]) ? 1 : t < ACT.morph[0] ? 2 : 3
   }));
   DEMOS.push(Demo('demoSplit', {
     cam: { x: 196.5, y: 353, z: 2.5 }, start: 18.9, hide: ['fb', 'fbLab', 'island'],
     states: [
-      { hint: [196.5, 343], btn: 'Mark it not relevant', go: [{ to: 23.9 }], next: 1 },
-      { btn: 'Replay', go: [{ jump: 18.9, fade: true }], next: 0 }
+      { hint: 'ord', btn: 'Mark it not relevant', go: [{ to: 23.9 }], next: 1 },
+      { last: true, go: [{ jump: 18.9, fade: true }], next: 0 }
     ],
     stepOf: t => t < 19.3 ? 0 : t < 20.7 ? 1 : 2
   }));
@@ -2045,7 +2109,7 @@ function buildDemos() {
     /* the 2x2 alone, filling the frame; Until Payday runs to 31.15 so every digit of the dial lands */
     cam: { x: 106.5, y: 353, z: 3.27 }, start: 24.2, swipe: true, hide: ['fb', 'fbLab', 'icon', 'iconLab', 'island', 'ord', 'goo'],
     states: [
-      { hint: [CARD.x + 71, CARD.y + 47], go: [{ to: 25.6 }], next: 1 },
+      { hint: 'card', go: [{ to: 25.6 }], next: 1 },
       { go: [{ jump: 26.95 }, { to: 28.3 }], next: 2, back: [{ to: 24.2 }], prev: 0 },
       { go: [{ jump: 29.3 }, { to: 31.15 }], next: 3, back: [{ to: 26.95 }, { jump: 25.6 }], prev: 1 },
       { go: [{ jump: 24.2, fade: true }], next: 0, back: [{ to: 29.3 }, { jump: 28.3 }], prev: 2 }
@@ -2088,11 +2152,65 @@ function seg(root, onPick) {
   return { pick: (b, q) => pick(b, q), buttons: bs };
 }
 
-/* problem: today vs with finboard */
-seg(document.getElementById('reachSeg'), b => {
-  document.querySelectorAll('.reach>div').forEach(d => { d.hidden = d.dataset.v !== b.dataset.v; });
-  document.getElementById('reachT').textContent = b.dataset.v === 'asis' ? "Checking today's spending" : 'Reading it with finboard';
-});
+/* problem: today vs with finboard. Today's ten steps fold into the few that replace them: each one travels to the
+   finboard step that absorbs it and melts into it; going back, they unfold out of those steps again.
+   Boxes move by their own left/top/width/height, never by scale, so every corner keeps its 14px radius. */
+(function () {
+  const reach = document.querySelector('.reach'), title = document.getElementById('reachT');
+  const V = { asis: reach.querySelector('[data-v=asis]'), tobe: reach.querySelector('[data-v=tobe]') };
+  const TITLE = { asis: "Checking today's spending", tobe: 'Reading it with finboard' };
+  /* today's step -> the finboard step that absorbs it: the logins go to the one-time sign-in at the bank, repeating it per bank
+     goes to the registry, the app and its tabs become the Home Screen, and the mental math and the drop-off become Read */
+  const INTO = [4, 5, 3, 3, 5, 5, 5, 2, 7, 7];
+  const EASE = 'cubic-bezier(.65,0,.35,1)', OUT = 'cubic-bezier(.2,.7,.1,1)', DUR = 660, STEP = 26;
+  let cur = 'asis', live = [], done = null;
+  const show = (v, on) => { V[v].classList.add('nofx'); V[v].hidden = !on; void V[v].offsetWidth; V[v].classList.remove('nofx'); };
+  function morph(to) {
+    if (to === cur) return;
+    if (done) { live.forEach(a => a.finish()); done(); }
+    const from = cur; cur = to; title.textContent = TITLE[to];
+    if (REDUCED) { V[from].hidden = true; V[to].hidden = false; return; }
+    const fwd = to === 'tobe';
+    show(to, true);
+    const A = [...V.asis.querySelectorAll('.node')], B = [...V.tobe.querySelectorAll('.node')], used = new Set(INTO);
+    const base = reach.getBoundingClientRect();
+    const rect = el => { const r = el.getBoundingClientRect(); return { x: r.left - base.left, y: r.top - base.top, w: r.width, h: r.height }; };
+    const css = r => ({ left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px' });
+    /* halfway, a travelling step is a smaller pill between the two boxes, so the crowd thins out in flight and swells into its target */
+    const mid = (s, e) => { const w = (s.w + e.w) / 2 * .6, h = (s.h + e.h) / 2 * .7; return { x: (s.x + s.w / 2 + e.x + e.w / 2) / 2 - w / 2, y: (s.y + s.h / 2 + e.y + e.h / 2) / 2 - h / 2, w, h }; };
+    const look = el => { const cs = getComputedStyle(el); return { backgroundColor: cs.backgroundColor, boxShadow: cs.boxShadow === 'none' ? 'inset 0 0 0 0 rgba(0,0,0,0)' : cs.boxShadow }; };
+    const ra = A.map(rect), rb = B.map(rect), la = A.map(look), lb = B.map(look);
+    const fx = document.createElement('div'); fx.className = 'reach-fx'; fx.setAttribute('aria-hidden', 'true'); reach.appendChild(fx);
+    const anims = [], run = (el, kf, o) => { const a = el.animate(kf, { fill: 'both', easing: EASE, ...o }); anims.push(a); return a; };
+    const extras = v => [...V[v].querySelectorAll('.arr,.grp,.tally>div')];
+    extras(from).forEach(e => run(e, [{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: 'linear' }));
+    extras(to).forEach((e, i) => run(e, [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 320, delay: 560 + i * 12, easing: OUT }));
+    /* the travelling steps: copies of today's steps, between their own box and the box of the step that absorbs them */
+    A.forEach((n, i) => {
+      const c = n.cloneNode(false); c.innerHTML = `<span class="fx-c">${n.innerHTML}</span>`; fx.appendChild(c);
+      if (n.classList.contains('drop')) c.style.backgroundImage = 'none';
+      const j = INTO[i], o = { duration: DUR, delay: i * STEP };
+      const [s, e, ls, le] = fwd ? [ra[i], rb[j], la[i], lb[j]] : [rb[j], ra[i], lb[j], la[i]];
+      run(c, fwd
+        ? [{ ...css(s), ...ls, opacity: 1 }, { ...css(mid(s, e)), offset: .5 }, { opacity: 1, offset: .8 }, { ...css(e), ...le, opacity: 0 }]
+        : [{ ...css(s), ...ls, opacity: 0 }, { opacity: 1, offset: .12 }, { ...css(mid(s, e)), offset: .5 }, { ...css(e), ...le, opacity: 1 }], o);
+      run(c.firstChild, fwd ? [{ opacity: 1 }, { opacity: 0, offset: .22 }, { opacity: 0 }] : [{ opacity: 0 }, { opacity: 0, offset: .7 }, { opacity: 1 }], { ...o, easing: 'linear' });
+      run(n, [{ visibility: 'hidden' }, { visibility: 'hidden' }], { duration: DUR + A.length * STEP, easing: 'linear' });
+    });
+    /* finboard's own steps: the ones that absorb today's appear as the copies arrive; the new ones grow in */
+    B.forEach((n, j) => {
+      /* a step that absorbs others shows its label as the last of them lands */
+      const land = Math.max(...INTO.map((t, i) => t === j ? i * STEP : -1)) + DUR * .8;
+      if (fwd) run(n, used.has(j) ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 0, transform: 'scale(.92)', filter: 'blur(4px)' }, { opacity: 1, transform: 'none', filter: 'none' }],
+        { duration: used.has(j) ? 240 : 320, delay: used.has(j) ? land : 460 + j * 40, easing: OUT });
+      else run(n, [{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: 'linear' });
+    });
+    const my = done = () => { show(from, false); anims.forEach(a => a.cancel()); fx.remove(); done = null; live = []; };
+    live = anims;
+    Promise.all(anims.map(a => a.finished)).then(() => { if (done === my) my(); }, () => {});
+  }
+  seg(document.getElementById('reachSeg'), b => morph(b.dataset.v));
+})();
 
 /* discovery: chart bars and meters fill when seen */
 (function () {
