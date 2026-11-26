@@ -1285,6 +1285,12 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
 .cs-head .cs-tag{grid-column:1;grid-row:1;align-self:start;padding-top:clamp(10px,1.1vw,16px)}
 .cs-head .cs-h2{grid-column:2;grid-row:1}
 .cs-head .cs-lede{grid-column:2;max-width:62ch}
+/* a photo from the field, under the chapter’s words and on their column */
+.cs-head .cs-photo{grid-column:2;margin:16px 0 0}
+.cs-photo img{display:block;width:100%;height:auto;aspect-ratio:3/1;object-fit:cover;border-radius:24px;background:var(--raise)}
+.cs-photo figcaption{margin-top:12px;font-size:13px;line-height:1.5;color:var(--grey)}
+/* on a phone the photo is only ~120px tall, so its corners tighten with it */
+@media (max-width:640px){.cs-photo img{border-radius:16px}}
 .cs-offset{margin-left:calc(var(--cs-label) + var(--cs-col))}
 .cs-block{display:grid;grid-template-columns:var(--cs-label) minmax(0,1fr);column-gap:var(--cs-col)}
 .cs-block + .cs-block{margin-top:clamp(80px,8.5vw,120px)}
@@ -1348,7 +1354,7 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
   .cs-hero .cs-lede{max-width:56ch}
   .cs-head{grid-template-columns:minmax(0,1fr)}
   .cs-head .cs-tag{padding-top:0}
-  .cs-head .cs-h2,.cs-head .cs-lede{grid-column:1}
+  .cs-head .cs-h2,.cs-head .cs-lede,.cs-head .cs-photo{grid-column:1}
   .cs-head .cs-h2{grid-row:2}
   .cs-block{grid-template-columns:minmax(0,1fr)}
   .cs-sub{grid-column:1;position:static;margin-bottom:26px}
@@ -1673,6 +1679,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
         <div class="cs-tag">At a glance</div>
         <h2 class="cs-h2" id="glanceTitle">Radio reaches you without being asked. <span class="soft">AI still waits for a question.</span></h2>
         <p class="cs-lede">AI assistants know a lot about your inbox, calendar and city, but they only answer questions. OnGen plays like radio and uses what AI knows about your day.</p>
+        <figure class="cs-photo"><img src="assets/images/ongen-gradex-show.webp" width="1800" height="600" loading="lazy" decoding="async" alt="Visitors at the OnGen booth at GradEX 111 watch the app on a monitor while it is presented at a microphone"><figcaption>OnGen at GradEX 111, OCAD University’s graduate exhibition.</figcaption></figure>
       </div>
       <div class="cs-pitch cs-offset">
         <div><span class="k">Problem</span><p>What shapes a person's day is spread across many apps and feeds, and radio, the one medium that works hands-free, still plays the same broadcast to everyone.</p></div>
@@ -2118,6 +2125,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
         <div class="cs-tag">Conclusion</div>
         <h2 class="cs-h2" id="ccTitle">The direction was right. <span class="soft">The device was not.</span></h2>
         <p class="cs-lede">GradEX 111 confirmed that AI acting as an assistant holds value, and showed that an AR device is not an effective medium for it. The direction was right. The device was not.</p>
+        <figure class="cs-photo"><img src="assets/images/ongen-gradex-ar.webp" width="1800" height="600" loading="lazy" decoding="async" alt="The AR setup at GradEX 111: a pair of smart glasses on the desk, a radio speaker set, a laptop and a monitor showing the show’s script"><figcaption>The AR setup at GradEX 111: the glasses, the radio speakers and the script on screen.</figcaption></figure>
       </div>
       <div class="cs-block">
         <div class="cs-sub"><span class="no">01</span><h3>What GradEX 111 settled</h3><p>And where OnGen goes next</p></div>
