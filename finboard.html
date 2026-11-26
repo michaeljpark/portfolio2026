@@ -2100,7 +2100,7 @@ function buildDemos() {
   DEMOS.push(Demo('demoSplit', {
     cam: { x: 196.5, y: 353, z: 2.5 }, start: 18.9, hide: ['fb', 'fbLab', 'island'],
     states: [
-      { hint: 'ord', btn: 'Mark it not relevant', go: [{ to: 23.9 }], next: 1 },
+      { hint: 'ord', btn: 'Try finboard', go: [{ to: 23.9 }], next: 1 },
       { last: true, go: [{ jump: 18.9, fade: true }], next: 0 }
     ],
     stepOf: t => t < 19.3 ? 0 : t < 20.7 ? 1 : 2
