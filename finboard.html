@@ -280,9 +280,9 @@ main{overflow-x:clip}
 .dots span{display:block;width:8px;height:8px;border-radius:4px;background:var(--ctl-2);transition:width .4s var(--spring),background .3s}
 .dots span.on{width:22px;background:#fff}
 .how{list-style:none;display:grid;gap:10px;margin-top:22px;padding-top:20px;box-shadow:inset 0 .5px 0 var(--line)}
-.how li{position:relative;padding-left:16px;font-size:14px;line-height:1.5;color:var(--ink-3)}
-.how li::before{content:"";position:absolute;left:0;top:.6em;width:5px;height:5px;border-radius:50%;background:#636366}
-.how b{color:var(--ink-2);font-weight:500}
+.how li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:12px;align-items:start;font-size:14px;line-height:1.5;color:var(--ink-3)}
+.how .fi{width:20px;height:20px;margin-top:1px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;color:var(--brand)}
+.how b{display:block;margin-bottom:2px;font-size:15px;color:#fff;font-weight:500}
 
 /* scaled iOS canvas for the hand-built components (points, like the widget film) */
 .mini{position:relative;width:100%;aspect-ratio:var(--ar,1);overflow:hidden;background:var(--stage);touch-action:pan-y}
@@ -619,6 +619,7 @@ main{overflow-x:clip}
     <symbol id="fbLogo" viewBox="27 0 280 236"><path fill="currentColor" d="M120.50 0.00L256.00 0.00L275.29 72.00L139.79 72.00C114.39 72.00 99.31 92.59 106.12 118.00L31.62 118.00C14.16 52.83 53.95 0.00 120.50 0.00Z"/><path fill="currentColor" d="M152.12 118.00L287.62 118.00L306.91 190.00L171.41 190.00C146.00 190.00 130.93 210.59 137.74 236.00L63.24 236.00C45.77 170.83 85.57 118.00 152.12 118.00Z"/></symbol>
     <symbol id="iSpark" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0.8c.5 3.6 1.9 5.5 6.6 7.2-4.7 1.7-6.1 3.6-6.6 7.2-.5-3.6-1.9-5.5-6.6-7.2C6.1 6.3 7.5 4.4 8 .8Z"/></symbol>
     <symbol id="iBars" viewBox="0 0 16 16"><path fill="currentColor" d="M2 8.5h2.4V14H2zM6.8 4.5h2.4V14H6.8zM11.6 2h2.4v12h-2.4z"/></symbol>
+    <symbol id="fb-accessibility" viewBox="0 0 24 24"><circle cx="16" cy="4" r="1"/><path d="m18 19 1-7-6 1"/><path d="m5 8 3-3 5.5 3-2.36 3.5"/><path d="M4.24 14.5a5 5 0 0 0 6.88 6"/><path d="M13.76 17.5a5 5 0 0 0-6.88-6"/></symbol><symbol id="fb-audio-lines" viewBox="0 0 24 24"><path d="M2 10v3"/><path d="M6 6v11"/><path d="M10 3v18"/><path d="M14 8v7"/><path d="M18 5v13"/><path d="M22 10v3"/></symbol><symbol id="fb-calendar-check" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></symbol><symbol id="fb-circle-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="fb-component" viewBox="0 0 24 24"><path d="M15.536 11.293a1 1 0 0 0 0 1.414l2.376 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z"/><path d="M2.297 11.293a1 1 0 0 0 0 1.414l2.377 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414L6.088 8.916a1 1 0 0 0-1.414 0z"/><path d="M8.916 17.912a1 1 0 0 0 0 1.415l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.415l-2.377-2.376a1 1 0 0 0-1.414 0z"/><path d="M8.916 4.674a1 1 0 0 0 0 1.414l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z"/></symbol><symbol id="fb-gallery-horizontal" viewBox="0 0 24 24"><path d="M2 3v18"/><rect width="12" height="18" x="6" y="3" rx="2"/><path d="M22 3v18"/></symbol><symbol id="fb-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></symbol><symbol id="fb-highlighter" viewBox="0 0 24 24"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></symbol><symbol id="fb-layout-grid" viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></symbol><symbol id="fb-library" viewBox="0 0 24 24"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></symbol><symbol id="fb-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol><symbol id="fb-maximize-2" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></symbol><symbol id="fb-message-square-text" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M13 8H7"/><path d="M17 12H7"/></symbol><symbol id="fb-smartphone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></symbol>
   </defs>
 </svg>
 
@@ -885,7 +886,7 @@ main{overflow-x:clip}
           <div class="t">Tap the card, or use the button</div>
           <ol class="steps"><li><span>01</span>A bank text lands over an ordinary widget</li><li><span>02</span>It becomes a locked finboard widget and pushes the old one down</li><li><span>03</span>Face ID unlocks it in the Dynamic Island</li></ol>
           <div class="demo-act"><button class="btn btn-brand" type="button" data-act>Turn it into a widget</button></div>
-          <ul class="how"><li><b>The text is the same alert</b> banks already send; finboard gives it a place to live.</li><li><b>Locked by default.</b> Spending is personal, so the summary waits behind Face ID.</li></ul>
+          <ul class="how"><li><svg class="fi" aria-hidden="true"><use href="#fb-message-square-text"/></svg><span><b>Alert to widget</b>The text alert the bank already sends becomes a finboard widget on the Home Screen.</span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-lock"/></svg><span><b>Private by default</b>The summary stays locked until Face ID confirms it's you.</span></li></ul>
         </div>
       </div>
     </div>
@@ -898,7 +899,7 @@ main{overflow-x:clip}
           <div class="t">Press play, then answer</div>
           <ol class="steps"><li><span>01</span>Today's summary is ready</li><li><span>02</span>It reads the day aloud, and the island becomes a Live Activity</li><li><span>03</span>The forward-looking range is marked as it's read</li><li><span>04</span>The question becomes one button</li></ol>
           <div class="demo-act"><button class="btn btn-brand" type="button" data-act>Play today's summary</button></div>
-          <ul class="how"><li><b>It explains the alert</b> (just the grocery run posting) before asking anything.</li><li><b>"$35–55 tonight"</b> is the only highlight: the number that's still ahead.</li><li><b>One tap sets the cap,</b> without opening the app.</li></ul>
+          <ul class="how"><li><svg class="fi" aria-hidden="true"><use href="#fb-audio-lines"/></svg><span><b>Spoken summary</b>Today's spending is read aloud, and the Dynamic Island carries it as a Live Activity.</span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-highlighter"/></svg><span><b>What's ahead, marked</b>Only the forward-looking range, $35–55 tonight, is highlighted.</span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-circle-check"/></svg><span><b>One-tap action</b>The closing question becomes a button that sets tonight's cap without opening the app.</span></li></ul>
         </div>
       </div>
     </div>
@@ -911,7 +912,7 @@ main{overflow-x:clip}
           <div class="t">Tap the ordinary widget</div>
           <ol class="steps"><li><span>01</span>A market widget nobody reads for spending</li><li><span>02</span>Marked not relevant, it greys out into a droplet</li><li><span>03</span>It splits into the Daily Tracker and the app icon</li></ol>
           <div class="demo-act"><button class="btn btn-brand" type="button" data-act>Mark it not relevant</button></div>
-          <ul class="how"><li><b>The space is reused,</b> not added: the Home Screen gets no busier.</li><li><b>Today's total dials in</b> digit by digit, so the change reads as a change.</li></ul>
+          <ul class="how"><li><svg class="fi" aria-hidden="true"><use href="#fb-layout-grid"/></svg><span><b>Space reused</b>The irrelevant widget's slot becomes the Daily Tracker and the app icon, so the Home Screen gets no busier.</span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-gauge"/></svg><span><b>Today at a glance</b>The Daily Tracker shows today's spending, −$57.30, the moment it appears.</span></li></ul>
         </div>
       </div>
     </div>
@@ -924,7 +925,7 @@ main{overflow-x:clip}
           <div class="t">Swipe the card left or right</div>
           <ol class="steps"><li><span>01</span>Daily Tracker: today, −$57.30</li><li><span>02</span>Transactions: what made it up</li><li><span>03</span>Weekly Trend: seven days against the limit</li><li><span>04</span>Until Payday: what's left, per day</li></ol>
           <div class="demo-act"><button class="round" type="button" data-prev aria-label="Previous reading"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3 4.5 7l4 4"/></svg></button><span class="dots" data-dots></span><button class="round" type="button" data-next aria-label="Next reading"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 3l4 4-4 4"/></svg></button></div>
-          <ul class="how"><li><b>The weekly bars become the runway:</b> past days slide into the days ahead.</li><li><b>Nine days, $412 after bills,</b> becomes about $40 to $46 a day.</li></ul>
+          <ul class="how"><li><svg class="fi" aria-hidden="true"><use href="#fb-gallery-horizontal"/></svg><span><b>Four readings, one card</b>Daily Tracker, Transactions, Weekly Trend and Until Payday share one small widget.</span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-calendar-check"/></svg><span><b>Until Payday</b>Nine days and $412 after bills become about $40 to $46 a day.</span></li></ul>
         </div>
       </div>
     </div>
@@ -977,7 +978,7 @@ main{overflow-x:clip}
           <div class="t">Pick an activity, then a size</div>
           <div class="seg" role="tablist" aria-label="Live Activity" id="islKind"><span class="thumb" aria-hidden="true"></span><button role="tab" aria-selected="true" data-k="tx">Transaction</button><button role="tab" aria-selected="false" data-k="wk">Weekly goal</button><button role="tab" aria-selected="false" data-k="ai">AI summary</button></div>
           <div class="seg" role="tablist" aria-label="Size" id="islSize" style="margin-top:10px"><span class="thumb" aria-hidden="true"></span><button role="tab" aria-selected="false" data-s="min">Minimal</button><button role="tab" aria-selected="true" data-s="cmp">Compact</button><button role="tab" aria-selected="false" data-s="exp">Expanded</button></div>
-          <ul class="how" style="margin-top:24px"><li><b>Tap the island</b> to step through its sizes.</li><li><b>Every size states the same fact,</b> shorter: −$4.75, then 59% of the weekly goal, then 0:12 of the summary.</li><li><b>Reduce Motion</b> keeps the waveform still in the expanded audio summary.</li></ul>
+          <ul class="how" style="margin-top:24px"><li><svg class="fi" aria-hidden="true"><use href="#fb-maximize-2"/></svg><span><b>Three sizes, one fact</b>Minimal, Compact and Expanded say the same thing at different lengths: −$4.75, 59% of the weekly goal, 0:12 of the summary. Tap the island to step through them.</span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-smartphone"/></svg><span><b>Lock Screen</b>Each activity also has a Lock Screen version that reads before the phone unlocks.</span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-accessibility"/></svg><span><b>Reduce Motion</b>With Reduce Motion on, the expanded audio summary keeps its waveform still.</span></li></ul>
         </div>
       </div>
     </div>
@@ -1008,7 +1009,7 @@ main{overflow-x:clip}
         <div class="demo-side">
           <div class="t">Drag across the stack</div>
           <ol class="steps"><li class="on"><span>01</span>Low fidelity: native shapes, real flows, no style</li><li class="on"><span>02</span>High fidelity: one component set across every surface</li></ol>
-          <ul class="how"><li><b>Wireframes used iOS's own components,</b> so the first pass could be judged as an iOS product instead of as a picture of one.</li><li><b>The icon set, type and card shapes</b> were drawn as a library first, which kept the four surfaces consistent without redrawing anything.</li></ul>
+          <ul class="how"><li><svg class="fi" aria-hidden="true"><use href="#fb-component"/></svg><span><b>Native components</b>The wireframes used iOS’s own components, so the first pass could be judged as an iOS product.</span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-library"/></svg><span><b>One component library</b>Icons, type and card shapes were drawn as a library first, which kept every surface consistent.</span></li></ul>
         </div>
       </div>
     </div>

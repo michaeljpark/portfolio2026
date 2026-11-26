@@ -1377,9 +1377,15 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
   .p-btn2{min-height:40px}
   .cs-foot nav a{display:inline-block;padding:11px 0}
 }
+/* feature lists: a Lucide icon, the feature, then what it does */
+.p-how li{grid-template-columns:20px minmax(0,1fr);gap:14px;align-items:start}
+.p-how li::before{content:none;display:none}
+.p-how .fi{width:20px;height:20px;margin-top:1px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;color:var(--ink)}
+.p-how b{display:block;margin-bottom:2px;font-weight:500;color:var(--ink)}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="og-arrow-left-right" viewBox="0 0 24 24"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></symbol><symbol id="og-audio-lines" viewBox="0 0 24 24"><path d="M2 10v3"/><path d="M6 6v11"/><path d="M10 3v18"/><path d="M14 8v7"/><path d="M18 5v13"/><path d="M22 10v3"/></symbol><symbol id="og-calendar-clock" viewBox="0 0 24 24"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h5"/><path d="M17.5 17.5 16 16.3V14"/><circle cx="16" cy="16" r="6"/></symbol><symbol id="og-circle-pause" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="10" x2="10" y1="15" y2="9"/><line x1="14" x2="14" y1="15" y2="9"/></symbol><symbol id="og-highlighter" viewBox="0 0 24 24"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></symbol><symbol id="og-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol><symbol id="og-list-music" viewBox="0 0 24 24"><path d="M21 15V6"/><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path d="M12 12H3"/><path d="M16 6H3"/><path d="M12 18H3"/></symbol><symbol id="og-list-plus" viewBox="0 0 24 24"><path d="M11 12H3"/><path d="M16 6H3"/><path d="M16 18H3"/><path d="M18 9v6"/><path d="M21 12h-6"/></symbol><symbol id="og-panel-top-open" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="m15 14-3 3-3-3"/></symbol><symbol id="og-plug-zap" viewBox="0 0 24 24"><path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z"/><path d="m2 22 3-3"/><path d="M7.5 13.5 10 11"/><path d="M10.5 16.5 13 14"/><path d="m18 3-4 4h6l-4 4"/></symbol><symbol id="og-radio" viewBox="0 0 24 24"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></symbol><symbol id="og-refresh-cw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol><symbol id="og-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol><symbol id="og-scroll-text" viewBox="0 0 24 24"><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></symbol><symbol id="og-sparkles" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></symbol><symbol id="og-square-pen" viewBox="0 0 24 24"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></symbol></defs></svg>
 
 <header class="p-top cs-top">
   <div class="p-wrap">
@@ -1747,12 +1753,8 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
           <div class="cs-demo-grid">
             <div class="p-slot" aria-hidden="true"></div>
             <div class="cs-demo-side">
-              <p class="cs-text">The top screen lays out John's day on a vertical time scale. Each show sits at its air time, and the red line marks the current time. The timetable stays still until you scroll it.</p>
-              <ul class="p-how">
-          <li><span><b>Brightness</b> shows where a show sits in the day: white on air, mid grey for the next show, dim for the previous one and darker for the rest.</span></li>
-          <li><span><b>Drag up or down</b> to look through the day. When you let go, it returns to the current time after 2.5 seconds.</span></li>
-          <li><span><b>Tap a show</b> to load its program into the card below. Music blocks are listed but can't be edited.</span></li>
-        </ul>
+              <p class="cs-text">The top screen is John's day as a radio schedule. OnGen writes a show for each gap between his plans and places it at its air time, with his own music in between.</p>
+              <ul class="p-how"><li><svg class="fi" aria-hidden="true"><use href="#og-calendar-clock"/></svg><span><b>Scheduled programs</b>Every show written for today sits at its air time, fitted to the gap it fills.</span></li><li><svg class="fi" aria-hidden="true"><use href="#og-radio"/></svg><span><b>On air now</b>The red line marks the current time, so what's playing and what airs next read at a glance. Scroll back or ahead and it returns to now on its own.</span></li><li><svg class="fi" aria-hidden="true"><use href="#og-square-pen"/></svg><span><b>Edit the program</b>Tap a show to open its program in the card below and change what it covers.</span></li></ul>
               <div class="p-read"><span class="led" data-led="timetable"></span><span data-read="timetable"></span></div>
             </div>
           </div>
@@ -1764,12 +1766,8 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
           <div class="cs-demo-grid">
             <div class="p-slot" aria-hidden="true"></div>
             <div class="cs-demo-side">
-              <p class="cs-text">Each show is made of corners, short segments such as Calendar or Local. One bar shows how the show's minutes are split between them, and longer corners are drawn brighter.</p>
-              <ul class="p-how">
-          <li><span><b>Drag a divider</b> to move minutes between two corners. Each corner keeps at least 2 minutes, and the show's total length stays the same.</span></li>
-          <li><span><b>Labels move with their blocks</b> and shift aside so they don't overlap.</span></li>
-          <li><span><b>Edit</b> shows a remove button on each corner and chips for corners you haven't added, up to six in total. A new corner takes up to 5 minutes from the longest one.</span></li>
-        </ul>
+              <p class="cs-text">Every show is built from corners, short segments drawn from John's day such as Calendar, Local or Reminders. The program card decides what a show covers and how long each part runs, while the show's total length stays the same.</p>
+              <ul class="p-how"><li><svg class="fi" aria-hidden="true"><use href="#og-arrow-left-right"/></svg><span><b>Content length</b>Drag between two corners to give one more minutes and the other fewer. Each corner keeps at least 2 minutes.</span></li><li><svg class="fi" aria-hidden="true"><use href="#og-list-plus"/></svg><span><b>Add or remove corners</b>Edit removes a corner or adds one not yet in the show, up to six. A new corner takes up to 5 minutes from the longest one.</span></li></ul>
               <div class="p-read"><span class="led"></span><span data-read="program"></span></div>
             </div>
           </div>
@@ -1781,13 +1779,8 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
           <div class="cs-demo-grid">
             <div class="p-slot" aria-hidden="true"></div>
             <div class="cs-demo-side">
-              <p class="cs-text">The connection card lists where John's information comes from: App Connector for mail and AI chats, and Smart Speaker for listening at home. The card below it shows the next show and the Generate key. The key is the only element on the home screen that glows, since it is the only way to put a show on air.</p>
-              <ul class="p-how">
-          <li><span><b>Apps that are off</b> show in grey at 28% opacity, and apps that are on show in full colour. The status reads Connected while at least one app is on.</span></li>
-          <li><span><b>Each toggle updates the plan.</b> If no mail app is connected, the host skips the email step.</span></li>
-          <li><span><b>Generate runs five steps</b>, 0.65 s apart: calendar, mail, AI chats, writing the corners and voicing the host. The logo turns into a spinner and the caption counts the steps.</span></li>
-          <li><span><b>A finished show is marked out of date</b> when a source changes, and the screen reads <em>Program changed, press Generate</em>.</span></li>
-        </ul>
+              <p class="cs-text">The connection card sets what OnGen is allowed to read: mail and AI chats through App Connector, and a smart speaker for listening at home. The Generate key below it writes and voices the next show.</p>
+              <ul class="p-how"><li><svg class="fi" aria-hidden="true"><use href="#og-plug-zap"/></svg><span><b>Connected sources</b>Switch each app on or off. Only connected sources reach the show: with no mail app on, the host skips the email step.</span></li><li><svg class="fi" aria-hidden="true"><use href="#og-sparkles"/></svg><span><b>Generate</b>One press reads the calendar, mail and AI chats, writes the corners and voices the host. It's the only key that glows, because it's the only way to put a show on air.</span></li><li><svg class="fi" aria-hidden="true"><use href="#og-refresh-cw"/></svg><span><b>Always current</b>If a source changes after a show is made, the show is marked out of date and asks to be generated again.</span></li></ul>
               <div class="p-read"><span class="led"></span><span data-read="sources"></span></div><div class="p-read"><span class="led" data-led="generate"></span><span data-read="generate"></span></div>
             </div>
           </div>
@@ -1799,13 +1792,8 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
           <div class="cs-demo-grid">
             <div class="p-slot" aria-hidden="true"></div>
             <div class="cs-demo-side">
-              <p class="cs-text">Opening a show expands the screen from 300 to 554 px and hides the cards below. The script replaces the timetable.</p>
-              <ul class="p-how">
-          <li><span><b>The current line</b> is full size and white. Other lines shrink to 84% and fade, and lines more than two away drop to 40% opacity.</span></li>
-          <li><span><b>Words light up as they're read.</b> With sound on, the highlight follows the voice. On this page the voice is muted, so the highlight moves every 0.32 s.</span></li>
-          <li><span><b>The waveform</b> has one bar per word. Spoken words are tall, pauses are flat, and the red needle stays at 58% of the width.</span></li>
-          <li><span><b>The corner name, its length and the elapsed time</b> sit at the bottom, with the time in a 64 px light numeral.</span></li>
-        </ul>
+              <p class="cs-text">Opening a show turns the top screen into the player. The timetable gives way to the script, read out by an AI host.</p>
+              <ul class="p-how"><li><svg class="fi" aria-hidden="true"><use href="#og-scroll-text"/></svg><span><b>Live script</b>The line being read stays in focus while the rest of the script steps back.</span></li><li><svg class="fi" aria-hidden="true"><use href="#og-highlighter"/></svg><span><b>Word-by-word highlight</b>Each word lights up as the host says it. Here the voice is muted, so the highlight keeps its own time.</span></li><li><svg class="fi" aria-hidden="true"><use href="#og-audio-lines"/></svg><span><b>Where you are</b>The waveform, the corner on air, its length and the elapsed time show how far into the show you are.</span></li></ul>
               <div class="p-read"><span class="led" data-led="listen"></span><span data-read="listen"></span></div>
             </div>
           </div>
@@ -1817,11 +1805,8 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
           <div class="cs-demo-grid">
             <div class="p-slot" aria-hidden="true"></div>
             <div class="cs-demo-side">
-              <p class="cs-text">If you go back to the home screen while a show is playing, a red panel opens from the camera cutout. It shows the current line, a waveform and the time left. Pausing folds it back into the island, and tapping the island opens it again.</p>
-              <ul class="p-how">
-          <li><span><b>It opens from the island.</b> The panel starts at the island's 124 × 36 size and expands to full width, while the key card and mode dial fold away.</span></li>
-          <li><span><b>The program bar follows playback.</b> The corner on air is brightest, the next one is at half brightness and the rest are dim.</span></li>
-        </ul>
+              <p class="cs-text">Leaving the player doesn't stop the show. Back on the home screen, a red panel opens from the camera cutout with the current line, a waveform and the time left.</p>
+              <ul class="p-how"><li><svg class="fi" aria-hidden="true"><use href="#og-panel-top-open"/></svg><span><b>Keeps playing</b>The panel grows out of the island to full width, and the cards below fold away while it's open.</span></li><li><svg class="fi" aria-hidden="true"><use href="#og-circle-pause"/></svg><span><b>Pause and resume</b>Pausing folds the panel back into the island. Tapping the island opens it again.</span></li><li><svg class="fi" aria-hidden="true"><use href="#og-list-music"/></svg><span><b>Program progress</b>The program bar follows playback, so the corner on air and the one after it are always in view.</span></li></ul>
               <div class="p-read"><span class="led" data-led="live"></span><span data-read="live"></span></div>
             </div>
           </div>
@@ -1833,12 +1818,8 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
           <div class="cs-demo-grid">
             <div class="p-slot" aria-hidden="true"></div>
             <div class="cs-demo-side">
-              <p class="cs-text">The bottom row sets how often OnGen airs: Daily, Hourly or Weekly Radio. You choose by moving a ruler under a fixed red needle.</p>
-              <ul class="p-how">
-          <li><span><b>Labels are 120 px apart</b> above a tick every 8 px, and get brighter as they approach the needle.</span></li>
-          <li><span><b>Drag the ruler, tap either side or use the arrow keys.</b> When you let go, it settles on the nearest mode.</span></li>
-          <li><span><b>In this prototype</b> the dial only changes the display. The timetable above shows the Hourly schedule.</span></li>
-        </ul>
+              <p class="cs-text">The bottom row sets how often OnGen airs.</p>
+              <ul class="p-how"><li><svg class="fi" aria-hidden="true"><use href="#og-repeat"/></svg><span><b>Broadcast frequency</b>Choose Daily, Hourly or Weekly Radio by moving the ruler under the red needle. It settles on the nearest mode.</span></li><li><svg class="fi" aria-hidden="true"><use href="#og-info"/></svg><span><b>In this prototype</b>The dial changes the display only. The timetable above follows the Hourly schedule.</span></li></ul>
               <div class="p-read"><span class="led"></span><span data-read="modes"></span></div>
             </div>
           </div>
