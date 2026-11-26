@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How OnGen Radio works</title>
+<title>OnGen Radio — Michael Joongmin Park</title>
+<meta name="description" content="OnGen Radio: an AI radio that plays short spoken shows about your own day between your plans, tested at GradEX 111 across 408 sessions. Case study by Michael Joongmin Park.">
 <meta name="theme-color" content="#0A0A0A">
 <script>
   /* OnGen pages open dark; a light choice made with the header switch is remembered. */
@@ -1197,26 +1198,207 @@ html,body{overflow-x:clip}
   .r-table tr{padding:var(--cp);border-radius:var(--r)}
 }
 </style>
+<style>
+/* ===== Case-study system =====
+   One scrolling case study laid out like TokenTrust and Finboard: a label column and a body column shared by
+   every chapter, an "at a glance" band, numbered blocks with a sticky subhead, and a closing band.
+   OnGen keeps its own identity: Geist, the near-black radio palette, red only for what is live, and both themes.
+   This block comes last, so it settles the layout of everything above it. */
+:root{
+  --cs-wrap:1280px;
+  --cs-gut:clamp(20px,4vw,40px);
+  --cs-label:250px;
+  --cs-col:64px;
+  --cs-gap:clamp(24px,3vw,44px);
+  --cs-line:rgba(255,255,255,.09);
+}
+html[data-theme="light"]{--cs-line:rgba(0,0,0,.1)}
+html{scroll-behavior:smooth}
+[id]{scroll-margin-top:calc(var(--nav) + 24px)}
+.cs-wrap{max-width:var(--cs-wrap);margin:0 auto;padding:0 var(--cs-gut)}
+
+/* ---------- type ---------- */
+.cs-h1{font-size:clamp(40px,4.5vw,64px);line-height:1.03;font-weight:400;letter-spacing:-.045em;max-width:none}
+.cs-h2{font-size:clamp(32px,3.4vw,48px);line-height:1.07;font-weight:400;letter-spacing:-.035em;max-width:20ch}
+.cs-h1 .soft,.cs-h2 .soft{color:var(--grey)}
+.cs-lede{font-size:clamp(17px,1.3vw,19px);line-height:1.6;color:var(--ink-2)}
+.cs-text{font-size:17px;line-height:1.6;color:var(--ink-2);max-width:62ch}
+.cs-meta{display:flex;flex-wrap:wrap;row-gap:2px;margin-bottom:24px;font-size:13px;color:var(--grey)}
+.cs-meta span{white-space:nowrap}
+.cs-meta span:first-child{color:var(--ink)}
+.cs-meta i{font-style:normal;margin:0 9px;color:var(--dim)}
+/* the chapter tag carries the radio's red needle */
+.cs-tag{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-2)}
+.cs-tag::before{content:"";flex:none;width:2px;height:13px;border-radius:1px;background:var(--red);box-shadow:0 0 8px rgba(232,50,43,.55)}
+
+/* ---------- top bar: name and mark, the chapters in the centre, theme and demo on the right ---------- */
+.cs-top .p-wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px}
+.cs-top .p-id{justify-self:start;min-width:0}
+.cs-top .p-acts{justify-self:end}
+.cs-chapters{position:relative;display:flex;align-items:center;gap:clamp(14px,1.8vw,26px);align-self:stretch;padding:0 14px}
+.cs-chapters::before{content:"";position:absolute;left:0;right:0;bottom:9px;height:5px;background:repeating-linear-gradient(90deg,#3A3A38 0 1px,transparent 1px 7px);-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);pointer-events:none}
+html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradient(90deg,#C4C4C0 0 1px,transparent 1px 7px)}
+.cs-chapters button{position:relative;padding:0 0 10px;height:100%;border:0;background:none;font:inherit;font-size:13.5px;line-height:1.2;color:var(--dim);cursor:pointer;white-space:nowrap;transition:color .35s}
+.cs-chapters button:hover{color:var(--ink-2)}
+.cs-chapters button[aria-current="true"]{color:var(--ink)}
+.cs-ind{position:absolute;left:0;bottom:7px;width:2px;height:15px;border-radius:1px;background:var(--red);box-shadow:0 0 8px rgba(232,50,43,.55);opacity:0;transition:transform .6s var(--ease),opacity .3s;pointer-events:none}
+.cs-now{display:none;justify-self:center;font-size:13.5px;color:var(--ink-2);white-space:nowrap}
+
+/* ---------- hero: text beside the live phone, the project facts underneath ---------- */
+.p-ch.cs-hero{padding:clamp(40px,6vh,80px) 0 0;border:0}
+.cs-hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:center}
+.cs-hero .cs-lede{margin-top:22px;max-width:42ch}
+.cs-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:30px}
+.cs-btn{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 18px;border-radius:12px;background:var(--ink);color:var(--bg);font-size:15px;font-weight:500;text-decoration:none;white-space:nowrap;transition:transform .2s var(--ease),opacity .2s}
+.cs-btn:hover{opacity:.88}
+.cs-btn:active{transform:scale(.97)}
+.cs-btn-text{display:inline-flex;align-items:center;height:46px;padding:0 10px;font-size:15px;color:var(--ink-2);text-decoration:none}
+.cs-btn-text:hover{color:var(--ink)}
+.cs-stage{min-width:0}
+.cs-state{display:grid;grid-template-columns:auto minmax(0,1fr);gap:7px 16px;margin:22px auto 0;max-width:430px;padding-top:16px;box-shadow:inset 0 1px 0 var(--cs-line);font-size:13px}
+.cs-state dt{font-size:12px;color:var(--dim)}
+.cs-state dd{margin:0;color:var(--ink-2);line-height:1.4}
+.cs-facts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--cs-gap);margin:clamp(56px,6vw,88px) 0 0;padding-top:24px;box-shadow:inset 0 1px 0 var(--cs-line)}
+.cs-facts dt{font-size:12.5px;color:var(--dim)}
+.cs-facts dd{margin:6px 0 0;font-size:15px;line-height:1.45;color:var(--ink-2)}
+
+/* ---------- at a glance ---------- */
+.cs-band{background:var(--raise);margin-top:clamp(96px,10vw,136px);padding:clamp(80px,9vw,120px) 0}
+.cs-pitch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px var(--cs-gap)}
+.cs-pitch .k{display:block;margin-bottom:8px;font-size:13px;color:var(--grey)}
+.cs-pitch p{font-size:17px;line-height:1.5;color:var(--ink)}
+.cs-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--cs-gap);margin-top:64px;padding-top:28px;box-shadow:inset 0 1px 0 var(--cs-line)}
+.cs-stats b{display:block;font-size:clamp(40px,4.2vw,60px);font-weight:300;line-height:1;letter-spacing:-.045em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cs-stats b small{font-size:.38em;margin-left:3px;letter-spacing:-.01em;color:var(--grey)}
+.cs-stats span{display:block;margin-top:10px;font-size:13px;line-height:1.4;color:var(--grey);max-width:20ch}
+
+/* ---------- chapters: tag, statement, lede; then numbered blocks ---------- */
+.cs-sec{padding-top:clamp(112px,12vw,168px)}
+.cs-head{display:grid;grid-template-columns:var(--cs-label) minmax(0,1fr);column-gap:var(--cs-col);row-gap:24px;margin-bottom:clamp(64px,7vw,100px)}
+.cs-head .cs-tag{grid-column:1;grid-row:1;align-self:start;padding-top:clamp(10px,1.1vw,16px)}
+.cs-head .cs-h2{grid-column:2;grid-row:1}
+.cs-head .cs-lede{grid-column:2;max-width:62ch}
+.cs-offset{margin-left:calc(var(--cs-label) + var(--cs-col))}
+.cs-block{display:grid;grid-template-columns:var(--cs-label) minmax(0,1fr);column-gap:var(--cs-col)}
+.cs-block + .cs-block{margin-top:clamp(80px,8.5vw,120px)}
+.p-ch.cs-block{padding:0;border:0}
+.cs-sub{grid-column:1;align-self:start;position:sticky;top:calc(var(--nav) + 40px)}
+.cs-sub .no{display:block;margin-bottom:12px;font-size:12.5px;color:var(--dim);font-variant-numeric:tabular-nums}
+.cs-sub h3{font-size:20px;line-height:1.25;letter-spacing:-.02em}
+.cs-sub p{margin-top:6px;font-size:14.5px;line-height:1.45;color:var(--grey);max-width:24ch}
+.cs-body{grid-column:2;min-width:0}
+/* whatever follows a paragraph in a block starts one step down */
+.cs-body > .cs-text + *{margin-top:28px}
+.cs-body > .fx-wide,.cs-body > .r-find,.cs-body > .wx-methods,.cs-body > .r-verdict,.cs-body > .p-grid{margin-top:0}
+.cs-body > .cs-text + .p-grid,.cs-body > .cs-text + .r-table-wrap{margin-top:28px}
+.cs-body > .r-charts,.cs-body > .r-compare{margin-top:14px}
+.cs-body > .r-src{margin-top:24px}
+.cs-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(24px,3vw,44px);align-items:start}
+.cs-split .spec-tight{margin-top:28px}
+
+/* ---------- how it works: the live card beside its notes ---------- */
+.cs-demo-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);gap:clamp(24px,3vw,44px);align-items:start}
+.cs-demo-side{min-width:0}
+.cs-demo-side .p-how{margin-top:22px}
+@media (min-width:861px){.cs-demo-side{position:sticky;top:calc(var(--nav) + 40px)}}
+
+/* ---------- close ---------- */
+.cs-close{background:var(--raise);margin-top:clamp(112px,12vw,168px);padding:clamp(80px,9vw,120px) 0 36px}
+.cs-eyebrow{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-2)}
+.cs-eyebrow svg{height:13px;width:auto;flex:none}
+.cs-close .cs-h2{max-width:22ch;margin-top:18px}
+.cs-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:56px}
+.cs-links a{display:flex;flex-direction:column;justify-content:space-between;gap:36px;min-height:160px;padding:22px;border-radius:var(--r);background:var(--key);color:var(--ink);text-decoration:none;transition:box-shadow .25s,transform .2s var(--ease)}
+.cs-links a:hover{box-shadow:inset 0 0 0 1px var(--grey)}
+.cs-links a:active{transform:scale(.98)}
+.cs-links .t{font-size:18px;letter-spacing:-.02em;line-height:1.25}
+.cs-links .s{font-size:13.5px;color:var(--grey);margin-top:4px}
+.cs-links svg{width:20px;height:20px;order:-1;color:var(--ink-2)}
+.cs-note{margin-top:56px;font-size:14px;line-height:1.6;color:var(--grey);max-width:70ch}
+.cs-note b{color:var(--ink);font-weight:500}
+.cs-note a{color:var(--ink-2)}
+.cs-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-top:40px;padding-top:22px;box-shadow:inset 0 1px 0 var(--cs-line);font-size:13.5px;color:var(--grey)}
+.cs-foot nav{display:flex;flex-wrap:wrap;gap:22px}
+.cs-foot a{color:inherit;text-decoration:none}
+.cs-foot a:hover{color:var(--ink)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1260px){
+  .cs-top .p-wrap{grid-template-columns:auto 1fr auto}
+  .cs-chapters{display:none}
+  .cs-now{display:block}
+}
+@media (max-width:1080px){
+  :root{--cs-label:0px;--cs-col:0px}
+  .cs-hero-grid{grid-template-columns:minmax(0,1fr)}
+  .cs-hero .cs-lede{max-width:56ch}
+  .cs-head{grid-template-columns:minmax(0,1fr)}
+  .cs-head .cs-tag{padding-top:0}
+  .cs-head .cs-h2,.cs-head .cs-lede{grid-column:1}
+  .cs-head .cs-h2{grid-row:2}
+  .cs-block{grid-template-columns:minmax(0,1fr)}
+  .cs-sub{grid-column:1;position:static;margin-bottom:26px}
+  .cs-sub .no{margin-bottom:8px}
+  .cs-sub p{max-width:none}
+  .cs-body{grid-column:1}
+  .cs-offset{margin-left:0}
+  .cs-facts{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:24px}
+}
+@media (max-width:860px){
+  .cs-demo-grid,.cs-split,.cs-links{grid-template-columns:minmax(0,1fr)}
+  .cs-demo-grid{gap:28px}
+  .cs-stats{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:32px}
+  .cs-links a{min-height:0;gap:20px}
+}
+@media (max-width:640px){
+  .cs-wrap{padding:0 20px}
+  .cs-h1{font-size:38px;line-height:1.05}
+  .cs-h2{font-size:30px;line-height:1.1}
+  .cs-lede{font-size:17px}
+  .cs-sec{padding-top:88px}
+  .cs-band{margin-top:72px;padding:64px 0}
+  .cs-head{margin-bottom:48px;row-gap:18px}
+  .cs-block + .cs-block{margin-top:64px}
+  .cs-pitch{grid-template-columns:minmax(0,1fr);gap:26px}
+  .cs-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cs-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cs-close{margin-top:88px;padding:64px 0 28px}
+  .cs-links{margin-top:32px}
+  .cs-links a{flex-direction:row;align-items:center;justify-content:space-between;padding:18px 20px}
+  .cs-links svg{order:1}
+  .cs-foot{flex-direction:column;gap:14px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* touch: the bar, its buttons and the footer links reach a 44px hit area; the prototype keeps its own scale */
+@media (pointer:coarse),(max-width:640px){
+  .p-home{display:inline-block;padding:13px 0;margin:-13px 0}
+  .p-theme{width:40px;height:40px}
+  .p-btn2{min-height:40px}
+  .cs-foot nav a{display:inline-block;padding:11px 0}
+}
+</style>
 </head>
 <body>
 
-<header class="p-top">
+<header class="p-top cs-top">
   <div class="p-wrap">
     <div class="p-id">
     <a class="p-home" href="index.html" aria-label="Michael J. Park, back to the portfolio">Michael J. Park</a>
     <span class="p-sep" aria-hidden="true"></span>
-    <a class="p-brand" href="#how" aria-label="OnGen Radio, back to top">
+    <a class="p-brand" href="#ch-intro" aria-label="OnGen Radio, back to top">
       <svg viewBox="0 0 366 169" aria-hidden="true"><path fill="currentColor" d="M84.5 0C112.993 0 138.191 14.1027 153.497 35.708C144.147 42.3237 138.034 53.2109 138.001 65.5283C138.013 65.5623 138.027 65.5959 138.039 65.6299H166.884C167.583 68.6933 168.115 71.8199 168.471 75H86.627C81.3804 75.0002 77.127 79.2534 77.127 84.5C77.127 89.7466 81.3804 93.9998 86.627 94H168.471C168.115 97.1801 167.583 100.307 166.884 103.37H138.039C138.027 103.404 138.013 103.437 138.001 103.471C138.034 115.788 144.147 126.675 153.497 133.291C138.191 154.897 112.993 169 84.5 169C37.8319 169 0 131.168 0 84.5C0 37.8319 37.8319 0 84.5 0ZM85.6699 29C54.9243 29.0001 30 53.8483 30 84.5C30 115.152 54.9243 140 85.6699 140C109.732 140 130.227 124.78 138.001 103.471L138 103.37H85.0557C74.6341 103.37 66.1855 94.9216 66.1855 84.5C66.1855 74.0784 74.6341 65.6299 85.0557 65.6299H138C138 65.596 138.001 65.5622 138.001 65.5283C130.227 44.2193 109.732 29 85.6699 29ZM246 140H174.63C166.759 140 159.468 137.516 153.497 133.291C159.776 124.428 164.39 114.303 166.884 103.37H246V140ZM310 29C340.376 29 365 53.6243 365 84V140H326V87.5C326 78.3873 318.613 71 309.5 71C300.387 71 293 78.3873 293 87.5V140H255V84C255 53.6243 279.624 29 310 29ZM246 94H168.471C168.82 90.8814 169 87.7117 169 84.5C169 81.2883 168.82 78.1186 168.471 75H246V94ZM246 65.6299H166.884C164.39 54.6968 159.776 44.5712 153.497 35.708C159.468 31.4832 166.759 29 174.63 29H246V65.6299Z"/></svg>
       <span>Radio</span>
     </a>
     </div>
-    <nav class="p-tabs" aria-label="Pages">
-      <div class="p-dial">
-        <a href="#how" data-view="how" aria-current="page" draggable="false">How it works</a>
-        <a href="#what" data-view="what" draggable="false">What is OnGen</a>
-        <a href="#review" data-view="review" draggable="false">Review</a>
-      </div>
-      <i class="p-needle" aria-hidden="true"></i>
+    <span class="cs-now" id="chapterNow" aria-hidden="true"></span>
+    <nav class="cs-chapters" id="chapterNav" aria-label="Case study chapters">
+      <button type="button" data-go="overview">Overview</button>
+      <button type="button" data-go="how">How it works</button>
+      <button type="button" data-go="research">Research</button>
+      <button type="button" data-go="review">Field test</button>
+      <button type="button" data-go="conclusion">Conclusion</button>
+      <i class="cs-ind" aria-hidden="true"></i>
     </nav>
     <div class="p-acts">
     <button type="button" class="p-theme" id="themeBtn" aria-label="Switch to light theme" title="Light theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg></button>
@@ -1226,10 +1408,9 @@ html,body{overflow-x:clip}
 </header>
 
 <main>
-<div class="p-view" data-view="how">
 <div class="p-story" id="story">
 
-  <div class="p-layer"><div class="p-cam off" id="cam">
+<div class="p-layer"><div class="p-cam off" id="cam">
     <div id="app" class="ogn">
 <div class="fit" id="fit"><div class="frame" id="frame">
   <div class="sbar" aria-hidden="true"><span class="sb-time">17:50</span><span class="sb-icons" aria-hidden="true"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3.2" height="4" rx="1"/><rect x="4.8" y="5.5" width="3.2" height="6.5" rx="1"/><rect x="9.6" y="3" width="3.2" height="9" rx="1"/><rect x="14.4" y="0" width="3.2" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.4c2.3 0 4.4.9 6 2.4.2.2.5.2.7 0l.9-.9c.2-.2.2-.5 0-.7A10.6 10.6 0 0 0 8 0C5.1 0 2.4 1.1.4 3.2c-.2.2-.2.5 0 .7l.9.9c.2.2.5.2.7 0A8.6 8.6 0 0 1 8 2.4z"/><path d="M8 6.1c1.3 0 2.5.5 3.4 1.3.2.2.5.2.7 0l.9-.9c.2-.2.2-.5 0-.7A7 7 0 0 0 8 3.8 7 7 0 0 0 3 5.8c-.2.2-.2.5 0 .7l.9.9c.2.2.5.2.7 0A4.9 4.9 0 0 1 8 6.1z"/><path d="M10.1 9.2c.2-.2.2-.5 0-.7a3.1 3.1 0 0 0-4.2 0c-.2.2-.2.5 0 .7l1.7 1.7c.2.2.5.2.7 0z"/></svg><svg width="27" height="13" viewBox="0 0 27 13" fill="none"><rect x=".5" y=".5" width="23" height="12" rx="3.8" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2.5" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2z" fill="currentColor" opacity=".45"/></svg></span></div>
@@ -1397,123 +1578,276 @@ html,body{overflow-x:clip}
     </div>
   </div></div>
 
-
-    <!-- 0 · Intro -->
-    <article class="p-ch p-intro" id="ch-intro" data-h="844" data-side="left" data-card="">
-      <div class="p-wrap p-row"><div class="p-text">
-        <h1>How OnGen Radio works</h1>
-        <p class="p-lede">OnGen plays short spoken shows between your plans, written from your calendar, mail, reminders and AI chats. The phone on this page runs the actual prototype. Each section below shows one of its cards, and you can use the card directly.</p>
-        <dl class="p-state">
+  <!-- HERO: the live prototype is the stage -->
+  <article class="p-ch cs-hero" id="ch-intro" data-h="844" data-side="right" data-card="" aria-labelledby="heroTitle">
+    <div class="cs-wrap">
+      <div class="cs-hero-grid">
+        <div class="cs-hero-text">
+          <p class="cs-meta"><span>Case study</span><i>/</i><span>Thesis project</span><i>/</i><span>AI radio</span><i>/</i><span>2026</span></p>
+          <h1 class="cs-h1" id="heroTitle">Your day as a short radio show. <span class="soft">OnGen airs it between your plans.</span></h1>
+          <p class="cs-lede">OnGen plays short spoken shows written from your calendar, mail, reminders and AI chats. The phone on this page runs the actual prototype, and each of its cards works further down.</p>
+          <div class="cs-actions"><a class="cs-btn" href="#how">Try the prototype<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v10M3.5 8.5 8 13l4.5-4.5"/></svg></a><a class="cs-btn-text" href="#review">Read the field test</a></div>
+        </div>
+        <div class="cs-stage">
+          <div class="p-slot" aria-hidden="true"></div>
+          <dl class="cs-state" aria-label="The prototype on this page">
           <dt>Listener</dt><dd>John, Toronto</dd>
           <dt>Clock</dt><dd>Held at 17:50 on a Wednesday</dd>
           <dt>On air</dt><dd>Traffic Update, 17:40 to 18:10</dd>
           <dt>Next</dt><dd>Commute Briefing at 18:10, 30 minutes</dd>
         </dl>
+        </div>
       </div>
-      <div class="p-slot" aria-hidden="true"></div></div>
-    </article>
+      <dl class="cs-facts"><div><dt>Role</dt><dd>Solo: product and experience design, research, AI-assisted prototyping</dd></div><div><dt>Timeline</dt><dd>Sep 2025 to May 2026</dd></div><div><dt>Context</dt><dd>Industrial Design thesis, OCAD University. Critique: Alexander Manu, Bernard Dietz</dd></div><div><dt>Field test</dt><dd>GradEX 111 · 408 sessions</dd></div><div><dt>Recognition</dt><dd>ACIDO 2026 finalist</dd></div></dl>
+    </div>
+  </article>
 
-    <!-- 1 · Timetable -->
-    <article class="p-ch" id="ch-timetable" data-h="292" data-side="right" data-card="screen" data-needs="home" data-intro="screen">
-      <div class="p-wrap p-row"><div class="p-text">
-        <h2>Today's shows on a timetable</h2>
-        <p class="p-lede">The top screen lays out John's day on a vertical time scale. Each show sits at its air time, and the red line marks the current time. The timetable stays still until you scroll it.</p>
-        <ul class="p-how">
+  <!-- AT A GLANCE -->
+  <section class="cs-band" id="glance" aria-labelledby="glanceTitle">
+    <div class="cs-wrap">
+      <div class="cs-head">
+        <div class="cs-tag">At a glance</div>
+        <h2 class="cs-h2" id="glanceTitle">Radio reaches you without being asked. <span class="soft">AI still waits for a question.</span></h2>
+        <p class="cs-lede">AI assistants know a lot about your inbox, calendar and city, but they only answer questions. OnGen plays like radio and uses what AI knows about your day.</p>
+      </div>
+      <div class="cs-pitch cs-offset">
+        <div><span class="k">Problem</span><p>What shapes a person's day is spread across many apps and feeds, and radio, the one medium that works hands-free, still plays the same broadcast to everyone.</p></div>
+        <div><span class="k">Insight</span><p>People were interested but not yet comfortable. Thirteen were excited about local information in one place and thirteen worried about being listened to, so consent became part of the interface.</p></div>
+        <div><span class="k">Outcome</span><p>A working web app that plays personal shows in the gaps of the day, field-tested at GradEX 111, where about a third of visitors generated their own podcast.</p></div>
+        <div><span class="k">My part</span><p>Solo: product and experience design, research and AI-assisted prototyping, as an Industrial Design thesis at OCAD University.</p></div>
+      </div>
+      <div class="cs-stats cs-offset">
+        <div><b>408</b><span>sessions logged at GradEX 111</span></div>
+        <div><b>147</b><span>users, 121 guests and 26 registered</span></div>
+        <div><b>35.6<small>s</small></b><span>median session</span></div>
+        <div><b>34.6<small>%</small></b><span>of visitors generated a personal podcast</span></div>
+        <div><b>73</b><span>SUS score in Pilot 1, against a 68 average</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OVERVIEW -->
+  <section class="cs-sec" id="overview" data-chapter="Overview" aria-labelledby="ovTitle">
+    <div class="cs-wrap">
+      <div class="cs-head">
+        <div class="cs-tag">Overview</div>
+        <h2 class="cs-h2" id="ovTitle">A radio about your own day.</h2>
+        <p class="cs-lede">OnGen is an AI-curated listening app. It reads your calendar, mail, AI chats and location, and plays short shows between your plans about what you need to do, what you missed, what to remember and what's happening nearby.</p>
+      </div>
+      <div class="cs-block">
+        <div class="cs-sub"><span class="no">01</span><h3>How each medium reaches you</h3><p>Comes to you, live, about you</p></div>
+        <div class="cs-body">
+          <figure class="fx">
+        <div class="card cm" role="table" aria-label="How each medium reaches you">
+          <div class="cm-head"><span></span><span>Comes to you</span><span>Live</span><span>About you</span></div>
+          <div class="cm-row"><b>Newspaper</b><i class="lp"></i><i class="lp"></i><i class="lp"></i><em>You go and find it. Printed once a day, for everyone.</em></div>
+          <div class="cm-row"><b>Radio</b><i class="lp on"></i><i class="lp on"></i><i class="lp"></i><em>It comes to you, live, for the whole region.</em></div>
+          <div class="cm-row"><b>TV</b><i class="lp on"></i><i class="lp on"></i><i class="lp"></i><em>It comes to you on a schedule, for everyone at once.</em></div>
+          <div class="cm-row"><b>Social feed</b><i class="lp p"></i><i class="lp p"></i><i class="lp p"></i><em>You scroll for it. Close to live, about people you follow.</em></div>
+          <div class="cm-row"><b>AI chat</b><i class="lp"></i><i class="lp"></i><i class="lp p"></i><em>You ask for it. It knows only what you typed.</em></div>
+          <div class="cm-row me"><b>OnGen</b><i class="lp on"></i><i class="lp on"></i><i class="lp on"></i><em>It comes to you between plans, live, about your own day.</em></div>
+          <div class="cm-key"><span><i class="lp on"></i>Yes</span><span><i class="lp p"></i>Partly</span><span><i class="lp"></i>No</span></div>
+        </div>
+      </figure>
+        </div>
+      </div>
+      <div class="cs-block">
+        <div class="cs-sub"><span class="no">02</span><h3>What a show covers</h3><p>Four kinds of corner</p></div>
+        <div class="cs-body">
+          <p class="cs-text">Each show is made of short corners, and each corner covers one of four things: your work for the day, what changed while you were away, what you might forget, and what's happening nearby.</p><figure class="fx">
+        <div class="card covers">
+          <div class="cv-tiles" id="cvTiles" role="tablist" aria-label="Segments">
+            <button class="tile2" data-k="prod" role="tab" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8.5 12.2 2.4 2.4 4.6-5"/></svg><span>Productivity</span></button>
+            <button class="tile2" data-k="catch" role="tab" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 13.5 6.2 6.6A2 2 0 0 1 8.1 5.2h7.8a2 2 0 0 1 1.9 1.4L20 13.5V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M4 13.5h4.5l1.2 2h4.6l1.2-2H20"/></svg><span>Catch-up</span></button>
+            <button class="tile2" data-k="remind" role="tab" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M6.5 16.5V11a5.5 5.5 0 0 1 11 0v5.5l1.5 1.5H5z"/><path d="M10 20.5h4"/></svg><span>Reminders</span></button>
+            <button class="tile2" data-k="local" role="tab" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 21s6.5-6 6.5-11.2a6.5 6.5 0 1 0-13 0C5.5 15 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.4"/></svg><span>Local news</span></button>
+          </div>
+          <div class="cv-body">
+            <div class="cv-meta"><span class="card-label" id="cvFrom"></span><span class="card-label dim" id="cvCorners"></span></div>
+            <div class="lyr" id="cvLines" aria-live="polite"></div>
+          </div>
+        </div>
+        <figcaption>Lines quoted from the prototype's demo shows.</figcaption>
+      </figure>
+        </div>
+      </div>
+      <div class="cs-block">
+        <div class="cs-sub"><span class="no">03</span><h3>When shows air</h3><p>In the gaps of your calendar</p></div>
+        <div class="cs-body">
+          <p class="cs-text">Shows are placed between meetings and commutes. Each one fits its gap and uses the corners that suit that time of day, such as a wake-up briefing at 7:30, traffic and errands on the way home, and a recap in the evening. Your own music service plays in between.</p><figure class="fx fx-wide">
+        <div class="card day" id="day">
+          <div class="day-head">
+            <div class="day-title">
+              <span class="card-label" id="dayWhen"></span>
+              <b id="dayName"></b>
+            </div>
+            <div class="day-nav">
+              <button type="button" id="dayPrev" aria-label="Previous show"><svg viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></svg></button>
+              <button type="button" id="dayNext" aria-label="Next show"><svg viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></svg></button>
+            </div>
+          </div>
+          <div class="day-note"><i aria-hidden="true"></i>Music Service Provider</div>
+          <div class="day-strip" id="dayStrip" tabindex="0" role="listbox" aria-label="Today's shows">
+            <div class="day-lane" id="dayShows"></div>
+            <div class="day-axis" id="dayAxis"></div>
+            <i class="day-now" id="dayNow"><b>5:50 PM</b></i>
+          </div>
+          <div class="day-prog">
+            <div class="pbar" id="dayBar"></div>
+            <div class="pleg" id="dayLeg"></div>
+          </div>
+          <div class="day-line"><span class="card-label">Opens with</span><p id="dayLine"></p></div>
+        </div>
+        <figcaption>The prototype's demo day, clock held at 5:50 PM.</figcaption>
+      </figure>
+        </div>
+      </div>
+      <div class="cs-block">
+        <div class="cs-sub"><span class="no">04</span><h3>Three service layers</h3><p>From the region down to one listener</p></div>
+        <div class="cs-body">
+          <div class="cs-split"><div><p class="cs-text">Regional data feeds a shared community stream, and the same engine narrows it down to personal shows. The inputs and outputs of each layer were mapped before the build started.</p><dl class="spec spec-tight">
+          <div><dt>Architecture</dt><dd>14 entities, 17 relations</dd></div>
+          <div><dt>Listener model</dt><dd>User is a listener, context is real time, flow is shared</dd></div>
+        </dl></div><figure class="fx">
+        <div class="card stk">
+          <div class="stk-head"><span class="card-label">Service layers</span><span class="card-label dim">audience narrows top to bottom</span></div>
+          <div class="st-row">
+            <div class="st-name"><b>Regional Information Hub</b><span>Data</span></div>
+            <div class="led st-scope" data-v="1" aria-label="Audience scope 100%"></div>
+            <dl class="st-io"><div><dt>Inputs</dt><dd>Local news, transit, weather, events</dd></div><div><dt>Outputs</dt><dd>Regional context for every show</dd></div></dl>
+          </div>
+          <div class="st-row">
+            <div class="st-name"><b>Community Radio</b><span>Shared</span></div>
+            <div class="led st-scope" data-v="0.58" aria-label="Audience scope 58%"></div>
+            <dl class="st-io"><div><dt>Inputs</dt><dd>Community posts, regional context</dd></div><div><dt>Outputs</dt><dd>A shared stream, voiced by an AI host</dd></div></dl>
+          </div>
+          <div class="st-row">
+            <div class="st-name"><b>Personal Radio</b><span>One listener</span></div>
+            <div class="led st-scope" data-v="0.18" aria-label="Audience scope 18%"></div>
+            <dl class="st-io"><div><dt>Inputs</dt><dd>Onboarding, calendar, mail, AI chats</dd></div><div><dt>Outputs</dt><dd>Personal shows on the listener’s schedule</dd></div></dl>
+          </div>
+        </div>
+      </figure></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS: each block holds one live card of the prototype -->
+  <section class="cs-sec" id="how" data-chapter="How it works" aria-labelledby="howTitle">
+    <div class="cs-wrap">
+      <div class="cs-head">
+        <div class="cs-tag">How it works</div>
+        <h2 class="cs-h2" id="howTitle">The phone on this page is the real prototype.</h2>
+        <p class="cs-lede">Each block below shows one of its cards, and you can use the card directly. The clock is held at 17:50 on a Wednesday: John, in Toronto, is hearing the Traffic Update, and the Commute Briefing airs next at 18:10.</p>
+      </div>
+      <article class="p-ch cs-block cs-demo" id="ch-timetable" data-h="292" data-side="right" data-card="screen" data-needs="home" data-intro="screen">
+        <div class="cs-sub"><span class="no">01</span><h3>Today's shows on a timetable</h3><p>The top screen</p></div>
+        <div class="cs-body">
+          <div class="cs-demo-grid">
+            <div class="p-slot" aria-hidden="true"></div>
+            <div class="cs-demo-side">
+              <p class="cs-text">The top screen lays out John's day on a vertical time scale. Each show sits at its air time, and the red line marks the current time. The timetable stays still until you scroll it.</p>
+              <ul class="p-how">
           <li><span><b>Brightness</b> shows where a show sits in the day: white on air, mid grey for the next show, dim for the previous one and darker for the rest.</span></li>
           <li><span><b>Drag up or down</b> to look through the day. When you let go, it returns to the current time after 2.5 seconds.</span></li>
           <li><span><b>Tap a show</b> to load its program into the card below. Music blocks are listed but can't be edited.</span></li>
         </ul>
-        <div class="p-read"><span class="led" data-led="timetable"></span><span data-read="timetable"></span></div>
-      </div>
-      <div class="p-slot" aria-hidden="true"></div></div>
-    </article>
-
-    <!-- 2 · Program -->
-    <article class="p-ch" id="ch-program" data-h="212" data-side="left" data-card="program" data-intro="program">
-      <div class="p-wrap p-row"><div class="p-text">
-        <h2>Editing a show's program</h2>
-        <p class="p-lede">Each show is made of corners, short segments such as Calendar or Local. One bar shows how the show's minutes are split between them, and longer corners are drawn brighter.</p>
-        <ul class="p-how">
+              <div class="p-read"><span class="led" data-led="timetable"></span><span data-read="timetable"></span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="p-ch cs-block cs-demo" id="ch-program" data-h="212" data-side="right" data-card="program" data-intro="program">
+        <div class="cs-sub"><span class="no">02</span><h3>Editing a show's program</h3><p>Corners and their minutes</p></div>
+        <div class="cs-body">
+          <div class="cs-demo-grid">
+            <div class="p-slot" aria-hidden="true"></div>
+            <div class="cs-demo-side">
+              <p class="cs-text">Each show is made of corners, short segments such as Calendar or Local. One bar shows how the show's minutes are split between them, and longer corners are drawn brighter.</p>
+              <ul class="p-how">
           <li><span><b>Drag a divider</b> to move minutes between two corners. Each corner keeps at least 2 minutes, and the show's total length stays the same.</span></li>
           <li><span><b>Labels move with their blocks</b> and shift aside so they don't overlap.</span></li>
           <li><span><b>Edit</b> shows a remove button on each corner and chips for corners you haven't added, up to six in total. A new corner takes up to 5 minutes from the longest one.</span></li>
         </ul>
-        <div class="p-read"><span class="led"></span><span data-read="program"></span></div>
-      </div>
-      <div class="p-slot" aria-hidden="true"></div></div>
-    </article>
-
-    <!-- Sources and the Generate key -->
-    <article class="p-ch" id="ch-sources" data-h="206" data-side="right" data-card="source" data-needs="idle" data-intro="source">
-      <div class="p-wrap p-row"><div class="p-text">
-        <h2>Choosing sources and generating a show</h2>
-        <p class="p-lede">The connection card lists where John's information comes from: App Connector for mail and AI chats, and Smart Speaker for listening at home. The card below it shows the next show and the Generate key. The key is the only element on the home screen that glows, since it is the only way to put a show on air.</p>
-        <ul class="p-how">
+              <div class="p-read"><span class="led"></span><span data-read="program"></span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="p-ch cs-block cs-demo" id="ch-sources" data-h="206" data-side="right" data-card="source" data-needs="idle" data-intro="source">
+        <div class="cs-sub"><span class="no">03</span><h3>Choosing sources and generating a show</h3><p>The connection card and the Generate key</p></div>
+        <div class="cs-body">
+          <div class="cs-demo-grid">
+            <div class="p-slot" aria-hidden="true"></div>
+            <div class="cs-demo-side">
+              <p class="cs-text">The connection card lists where John's information comes from: App Connector for mail and AI chats, and Smart Speaker for listening at home. The card below it shows the next show and the Generate key. The key is the only element on the home screen that glows, since it is the only way to put a show on air.</p>
+              <ul class="p-how">
           <li><span><b>Apps that are off</b> show in grey at 28% opacity, and apps that are on show in full colour. The status reads Connected while at least one app is on.</span></li>
           <li><span><b>Each toggle updates the plan.</b> If no mail app is connected, the host skips the email step.</span></li>
           <li><span><b>Generate runs five steps</b>, 0.65 s apart: calendar, mail, AI chats, writing the corners and voicing the host. The logo turns into a spinner and the caption counts the steps.</span></li>
           <li><span><b>A finished show is marked out of date</b> when a source changes, and the screen reads <em>Program changed, press Generate</em>.</span></li>
         </ul>
-        <div class="p-read"><span class="led"></span><span data-read="sources"></span></div>
-        <div class="p-read"><span class="led" data-led="generate"></span><span data-read="generate"></span></div>
-      </div>
-      <div class="p-slot" aria-hidden="true"></div></div>
-    </article>
-
-    <!-- 5 · Player -->
-    <article class="p-ch" id="ch-listen" data-h="554" data-side="left" data-card="screen" data-require="player" data-ph-t="The player is closed" data-ph-s="Open the player to read the show line by line." data-ph-act="open-player" data-ph-btn="Open the player">
-      <div class="p-wrap p-row"><div class="p-text">
-        <h2>The player shows the script line by line</h2>
-        <p class="p-lede">Opening a show expands the screen from 300 to 554 px and hides the cards below. The script replaces the timetable.</p>
-        <ul class="p-how">
+              <div class="p-read"><span class="led"></span><span data-read="sources"></span></div><div class="p-read"><span class="led" data-led="generate"></span><span data-read="generate"></span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="p-ch cs-block cs-demo" id="ch-listen" data-h="554" data-side="right" data-card="screen" data-require="player" data-ph-t="The player is closed" data-ph-s="Open the player to read the show line by line." data-ph-act="open-player" data-ph-btn="Open the player">
+        <div class="cs-sub"><span class="no">04</span><h3>The script, line by line</h3><p>The player</p></div>
+        <div class="cs-body">
+          <div class="cs-demo-grid">
+            <div class="p-slot" aria-hidden="true"></div>
+            <div class="cs-demo-side">
+              <p class="cs-text">Opening a show expands the screen from 300 to 554 px and hides the cards below. The script replaces the timetable.</p>
+              <ul class="p-how">
           <li><span><b>The current line</b> is full size and white. Other lines shrink to 84% and fade, and lines more than two away drop to 40% opacity.</span></li>
           <li><span><b>Words light up as they're read.</b> With sound on, the highlight follows the voice. On this page the voice is muted, so the highlight moves every 0.32 s.</span></li>
           <li><span><b>The waveform</b> has one bar per word. Spoken words are tall, pauses are flat, and the red needle stays at 58% of the width.</span></li>
           <li><span><b>The corner name, its length and the elapsed time</b> sit at the bottom, with the time in a 64 px light numeral.</span></li>
         </ul>
-        <div class="p-read"><span class="led" data-led="listen"></span><span data-read="listen"></span></div>
-      </div>
-      <div class="p-slot" aria-hidden="true"></div></div>
-    </article>
-
-    <!-- 6 · Now Playing -->
-    <article class="p-ch" id="ch-live" data-h="300" data-side="right" data-card="now">
-      <div class="p-wrap p-row"><div class="p-text">
-        <h2>The Now Playing panel</h2>
-        <p class="p-lede">If you go back to the home screen while a show is playing, a red panel opens from the camera cutout. It shows the current line, a waveform and the time left. Pausing folds it back into the island, and tapping the island opens it again.</p>
-        <ul class="p-how">
+              <div class="p-read"><span class="led" data-led="listen"></span><span data-read="listen"></span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="p-ch cs-block cs-demo" id="ch-live" data-h="300" data-side="right" data-card="now">
+        <div class="cs-sub"><span class="no">05</span><h3>The Now Playing panel</h3><p>It opens from the camera cutout</p></div>
+        <div class="cs-body">
+          <div class="cs-demo-grid">
+            <div class="p-slot" aria-hidden="true"></div>
+            <div class="cs-demo-side">
+              <p class="cs-text">If you go back to the home screen while a show is playing, a red panel opens from the camera cutout. It shows the current line, a waveform and the time left. Pausing folds it back into the island, and tapping the island opens it again.</p>
+              <ul class="p-how">
           <li><span><b>It opens from the island.</b> The panel starts at the island's 124 × 36 size and expands to full width, while the key card and mode dial fold away.</span></li>
           <li><span><b>The program bar follows playback.</b> The corner on air is brightest, the next one is at half brightness and the rest are dim.</span></li>
         </ul>
-        <div class="p-read"><span class="led" data-led="live"></span><span data-read="live"></span></div>
-      </div>
-      <div class="p-slot" aria-hidden="true"></div></div>
-    </article>
-
-    <!-- 7 · Modes -->
-    <article class="p-ch p-pad-end" id="ch-modes" data-h="76" data-side="left" data-card="modes" data-needs="idle" data-intro="modes">
-      <div class="p-wrap p-row"><div class="p-text">
-        <h2>The mode dial</h2>
-        <p class="p-lede">The bottom row sets how often OnGen airs: Daily, Hourly or Weekly Radio. You choose by moving a ruler under a fixed red needle.</p>
-        <ul class="p-how">
+              <div class="p-read"><span class="led" data-led="live"></span><span data-read="live"></span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="p-ch cs-block cs-demo" id="ch-modes" data-h="76" data-side="right" data-card="modes" data-needs="idle" data-intro="modes">
+        <div class="cs-sub"><span class="no">06</span><h3>The mode dial</h3><p>Daily, Hourly or Weekly Radio</p></div>
+        <div class="cs-body">
+          <div class="cs-demo-grid">
+            <div class="p-slot" aria-hidden="true"></div>
+            <div class="cs-demo-side">
+              <p class="cs-text">The bottom row sets how often OnGen airs: Daily, Hourly or Weekly Radio. You choose by moving a ruler under a fixed red needle.</p>
+              <ul class="p-how">
           <li><span><b>Labels are 120 px apart</b> above a tick every 8 px, and get brighter as they approach the needle.</span></li>
           <li><span><b>Drag the ruler, tap either side or use the arrow keys.</b> When you let go, it settles on the nearest mode.</span></li>
           <li><span><b>In this prototype</b> the dial only changes the display. The timetable above shows the Hourly schedule.</span></li>
         </ul>
-        <div class="p-read"><span class="led"></span><span data-read="modes"></span></div>
-      </div>
-      <div class="p-slot" aria-hidden="true"></div></div>
-    </article>
-
-</div>
-
-<!-- System -->
-<section class="p-sec" id="ch-system">
-  <div class="p-wrap">
-    <h2>Colour, type and shape</h2>
-    <p class="p-lede">The interface follows the look of a radio, with flat dark keys around a black screen. Four greys build the structure, and red is used only for something that is on air or about to air.</p>
-
-    <div class="p-grid">
+              <div class="p-read"><span class="led"></span><span data-read="modes"></span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+      <div class="cs-block" id="ch-system">
+        <div class="cs-sub"><span class="no">07</span><h3>Colour, type and shape</h3><p>A radio: flat dark keys, a black screen</p></div>
+        <div class="cs-body">
+          <p class="cs-text">The interface follows the look of a radio, with flat dark keys around a black screen. Four greys build the structure, and red is used only for something that is on air or about to air.</p><div class="p-grid">
       <div class="p-cell c-color">
         <h3>Colour</h3>
         <div class="sw">
@@ -1542,203 +1876,43 @@ html,body{overflow-x:clip}
         </div>
       </div>
     </div>
-
-    <div class="p-research">
-      <h3>The mobile app is one part of the research</h3>
-      <p>The phone app on this page is a research prototype. OnGen is still exploring which medium suits it best. The current focus is AR integration, together with research into SDKs across the platforms people already use, from phones and AR glasses to smart home devices.</p>
-    </div>
-  </div>
-</section>
-<section class="wx wx-next">
-  <div class="p-wrap">
-    <a class="nx" href="#what">
-      <span class="nx-l">
-        <span class="nx-k">Up next</span>
-        <b class="nx-t">What is OnGen</b>
-        <span class="nx-s">The research and the decisions behind the app</span>
-      </span>
-      <span class="nx-r" aria-hidden="true">
-        <span class="nx-n"><b>7</b><span>research phases</span></span>
-        <span class="nx-n"><b>22</b><span>surveyed</span></span>
-        <span class="nx-n"><b>73</b><span>SUS score</span></span>
-      </span>
-      <span class="nx-key" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.6v14.8a1 1 0 0 0 1.5.86l12.2-7.4a1 1 0 0 0 0-1.72L8.5 3.74A1 1 0 0 0 7 4.6z"/></svg></span>
-    </a>
-  </div>
-</section>
-</div>
-<!-- ===================== What is OnGen ===================== -->
-<div class="p-view" data-view="what" hidden>
-
-  <!-- Hero: statement, spec sheet, contents as a timetable -->
-  <section class="wx wx-hero">
-    <div class="p-wrap">
-      <div class="wx-hero-grid">
-        <div>
-          <h1 class="wx-h1">Your day as a short radio show</h1>
-          <p class="wx-lede">OnGen is an AI-curated listening app. It reads your calendar, mail, AI chats and location, and plays short shows between your plans about what you need to do, what you missed, what to remember and what's happening nearby. This page covers the research and the decisions behind it.</p>
         </div>
       </div>
-      <dl class="spec">
-        <div><dt>Role</dt><dd>Solo: product and experience design, research, AI-assisted prototyping</dd></div>
-        <div><dt>Timeline</dt><dd>Sep 2025 to May 2026</dd></div>
-        <div><dt>Context</dt><dd>Industrial Design thesis, OCAD University. Critique: Alexander Manu, Bernard Dietz</dd></div>
-        <div><dt>Field test</dt><dd>GradEX 111 · 408 sessions</dd></div>
-        <div><dt>Recognition</dt><dd>ACIDO 2026 finalist</dd></div>
-      </dl>
+      <div class="cs-block">
+        <div class="cs-sub"><span class="no">08</span><h3>The mobile app is one part of the research</h3><p>Which medium suits OnGen</p></div>
+        <div class="cs-body">
+          <p class="cs-text">The phone app on this page is a research prototype, one of the media OnGen was tested on. GradEX 111 showed that an AR device is not an effective medium for it, so the work now goes into devices already in the home, such as Amazon Alexa, together with research into SDKs across the platforms people already use.</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- The question -->
-  <section class="wx" id="w-question" data-title="The question" data-note="Why it plays without being asked">
-    <div class="p-wrap p-row">
-      <div class="p-text">
-        <h2>Most AI waits to be asked</h2>
-        <p class="wx-lede">Radio reaches people without being asked. AI assistants know a lot about your inbox, calendar and city, but they only answer questions. OnGen plays like radio and uses what AI knows about your day.</p>
-      </div>
-      <figure class="fx">
-        <div class="card cm" role="table" aria-label="How each medium reaches you">
-          <div class="cm-head"><span></span><span>Comes to you</span><span>Live</span><span>About you</span></div>
-          <div class="cm-row"><b>Newspaper</b><i class="lp"></i><i class="lp"></i><i class="lp"></i><em>You go and find it. Printed once a day, for everyone.</em></div>
-          <div class="cm-row"><b>Radio</b><i class="lp on"></i><i class="lp on"></i><i class="lp"></i><em>It comes to you, live, for the whole region.</em></div>
-          <div class="cm-row"><b>TV</b><i class="lp on"></i><i class="lp on"></i><i class="lp"></i><em>It comes to you on a schedule, for everyone at once.</em></div>
-          <div class="cm-row"><b>Social feed</b><i class="lp p"></i><i class="lp p"></i><i class="lp p"></i><em>You scroll for it. Close to live, about people you follow.</em></div>
-          <div class="cm-row"><b>AI chat</b><i class="lp"></i><i class="lp"></i><i class="lp p"></i><em>You ask for it. It knows only what you typed.</em></div>
-          <div class="cm-row me"><b>OnGen</b><i class="lp on"></i><i class="lp on"></i><i class="lp on"></i><em>It comes to you between plans, live, about your own day.</em></div>
-          <div class="cm-key"><span><i class="lp on"></i>Yes</span><span><i class="lp p"></i>Partly</span><span><i class="lp"></i>No</span></div>
-        </div>
-      </figure>
-    </div>
-  </section>
+</div><!-- /story -->
 
-  <!-- What it covers -->
-  <section class="wx" id="w-covers" data-title="What it covers" data-note="Four kinds of segment">
-    <div class="p-wrap p-row wx-flip">
-      <div class="p-text">
-        <h2>What a show covers</h2>
-        <p class="wx-lede">Each show is made of short corners, and each corner covers one of four things: your work for the day, what changed while you were away, what you might forget, and what's happening nearby.</p>
+  <!-- RESEARCH -->
+  <section class="cs-sec" id="research" data-chapter="Research" aria-labelledby="rsTitle">
+    <div class="cs-wrap">
+      <div class="cs-head">
+        <div class="cs-tag">Research</div>
+        <h2 class="cs-h2" id="rsTitle">Seven research phases, each set up before the build.</h2>
+        <p class="cs-lede">Each of the four journey steps had a hypothesis, a survey question and a target metric before anything was built. Consent was tested first, since that is where people were most likely to drop off. Each phase below lists what was found and what was decided as a result.</p>
       </div>
-      <figure class="fx">
-        <div class="card covers">
-          <div class="cv-tiles" id="cvTiles" role="tablist" aria-label="Segments">
-            <button class="tile2" data-k="prod" role="tab" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8.5 12.2 2.4 2.4 4.6-5"/></svg><span>Productivity</span></button>
-            <button class="tile2" data-k="catch" role="tab" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 13.5 6.2 6.6A2 2 0 0 1 8.1 5.2h7.8a2 2 0 0 1 1.9 1.4L20 13.5V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M4 13.5h4.5l1.2 2h4.6l1.2-2H20"/></svg><span>Catch-up</span></button>
-            <button class="tile2" data-k="remind" role="tab" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M6.5 16.5V11a5.5 5.5 0 0 1 11 0v5.5l1.5 1.5H5z"/><path d="M10 20.5h4"/></svg><span>Reminders</span></button>
-            <button class="tile2" data-k="local" role="tab" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 21s6.5-6 6.5-11.2a6.5 6.5 0 1 0-13 0C5.5 15 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.4"/></svg><span>Local news</span></button>
-          </div>
-          <div class="cv-body">
-            <div class="cv-meta"><span class="card-label" id="cvFrom"></span><span class="card-label dim" id="cvCorners"></span></div>
-            <div class="lyr" id="cvLines" aria-live="polite"></div>
-          </div>
-        </div>
-        <figcaption>Lines quoted from the prototype's demo shows.</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <!-- A day of shows -->
-  <section class="wx" id="w-day" data-title="A day of shows" data-note="When shows air">
-    <div class="p-wrap">
-      <div class="wx-split">
-        <div>
-          <h2>Shows air in the gaps of your calendar</h2>
-        </div>
-        <p class="wx-lede">Shows are placed between meetings and commutes. Each one fits its gap and uses the corners that suit that time of day, such as a wake-up briefing at 7:30, traffic and errands on the way home, and a recap in the evening. Your own music service plays in between.</p>
-      </div>
-      <figure class="fx fx-wide">
-        <div class="card day" id="day">
-          <div class="day-head">
-            <div class="day-title">
-              <span class="card-label" id="dayWhen"></span>
-              <b id="dayName"></b>
-            </div>
-            <div class="day-nav">
-              <button type="button" id="dayPrev" aria-label="Previous show"><svg viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></svg></button>
-              <button type="button" id="dayNext" aria-label="Next show"><svg viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></svg></button>
-            </div>
-          </div>
-          <div class="day-note"><i aria-hidden="true"></i>Music Service Provider</div>
-          <div class="day-strip" id="dayStrip" tabindex="0" role="listbox" aria-label="Today's shows">
-            <div class="day-lane" id="dayShows"></div>
-            <div class="day-axis" id="dayAxis"></div>
-            <i class="day-now" id="dayNow"><b>5:50 PM</b></i>
-          </div>
-          <div class="day-prog">
-            <div class="pbar" id="dayBar"></div>
-            <div class="pleg" id="dayLeg"></div>
-          </div>
-          <div class="day-line"><span class="card-label">Opens with</span><p id="dayLine"></p></div>
-        </div>
-        <figcaption>The prototype's demo day, clock held at 5:50 PM.</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <!-- The service -->
-  <section class="wx" id="w-services" data-title="The service" data-note="How the service is structured">
-    <div class="p-wrap p-row">
-      <div class="p-text">
-        <h2>Three service layers</h2>
-        <p class="wx-lede">Regional data feeds a shared community stream, and the same engine narrows it down to personal shows. The inputs and outputs of each layer were mapped before the build started.</p>
-        <dl class="spec spec-tight">
-          <div><dt>Architecture</dt><dd>14 entities, 17 relations</dd></div>
-          <div><dt>Listener model</dt><dd>User is a listener, context is real time, flow is shared</dd></div>
-        </dl>
-      </div>
-      <figure class="fx">
-        <div class="card stk">
-          <div class="stk-head"><span class="card-label">Service layers</span><span class="card-label dim">audience narrows top to bottom</span></div>
-          <div class="st-row">
-            <div class="st-name"><b>Regional Information Hub</b><span>Data</span></div>
-            <div class="led st-scope" data-v="1" aria-label="Audience scope 100%"></div>
-            <dl class="st-io"><div><dt>Inputs</dt><dd>Local news, transit, weather, events</dd></div><div><dt>Outputs</dt><dd>Regional context for every show</dd></div></dl>
-          </div>
-          <div class="st-row">
-            <div class="st-name"><b>Community Radio</b><span>Shared</span></div>
-            <div class="led st-scope" data-v="0.58" aria-label="Audience scope 58%"></div>
-            <dl class="st-io"><div><dt>Inputs</dt><dd>Community posts, regional context</dd></div><div><dt>Outputs</dt><dd>A shared stream, voiced by an AI host</dd></div></dl>
-          </div>
-          <div class="st-row">
-            <div class="st-name"><b>Personal Radio</b><span>One listener</span></div>
-            <div class="led st-scope" data-v="0.18" aria-label="Audience scope 18%"></div>
-            <dl class="st-io"><div><dt>Inputs</dt><dd>Onboarding, calendar, mail, AI chats</dd></div><div><dt>Outputs</dt><dd>Personal shows on the listener’s schedule</dd></div></dl>
-          </div>
-        </div>
-      </figure>
-    </div>
-  </section>
-
-  <!-- Research: decisions -->
-  <section class="wx" id="w-research" data-title="Research" data-note="Findings and decisions">
-    <div class="p-wrap">
-      <div class="wx-split">
-        <div>
-          <h2>Seven research phases</h2>
-        </div>
-        <p class="wx-lede">Each of the four journey steps had a hypothesis, a survey question and a target metric before anything was built. Consent was tested first, since that is where people were most likely to drop off. Each phase below lists what was found and what was decided as a result.</p>
-      </div>
-      <figure class="fx fx-wide">
+      <div class="cs-block">
+        <div class="cs-sub"><span class="no">01</span><h3>Research phases</h3><p>What was found, and what was decided</p></div>
+        <div class="cs-body">
+          <figure class="fx fx-wide">
         <div class="card gantt">
           <div class="gt" id="gt" role="tablist" aria-label="Research phases"></div>
           <div class="rd" id="rDetail" aria-live="polite"></div>
         </div>
         <figcaption>Phases dated “winter 2026” in the case study are placed in January and February.</figcaption>
       </figure>
-      <div class="wx-methods">
-        <p><span>Methods</span> Service map (14 entities, 17 relations) · journey mapping · hypothesis-led research plan · concept survey (n = 22) · pre-pilot peer review on concept clarity, flow predictability, trust and value · usability testing with SUS, session time and touchpoint regressions · qualitative interview coding · five journey maps of cognitive load, emotion and motivation · three personas · field pilot (408 sessions)</p>
-        <p><span>Frameworks</span> Business model canvas · MECE · VRIO · BCG · four positioning matrices across platform, delivery, revenue and intelligence · TCPS 2 research ethics</p>
+        </div>
       </div>
-    </div>
-  </section>
-
-  <!-- People -->
-  <section class="wx" id="w-people" data-title="What people said" data-note="Survey and Pilot 1">
-    <div class="p-wrap p-row wx-flip">
-      <div class="p-text">
-        <h2>Interested, but not yet comfortable</h2>
-        <p class="wx-lede">Every average in the concept survey fell between 2.91 and 3.41 on a 5-point scale, close to neutral. Local news and community events were what people most wanted to hear. The open answers split evenly, with 13 excited about local information in one place and 13 worried about being listened to, so consent became part of the interface. Usability was already above average in Pilot 1.</p>
-      </div>
-      <figure class="fx">
+      <div class="cs-block">
+        <div class="cs-sub"><span class="no">02</span><h3>Interested, but not yet comfortable</h3><p>Concept survey and Pilot 1</p></div>
+        <div class="cs-body">
+          <p class="cs-text">Every average in the concept survey fell between 2.91 and 3.41 on a 5-point scale, close to neutral. Local news and community events were what people most wanted to hear. The open answers split evenly, with 13 excited about local information in one place and 13 worried about being listened to, so consent became part of the interface. Usability was already above average in Pilot 1.</p><figure class="fx">
         <div class="card people">
           <div class="pp-block">
             <div class="pp-head"><span class="card-label">Concept survey · averages</span><span class="card-label dim">n = 22 · scale 1 to 5</span></div>
@@ -1772,19 +1946,21 @@ html,body{overflow-x:clip}
         </div>
         <figcaption>Concept survey, March 11 to 25, 2026, 22 consenting participants (64% aged 20 to 24, 91% students). Pilot 1 usability test, winter 2026.</figcaption>
       </figure>
-    </div>
-  </section>
-
-  <!-- Build -->
-  <section class="wx" id="w-build" data-title="Build" data-note="How it was built">
-    <div class="p-wrap">
-      <div class="wx-split">
-        <div>
-          <h2>Built as a working web app</h2>
         </div>
-        <p class="wx-lede">OnGen runs on a phone. A local Python server handles the AI and backend, a prompter turns sources into scripts, AI APIs generate the voice, and Firebase logs every interaction. The GradEX 111 numbers come from those logs.</p>
       </div>
-      <figure class="fx fx-wide">
+      <div class="cs-block">
+        <div class="cs-sub"><span class="no">03</span><h3>Methods and frameworks</h3><p>How the research was run</p></div>
+        <div class="cs-body">
+          <div class="wx-methods">
+        <p><span>Methods</span> Service map (14 entities, 17 relations) · journey mapping · hypothesis-led research plan · concept survey (n = 22) · pre-pilot peer review on concept clarity, flow predictability, trust and value · usability testing with SUS, session time and touchpoint regressions · qualitative interview coding · five journey maps of cognitive load, emotion and motivation · three personas · field pilot (408 sessions)</p>
+        <p><span>Frameworks</span> Business model canvas · MECE · VRIO · BCG · four positioning matrices across platform, delivery, revenue and intelligence · TCPS 2 research ethics</p>
+      </div>
+        </div>
+      </div>
+      <div class="cs-block">
+        <div class="cs-sub"><span class="no">04</span><h3>Built as a working web app</h3><p>From the sources to the logs</p></div>
+        <div class="cs-body">
+          <p class="cs-text">OnGen runs on a phone. A local Python server handles the AI and backend, a prompter turns sources into scripts, AI APIs generate the voice, and Firebase logs every interaction. The GradEX 111 numbers come from those logs.</p><figure class="fx fx-wide">
         <div class="card flow">
           <div class="fl-row">
           <div class="fl-st"><b>Sources</b><span>Calendar, mail, AI chats, place</span><p>With consent, only the summary a show needs is passed on.</p></div>
@@ -1796,57 +1972,40 @@ html,body{overflow-x:clip}
           </div>
         </div>
       </figure>
-    </div>
-  </section>
-
-  <!-- Next -->
-  <section class="wx wx-next">
-    <div class="p-wrap">
-      <a class="nx" href="#review">
-        <span class="nx-l">
-          <span class="nx-k">Up next</span>
-          <b class="nx-t">Review</b>
-          <span class="nx-s">What the GradEX 111 field test showed</span>
-        </span>
-        <span class="nx-r" aria-hidden="true">
-          <span class="nx-n"><b>408</b><span>sessions</span></span>
-          <span class="nx-n"><b>147</b><span>users</span></span>
-          <span class="nx-n"><b>34.6%</b><span>made a podcast</span></span>
-        </span>
-        <span class="nx-key" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.6v14.8a1 1 0 0 0 1.5.86l12.2-7.4a1 1 0 0 0 0-1.72L8.5 3.74A1 1 0 0 0 7 4.6z"/></svg></span>
-      </a>
-    </div>
-  </section>
-</div>
-
-<!-- ===================== Review ===================== -->
-<div class="p-view" data-view="review" hidden>
-
-  <section class="w-sec w-hero">
-    <div class="p-wrap">
-      <h1 class="w-h1 r-h1">408 sessions at GradEX 111</h1>
-      <div class="r-summary">
-        <p class="p-lede">OnGen ran as a working web app at GradEX 111, OCAD University's graduate exhibition, and Firebase logged every interaction. About a third of visitors went beyond browsing and generated their own podcast. In the first four days, 47.7% of users left within 30 seconds, while users who signed in stayed about 20 times longer than guests.</p>
-        <div class="r-verdict">
-          <div><span class="r-tag good">Worked</span><p>34.6% of visitors generated a personal podcast.</p></div>
-          <div><span class="r-tag bad">Did not</span><p>47.7% of users left within 30 seconds in the first four days.</p></div>
-          <div><span class="r-tag next">Next</span><p>Start the first show sooner and move sign-in earlier.</p></div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="w-sec r-sec">
-    <div class="p-wrap">
-      <div class="r-tiles">
+  <!-- FIELD TEST -->
+  <section class="cs-sec" id="review" data-chapter="Field test" aria-labelledby="rvTitle">
+    <div class="cs-wrap">
+      <div class="cs-head">
+        <div class="cs-tag">Field test</div>
+        <h2 class="cs-h2" id="rvTitle">408 sessions at GradEX 111.</h2>
+        <p class="cs-lede">OnGen ran as a working web app at GradEX 111, OCAD University's graduate exhibition, and Firebase logged every interaction. About a third of visitors went beyond browsing and generated their own podcast. In the first four days, 47.7% of users left within 30 seconds, while users who signed in stayed about 20 times longer than guests.</p>
+      </div>
+      <div class="cs-block">
+        <div class="cs-sub"><span class="no">01</span><h3>The verdict</h3><p>What worked, what did not, what comes next</p></div>
+        <div class="cs-body">
+          <div class="r-verdict">
+          <div><span class="r-tag good">Worked</span><p>34.6% of visitors generated a personal podcast.</p></div>
+          <div><span class="r-tag bad">Did not</span><p>47.7% of users left within 30 seconds in the first four days.</p></div>
+          <div><span class="r-tag next">Next</span><p>Start the first show sooner and move sign-in earlier.</p></div>
+        </div>
+        </div>
+      </div>
+      <div class="cs-block">
+        <div class="cs-sub"><span class="no">02</span><h3>The numbers</h3><p>Firebase logs from the exhibition</p></div>
+        <div class="cs-body">
+          <div class="r-tiles">
         <div class="r-tile"><span>Sessions</span><b>408</b><em>logged in Firebase</em></div>
         <div class="r-tile"><span>Users</span><b>147</b><em>121 guests · 26 registered</em></div>
         <div class="r-tile"><span>Sessions per user</span><b>2.8</b><em>average per visitor</em></div>
         <div class="r-tile"><span>Median session</span><b>35.6<small>s</small></b><em>per session</em></div>
         <div class="r-tile accent"><span>Podcast generation</span><b>34.6<small>%</small></b><em>personal shows created</em></div>
       </div>
-
-      <div class="r-charts">
+<div class="r-charts">
         <div class="r-card">
           <h3>Who used it</h3>
           <div class="r-split" aria-label="121 guests and 26 registered users">
@@ -1872,7 +2031,7 @@ html,body{overflow-x:clip}
           <p class="r-note">Ten users account for 90% of the total time, so this review uses the median session length.</p>
         </div>
       </div>
-      <div class="r-card r-compare">
+<div class="r-card r-compare">
         <h3>Guests and registered users, average per user</h3>
         <div class="r-cmp">
           <div class="r-cmp-row"><span class="l">Time in the app</span><div class="b"><div class="led" style="width:5.03%;--on:var(--m1)"></div><em>1,132 s</em><div class="led" style="width:100%;--on:var(--m5)"></div><em class="w">22,514 s</em></div><b>20×</b></div>
@@ -1882,14 +2041,12 @@ html,body{overflow-x:clip}
         <div class="r-legend"><span><i class="g"></i>Guest</span><span><i class="r"></i>Registered</span></div>
         <p class="r-note">First four days of logging. Registered users stayed longer, interacted far more and moved between more stations.</p>
       </div>
-    </div>
-  </section>
-
-  <section class="w-sec r-sec">
-    <div class="p-wrap">
-      <h2>KPIs set before the test</h2>
-      <p class="p-lede">The thesis set three KPIs focused on listening rather than screen time. Each has a long-term target and a baseline for a graduation pilot, and the GradEX data covers two of them.</p>
-      <div class="r-table-wrap">
+        </div>
+      </div>
+      <div class="cs-block">
+        <div class="cs-sub"><span class="no">03</span><h3>KPIs set before the test</h3><p>Listening, not screen time</p></div>
+        <div class="cs-body">
+          <p class="cs-text">The thesis set three KPIs focused on listening rather than screen time. Each has a long-term target and a baseline for a graduation pilot, and the GradEX data covers two of them.</p><div class="r-table-wrap">
         <table class="r-table">
           <thead><tr><th>KPI</th><th>Target</th><th>Baseline</th><th>What GradEX showed</th><th>Read</th></tr></thead>
           <tbody>
@@ -1899,37 +2056,70 @@ html,body{overflow-x:clip}
           </tbody>
         </table>
       </div>
-    </div>
-  </section>
-
-  <section class="w-sec r-sec">
-    <div class="p-wrap">
-      <h2>Findings</h2>
-      <div class="r-find">
+        </div>
+      </div>
+      <div class="cs-block">
+        <div class="cs-sub"><span class="no">04</span><h3>Findings</h3><p>What the logs and the survey showed</p></div>
+        <div class="cs-body">
+          <div class="r-find">
         <div><h3>Visitors reached the core action</h3><p>About a third of visitors created their own show, at an exhibition where a lot of other work was competing for attention.</p></div>
         <div><h3>The first 30 seconds matter most</h3><p>47.7% of users left within 30 seconds, but 23.4% stayed ten minutes or more. The first show needs to start right away, before any setup.</p></div>
         <div><h3>Signed-in visitors stayed longer</h3><p>Registered users stayed about 20 times longer and made 56 times as many interactions. Personal context is what keeps people listening, so sign-in should come earlier and take less effort.</p></div>
         <div><h3>Trust needs to be designed</h3><p>The neutral survey scores came from worry about being listened to. Clear consent copy and visible control over sources belong in the product itself.</p></div>
+      </div><p class="r-src">Sources · Firebase event logs from GradEX 111, May 2026; the time and guest/registered breakdowns cover the first four days, May 6 to 10, 107 users · Pilot 1 usability study · concept survey, 22 respondents, March 11 to 25, 2026 · KPI targets from the thesis report.</p>
+        </div>
       </div>
-      <p class="r-src">Sources · Firebase event logs from GradEX 111, May 2026; the time and guest/registered breakdowns cover the first four days, May 6 to 10, 107 users · Pilot 1 usability study · concept survey, 22 respondents, March 11 to 25, 2026 · KPI targets from the thesis report.</p>
     </div>
   </section>
 
-  <section class="w-sec r-sec">
-    <div class="p-wrap">
-      <h2>Conclusion</h2>
-      <p class="p-lede">GradEX 111 confirmed that AI acting as an assistant holds value, and showed that an AR device is not an effective medium for it. The direction was right. The device was not.</p>
-      <div class="r-find">
+  <!-- CONCLUSION -->
+  <section class="cs-sec" id="conclusion" data-chapter="Conclusion" aria-labelledby="ccTitle">
+    <div class="cs-wrap">
+      <div class="cs-head">
+        <div class="cs-tag">Conclusion</div>
+        <h2 class="cs-h2" id="ccTitle">The direction was right. <span class="soft">The device was not.</span></h2>
+        <p class="cs-lede">GradEX 111 confirmed that AI acting as an assistant holds value, and showed that an AR device is not an effective medium for it. The direction was right. The device was not.</p>
+      </div>
+      <div class="cs-block">
+        <div class="cs-sub"><span class="no">01</span><h3>What GradEX 111 settled</h3><p>And where OnGen goes next</p></div>
+        <div class="cs-body">
+          <div class="r-find">
         <div><h3>The assistant role holds value</h3><p>What GradEX 111 validated is the value of AI taking on an assistant’s role in a person’s day.</p></div>
         <div><h3>AR is not the right medium</h3><p>The AR device approach did not prove an effective medium, and OnGen is unlikely to be used in an AR environment.</p></div>
         <div><h3>The market confirmed the direction</h3><p>Since then, demand for AI assistant features has risen sharply, as of October 2026, which shows the direction itself was right.</p></div>
         <div><h3>Next: home devices</h3><p>In place of AR, OnGen works better on devices already in the home, such as Amazon Alexa. It is now in an expansion stage of development.</p></div>
       </div>
+        </div>
+      </div>
+      <div class="cs-block" id="book">
+        <div class="cs-sub"><span class="no">02</span><h3>A walkthrough</h3><p>The prototype, live, with questions</p></div>
+        <div class="cs-body">
+          <div class="p-cta-card">
+      <div class="p-cta-txt">
+        <h2>See the working prototype</h2>
+        <p>A short walkthrough of the prototype, with time for questions about the research and the build.</p>
+      </div>
+      <a class="p-cta-btn" href="index.html#contact">Book a demo</a>
+    </div>
+        </div>
+      </div>
     </div>
   </section>
-</div>
-
 </main>
+
+<footer class="cs-close" id="end">
+  <div class="cs-wrap">
+    <div class="cs-eyebrow"><svg viewBox="0 0 366 169" aria-hidden="true"><path fill="currentColor" d="M84.5 0C112.993 0 138.191 14.1027 153.497 35.708C144.147 42.3237 138.034 53.2109 138.001 65.5283C138.013 65.5623 138.027 65.5959 138.039 65.6299H166.884C167.583 68.6933 168.115 71.8199 168.471 75H86.627C81.3804 75.0002 77.127 79.2534 77.127 84.5C77.127 89.7466 81.3804 93.9998 86.627 94H168.471C168.115 97.1801 167.583 100.307 166.884 103.37H138.039C138.027 103.404 138.013 103.437 138.001 103.471C138.034 115.788 144.147 126.675 153.497 133.291C138.191 154.897 112.993 169 84.5 169C37.8319 169 0 131.168 0 84.5C0 37.8319 37.8319 0 84.5 0ZM85.6699 29C54.9243 29.0001 30 53.8483 30 84.5C30 115.152 54.9243 140 85.6699 140C109.732 140 130.227 124.78 138.001 103.471L138 103.37H85.0557C74.6341 103.37 66.1855 94.9216 66.1855 84.5C66.1855 74.0784 74.6341 65.6299 85.0557 65.6299H138C138 65.596 138.001 65.5622 138.001 65.5283C130.227 44.2193 109.732 29 85.6699 29ZM246 140H174.63C166.759 140 159.468 137.516 153.497 133.291C159.776 124.428 164.39 114.303 166.884 103.37H246V140ZM310 29C340.376 29 365 53.6243 365 84V140H326V87.5C326 78.3873 318.613 71 309.5 71C300.387 71 293 78.3873 293 87.5V140H255V84C255 53.6243 279.624 29 310 29ZM246 94H168.471C168.82 90.8814 169 87.7117 169 84.5C169 81.2883 168.82 78.1186 168.471 75H246V94ZM246 65.6299H166.884C164.39 54.6968 159.776 44.5712 153.497 35.708C159.468 31.4832 166.759 29 174.63 29H246V65.6299Z"/></svg><span>Radio · Industrial Design thesis, OCAD University · 2026</span></div>
+    <h2 class="cs-h2">Radio that comes to you, about your own day.</h2>
+    <div class="cs-links">
+      <a href="https://plak-1a653.web.app/about" target="_blank" rel="noopener"><div><div class="t">Clink</div><div class="s">Previous case study</div></div><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 10H4M9 5l-5 5 5 5"/></svg></a>
+      <a href="finboard.html"><div><div class="t">Finboard</div><div class="s">Next case study</div></div><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg></a>
+      <a href="index.html#work"><div><div class="t">More work</div><div class="s">Back to the portfolio</div></div><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h8v8M6 14l8-8"/></svg></a>
+    </div>
+    <p class="cs-note"><b>OnGen</b> is a thesis project by Michael Joongmin Park, Industrial Design, OCAD University. The listener, schedule and script on this page are demo data. <a href="ongenprototype.html">The prototype on its own ↗</a></p>
+    <div class="cs-foot"><span>© 2026 Michael Joongmin Park</span><nav aria-label="Site"><a href="index.html#work">Work</a><a href="principle.html">Principle</a><a href="about.html">About</a><a href="index.html#contact">Contact</a><a href="https://michaeljpark.github.io/portfolio2026/Joongmin_Park_Resume.pdf">Résumé</a></nav></div>
+  </div>
+</footer>
 
 <div class="ask-scrim" id="askScrim"></div>
 <aside class="ask" id="ask" aria-label="Ask about OnGen" aria-hidden="true">
@@ -1942,26 +2132,6 @@ html,body{overflow-x:clip}
   <p class="ask-note">Answers are generated by Claude from the facts on this site.</p>
 </aside>
 
-<section class="p-cta" id="book" aria-label="Book a demo">
-  <div class="p-wrap">
-    <div class="p-cta-card">
-      <div class="p-cta-txt">
-        <h2>See the working prototype</h2>
-        <p>A short walkthrough of the prototype, with time for questions about the research and the build.</p>
-      </div>
-      <a class="p-cta-btn" href="index.html#contact">Book a demo</a>
-    </div>
-  </div>
-</section>
-
-<footer class="p-foot">
-  <div class="p-wrap">
-    <p><b>OnGen</b> is a thesis project by Michael Joongmin Park, Industrial Design, OCAD University. The listener, schedule and script on this page are demo data.</p>
-    <div class="p-links">
-      <a href="ongenprototype.html">Prototype on its own ↗</a>
-    </div>
-  </div>
-</footer>
 
 <script>
 (function(){
@@ -2768,7 +2938,7 @@ html,body{overflow-x:clip}
 (function(){
   'use strict';
   var A = window.OnGen;
-  if (!A) { var hv = document.querySelector('[data-view="how"] .p-story'); if (hv) hv.style.display = 'none'; window.OnGenHow = { shown: function(){}, hidden: function(){} }; return; }
+  if (!A) { var hv = document.getElementById('story'); if (hv) hv.style.display = 'none'; window.OnGenHow = { shown: function(){}, hidden: function(){} }; return; }
   var $ = function(s, r){ return (r || document).querySelector(s); };
   var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var frame = document.getElementById('frame'), fit = document.getElementById('fit');
@@ -3437,7 +3607,7 @@ html,body{overflow-x:clip}
     setInterval(function(){ if (!visible() || document.hidden) return; readouts(); wake(); }, 250);
     pickChapter(); readouts(); wake();
   }
-  var started = false, fontsOk = false, howView = document.querySelector('.p-view[data-view="how"]');
+  var started = false, fontsOk = false, howView = document.getElementById('story');
   function visible(){ return !howView.hidden; }
   function go(){ if (started || !fontsOk || !visible()) return; started = true; start(); }
   function fontsReady(){ if (fontsOk) return; fontsOk = true; go(); }
@@ -3458,62 +3628,6 @@ html,body{overflow-x:clip}
   var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- routing: #how (default), #what, #review; chapter anchors belong to their page ---------- */
-  var VIEWS = ['how', 'what', 'review'];
-  var current = null;
-  function viewFor(h){
-    if (VIEWS.indexOf(h) >= 0) return h;
-    var el = h && document.getElementById(h);
-    var v = el && el.closest('.p-view');
-    return v ? v.dataset.view : 'how';
-  }
-  // where the page is: the URL hash, or the last link followed when the host won't let the hash change
-  var route = null;
-  function hashNow(){ return location.hash.replace('#', ''); }
-  function go(h){
-    h = String(h).replace('#', '');
-    try { if (hashNow() !== h) location.hash = h; } catch (err) {}
-    route = hashNow() === h ? null : h;
-    show();
-  }
-  function show(){
-    var h = route !== null ? route : hashNow(), v = viewFor(h);
-    if (v !== current) {
-      var was = current;
-      current = v;
-      $$('.p-view[data-view]').forEach(function(el){ el.hidden = el.dataset.view !== v; });
-      $$('.p-tabs a').forEach(function(a){ if (a.dataset.view === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-      document.title = v === 'what' ? 'What is OnGen' : v === 'review' ? 'OnGen Review · GradEX 111' : 'How OnGen Radio works';
-      // a link or the dial opens a page at the top; browser back and forward return to where you were on it
-      var y = fresh ? ((VIEWS.indexOf(h) >= 0 || !h) ? 0 : null) : (spot[v] || 0);
-      if (y !== null) window.scrollTo(0, y);
-      fresh = false;
-      if (window.OnGenHow) { if (v === 'how') window.OnGenHow.shown(); else if (was === 'how') window.OnGenHow.hidden(); }
-      // the How page sizes its chapters when shown, so settle the position once more after that
-      if (y) requestAnimationFrame(function(){ window.scrollTo(0, y); });
-      needle(was !== null);
-    }
-    if (h && VIEWS.indexOf(h) < 0) { var t = document.getElementById(h); if (t) requestAnimationFrame(function(){ t.scrollIntoView(); }); }
-  }
-  function fromURL(){ route = hashNow(); show(); }
-  window.addEventListener('hashchange', fromURL);
-  window.addEventListener('popstate', fromURL);
-  // remember the reading position of each page, so going back lands on the same spot
-  var spot = {}, fresh = false, spotT = 0;
-  try { history.scrollRestoration = 'manual'; } catch (err) {}
-  window.addEventListener('scroll', function(){ if (spotT) return; spotT = setTimeout(function(){ spotT = 0; if (current) spot[current] = window.scrollY; }, 120); }, { passive: true });
-  // every in-page link routes here, so the pages switch even where the browser blocks hash navigation
-  document.addEventListener('click', function(e){
-    if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    var a = e.target.closest && e.target.closest('a[href^="#"]');
-    if (!a) return;
-    var h = a.getAttribute('href').slice(1);
-    if (!h) return;
-    e.preventDefault();
-    if (current) spot[current] = window.scrollY;
-    fresh = true;
-    go(h);
-  });
   /* ---------- LED meters: segment count follows the element's width, so every segment stays whole ---------- */
   (function(){
     var PITCH = 7, GAP = 2;
@@ -3531,70 +3645,31 @@ html,body{overflow-x:clip}
     else window.addEventListener('resize', function(){ leds.forEach(draw); });
   })();
 
-  /* ---------- navigation dial ---------- */
-  var nav = $('.p-tabs'), dial = $('.p-dial'), tabs = $$('.p-tabs a'), nd = $('.p-needle');
-  var phone = window.matchMedia('(max-width: 860px)'), pos = 0, dialRaf = 0;
-  function cur(){ return Math.max(0, tabs.findIndex(function(a){ return a.hasAttribute('aria-current'); })); }
-  function centerOf(i){ var a = tabs[i]; return a.offsetLeft + a.offsetWidth / 2; }
-  function drawPhone(){
-    var lo = Math.max(0, Math.min(tabs.length - 1, Math.floor(pos))), hi = Math.min(tabs.length - 1, lo + 1), f = pos - lo;
-    var c = centerOf(lo) + (centerOf(hi) - centerOf(lo)) * f;
-    if (pos < 0) c = centerOf(0) + pos * 136; else if (pos > tabs.length - 1) c = centerOf(tabs.length - 1) + (pos - tabs.length + 1) * 136;
-    dial.style.transform = 'translateX(' + (nav.clientWidth / 2 - c).toFixed(1) + 'px)';
-    var light = document.documentElement.getAttribute('data-theme') === 'light';
-    tabs.forEach(function(t, k){ var d = Math.min(1, Math.abs(k - pos)), v = Math.round(light ? 20 + d * 134 : 242 - d * 150); t.style.color = 'rgb(' + v + ',' + v + ',' + (v - 3) + ')'; t.style.opacity = Math.max(0, 1 - d * 1.15).toFixed(3); t.style.pointerEvents = d < .5 ? '' : 'none'; });
-  }
-  function dialSettle(to){
-    cancelAnimationFrame(dialRaf);
-    if (reduce) { pos = to; drawPhone(); return; }
-    (function step(){
-      pos += (to - pos) * .2; if (Math.abs(to - pos) < .002) pos = to;
-      drawPhone(); if (pos !== to) dialRaf = requestAnimationFrame(step);
-    })();
-  }
-  function needle(animate){
-    var i = cur();
-    tabs.forEach(function(t, k){ t.classList.toggle('near', Math.abs(k - i) === 1); });
-    if (phone.matches) { if (animate) dialSettle(i); else { cancelAnimationFrame(dialRaf); pos = i; drawPhone(); } return; }
-    dial.style.transform = ''; tabs.forEach(function(t){ t.style.color = ''; t.style.opacity = ''; t.style.pointerEvents = ''; });
-    var a = tabs[i]; if (!a || !a.offsetWidth) return;
-    var nr = nav.getBoundingClientRect(), ar = a.getBoundingClientRect();
-    nd.classList.toggle('still', !animate || reduce);
-    nd.style.transform = 'translateX(' + (ar.left - nr.left + ar.width / 2).toFixed(1) + 'px)';
-  }
-  // drag the phone dial; let go and it snaps to the nearest page and opens it
-  var drag = null, dragged = false;
-  nav.addEventListener('pointerdown', function(e){
-    if (!phone.matches) return;
-    cancelAnimationFrame(dialRaf); drag = { x: e.clientX, p: pos, id: e.pointerId }; dragged = false;
-  });
-  nav.addEventListener('pointermove', function(e){
-    if (!drag) return;
-    var dx = e.clientX - drag.x;
-    if (!dragged && Math.abs(dx) > 6) { dragged = true; nav.classList.add('dragging'); try { nav.setPointerCapture(drag.id); } catch (err) {} }
-    if (dragged) { pos = Math.max(-.4, Math.min(tabs.length - .6, drag.p - dx / 136)); drawPhone(); }
-  });
-  function release(){
-    if (!drag) return; drag = null; nav.classList.remove('dragging');
-    if (!dragged) return;
-    var k = Math.max(0, Math.min(tabs.length - 1, Math.round(pos)));
-    dialSettle(k);
-    if (k !== cur()) { spot[current] = window.scrollY; fresh = true; go(tabs[k].getAttribute('href')); }
-  }
-  nav.addEventListener('pointerup', release);
-  nav.addEventListener('pointercancel', function(){ if (!drag) return; drag = null; nav.classList.remove('dragging'); dialSettle(cur()); });
-  nav.addEventListener('dragstart', function(e){ e.preventDefault(); });
-  // a drag must not also count as a tap on the label under the finger
-  nav.addEventListener('click', function(e){
-    if (dragged) { e.preventDefault(); e.stopPropagation(); dragged = false; return; }
-    // on phones a tap anywhere on the dial steps to the next page, wrapping round at the end
-    if (!phone.matches) return;
-    e.preventDefault(); e.stopPropagation();
-    var k = (cur() + 1) % tabs.length;
-    spot[current] = window.scrollY; fresh = true;
-    go(tabs[k].getAttribute('href'));
-  }, true);
-  window.addEventListener('resize', function(){ needle(false); });
+  /* ---------- chapter nav: one page, its chapters tracked while reading (as the other case studies) ---------- */
+  (function(){
+    var links = $$('#chapterNav button'), ind = $('#chapterNav .cs-ind'), nowEl = $('#chapterNow');
+    var secs = $$('section[data-chapter]'), curId = null;
+    links.forEach(function(b){
+      b.addEventListener('click', function(){ var t = document.getElementById(b.dataset.go); if (t) t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); });
+    });
+    function track(){
+      var y = window.innerHeight * .35, cur = null;
+      secs.forEach(function(sec){ if (sec.getBoundingClientRect().top < y) cur = sec; });
+      var id = cur ? cur.id : null;
+      links.forEach(function(b){ b.setAttribute('aria-current', b.dataset.go === id ? 'true' : 'false'); });
+      var on = links.filter(function(b){ return b.dataset.go === id; })[0];
+      if (on && on.offsetWidth) { ind.style.opacity = '1'; ind.style.transform = 'translateX(' + (on.offsetLeft + on.offsetWidth / 2 - 1).toFixed(1) + 'px)'; }
+      else ind.style.opacity = '0';
+      if (id !== curId) { curId = id; nowEl.textContent = cur ? cur.dataset.chapter : ''; }
+    }
+    window.addEventListener('scroll', track, { passive: true });
+    window.addEventListener('resize', track);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(track);
+    track();
+    // links into the earlier three-page version (#what, #how, #review) still land on the right chapter
+    var legacy = { what: 'overview' }, h = location.hash.replace('#', '');
+    if (legacy[h]) { var t = document.getElementById(legacy[h]); if (t) setTimeout(function(){ t.scrollIntoView(); }, 60); }
+  })();
 
   /* ---------- light / dark switch: the page changes, the phone keeps its own dark finish ---------- */
   (function(){
@@ -3611,18 +3686,13 @@ html,body{overflow-x:clip}
       root.setAttribute('data-theme', next);
       try { localStorage.setItem('ongen-theme', next); } catch (err) {}
       sync();
-      // the phone dial colours its labels in script, so repaint it for the new theme
-      if (phone.matches) drawPhone();
     });
     sync();
   })();
-  if (phone.addEventListener) phone.addEventListener('change', function(){ needle(false); });
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ needle(false); });
 
   /* ================= What is OnGen ================= */
   // resize work runs on the next frame, so a size it changes never re-enters the observer in the same frame
   function later(fn){ var raf = 0; return function(){ if (raf) return; raf = requestAnimationFrame(function(){ raf = 0; fn(); }); }; }
-  var whatView = document.querySelector('.p-view[data-view="what"]');
   function inView(el, cb){
     if (!('IntersectionObserver' in window)) { cb(true); return; }
     new IntersectionObserver(function(es){ es.forEach(function(e){ cb(e.isIntersecting); }); }, { threshold: .25 }).observe(el);
@@ -3905,7 +3975,7 @@ html,body{overflow-x:clip}
   function openAsk(){ askEl.classList.add('open'); scrim.classList.add('open'); askEl.setAttribute('aria-hidden', 'false'); setTimeout(function(){ ta.focus({ preventScroll: true }); }, 350); }
   function closeAsk(){ askEl.classList.remove('open'); scrim.classList.remove('open'); askEl.setAttribute('aria-hidden', 'true'); }
   var askBtn = $('#askOpen'); if (askBtn) askBtn.addEventListener('click', openAsk);
-  // the nav's Book a demo goes to the demo card at the bottom of whichever page is open
+  // the nav's Book a demo goes to the demo card at the end of the page
   $('#bookJump').addEventListener('click', function(){
     var card = document.getElementById('book');
     card.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
@@ -3934,7 +4004,7 @@ html,body{overflow-x:clip}
       if (!s) {
         var c = CANNED[q];
         out.classList.remove('wait');
-        out.textContent = c || 'Live answers are not available in this view. Try one of the suggested questions, or open the Review and What is OnGen pages.';
+        out.textContent = c || 'Live answers are not available in this view. Try one of the suggested questions, or read the Field test and Research chapters.';
         if (!c) out.classList.add('err');
         history.push({ role: 'assistant', content: out.textContent });
         busy = false; send.disabled = false; return;
@@ -3961,7 +4031,6 @@ html,body{overflow-x:clip}
   ta.addEventListener('keydown', function(e){ if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); $('#askForm').requestSubmit(); } });
   ta.addEventListener('input', function(){ ta.style.height = 'auto'; ta.style.height = Math.min(120, ta.scrollHeight) + 'px'; });
 
-  show();
 })();
 
 </script>
