@@ -19,7 +19,7 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Hanken+Grotesk:wght@600&family=Instrument+Serif&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Hanken+Grotesk:wght@600&display=swap" rel="stylesheet">
 <style>
 /* ==========================================================================
    Clink case study
@@ -123,8 +123,8 @@ main{overflow-x:clip}
 .home{font-family:"Hanken Grotesk",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;font-size:12.5px;font-weight:600;line-height:1.45;color:var(--ink);text-decoration:none;white-space:nowrap;transition:color .25s}
 .home:hover{color:var(--ink-3)}
 .nav-sep{flex:none;width:1px;height:16px;background:var(--line-2)}
-/* the name, set in Instrument Serif */
-.brand{display:flex;align-items:center;color:var(--ink);text-decoration:none;font-family:"Instrument Serif",Georgia,serif;font-size:21px;font-weight:400;line-height:1;letter-spacing:-.005em}
+/* the name, in the body face, lower case */
+.brand{display:flex;align-items:center;color:var(--ink);text-decoration:none;font-size:15px;font-weight:600;line-height:1;letter-spacing:-.03em}
 .nav-links{position:relative;display:flex;align-items:center;gap:clamp(16px,1.9vw,28px)}
 .nav-links button{font-size:13.5px;font-weight:500;color:var(--ink-3);padding:8px 0;transition:color .25s}
 .nav-links button:hover,.nav-links button[aria-current="true"]{color:var(--ink)}
@@ -322,7 +322,7 @@ html[data-theme="dark"] .dd .ik{fill:#F2F1EE}
 /* ---------- close ---------- */
 .close{margin-top:clamp(112px,12vw,168px);padding:clamp(80px,9vw,120px) 0 36px;background:var(--s2)}
 .eyebrow{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink-2)}
-.eyebrow .wm{font-family:"Instrument Serif",Georgia,serif;font-size:20px;line-height:1;color:var(--ink)}
+.eyebrow .wm{font-size:14px;font-weight:600;letter-spacing:-.03em;color:var(--ink)}
 .close .h2{max-width:22ch;margin-top:18px}
 .close-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:56px}
 .close-links a{display:flex;flex-direction:column;justify-content:space-between;gap:36px;min-height:160px;padding:22px;border-radius:22px;background:var(--page);text-decoration:none;box-shadow:inset 0 0 0 1px var(--line);transition:box-shadow .25s,transform .3s var(--ease)}
@@ -515,7 +515,7 @@ html[data-theme="dark"] .post .pk.bug{background:rgba(232,80,60,.2);color:#F4ABA
     <div class="nav-id">
       <a class="home" href="index.html" aria-label="Michael J. Park, back to the portfolio">Michael J. Park</a>
       <span class="nav-sep" aria-hidden="true"></span>
-      <a class="brand" href="#top" aria-label="Clink, back to top">Clink</a>
+      <a class="brand" href="#top" aria-label="Clink, back to top">clink</a>
     </div>
     <span class="chapter-now" id="chapterNow"></span>
     <nav class="nav-links" id="chapterNav" aria-label="Case study chapters">
@@ -893,7 +893,7 @@ html[data-theme="dark"] .post .pk.bug{background:rgba(232,80,60,.2);color:#F4ABA
 
 <footer class="close" id="end">
   <div class="wrap">
-    <div class="eyebrow"><span class="wm">Clink</span>· Full-stack web app · 2026</div>
+    <div class="eyebrow"><span class="wm">clink</span>· Full-stack web app · 2026</div>
     <h2 class="h2">A canvas can hold everything. <span class="soft">The work is making the way through it clear.</span></h2>
     <div class="close-links reveal stagger">
       <a class="out" href="https://plak-1a653.web.app/about" target="_blank" rel="noopener"><div><div class="t">Clink</div><div class="s">The product page, in a new tab</div></div><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14 14 6M7 6h7v7"/></svg></a>
