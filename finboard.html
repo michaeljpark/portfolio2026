@@ -123,13 +123,18 @@ main{overflow-x:clip}
 
 /* ---------- hero ---------- */
 .hero{padding-top:clamp(104px,12.5vh,144px)}
-.hero-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,5vw,72px);align-items:center}
+/* title across the wide column, the summary beside its last line, the film full width below */
+.hero-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,380px);gap:clamp(32px,5vw,80px);align-items:end}
+.hero .h1{font-size:clamp(44px,4.9vw,72px)}
+.hero-r{padding-bottom:6px}
+.hero .film{margin-top:clamp(48px,5.5vw,80px)}
+.hero .film .fs{--ar:16/9}
 .meta{display:flex;flex-wrap:wrap;row-gap:2px;margin-bottom:24px;font-size:13px;color:var(--ink-3)}
 .meta span{white-space:nowrap}
 .meta span:first-child{color:#fff}
 .meta i{font-style:normal;margin:0 9px;color:#48484A}
-.hero .lede{margin-top:22px;max-width:44ch}
-.actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:30px}
+.hero .lede{max-width:40ch}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:26px}
 .facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap);margin-top:clamp(56px,6vw,88px);padding-top:26px;box-shadow:inset 0 .5px 0 var(--line)}
 .facts dt{font-size:13px;color:var(--ink-3)}
 .facts dd{font-size:15.5px;line-height:1.45;margin-top:6px;max-width:27ch}
@@ -523,9 +528,10 @@ main{overflow-x:clip}
 }
 @media (max-width:1080px){
   :root{--label:0px;--col:0px}
-  .hero-grid{grid-template-columns:minmax(0,1fr)}
+  .hero-top{grid-template-columns:minmax(0,1fr);align-items:start;gap:24px}
+  .hero-r{padding-bottom:0}
   .hero .lede{max-width:56ch}
-  .film{max-width:760px}
+  .hero .film .fs{--ar:4/3}
   .sec-head .tag{grid-column:1;grid-row:1;padding-top:0}
   .sec-head .h2,.sec-head .lede{grid-column:1}
   .sec-head .h2{grid-row:2}
@@ -635,16 +641,19 @@ main{overflow-x:clip}
 <!-- HERO -->
 <section class="hero" id="top" aria-labelledby="heroTitle">
   <div class="wrap">
-    <div class="hero-grid">
-      <div>
+    <div class="hero-top">
+      <div class="hero-l">
         <p class="meta"><span>Case study</span><i>/</i><span>iOS banking app</span><i>/</i><span>Accessibility</span><i>/</i><span>2026</span></p>
         <h1 class="h1" id="heroTitle">Your receipt is not visible. <span class="soft">finboard puts it where you already look.</span></h1>
+      </div>
+      <div class="hero-r">
         <p class="lede">An iOS-native banking app for early-career adults. Spending reads on the Home Screen, the Lock Screen and the Dynamic Island, without opening an app, and every surface was audited against WCAG 2.2 AA.</p>
         <div class="actions">
           <a class="btn btn-brand" href="#widgets">Try the widgets<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v10M3.5 8.5 8 13l4.5-4.5"/></svg></a>
           <a class="btn btn-text" href="#audit">Read the audit</a>
         </div>
       </div>
+    </div>
       <div class="film">
         <div class="fs" id="filmStage" role="img" aria-label="The finboard widget motion: a bank text alert becomes a locked finboard widget, unlocks with Face ID, reads today's spending aloud and sets a $40 cap, then the ordinary bank widget splits into the Daily Tracker card and the app icon, which swipes through transactions and the weekly trend and becomes Until Payday."></div>
         <div class="rail" id="rail" aria-label="Moments in the motion"></div>
@@ -654,7 +663,6 @@ main{overflow-x:clip}
           <button class="round" id="filmPlay" type="button" aria-label="Pause the motion"><svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor" aria-hidden="true"><rect x="1" width="3.5" height="14" rx="1"/><rect x="7.5" width="3.5" height="14" rx="1"/></svg></button>
         </div>
       </div>
-    </div>
     <dl class="facts">
       <div><dt>Role</dt><dd>Product, interaction and iOS design</dd></div>
       <div><dt>Team</dt><dd>Solo, end to end</dd></div>
@@ -1360,7 +1368,8 @@ const WORLD = uid => `
 
 let FS_UID = 0;
 function FinStage(host, opt) {
-  const uid = ++FS_UID, W = opt.W || 1080, H = opt.H || 1080;
+  const uid = ++FS_UID, H = opt.H || 1080;
+  let W = opt.W || 1080;
   host.innerHTML = `<div class="fs-in" style="width:${W}px;height:${H}px">${WORLD(uid)}</div>`;
   const inner = host.firstElementChild, K = {};
   const reg = root => root.querySelectorAll('[data-k]').forEach(e => { K[e.dataset.k] = e; });
@@ -1668,9 +1677,11 @@ function FinStage(host, opt) {
     setS($('small'), 'transform', `scale(${sc(33.25, 34.0, .45).toFixed(4)})`);
     setS($('icon'), 'transform', `scale(${sc(33.35, 34.1, .35).toFixed(4)})`);
   }
+  /* a fluid stage keeps its height in points and widens to the box, so the film can run 16:9 or 4:3 */
   function fit() {
-    const w = host.clientWidth; if (!w) return;
-    const k = w / W; inner.style.transform = `scale(${k})`;
+    const w = host.clientWidth, h = host.clientHeight; if (!w || !h) return;
+    if (opt.fluid) { W = Math.round(H * w / h); inner.style.width = W + 'px'; }
+    const k = h / H; inner.style.transform = `scale(${k})`;
     hlScale = (window.devicePixelRatio || 1) * k * WORLD_SCALE * (opt.film ? 2.2 : opt.cam.z * 1.1); lastHL = '';
   }
   new ResizeObserver(fit).observe(host);
@@ -1701,7 +1712,7 @@ function watch(el, ctl) {
 const CHAPTERS = [['Bank alert', 0], ['Face ID', 4.6], ['Read aloud', 8.3], ['Set $40', SPEECH_END - .2], ['Split', 18.9], ['Swipe', 24.3], ['Until payday', 29.2]];
 function Film() {
   const host = document.getElementById('filmStage'), rail = document.getElementById('rail'), btn = document.getElementById('filmPlay'), now = document.getElementById('railNow');
-  const st = FinStage(host, { film: true, W: 1440, H: 1080 });
+  const st = FinStage(host, { film: true, fluid: true, W: 1920, H: 1080 });
   rail.innerHTML = CHAPTERS.map(([n], i) => `<button type="button" data-i="${i}"><span>${String(i + 1).padStart(2, '0')}</span>${n}<i></i></button>`).join('');
   const btns = [...rail.children];
   let tr = REDUCED ? realTime(24.3) : 0, playing = !REDUCED, cur = -1;
