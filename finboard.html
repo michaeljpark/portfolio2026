@@ -532,6 +532,7 @@ main{overflow-x:clip}
   .hero-r{padding-bottom:0}
   .hero .lede{max-width:56ch}
   .hero .film .fs{--ar:4/3}
+  .sec-head{grid-template-columns:minmax(0,1fr)}
   .sec-head .tag{grid-column:1;grid-row:1;padding-top:0}
   .sec-head .h2,.sec-head .lede{grid-column:1}
   .sec-head .h2{grid-row:2}
@@ -570,9 +571,10 @@ main{overflow-x:clip}
   .block+.block{margin-top:64px}
   .panel{border-radius:20px;padding:18px}
   .demo{padding:10px}
-  .rail{display:flex;overflow-x:auto;scrollbar-width:none;gap:0;padding:4px 10px 0;scroll-snap-type:x proximity}
-  .rail::-webkit-scrollbar{display:none}
-  .rail button{flex:none;width:92px;scroll-snap-align:start}
+  /* on a phone the rail keeps all seven moments in one row as numbered segments; the moment's name sits below it */
+  .rail{gap:4px;padding:2px 12px 0}
+  .rail button{align-items:center;padding:14px 0 13px;font-size:0;line-height:1}
+  .rail button span{line-height:16px}
   .film-foot .long{display:none}
   .film-foot .now{display:block}
   .pitch{grid-template-columns:minmax(0,1fr);gap:26px}
@@ -1889,7 +1891,9 @@ seg(document.getElementById('reachSeg'), b => {
   const bars = [...document.querySelectorAll('#liftBars .bar')], tip = document.getElementById('liftTip'), max = 180;
   const fill = () => { bars.forEach((b, i) => { b.querySelector('i').style.height = `calc((100% - 34px) * ${(+b.dataset.v / max).toFixed(3)})`; b.querySelector('i').style.transitionDelay = i * 90 + 'ms'; }); document.querySelectorAll('#adoptMeters b').forEach(m => { m.style.width = m.dataset.w * 2.4 + '%'; }); };
   new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { fill(); o.disconnect(); } }, { threshold: .3 }).observe(document.getElementById('liftBars'));
-  const show = b => { bars.forEach(x => x.classList.toggle('on', x === b)); tip.textContent = b ? b.dataset.tip : 'Hover or focus a bar to read it.'; };
+  const hint = matchMedia('(hover: none)').matches ? 'Tap a bar to read it.' : 'Hover or focus a bar to read it.';
+  tip.textContent = hint;
+  const show = b => { bars.forEach(x => x.classList.toggle('on', x === b)); tip.textContent = b ? b.dataset.tip : hint; };
   bars.forEach(b => { b.addEventListener('mouseenter', () => show(b)); b.addEventListener('focus', () => show(b)); b.addEventListener('click', () => show(b)); b.setAttribute('aria-label', b.querySelector('b').textContent + ' points. ' + b.dataset.tip); });
   document.getElementById('liftBars').addEventListener('mouseleave', () => show(null));
 })();

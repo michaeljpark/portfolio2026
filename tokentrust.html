@@ -868,6 +868,23 @@ html[data-theme="dark"] .av.av-logo{background:var(--card);box-shadow:inset 0 0 
   .foot nav a{display:inline-block;padding:11px 0}
   .hero .meta{font-size:12px}
   .own{font-size:12px}
+  /* the whole feature row is the switch; the sliders take a finger 8px above and below their track */
+  .tg-row{padding:10px 0}
+  .fbar input{top:-8px;bottom:-8px;height:44px}
+  .fbar input::-webkit-slider-runnable-track{height:44px}
+  .fbar input::-moz-range-track{height:44px}
+  .fbar input::-webkit-slider-thumb{margin-top:10px}
+}
+/* small phones: the saving drops its unit so feature names stay on one line, and the missing right's chip moves under its text */
+@media (max-width:420px){
+  .tg-row .per{display:none}
+  .rights .row.gap{flex-wrap:wrap;row-gap:10px;align-items:flex-start}
+  .rights .row.gap>div{flex:1 1 0}
+  .rights .row.gap .rv{flex:0 0 calc(100% - 36px);margin-left:36px;text-align:left}
+}
+/* below 360px the chapter name has no room between the name and the buttons */
+@media (max-width:359px){
+  .chapter-now{display:none!important}
 }
 
 /* survey numbers: four across, straight under their heading */
@@ -2016,7 +2033,7 @@ function renderFF(){ const on=FF.filter(f=>f[1]).length, rate=4.17-0.45*(5-on), 
   $('#ffPct').textContent='+'+Math.round((tok/FF_BASE-1)*100)+'%'; $('#ffUp').classList.toggle('idle',on===5);
   $('#ffRateV').textContent='CA$'+rate.toFixed(2); $('#ffRateB').style.width=(rate/4.17*100)+'%';
   $('#ffTokV').textContent=tok.toFixed(2)+'M'; $('#ffTokB').style.width=(tok/FF_MAX*100)+'%'; }
-$('#ffList').innerHTML=FF.map((f,i)=>`<div class="tg-row"><span class="nm">${f[0]}</span><span class="sv">−CA$0.45 per 1 M</span><button class="tg" role="switch" aria-checked="true" aria-label="${f[0]}" data-i="${i}"><i></i></button></div>`).join('');
+$('#ffList').innerHTML=FF.map((f,i)=>`<div class="tg-row"><span class="nm">${f[0]}</span><span class="sv">−CA$0.45<span class="per"> per 1 M</span></span><button class="tg" role="switch" aria-checked="true" aria-label="${f[0]}" data-i="${i}"><i></i></button></div>`).join('');
 $$('#ffList .tg-row').forEach(row=>{ const b=$('.tg',row); row.addEventListener('click',()=>{ const i=+b.dataset.i; const on=FF.filter(f=>f[1]).length; if(FF[i][1]&&on===1){ say('Keep at least one feature'); return; } FF[i][1]=FF[i][1]?0:1; b.setAttribute('aria-checked',FF[i][1]?'true':'false'); row.classList.toggle('off',!FF[i][1]); renderFF(); }); });
 renderFF();
 const barX=f=>`calc(12px + ${f.toFixed(4)} * (100% - 24px))`, barW=f=>`calc(${Math.max(0,f).toFixed(4)} * (100% - 24px))`;
