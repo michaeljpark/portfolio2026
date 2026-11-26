@@ -277,8 +277,8 @@ main{overflow-x:clip}
 .demo-act{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:22px}
 .demo-act .btn{min-width:0}
 .dots{display:flex;gap:6px;align-items:center;margin:0 6px}
-.dots button{width:8px;height:8px;border-radius:4px;background:var(--ctl-2);transition:width .4s var(--spring),background .3s;padding:0}
-.dots button[aria-current="true"]{width:22px;background:#fff}
+.dots span{display:block;width:8px;height:8px;border-radius:4px;background:var(--ctl-2);transition:width .4s var(--spring),background .3s}
+.dots span.on{width:22px;background:#fff}
 .how{list-style:none;display:grid;gap:10px;margin-top:22px;padding-top:20px;box-shadow:inset 0 .5px 0 var(--line)}
 .how li{position:relative;padding-left:16px;font-size:14px;line-height:1.5;color:var(--ink-3)}
 .how li::before{content:"";position:absolute;left:0;top:.6em;width:5px;height:5px;border-radius:50%;background:#636366}
@@ -595,6 +595,16 @@ main{overflow-x:clip}
 }
 @media (max-width:420px){
   .nav-sep,.nav-id .brand{display:none}
+}
+@media (pointer:coarse),(max-width:640px){
+  .home{display:inline-block;padding:13px 0;margin:-13px 0}
+  .nav-cta{height:38px}
+  .seg button{padding:11px 14px}
+  .round{width:44px;height:44px}
+  .presets button{height:40px;padding:0 13px}
+  .grey .ios-range{height:44px}
+  .rail button span{font-size:12px}
+  .foot nav a{display:inline-block;padding:11px 0}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
@@ -937,8 +947,8 @@ main{overflow-x:clip}
             <div class="w-shell" style="left:27.5px;top:258px;width:338px;height:158px;padding:14px 16px">
               <div class="w-row"><span class="w-v" style="font-weight:600">Controls</span><span class="w-k">Student plan</span></div>
               <div class="w-row" style="margin-top:12px"><label class="w-k" for="ctlRange" style="color:#fff;font-size:15px;line-height:20px">Daily limit</label><span class="w-v" style="font-size:15px;line-height:20px" id="ctlLim">$40</span></div>
-              <input class="ios-range" id="ctlRange" type="range" min="10" max="80" step="5" value="40" style="margin-top:4px">
-              <div class="w-row" style="margin-top:10px;align-items:center"><span id="ctlPushL" style="font-size:15px;line-height:20px">Push notifications</span><button class="ios-switch" id="ctlPush" type="button" role="switch" aria-checked="true" aria-labelledby="ctlPushL"></button></div>
+              <input class="ios-range" id="ctlRange" type="range" min="10" max="80" step="5" value="40" style="height:34px;margin-top:0">
+              <div class="w-row" style="margin-top:4px;align-items:center"><span id="ctlPushL" style="font-size:15px;line-height:20px">Push notifications</span><button class="ios-switch" id="ctlPush" type="button" role="switch" aria-checked="true" aria-labelledby="ctlPushL"></button></div>
             </div>
             <div class="lbl12" style="left:196.5px;top:422px">Controls</div>
           </div>
@@ -1831,12 +1841,12 @@ function buildDemos() {
     ],
     sync(si, moving) {
       const el = document.getElementById('demoSwipe');
-      el.querySelectorAll('[data-dots] button').forEach((d, i) => d.setAttribute('aria-current', i === si ? 'true' : 'false'));
+      el.querySelectorAll('[data-dots] span').forEach((d, i) => d.classList.toggle('on', i === si));
       el.querySelector('[data-prev]').disabled = si === 0;
     }
   });
   const dots = document.querySelector('#demoSwipe [data-dots]');
-  dots.innerHTML = ['Daily Tracker', 'Transactions', 'Weekly Trend', 'Until Payday'].map((n, i) => `<button type="button" aria-label="${n}" tabindex="-1"></button>`).join('');
+  dots.setAttribute('aria-hidden', 'true'); dots.innerHTML = '<span></span>'.repeat(4);
   DEMOS.push(sw);
 }
 

@@ -346,7 +346,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .small{font-size:13px}
 
   .bar{padding-top:max(14px,env(safe-area-inset-top));padding-bottom:6px;row-gap:2px}
-  .bar .name{align-self:center}
+  .bar .name{align-self:center;padding:12px 0;margin:-12px 0}
   .bar .theme{padding:12px 0 12px 12px;margin:-12px 0}
   .bar nav{gap:0;margin:0 -10px}
   .bar nav a{padding:12px 10px}
@@ -365,7 +365,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .block > .label{margin-bottom:12px}
   .block h2.statement{font-size:26px;line-height:1.15}
   .list li{padding:12px 0}
-  .list a{display:inline-block;padding:6px 0;margin:-6px 0}
+  .list a{display:inline-block;padding:12px 0;margin:-12px 0}
   .contact{padding-bottom:64px}
   .contact h2.statement{font-size:clamp(20px,6vw,28px);overflow-wrap:anywhere}
   .links{gap:0 22px;margin-top:12px}
@@ -454,7 +454,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .xp .role{grid-column:1;grid-row:1}
   .xp .yr{grid-column:2;grid-row:1;text-align:right}
   .xp .place{display:none}
-  .xp .org a{display:inline-block;padding:6px 0;margin:-6px 0}
+  .xp .org a{display:inline-block;padding:12px 0;margin:-12px 0}
   .ai{grid-template-columns:1fr;grid-template-rows:none;border-top:1px solid var(--rule)}
   .ai li{grid-row:auto;grid-template-rows:none;row-gap:4px;padding:12px 0;border-bottom:1px solid var(--rule)}
   .ai .st{padding:0;border:0}

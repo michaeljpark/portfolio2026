@@ -821,6 +821,18 @@ html[data-theme="dark"] .tt-theme svg{transform:rotate(180deg)}
   [id]{scroll-margin-top:72px}
 }
 @media (prefers-reduced-motion:reduce){.tt-theme svg{transition:none}}
+/* touch: controls reach a 44px hit area, and the smallest labels step up to 12px */
+@media (pointer:coarse),(max-width:640px){
+  .home{display:inline-block;padding:13px 0;margin:-13px 0}
+  .tt-theme{width:40px;height:40px}
+  .nav-cta{height:40px}
+  .link{display:inline-block;padding:11px 0;margin:-11px 0}
+  .seg button{padding-top:12px;padding-bottom:12px}
+  .btn-ghost[data-copy]{height:44px!important}
+  .foot nav a{display:inline-block;padding:11px 0}
+  .hero .meta{font-size:12px}
+  .own{font-size:12px}
+}
 
 /* survey numbers: four across, straight under their heading */
 .sv-stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:0}
