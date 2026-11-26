@@ -159,18 +159,22 @@ main{overflow-x:clip}
 
 /* ---------- hero ---------- */
 .hero{padding-top:clamp(112px,13vh,152px)}
-.hero-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,5vw,72px);align-items:center}
+/* title across the wide column, the summary beside its last line, the live card full width below */
+.hero-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,400px);gap:clamp(32px,5vw,80px);align-items:end}
+.hero .h1{font-size:clamp(42px,4.8vw,70px)}
+.hero-r{padding-bottom:8px}
+.hero .stage-wrap{margin-top:clamp(48px,5.5vw,80px)}
 .hero .meta{display:flex;flex-wrap:wrap;align-items:center;row-gap:2px;margin-bottom:26px}
 .hero .meta span{white-space:nowrap}
 .hero .meta i{font-style:normal;margin:0 10px;color:#C3CAD6}
 .hero .meta span:first-child{color:var(--ink)}
 .hero .h1 .soft{color:var(--ink-3)}
-.hero .lede{margin-top:22px;max-width:44ch}
+.hero .lede{max-width:40ch}
 .hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:30px}
 .facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap);margin-top:clamp(56px,6vw,88px)}
 .facts dd{font-size:16px;font-weight:400;line-height:1.4;margin-top:8px;max-width:26ch}
 .stage-wrap{min-width:0;background:var(--sky);border-radius:20px;padding:8px 8px 14px}
-.stage{position:relative;width:100%;aspect-ratio:1240/910;overflow:hidden;contain:layout paint}
+.stage{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;contain:layout paint}
 .stage #ttv{position:absolute;left:0;top:0;transform-origin:0 0}
 .rail{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;padding:0 12px}
 .rail button{display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:10px 4px 12px;position:relative;font-size:12.5px;line-height:1.25;color:var(--ink-3);transition:color .25s;min-width:0}
@@ -575,9 +579,10 @@ main{overflow-x:clip}
 }
 @media (max-width:1080px){
   :root{--label:0px;--col:0px}
-  .hero-grid{grid-template-columns:minmax(0,1fr)}
+  .hero-top{grid-template-columns:minmax(0,1fr);align-items:start;gap:22px}
+  .hero-r{padding-bottom:0}
   .hero .lede{max-width:56ch}
-  .stage-wrap{max-width:760px}
+  .stage{aspect-ratio:1240/910}
   .sec-head{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);column-gap:48px}
   .ch-tag{grid-column:1/-1;padding-top:0}
   .sec-head .h2{grid-column:1/-1;grid-row:2}
@@ -649,7 +654,6 @@ main{overflow-x:clip}
   .hero .lede{margin-top:14px}
   .hero-actions{margin-top:22px;gap:6px}
   .btn{height:46px}
-  .hero-grid{gap:32px}
   .stage-wrap{margin:0 -8px;border-radius:16px;padding:6px 6px 12px}
   .rail{gap:2px;padding:0 6px}
   .rail button{align-items:center;padding:12px 0 14px}
@@ -980,20 +984,22 @@ html[data-theme="dark"] figure.diagram svg{filter:invert(1) hue-rotate(180deg)}
 <main>
 <!-- HERO -->
 <section class="hero" id="top" aria-labelledby="heroTitle">
-  <div class="wrap"><div class="hero-grid">
-    <div>
+  <div class="wrap">
+    <div class="hero-top">
+      <div class="hero-l">
       <p class="meta"><span>Case study</span><i>/</i><span>Service design</span><i>/</i><span>Strategic research</span><i>/</i><span>2026</span></p>
       <h1 class="h1" id="heroTitle">Your data already has a price. <span class="soft">TokenTrust gives it back.</span></h1>
+      </div>
+      <div class="hero-r">
       <p class="lede">A governance platform that measures the quality of the data people give to AI, pays them for it, and lets that value move between platforms.</p>
       <div class="hero-actions"><a class="btn btn-ink" href="#model">TokenTrust Model<svg class="lc" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14" pathLength="1" style="transition-delay:120ms"/><path d="m19 12-7 7-7-7" pathLength="1" style="transition-delay:260ms"/></svg></a></div>
-
+      </div>
     </div>
     <div class="stage-wrap">
       <div class="stage" id="stage" aria-label="The TokenTrust card moving through seven states: balance, sources, convert, returns, data flow, privacy and payouts"><div id="ttv"><div id="ttcard"></div><svg id="ttptr" viewBox="0 0 28 28" aria-hidden="true"><path d="M4 3l16 9.5-7.2 1.6-3.6 7z" fill="#1D2433" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg></div></div>
       <div class="rail" id="rail" aria-label="Card states"></div>
       <div class="stage-note"><span class="long">One card, seven states. Live HTML, not a video: tap a state to jump to it.</span><span class="now" id="railNow">Total balance</span></div>
     </div>
-  </div>
     <dl class="facts">
         <div><dt>Role</dt><dd>Team lead: research direction, service framework, prototyping</dd></div>
         <div><dt>Team</dt><dd>Five, industrial &amp; graphic design</dd></div>
@@ -1884,7 +1890,7 @@ $$('.reveal').forEach(el=>io.observe(el));
 (()=>{
   const stage=$('#stage'), v=$('#ttv'), rail=$('#rail');
   const NAMES=['Total balance','Token sources','Convert','Returns','Where your data went','Privacy level','Payouts'];
-  const fit=()=>{ v.style.transform=`scale(${stage.clientWidth/1240}) translate(-100px,-100px)`; };
+  const fit=()=>{ const k=stage.clientHeight/910; v.style.transform=`translate(${((stage.clientWidth-1440*k)/2).toFixed(2)}px,${((stage.clientHeight-1080*k)/2).toFixed(2)}px) scale(${k.toFixed(5)})`; };
   new ResizeObserver(fit).observe(stage); fit();
   const RI=['wallet','plug','arrow-left-right','receipt','chart-pie','shield','calendar-days'];
   rail.innerHTML=NAMES.map((n,i)=>`<button data-i="${i}" aria-label="${n}"><span class="ri">${LUC[RI[i]]}</span><span class="rl">${n}</span><i></i></button>`).join('');

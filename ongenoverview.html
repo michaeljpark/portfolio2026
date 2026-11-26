@@ -1384,6 +1384,45 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
 .p-how li::before{content:none;display:none}
 .p-how .fi{width:20px;height:20px;margin-top:1px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;color:var(--ink)}
 .p-how b{display:block;margin-bottom:2px;font-weight:500;color:var(--ink)}
+/* ---------- hero, as Finboard: the title wide, the summary beside it, the prototype full width below ---------- */
+.cs-hero-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,400px);gap:clamp(32px,5vw,80px);align-items:end}
+.cs-hero .cs-h1{font-size:clamp(44px,4.9vw,72px)}
+.cs-hero-r{padding-bottom:8px}
+.cs-hero .cs-lede{margin-top:0;max-width:40ch}
+.cs-hero .cs-actions{margin-top:26px}
+/* the stage: a camera zooms into one feature at a time, like the OnGen motion showcase */
+.cs-stage{margin-top:clamp(48px,5.5vw,80px);border-radius:28px;background:#121212;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);overflow:hidden}
+html[data-theme="light"] .cs-stage{background:#EFEFEB;box-shadow:none}
+.cs-stage .p-slot{display:block}
+.p-cam.demo{will-change:auto}
+.cs-rail{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;padding:4px 18px 0}
+.cs-rail button{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 2px 12px;border:0;background:none;font:inherit;font-size:12.5px;line-height:1.25;text-align:left;color:var(--dim);cursor:pointer;transition:color .3s}
+.cs-rail button span{font-size:11.5px;font-variant-numeric:tabular-nums}
+.cs-rail button::after{content:"";position:absolute;left:2px;right:2px;bottom:0;height:2px;border-radius:2px;background:rgba(255,255,255,.08)}
+html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
+.cs-rail button i{position:absolute;left:2px;bottom:0;height:2px;width:0;max-width:calc(100% - 4px);border-radius:2px;background:var(--red);box-shadow:0 0 6px rgba(232,50,43,.5);z-index:1}
+.cs-rail button.on,.cs-rail button:hover{color:var(--ink)}
+.cs-rail button.done i{width:calc(100% - 4px)!important;transition:none!important;background:var(--grey);box-shadow:none}
+.cs-stage-foot{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 20px 0;font-size:12.5px;color:var(--dim)}
+.cs-stage-foot .now{display:none;font-size:14px;color:var(--ink)}
+.cs-stage .cs-state{display:grid;grid-template-columns:repeat(4,auto minmax(0,1fr));gap:4px 12px;max-width:none;margin:14px 20px 0;padding:14px 0 18px;box-shadow:inset 0 1px 0 var(--cs-line)}
+@media (max-width:1080px){
+  .cs-hero-top{grid-template-columns:minmax(0,1fr);align-items:start;gap:22px}
+  .cs-hero-r{padding-bottom:0}
+  .cs-hero .cs-lede{max-width:56ch}
+  .cs-stage .cs-state{grid-template-columns:auto minmax(0,1fr) auto minmax(0,1fr)}
+}
+@media (max-width:640px){
+  .cs-hero .cs-h1{font-size:38px}
+  .cs-stage{border-radius:22px}
+  .cs-rail{display:flex;overflow-x:auto;scrollbar-width:none;gap:0;padding:4px 10px 0;scroll-snap-type:x proximity}
+  .cs-rail::-webkit-scrollbar{display:none}
+  .cs-rail button{flex:none;width:108px;scroll-snap-align:start}
+  .cs-stage-foot .long{display:none}
+  .cs-stage-foot .now{display:block}
+  .cs-stage .cs-state{grid-template-columns:auto minmax(0,1fr);margin:12px 16px 0}
+}
+
 </style>
 </head>
 <body>
@@ -1589,22 +1628,26 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
   <!-- HERO: the live prototype is the stage -->
   <article class="p-ch cs-hero" id="ch-intro" data-h="844" data-side="right" data-card="" aria-labelledby="heroTitle">
     <div class="cs-wrap">
-      <div class="cs-hero-grid">
-        <div class="cs-hero-text">
+      <div class="cs-hero-top">
+        <div class="cs-hero-l">
           <p class="cs-meta"><span>Case study</span><i>/</i><span>Thesis project</span><i>/</i><span>AI radio</span><i>/</i><span>2026</span></p>
           <h1 class="cs-h1" id="heroTitle">Your day as a short radio show. <span class="soft">OnGen airs it between your plans.</span></h1>
+        </div>
+        <div class="cs-hero-r">
           <p class="cs-lede">OnGen plays short spoken shows written from your calendar, mail, reminders and AI chats. The phone on this page runs the actual prototype, and each of its cards works further down.</p>
           <div class="cs-actions"><a class="cs-btn" href="#how">Try the prototype<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v10M3.5 8.5 8 13l4.5-4.5"/></svg></a><a class="cs-btn-text" href="#review">Read the field test</a></div>
         </div>
-        <div class="cs-stage">
-          <div class="p-slot" aria-hidden="true"></div>
-          <dl class="cs-state" aria-label="The prototype on this page">
+      </div>
+      <div class="cs-stage">
+        <div class="p-slot" aria-hidden="true"></div>
+        <div class="cs-rail" id="heroRail" aria-label="Moments in the prototype"><button type="button" data-i="0"><span>01</span>Scheduled programs<i></i></button><button type="button" data-i="1"><span>02</span>Edit the program<i></i></button><button type="button" data-i="2"><span>03</span>Sources and Generate<i></i></button><button type="button" data-i="3"><span>04</span>Live script<i></i></button><button type="button" data-i="4"><span>05</span>Now Playing<i></i></button><button type="button" data-i="5"><span>06</span>The whole prototype<i></i></button></div>
+        <div class="cs-stage-foot"><span class="long">One prototype, six moments. Live HTML, not a video: tap a moment to jump to it.</span><span class="now" id="heroNow">Scheduled programs</span></div>
+        <dl class="cs-state" aria-label="The prototype on this page">
           <dt>Listener</dt><dd>John, Toronto</dd>
           <dt>Clock</dt><dd>Held at 17:50 on a Wednesday</dd>
           <dt>On air</dt><dd>Traffic Update, 17:40 to 18:10</dd>
           <dt>Next</dt><dd>Commute Briefing at 18:10, 30 minutes</dd>
         </dl>
-        </div>
       </div>
       <dl class="cs-facts"><div><dt>Role</dt><dd>Solo: product and experience design, research, AI-assisted prototyping</dd></div><div><dt>Timeline</dt><dd>Sep 2025 to May 2026</dd></div><div><dt>Context</dt><dd>Industrial Design thesis, OCAD University. Critique: Alexander Manu, Bernard Dietz</dd></div><div><dt>Field test</dt><dd>GradEX 111 · 408 sessions</dd></div><div><dt>Recognition</dt><dd>ACIDO 2026 finalist</dd></div></dl>
     </div>
@@ -3048,35 +3091,64 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
 
   /* ---------- hero loop: the dial and program card build, then the play flow, on the whole phone, over and over ----------
      Runs only while the first section is the active one, the How page is shown and the tab is visible. */
+  var HERO = { key: '', i: -1 };
   var LOOP = (function(){
     // the play flow on the whole phone, on repeat: home, open and play a show, go home with the red panel live, stop
     // home: the dial rolls in and the program card builds, then a show plays, goes home with the red panel live, and stops
     var STEPS = [
       [550, function(){ A.prepare(); A.setVoice(false); if (A.rewind) A.rewind(); A.introDial(); show(dialCv); }],
       [1500, function(){ introProgram.play(); }],
-      [6800, function(){ A.openPlayer(); A.play(); }],
-      [12600, function(){ A.home(); }],
-      [17800, function(){ A.pause(); }]
-    ], CYCLE = 20000;
+      [4200, function(){ SR && SR.play(); }],
+      [5700, function(){ introKeys.play(); }],
+      [7600, function(){ A.openPlayer(); A.play(); }],
+      [13200, function(){ A.home(); }],
+      [18200, function(){ A.pause(); }]
+    ], CYCLE = 20500;
+    // the camera's moments: when each starts, which part of the phone it frames
+    var FOCUS = [[0, 'screen'], [1300, 'program'], [4000, 'source'], [7400, 'screen'], [13100, 'now'], [18000, '']];
+    var rail = document.getElementById('heroRail'), railB = rail ? [].slice.call(rail.querySelectorAll('button')) : [], heroNow = document.getElementById('heroNow');
+    function focus(i, into){
+      HERO.key = FOCUS[i][1]; HERO.i = i;
+      var end = i < FOCUS.length - 1 ? FOCUS[i + 1][0] : CYCLE, len = end - FOCUS[i][0], done = Math.max(0, into || 0);
+      railB.forEach(function(b, j){
+        b.classList.toggle('on', j === i); b.classList.toggle('done', j < i);
+        var bar = b.querySelector('i'); bar.style.transition = 'none';
+        bar.style.width = j === i ? 'calc((100% - 4px) * ' + (done / len).toFixed(3) + ')' : '0';
+      });
+      if (railB[i]) { void railB[i].offsetWidth; var bi = railB[i].querySelector('i'); bi.style.transition = 'width ' + Math.max(0, len - done) + 'ms linear'; bi.style.width = 'calc(100% - 4px)'; }
+      if (heroNow && railB[i]) heroNow.textContent = railB[i].textContent.replace(/^\d+/, '');
+      wake();
+    }
     var timers = [], on = false, dialCv = frame.querySelector('#dialHero');
     // each cycle first fades the finished dial and program card out, so redrawing them never pops
     function fade(el){ if (!el) return; el.style.transition = 'opacity .5s cubic-bezier(.45,0,.25,1)'; el.style.opacity = '0'; }
     function show(el){ if (!el) return; el.style.transition = ''; el.style.opacity = ''; }
     function clear(){ timers.forEach(clearTimeout); timers = []; }
     function settle(keep){ introProgram.stop(); A.stopIntros(); if (!keep) { show(dialCv); show(pg); } var st = A.state(); if (st.playing) A.pause(); if (st.view !== 'home') A.home(); }
-    function cycle(){
+    // a cycle can start part-way: steps already passed run at once, the rest keep their timing
+    function cycle(from){
       clear();
       if (!on) return;
-      settle(true); fade(dialCv); fade(pg);
-      STEPS.forEach(function(x){ timers.push(setTimeout(function(){ if (on) x[1](); }, x[0])); });
-      timers.push(setTimeout(cycle, CYCLE));
+      from = +from || 0;
+      settle(!from); if (!from) { fade(dialCv); fade(pg); }
+      STEPS.forEach(function(x){ if (x[0] < from) x[1](); else timers.push(setTimeout(function(){ if (on) x[1](); }, x[0] - from)); });
+      FOCUS.forEach(function(f, i){
+        var next = i < FOCUS.length - 1 ? FOCUS[i + 1][0] : CYCLE;
+        if (f[0] <= from && from < next) focus(i, from - f[0]);
+        else if (f[0] > from) timers.push(setTimeout(function(){ if (on) focus(i, 0); }, f[0] - from));
+      });
+      timers.push(setTimeout(function(){ cycle(0); }, CYCLE - from));
     }
+    railB.forEach(function(b, i){ b.addEventListener('click', function(){
+      if (on) cycle(FOCUS[i][0] + 1);
+      else { HERO.key = FOCUS[i][1]; railB.forEach(function(x, j){ x.classList.toggle('on', j === i); }); wake(); }
+    }); });
     function want(){ return !reduce && !document.hidden && !howView.hidden && activeSlot && activeSlot.ch.id === 'ch-intro'; }
     return {
       sync: function(){
         var w = !!want();
-        if (w && !on) { on = true; cycle(); }
-        else if (!w && on) { on = false; clear(); settle(); }
+        if (w && !on) { on = true; cycle(0); }
+        else if (!w && on) { on = false; clear(); settle(); HERO.key = ''; }
       }
     };
   })();
@@ -3134,6 +3206,7 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
   function sizeSlot(o){
     var W = o.el.clientWidth || 360, w = cardW(o), vh = window.innerHeight, P = plateP(o);
     var s;
+    if (o.ch.id === 'ch-intro') { o.el.style.height = Math.round(narrow() ? Math.min(W * 1.02, vh * .66) : Math.min(W * 9 / 16, vh * .74)) + 'px'; o.s = o.s || .6; return; }
     if (!o.card) s = narrow() ? Math.min(.66, (W - 8) / w) : Math.min(.92, (vh - 150) / 844, W / w);
     // every card fills its column, so card edges sit on the same grid lines as the text and the What page's cards;
     // only a card taller than the screen (the player) gives way, and then it keeps to the column's outer edge
@@ -3205,6 +3278,11 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
   }
   function layoutSnap(o){
     if (!o.snap) return;
+    if (o.ch.id === 'ch-intro') {
+      var SW = o.el.clientWidth, SH = o.el.clientHeight, ss = Math.min(SW * .72 / o.rw, SH * .82 / o.rh, 1.75);
+      o.snap.style.transform = 'translate(' + ((SW - o.rw * ss) / 2).toFixed(1) + 'px,' + ((SH - o.rh * ss) / 2).toFixed(1) + 'px) scale(' + ss.toFixed(4) + ')';
+      return;
+    }
     var b = boxFor(o, o.rw, o.rh);
     o.snap.style.transform = 'translate(' + b.x.toFixed(1) + 'px,' + b.y.toFixed(1) + 'px) scale(' + o.s.toFixed(4) + ')';
   }
@@ -3302,8 +3380,8 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
     requestAnimationFrame(frameLoop);
   }
   function place(){
-    var o = activeSlot;
-    var ok = ready(o), r = ok ? regionOf(o.card) : null;
+    var o = activeSlot, hero = o.ch.id === 'ch-intro', key = hero ? HERO.key : o.card;
+    var ok = ready(o), r = ok ? regionOf(key) : null;
     if (o.ph) { var phOff = !!r || (!!o.snap && !o.ch.dataset.require); if (o.ph.hidden !== phOff) o.ph.hidden = phOff; }
     if (!r) {
       cam.classList.add('off');
@@ -3317,18 +3395,21 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
     var now = performance.now(), dt = Math.min(64, now - (o.lt || now)); o.lt = now;
     if (!o.cr || reduce) o.cr = { x0: r.x0, y0: r.y0, x1: r.x1, y1: r.y1 };
     else {
-      var k = 1 - Math.exp(-dt / 70);
+      var k = 1 - Math.exp(-dt / (hero ? 260 : 70));
       o.cr = { x0: o.cr.x0 + (r.x0 - o.cr.x0) * k, y0: o.cr.y0 + (r.y0 - o.cr.y0) * k, x1: o.cr.x1 + (r.x1 - o.cr.x1) * k, y1: o.cr.y1 + (r.y1 - o.cr.y1) * k };
     }
     var c = o.cr;
     var sr = story.getBoundingClientRect(), eb = o.el.getBoundingClientRect();
-    var rw = c.x1 - c.x0, rh = c.y1 - c.y0, b = boxFor(o, rw, rh);
+    var rw = c.x1 - c.x0, rh = c.y1 - c.y0;
+    // the hero frames whatever the camera holds, as large as the wide stage allows
+    if (hero) o.s = Math.min(o.el.clientWidth * .72 / rw, o.el.clientHeight * .82 / rh, 1.75);
+    var b = boxFor(o, rw, rh);
     // the Now Playing card keeps its top edge still: the panel grows down out of the bar, like on the phone
     if (o.card === 'now') b.y = (o.el.clientHeight - Math.max(o.h, o.hl || 0) * o.s) / 2;
     var x = eb.left - sr.left + b.x - c.x0 * o.s, y = eb.top - sr.top + b.y - c.y0 * o.s;
     var T = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) scale(' + o.s.toFixed(4) + ')';
-    var Rr = Math.min(RAD[o.card] || 32, rh / 2);
-    var C = o.card ? 'inset(' + c.y0.toFixed(1) + 'px ' + (390 - c.x1).toFixed(1) + 'px ' + (844 - c.y1).toFixed(1) + 'px ' + c.x0.toFixed(1) + 'px round ' + Rr.toFixed(1) + 'px)' : 'none';
+    var Rr = Math.min(hero && !key ? 46 : (RAD[key] || 32), rh / 2);
+    var C = (o.card || hero) ? 'inset(' + c.y0.toFixed(1) + 'px ' + (390 - c.x1).toFixed(1) + 'px ' + (844 - c.y1).toFixed(1) + 'px ' + c.x0.toFixed(1) + 'px round ' + Rr.toFixed(1) + 'px)' : 'none';
     // write only what changed
     var moved = false;
     if (T !== lastT) { cam.style.transform = T; lastT = T; moved = true; }
