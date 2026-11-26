@@ -1,0 +1,1410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clink — Michael Joongmin Park</title>
+<meta name="description" content="Clink: a shared canvas where a small team plans, makes and reviews a project on one board. Designed and built end to end by Michael Joongmin Park, co-owner at CNPT.">
+<meta name="theme-color" content="#FFFFFF">
+<script>
+  /* Clink opens light, as the product does by default; a dark choice made with the header switch is remembered. */
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('clink-theme'); } catch (e) {}
+    var dark = t === 'dark';
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    if (dark) document.querySelector('meta[name="theme-color"]').setAttribute('content', '#1E1E1C');
+  })();
+</script>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Hanken+Grotesk:wght@600&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   Clink case study
+   UI:   the product's own system (plak, src/main/main.css and the value page):
+         a white page, canvas-coloured panels with the board's dot grid, ink
+         pill buttons, Geist; the showcase's yellow and the film's marker ink
+         carry the drawings
+   Grid: label column + body column, shared by every chapter (as the other
+         case studies)
+   ========================================================================== */
+:root{
+  --font:Geist,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --page:#FFFFFF;
+  --canvas:#EEEDEA;          /* the board */
+  --s2:#F4F3F0;
+  --s3:#E9E7E2;
+  --ink:#191917;
+  --ink-2:#5E5C56;
+  --ink-3:#6B6963;           /* 5.5:1 on the page, 4.6:1 on the canvas */
+  --line:rgba(25,25,23,.09);
+  --line-2:rgba(25,25,23,.16);
+  --dot:rgba(25,25,23,.11);
+  --yellow:#F2D34C;          /* the showcase's yellow */
+  --marker:#151514;          /* the film's marker ink */
+  --sh-1:0 1px 2px rgba(20,20,18,.05),0 3px 10px -4px rgba(20,20,18,.08);
+  --sh-2:0 2px 4px rgba(20,20,18,.05),0 14px 30px -12px rgba(20,20,18,.2);
+  --sh-3:0 6px 14px rgba(20,20,18,.08),0 30px 60px -18px rgba(20,20,18,.35);
+  --ease:cubic-bezier(.32,.72,0,1);
+  --out:cubic-bezier(.22,1,.36,1);
+  --wrap:1280px;
+  --gut:clamp(20px,4vw,40px);
+  --pm:clamp(16px,3.2vw,48px);
+  --label:250px;
+  --col:64px;
+  --gap:clamp(24px,3vw,44px);
+  --r-panel:26px;
+  color-scheme:light;
+}
+html[data-theme="dark"]{
+  --page:#1E1E1C;--canvas:#141413;--s2:#272725;--s3:#31312E;
+  --ink:#F2F1EE;--ink-2:#B4B2AB;--ink-3:#8F8D86;
+  --line:rgba(255,255,255,.08);--line-2:rgba(255,255,255,.15);--dot:rgba(255,255,255,.08);
+  --sh-1:0 1px 2px rgba(0,0,0,.3);--sh-2:0 2px 4px rgba(0,0,0,.25),0 14px 30px -12px rgba(0,0,0,.6);--sh-3:0 6px 14px rgba(0,0,0,.3),0 30px 60px -18px rgba(0,0,0,.7);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--page)}
+[id]{scroll-margin-top:84px}
+body{font-family:var(--font);background:var(--page);color:var(--ink);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;transition:background .3s,color .3s}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+svg{display:block}
+::selection{background:var(--yellow);color:var(--marker)}
+:focus-visible{outline:2px solid #3D7BFF;outline-offset:3px;border-radius:8px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--gut)}
+main{overflow-x:clip}
+
+/* ---------- type: Geist, as the product sets it ---------- */
+.h1{font-size:clamp(44px,4.9vw,72px);line-height:1.02;font-weight:650;letter-spacing:-.045em}
+.h2{font-size:clamp(32px,3.6vw,52px);line-height:1.06;font-weight:650;letter-spacing:-.038em}
+.h1 .soft,.h2 .soft{color:var(--ink-3)}
+.lede{font-size:clamp(17px,1.32vw,19px);line-height:1.62;color:var(--ink-2)}
+.lede p+p{margin-top:1em}
+.small{font-size:15px;line-height:1.6;color:var(--ink-2)}
+.k{display:block;font-size:13px;line-height:1.4;color:var(--ink-3)}
+.num{font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+/* the chapter label: a little yellow card, outlined in the marker */
+.tag{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500;color:var(--ink-2)}
+.tag::before{content:"";flex:none;width:10px;height:10px;border-radius:3px;background:var(--yellow);box-shadow:inset 0 0 0 1.5px var(--marker)}
+
+/* ---------- motion: blocks rise into place once, as on the product page ---------- */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .8s var(--out),transform .9s var(--out)}
+.reveal.in{opacity:1;transform:none}
+.stagger>*{opacity:0;transform:translateY(14px);transition:opacity .7s var(--out),transform .8s var(--out);transition-delay:calc(var(--i,0)*70ms + 80ms)}
+.in.stagger>*,.in .stagger>*{opacity:1;transform:none}
+
+/* ---------- primitives ---------- */
+.board{background-color:var(--canvas);background-image:radial-gradient(circle,var(--dot) 1px,transparent 1.3px);background-size:18px 18px;background-position:9px 9px}
+.panel{border-radius:var(--r-panel);padding:clamp(20px,2.4vw,32px);min-width:0;background:var(--canvas)}
+.card{border-radius:20px;background:var(--page);box-shadow:inset 0 0 0 1px var(--line);padding:22px 22px 24px;min-width:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:50px;padding:0 24px;border-radius:999px;font-size:15px;font-weight:600;text-decoration:none;white-space:nowrap;transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .2s,opacity .2s}
+.btn svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+.btn:active{transform:scale(.98)}
+.btn-ink{background:var(--ink);color:var(--page);box-shadow:var(--sh-2)}
+.btn-ink:hover{transform:translateY(-1px);box-shadow:var(--sh-3)}
+.btn-text{padding:0 12px;color:var(--ink-2)}
+.btn-text:hover{color:var(--ink)}
+.btn-dark{background:var(--marker);color:#fff;box-shadow:0 2px 4px rgba(20,20,18,.08),0 14px 30px -12px rgba(20,20,18,.35)}
+.btn-dark:hover{transform:translateY(-1px)}
+.round{flex:none;width:38px;height:38px;border-radius:50%;background:var(--page);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-2);display:grid;place-items:center;transition:background .2s,transform .25s var(--ease)}
+.round:hover{background:var(--s2)}
+.round:active{transform:scale(.92)}
+.round svg{width:13px;height:13px}
+.fi{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- navigation ---------- */
+.nav{position:fixed;inset:0 0 auto;z-index:50;transition:background .3s,box-shadow .3s}
+.nav.solid{background:color-mix(in srgb,var(--page) 86%,transparent);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);box-shadow:0 1px 0 var(--line)}
+.nav-in{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;height:56px;padding:0 var(--pm)}
+.nav-id{justify-self:start;display:flex;align-items:center;gap:14px;min-width:0}
+.home{font-family:"Hanken Grotesk",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;font-size:12.5px;font-weight:600;line-height:1.45;color:var(--ink);text-decoration:none;white-space:nowrap;transition:color .25s}
+.home:hover{color:var(--ink-3)}
+.nav-sep{flex:none;width:1px;height:16px;background:var(--line-2)}
+.brand{display:flex;align-items:center;color:var(--ink);text-decoration:none}
+.brand svg{height:12px;width:auto}
+.nav-links{position:relative;display:flex;align-items:center;gap:clamp(16px,1.9vw,28px)}
+.nav-links button{font-size:13.5px;font-weight:500;color:var(--ink-3);padding:8px 0;transition:color .25s}
+.nav-links button:hover,.nav-links button[aria-current="true"]{color:var(--ink)}
+.nav-links .ind{position:absolute;left:0;bottom:1px;width:5px;height:5px;border-radius:2px;background:var(--yellow);box-shadow:inset 0 0 0 1px var(--marker);opacity:0;transition:transform .5s var(--ease),opacity .3s}
+.nav-right{justify-self:end;display:flex;align-items:center;gap:4px}
+.theme{flex:none;display:grid;place-items:center;width:36px;height:36px;margin-right:4px;border-radius:999px;background:var(--s2);color:var(--ink-2);transition:color .2s,background .2s}
+.theme:hover{color:var(--ink)}
+.theme svg{width:16px;height:16px;transition:transform .5s var(--ease)}
+html[data-theme="dark"] .theme svg{transform:rotate(180deg)}
+.work{display:inline-flex;align-items:center;height:36px;padding:0 12px;font-size:13.5px;font-weight:500;color:var(--ink-3);text-decoration:none;transition:color .25s}
+.work:hover{color:var(--ink)}
+.nav-cta{display:inline-flex;align-items:center;height:36px;padding:0 16px;border-radius:999px;background:var(--ink);color:var(--page);font-size:13.5px;font-weight:600;text-decoration:none;transition:opacity .2s}
+.nav-cta:hover{opacity:.86}
+.chapter-now{display:none}
+
+/* ---------- hero ---------- */
+.hero{padding-top:clamp(104px,12.5vh,144px)}
+/* title across the wide column, the summary beside its last line, the showcase full width below */
+.hero-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,390px);gap:clamp(32px,5vw,80px);align-items:end}
+.hero-r{padding-bottom:6px}
+.meta{display:flex;flex-wrap:wrap;row-gap:2px;margin-bottom:24px;font-size:13px;color:var(--ink-3)}
+.meta span{white-space:nowrap}
+.meta span:first-child{color:var(--ink)}
+.meta i{font-style:normal;margin:0 9px;color:var(--line-2)}
+.hero .lede{max-width:42ch}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:26px}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap);margin-top:clamp(56px,6vw,88px);padding-top:26px;box-shadow:inset 0 1px 0 var(--line)}
+.facts dt{font-size:13px;color:var(--ink-3)}
+.facts dd{font-size:15.5px;line-height:1.45;margin-top:6px;max-width:27ch}
+
+/* the showcase: the product's one-minute UI loop on the board, with its moments under it */
+.stage{margin-top:clamp(48px,5.5vw,80px);border-radius:clamp(22px,2.6vw,34px);overflow:hidden}
+.stage-in{display:grid;place-items:center;padding:clamp(12px,2.4vw,36px) clamp(12px,2.4vw,36px) clamp(10px,1.6vw,22px)}
+.stage video{display:block;width:100%;max-width:880px;height:auto;aspect-ratio:4/3;border-radius:clamp(14px,1.8vw,22px);background:#F4F4F3;box-shadow:var(--sh-3)}
+.rail{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;max-width:944px;margin:0 auto;padding:4px 16px 0}
+.rail button{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;padding:10px 2px 12px;font-size:12.5px;font-weight:500;line-height:1.25;color:var(--ink-3);transition:color .25s;min-width:0}
+.rail button span{font-variant-numeric:tabular-nums;font-size:11.5px;font-weight:400}
+.rail button::after{content:"";position:absolute;left:2px;right:2px;bottom:0;height:2px;border-radius:2px;background:var(--line-2)}
+.rail button i{position:absolute;left:2px;bottom:0;height:2px;border-radius:2px;background:var(--ink);z-index:1;width:0;max-width:calc(100% - 4px)}
+.rail button.done i{background:var(--ink-3)}
+.rail button.on,.rail button:hover{color:var(--ink)}
+.stage-foot{display:flex;justify-content:space-between;align-items:center;gap:14px;max-width:944px;margin:0 auto;padding:12px 16px 16px;font-size:13px;color:var(--ink-3)}
+.stage-foot .now{display:none;font-size:14px;font-weight:500;color:var(--ink)}
+
+/* ---------- chapters: label column + body column ---------- */
+.sec{padding-top:clamp(112px,12vw,168px)}
+.band{margin-top:clamp(96px,10vw,136px);padding:clamp(80px,9vw,120px) 0;background:var(--s2)}
+.sec-head{display:grid;grid-template-columns:var(--label) minmax(0,1fr);column-gap:var(--col);row-gap:24px;margin-bottom:clamp(64px,7vw,100px)}
+.sec-head .tag{grid-column:1;grid-row:1;align-self:start;padding-top:clamp(10px,1.1vw,16px)}
+.sec-head .h2{grid-column:2;grid-row:1;max-width:19ch}
+.sec-head .lede{grid-column:2;max-width:62ch}
+.block{display:grid;grid-template-columns:var(--label) minmax(0,1fr);column-gap:var(--col)}
+.block+.block{margin-top:clamp(72px,8vw,112px)}
+.block>.subhead{grid-column:1;grid-row:1/span 12;align-self:start;position:sticky;top:96px}
+.block>*:not(.subhead){grid-column:2;min-width:0}
+.subhead .no{display:block;margin-bottom:12px;font-size:12.5px;font-variant-numeric:tabular-nums;color:var(--ink-3)}
+.subhead h3{font-size:20px;font-weight:600;line-height:1.25;letter-spacing:-.02em}
+.subhead p{font-size:14.5px;line-height:1.45;color:var(--ink-3);margin-top:6px;max-width:24ch}
+.offset{margin-left:calc(var(--label) + var(--col))}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.body-text{max-width:66ch}
+.body-text+*{margin-top:28px}
+
+/* at a glance */
+.pitch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px var(--gap)}
+.pitch .k{margin-bottom:8px}
+.pitch p{font-size:17px;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap);margin-top:72px;padding-top:32px;box-shadow:inset 0 1px 0 var(--line)}
+.stats .num{font-size:clamp(44px,4.4vw,64px);line-height:1;font-weight:600}
+.stats .k{margin-top:10px;max-width:22ch}
+
+/* cards with a line icon, a title and what it means */
+.ic-card .fi{color:var(--ink)}
+.ic-card h4{margin-top:16px;font-size:17px;font-weight:600;letter-spacing:-.015em;line-height:1.3}
+.ic-card p{margin-top:6px;font-size:15px;line-height:1.55;color:var(--ink-2)}
+
+/* overview: the path from client work to Clink */
+.path{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;counter-reset:p}
+.path li{position:relative;padding:20px 20px 22px;border-radius:20px;background:var(--canvas)}
+.path li::before{counter-increment:p;content:counter(p,decimal-leading-zero);display:block;font-size:12.5px;font-variant-numeric:tabular-nums;color:var(--ink-3)}
+.path li b{display:block;margin-top:14px;font-size:17px;font-weight:600;letter-spacing:-.015em}
+.path li p{margin-top:6px;font-size:14.5px;line-height:1.55;color:var(--ink-2)}
+.path li:last-child{background:var(--yellow);color:var(--marker)}
+.path li:last-child::before,.path li:last-child p{color:rgba(21,21,20,.72)}
+.path li:not(:last-child)::after{content:"";position:absolute;top:50%;right:-9px;width:6px;height:6px;border-top:1.6px solid var(--ink-3);border-right:1.6px solid var(--ink-3);transform:translateY(-50%) rotate(45deg);z-index:1}
+
+/* the team */
+.team-list{list-style:none;display:grid;gap:2px;margin-top:28px}
+.team-list li{display:flex;align-items:center;gap:14px;padding:14px 0;box-shadow:inset 0 -1px 0 var(--line)}
+.team-list .av{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--s2);font-size:13px;font-weight:600;color:var(--ink-2)}
+.team-list .av .fi{width:18px;height:18px}
+.team-list .me .av{background:var(--yellow);color:var(--marker);box-shadow:inset 0 0 0 1.5px var(--marker)}
+.team-list b{display:block;font-size:16px;font-weight:600;letter-spacing:-.01em}
+.team-list span{display:block;font-size:14px;color:var(--ink-3)}
+.team-list .you{margin-left:auto;font-style:normal;font-size:12.5px;font-weight:500;padding:3px 10px;border-radius:999px;background:var(--s2);color:var(--ink-2)}
+
+/* the brief */
+.brief{font-size:clamp(25px,2.6vw,36px);line-height:1.22;letter-spacing:-.028em;font-weight:600;max-width:26ch;padding-left:24px;box-shadow:inset 5px 0 0 var(--yellow)}
+.brief-after{margin-top:22px;max-width:60ch}
+
+/* where it scatters (the product page's figure) */
+.scatter-panel{display:grid;place-items:center;padding:clamp(40px,6vw,72px) 20px;border-radius:var(--r-panel)}
+.scatter{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px}
+.scatter span{display:inline-flex;align-items:center;height:40px;padding:0 17px;border-radius:999px;background:var(--page);box-shadow:var(--sh-1);color:var(--ink-3);font-size:14.5px;font-weight:500;text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--ink-3) 60%,transparent)}
+.scatter span:nth-child(1){transform:rotate(-3deg)}.scatter span:nth-child(2){transform:rotate(2deg) translateY(4px)}.scatter span:nth-child(3){transform:rotate(-1.5deg) translateY(-3px)}.scatter span:nth-child(4){transform:rotate(3deg)}
+.scatter svg{width:24px;height:24px;margin:0 6px;fill:none;stroke:var(--ink-2);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.scatter b{display:inline-flex;align-items:center;height:44px;padding:0 21px;border-radius:999px;background:var(--ink);color:var(--page);font-size:15px;font-weight:600;box-shadow:var(--sh-2)}
+.scatter-cap{margin-top:22px;text-align:center;font-size:14.5px;color:var(--ink-2);max-width:46ch}
+
+/* discovery: before and after */
+.shift{list-style:none;display:grid;gap:12px}
+.shift li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:16px;align-items:start;padding:22px;border-radius:20px;background:var(--canvas)}
+.shift b{display:block;font-size:17px;font-weight:600;letter-spacing:-.015em}
+.shift p{margin-top:4px;font-size:15px;line-height:1.55;color:var(--ink-2)}
+
+/* product: an idea, its features and its drawing */
+.idea{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(28px,4vw,56px);align-items:center}
+.idea .body-text{font-size:16.5px;line-height:1.62;color:var(--ink-2)}
+.how{list-style:none;display:grid;gap:12px;margin-top:22px;padding-top:20px;box-shadow:inset 0 1px 0 var(--line)}
+.how li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:12px;align-items:start;font-size:14.5px;line-height:1.5;color:var(--ink-2)}
+.how .fi{margin-top:1px;color:var(--ink)}
+.how b{display:block;margin-bottom:2px;font-size:15.5px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.art{display:flex;align-items:center;justify-content:center;border-radius:clamp(22px,2.4vw,30px);padding:clamp(16px,2.4vw,30px);background-color:var(--yellow);background-image:radial-gradient(circle,rgba(21,21,20,.09) 1px,transparent 1.3px);background-size:18px 18px;background-position:9px 9px}
+
+/* the drawings (from the product page's about.js and about.css): the film's marker ink (#151514) on the showcase's
+   yellow, white paper cards; the same in light and dark */
+.pen{display:block;width:100%;height:auto;overflow:visible}
+.pen .mk{fill:none;stroke:#151514;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.pen .mk.t{stroke-width:1.7}
+.pen .mk.b{stroke-width:2.8}
+.pen .pp{fill:#FFFFFF;stroke:none}
+.pen .pp.sec{fill:rgba(255,255,255,.42)}
+.pen .ik{fill:#151514;stroke:none}
+.pen .hf{fill:none;stroke:#151514;stroke-width:20;stroke-linecap:round;stroke-linejoin:round}
+.pen .hf.big{stroke-width:13}
+.pen .num{font:700 10px var(--font);fill:#151514;text-anchor:middle;letter-spacing:0}
+.pen .num.inv{fill:#FFFFFF}
+.pen .num.sm{font-size:7.5px;letter-spacing:.06em}
+
+/* build: the four steps, each with its doodle */
+.steps{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.steps li{padding:22px 24px 28px;border-radius:24px;background:var(--canvas);transition:background .2s var(--out),color .2s}
+.steps li:hover{background:var(--yellow);color:var(--marker)}
+.steps li:hover p,.steps li:hover .sn{color:rgba(21,21,20,.72)}
+.steps .step-pen{width:120px;max-width:100%;margin:0 0 0 -6px}
+.steps .pen .mk{stroke:currentColor}.steps .pen .ik{fill:currentColor}.steps .pen .hf{stroke:currentColor}
+.steps .pen .pp{fill:var(--page);transition:fill .2s}
+.steps li:hover .pen .pp{fill:#FFFFFF}
+.steps .sn{display:block;margin-top:12px;font-size:12.5px;font-variant-numeric:tabular-nums;color:var(--ink-3)}
+.steps h4{margin-top:4px;font-size:18px;letter-spacing:-.015em;font-weight:600}
+.steps p{margin-top:8px;font-size:15px;line-height:1.55;color:var(--ink-2)}
+
+/* build: what is built (the product page's tiles; their icons redrawn as doodles) */
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tile{position:relative;padding:22px 22px 24px;border-radius:22px;background:var(--page);box-shadow:inset 0 0 0 1px var(--line);transition:background .2s}
+.tile:hover{background:var(--s2)}
+.tile svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.tile h5{margin-top:18px;font-size:15.5px;font-weight:600;letter-spacing:-.01em}
+.tile p{margin-top:6px;font-size:14px;line-height:1.5;color:var(--ink-2)}
+.soon-tag{position:absolute;top:20px;right:20px;display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:999px;background:var(--yellow);color:var(--marker);font-size:12px;font-weight:600;white-space:nowrap}
+svg.doodle{overflow:visible}
+.tile svg.doodle{stroke-width:1.75}
+
+/* build: the explainer film */
+.film{border-radius:var(--r-panel);padding:clamp(10px,1.4vw,16px)}
+.film video{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:clamp(14px,1.6vw,20px);background:#EEEDE9;box-shadow:var(--sh-2)}
+.film-cap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 20px;margin-top:16px;font-size:14.5px;line-height:1.55;color:var(--ink-2)}
+.film-cap p{max-width:62ch}
+.film-cap .len{font-size:13px;color:var(--ink-3);white-space:nowrap}
+
+/* build: the film's cast, drawn stroke by stroke (about.js) */
+.cast-panel{border-radius:var(--r-panel);padding:clamp(28px,4vw,52px) clamp(16px,3vw,40px)}
+.cast{display:flex;justify-content:center;align-items:flex-end;gap:clamp(8px,2.4vw,32px)}
+.dd{display:block;overflow:visible;width:clamp(56px,9vw,104px)}
+.dd-jane,.dd-mark{width:clamp(78px,12.5vw,150px)}
+.dd .cd{fill:none;stroke:#151514;stroke-linecap:round;stroke-linejoin:round}
+.dd .ik{fill:#151514;stroke:none}
+html[data-theme="dark"] .dd .cd{stroke:#F2F1EE}
+html[data-theme="dark"] .dd .ik{fill:#F2F1EE}
+.cast-names{display:flex;justify-content:center;gap:clamp(8px,2.4vw,32px);margin-top:14px;font-size:13px;color:var(--ink-3)}
+
+/* conclusion: what is next, and the way out to the product */
+.next{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.next li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:14px;padding:22px;border-radius:20px;box-shadow:inset 0 0 0 1px var(--line)}
+.next b{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:16.5px;font-weight:600;letter-spacing:-.01em}
+.next b em{font-style:normal;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--yellow);color:var(--marker)}
+.next p{margin-top:4px;font-size:14.5px;line-height:1.55;color:var(--ink-2)}
+.end-card{margin-top:clamp(72px,8vw,112px);padding:clamp(48px,7vw,88px) 24px;border-radius:clamp(26px,3vw,38px);background:var(--yellow);color:var(--marker);text-align:center}
+.end-card h3{font-size:clamp(30px,4.2vw,54px);line-height:1.04;letter-spacing:-.042em;font-weight:650}
+.end-card .team{width:min(440px,86%);margin:18px auto 0}
+.end-card p{margin:6px auto 0;max-width:46ch;font-size:17px;color:rgba(21,21,20,.72)}
+.end-card .btn{margin-top:30px}
+
+/* ---------- close ---------- */
+.close{margin-top:clamp(112px,12vw,168px);padding:clamp(80px,9vw,120px) 0 36px;background:var(--s2)}
+.eyebrow{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink-2)}
+.eyebrow svg{height:11px;width:auto;color:var(--ink)}
+.close .h2{max-width:22ch;margin-top:18px}
+.close-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:56px}
+.close-links a{display:flex;flex-direction:column;justify-content:space-between;gap:36px;min-height:160px;padding:22px;border-radius:22px;background:var(--page);text-decoration:none;box-shadow:inset 0 0 0 1px var(--line);transition:box-shadow .25s,transform .3s var(--ease)}
+.close-links a:hover{box-shadow:inset 0 0 0 1px var(--ink-3)}
+.close-links a:active{transform:scale(.98)}
+.close-links .t{font-size:18px;font-weight:600;letter-spacing:-.022em;line-height:1.25}
+.close-links .s{font-size:13.5px;color:var(--ink-3);margin-top:4px}
+.close-links svg{width:20px;height:20px;order:-1;color:var(--ink-2)}
+.close-links a.out{background:var(--yellow);color:var(--marker);box-shadow:none}
+.close-links a.out .s,.close-links a.out svg{color:rgba(21,21,20,.72)}
+.close-links a.out:hover{box-shadow:inset 0 0 0 1.5px var(--marker)}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-top:88px;font-size:13.5px;color:var(--ink-3)}
+.foot nav{display:flex;gap:22px;flex-wrap:wrap}
+.foot a{text-decoration:none}
+.foot a:hover{color:var(--ink)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1260px){
+  .nav-in{grid-template-columns:auto 1fr auto}
+  .nav-links{display:none}
+  .chapter-now{display:block;justify-self:center;font-size:13.5px;font-weight:500;color:var(--ink-2)}
+}
+@media (max-width:1080px){
+  :root{--label:0px;--col:0px}
+  .hero-top{grid-template-columns:minmax(0,1fr);align-items:start;gap:24px}
+  .hero-r{padding-bottom:0}
+  .hero .lede{max-width:56ch}
+  .sec-head{grid-template-columns:minmax(0,1fr)}
+  .sec-head .tag{grid-column:1;grid-row:1;padding-top:0}
+  .sec-head .h2,.sec-head .lede{grid-column:1}
+  .sec-head .h2{grid-row:2}
+  .block{grid-template-columns:minmax(0,1fr)}
+  .block>.subhead{grid-column:1;grid-row:auto;position:static;margin-bottom:26px}
+  .block>*:not(.subhead){grid-column:1}
+  .subhead .no{margin-bottom:8px}
+  .subhead p{max-width:none}
+  .offset{margin-left:0}
+  .path{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .path li:nth-child(2)::after{display:none}
+}
+@media (max-width:860px){
+  .grid-2,.grid-3,.idea,.next,.close-links{grid-template-columns:minmax(0,1fr)}
+  .idea .art{order:-1}
+  .facts{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:24px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:32px}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .close-links a{min-height:0;gap:20px}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .wrap{padding:0 20px}
+  :root{--pm:max(18px,env(safe-area-inset-left),env(safe-area-inset-right))}
+  .nav-in{height:52px;gap:12px}
+  .work{display:none}
+  .h1{font-size:38px;line-height:1.05}
+  .h2{font-size:30px;line-height:1.1}
+  .lede{font-size:17px}
+  .sec{padding-top:88px}
+  .band{margin-top:72px;padding:64px 0}
+  .sec-head{margin-bottom:48px;row-gap:18px}
+  .block+.block{margin-top:64px}
+  .actions .btn-ink{flex:1 1 100%}
+  .stage{border-radius:22px}
+  .stage-in{padding:10px 10px 6px}
+  /* on a phone the rail keeps all seven moments in one row as numbered segments; the moment's name sits below it */
+  .rail{gap:4px;padding:2px 12px 0}
+  .rail button{align-items:center;padding:14px 0 13px;font-size:0;line-height:1}
+  .rail button span{font-size:12px;line-height:16px}
+  .stage-foot .long{display:none}
+  .stage-foot .now{display:block}
+  .pitch{grid-template-columns:minmax(0,1fr);gap:26px}
+  .path,.steps,.tiles{grid-template-columns:minmax(0,1fr)}
+  .path li::after{display:none}
+  .scatter svg{transform:rotate(90deg);flex-basis:100%;height:20px}
+  .close{margin-top:88px;padding:64px 0 28px}
+  .close-links{margin-top:32px}
+  .close-links a{flex-direction:row;align-items:center;justify-content:space-between;padding:18px 20px}
+  .close-links svg{order:1}
+  .foot{margin-top:48px;flex-direction:column;gap:14px}
+  .end-card .btn{width:100%;max-width:340px}
+}
+@media (max-width:420px){
+  .nav-sep,.nav-id .brand{display:none}
+}
+@media (max-width:359px){
+  .chapter-now{display:none!important}
+}
+@media (pointer:coarse),(max-width:640px){
+  .home{display:inline-block;padding:13px 0;margin:-13px 0}
+  .theme{width:40px;height:40px}
+  .nav-cta{height:40px}
+  .round{width:44px;height:44px}
+  .foot nav a{display:inline-block;padding:11px 0}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal,.stagger>*{opacity:1;transform:none}
+}
+/* build: the loop, one round after another */
+.loop-steps{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.loop-steps li{position:relative;padding:20px 20px 22px;border-radius:20px;background:var(--canvas);transition:background .5s var(--out),color .5s var(--out)}
+.loop-steps .fi{color:var(--ink);transition:color .5s var(--out)}
+.loop-steps .who{display:block;margin-top:14px;font-size:12.5px;color:var(--ink-3);transition:color .5s var(--out)}
+.loop-steps b{display:block;margin-top:2px;font-size:17px;font-weight:600;letter-spacing:-.015em;line-height:1.3}
+.loop-steps p{margin-top:6px;font-size:14.5px;line-height:1.55;color:var(--ink-2);transition:color .5s var(--out)}
+.loop-steps li.on{background:var(--yellow);color:var(--marker)}
+.loop-steps li.on .fi{color:var(--marker)}
+.loop-steps li.on .who,.loop-steps li.on p{color:rgba(21,21,20,.72)}
+.loop-steps li:not(:last-child)::after{content:"";position:absolute;top:50%;right:-9px;width:6px;height:6px;border-top:1.6px solid var(--ink-3);border-right:1.6px solid var(--ink-3);transform:translateY(-50%) rotate(45deg);z-index:1}
+.loop-back{position:relative;margin:10px 12.5% 0;height:20px;border:1.5px solid var(--ink-3);border-top:0;border-radius:0 0 14px 14px}
+.loop-back::before{content:"";position:absolute;left:-5.25px;top:-1px;width:8px;height:8px;border-left:1.5px solid var(--ink-3);border-top:1.5px solid var(--ink-3);transform:rotate(45deg)}
+.loop-back span{position:absolute;left:50%;bottom:-10px;transform:translateX(-50%);padding:0 12px;background:var(--page);font-size:12.5px;color:var(--ink-3);white-space:nowrap}
+
+/* build: the full stack */
+.stack{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.stack li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:14px;padding:20px 20px 22px;border-radius:20px;box-shadow:inset 0 0 0 1px var(--line)}
+.stack b{display:block;font-size:16.5px;font-weight:600;letter-spacing:-.01em}
+.stack p{margin-top:4px;font-size:14.5px;line-height:1.55;color:var(--ink-2)}
+
+/* build: the feedback dialog and the board its posts land on (a working copy of the product's) */
+.fbk{display:grid;grid-template-columns:minmax(0,1fr) 36px minmax(0,1.15fr);align-items:center;gap:8px;padding:clamp(16px,2.4vw,32px);border-radius:var(--r-panel)}
+.fbk-dlg{position:relative;background:var(--page);border-radius:18px;box-shadow:var(--sh-3);padding:18px 18px 16px;min-width:0}
+.fbk-h{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:600;letter-spacing:-.01em}
+.fbk-l{display:block;margin-top:14px;font-size:12.5px;font-weight:500;color:var(--ink-3)}
+.fbk-seg{display:inline-flex;margin-top:6px;padding:3px;border-radius:999px;background:var(--s2)}
+.fbk-seg button{height:32px;padding:0 14px;border-radius:999px;font-size:13.5px;font-weight:500;color:var(--ink-2);transition:background .2s,color .2s}
+.fbk-seg button[aria-checked="true"]{background:var(--page);color:var(--ink);box-shadow:var(--sh-1)}
+.fbk-in{display:block;width:100%;margin-top:6px;padding:9px 12px;border:0;border-radius:10px;background:var(--s2);font:inherit;font-size:14px;line-height:1.45;color:var(--ink);resize:none}
+.fbk-in::placeholder{color:var(--ink-3)}
+.fbk-in:focus{outline:2px solid #3D7BFF;outline-offset:0}
+.fbk-f{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+.fbk-shots{font-size:12.5px;color:var(--ink-3)}
+.fbk-shots small{font-size:12px}
+.fbk-send{margin-left:auto;white-space:nowrap;height:38px;padding:0 16px;border-radius:999px;background:var(--ink);color:var(--page);font-size:13.5px;font-weight:600;transition:opacity .2s,transform .2s var(--ease)}
+.fbk-send:active{transform:scale(.97)}
+.fbk-send:disabled{opacity:.4;cursor:default}
+.fbk-ty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;border-radius:18px;background:var(--page)}
+.fbk-ty[hidden]{display:none}
+.fbk-ty .fi{width:30px;height:30px;color:#2E9E5B}
+.fbk-ty b{margin-top:12px;font-size:17px;font-weight:600;letter-spacing:-.01em}
+.fbk-ty p{margin-top:6px;font-size:14px;line-height:1.5;color:var(--ink-2);max-width:30ch}
+.fbk-to svg{width:24px;height:24px;margin:0 auto;fill:none;stroke:var(--ink-2);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.fbk-board{align-self:stretch;display:flex;flex-direction:column;gap:10px;min-width:0;padding:14px;border-radius:18px;background:color-mix(in srgb,var(--page) 55%,transparent);box-shadow:inset 0 0 0 1px var(--line)}
+.fbk-note{padding:12px 14px;border-radius:12px;background:var(--yellow);color:var(--marker)}
+.fbk-note b{display:block;font-size:15px;font-weight:600}
+.fbk-note span{display:block;font-size:12.5px;color:rgba(21,21,20,.72)}
+.fbk-posts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-content:start}
+.post{padding:12px 13px;border-radius:12px;background:var(--page);box-shadow:var(--sh-1);min-width:0}
+.post .pk{display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;background:var(--s2);font-size:12px;font-weight:600;color:var(--ink-2)}
+.post .pk.bug{background:#FBE3E1;color:#9B2C22}
+html[data-theme="dark"] .post .pk.bug{background:rgba(232,80,60,.2);color:#F4ABA2}
+.post p{margin-top:8px;font-size:13.5px;line-height:1.45;overflow-wrap:anywhere}
+.post .pby{display:block;margin-top:8px;font-size:12px;color:var(--ink-3)}
+.post.new{animation:land .8s var(--out)}
+@keyframes land{0%{opacity:0;transform:translateY(-16px) scale(.94);box-shadow:0 0 0 3px var(--yellow)}60%{opacity:1;box-shadow:0 0 0 3px var(--yellow)}100%{transform:none;box-shadow:var(--sh-1)}}
+.after{margin-top:16px;font-size:13.5px;line-height:1.55;color:var(--ink-3);max-width:72ch}
+@media (max-width:860px){
+  .loop-steps,.stack{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .loop-steps li:nth-child(2)::after{display:none}
+  .loop-back{display:none}
+  .fbk{grid-template-columns:minmax(0,1fr)}
+  .fbk-to svg{transform:rotate(90deg)}
+}
+@media (max-width:640px){
+  .loop-steps,.stack{grid-template-columns:minmax(0,1fr)}
+  .loop-steps li::after{display:none}
+  .brief{padding-left:18px}
+  /* the cast keeps all five in one row */
+  .cast-panel{padding:28px 12px}
+  .cast{gap:6px}
+  .dd{width:44px}
+  .dd-jane,.dd-mark{width:62px}
+}
+@media (pointer:coarse),(max-width:640px){
+  .fbk-seg button{height:40px}
+  .fbk-send{height:44px}
+  .fbk-in{padding:11px 12px}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="clLogo" viewBox="0 0 336 61"><path d="M60.9013 37.2881V60.9014H30.4497C22.374 60.9014 14.6288 57.6929 8.91865 51.9827C3.20781 46.2719 0 38.5273 0 30.451V30.4497C0 22.374 3.20781 14.6288 8.91865 8.91865C14.6288 3.20781 22.374 0 30.4497 0H60.9013V23.6126H53.8249C52.0119 23.6126 50.2734 24.3333 48.991 25.6151C47.7092 26.8969 46.9892 28.636 46.9892 30.449C46.9892 30.449 46.9892 30.451 46.9892 30.4523C46.9892 32.2653 47.7092 34.0039 48.991 35.2856C50.2734 36.5681 52.0119 37.2881 53.8249 37.2881C57.3425 37.2881 60.9013 37.2881 60.9013 37.2881Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/><path d="M129.62 37.2881V60.9014H68.7188V0H100.318V37.2881H129.62Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/><path d="M137.431 23.6126V0H198.332V23.6126H186.491C184.835 23.6126 183.492 24.9562 183.492 26.613C183.492 28.8913 183.492 32.01 183.492 34.2884C183.492 35.9451 184.835 37.2881 186.491 37.2881C190.827 37.2881 198.332 37.2881 198.332 37.2881V60.9014H137.431V37.2881H149.271C150.927 37.2881 152.271 35.9451 152.271 34.2884C152.271 32.01 152.271 28.8913 152.271 26.613C152.271 24.9562 150.927 23.6126 149.271 23.6126C144.935 23.6126 137.431 23.6126 137.431 23.6126Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/><path d="M229.073 60.9014H205.844V0H242.107C248.642 0 254.909 2.59548 259.529 7.21601C264.15 11.8365 266.745 18.1033 266.745 24.6372V60.9014H243.913V48.4378C243.913 42.2802 238.921 37.2881 232.763 37.2881C230.644 37.2881 229.073 37.2881 229.073 37.2881V60.9014Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/><path d="M332.671 37.5334C334.455 39.3171 335.457 41.7364 335.457 44.2587C335.457 50.2342 335.457 60.9014 335.457 60.9014H312.426V54.5749C312.426 52.6256 311.652 50.7568 310.274 49.3786C308.895 48.0004 307.026 47.2259 305.077 47.2259H297.585V60.9014H274.555V0H297.585V13.6748H305.077C307.026 13.6748 308.895 12.901 310.274 11.5228C311.652 10.1446 312.426 8.27515 312.426 6.32655V0H335.457V16.8035C335.457 19.3258 334.455 21.7452 332.671 23.5289C329.778 26.4222 325.668 30.5315 325.668 30.5315C325.668 30.5315 329.778 34.6401 332.671 37.5334Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/></symbol>
+    <symbol id="cl-bell-dot" viewBox="0 0 24 24"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M13.916 2.314A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.74 7.327A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673 9 9 0 0 1-.585-.665"/><circle cx="18" cy="8" r="3"/></symbol><symbol id="cl-book-open" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol><symbol id="cl-calendar-days" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></symbol><symbol id="cl-circle-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="cl-code-xml" viewBox="0 0 24 24"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></symbol><symbol id="cl-combine" viewBox="0 0 24 24"><path d="M10 18H5a3 3 0 0 1-3-3v-1"/><path d="M14 2a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2"/><path d="M20 2a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2"/><path d="m7 21 3-3-3-3"/><rect x="14" y="14" width="8" height="8" rx="2"/><rect x="2" y="2" width="8" height="8" rx="2"/></symbol><symbol id="cl-compass" viewBox="0 0 24 24"><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"/><circle cx="12" cy="12" r="10"/></symbol><symbol id="cl-folders" viewBox="0 0 24 24"><path d="M20 17a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3.9a2 2 0 0 1-1.69-.9l-.81-1.2a2 2 0 0 0-1.67-.9H8a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2Z"/><path d="M2 8v11a2 2 0 0 0 2 2h14"/></symbol><symbol id="cl-kanban" viewBox="0 0 24 24"><path d="M6 5v11"/><path d="M12 5v6"/><path d="M18 5v14"/></symbol><symbol id="cl-key-round" viewBox="0 0 24 24"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></symbol><symbol id="cl-layers" viewBox="0 0 24 24"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></symbol><symbol id="cl-layout-dashboard" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></symbol><symbol id="cl-layout-grid" viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></symbol><symbol id="cl-list-checks" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></symbol><symbol id="cl-message-circle-off" viewBox="0 0 24 24"><path d="M20.5 14.9A9 9 0 0 0 9.1 3.5"/><path d="m2 2 20 20"/><path d="M5.6 5.6C3 8.3 2.2 12.5 4 16l-2 6 6-2c3.4 1.8 7.6 1.1 10.3-1.7"/></symbol><symbol id="cl-message-square-heart" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M14.8 7.5a1.84 1.84 0 0 0-2.6 0l-.2.3-.3-.3a1.84 1.84 0 1 0-2.4 2.8L12 13l2.7-2.7c.9-.9.8-2.1.1-2.8"/></symbol><symbol id="cl-message-square-text" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M13 8H7"/><path d="M17 12H7"/></symbol><symbol id="cl-messages-square" viewBox="0 0 24 24"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></symbol><symbol id="cl-package" viewBox="0 0 24 24"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/><path d="m7.5 4.27 9 5.15"/></symbol><symbol id="cl-pencil-ruler" viewBox="0 0 24 24"><path d="M13 7 8.7 2.7a2.41 2.41 0 0 0-3.4 0L2.7 5.3a2.41 2.41 0 0 0 0 3.4L7 13"/><path d="m8 6 2-2"/><path d="m18 16 2-2"/><path d="m17 11 4.3 4.3c.94.94.94 2.46 0 3.4l-2.6 2.6c-.94.94-2.46.94-3.4 0L11 17"/><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></symbol><symbol id="cl-plug" viewBox="0 0 24 24"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></symbol><symbol id="cl-puzzle" viewBox="0 0 24 24"><path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z"/></symbol><symbol id="cl-search-x" viewBox="0 0 24 24"><path d="m13.5 8.5-5 5"/><path d="m8.5 8.5 5 5"/><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol><symbol id="cl-server" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></symbol><symbol id="cl-smartphone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></symbol><symbol id="cl-sparkles" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></symbol><symbol id="cl-trending-up" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></symbol><symbol id="cl-user-round" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></symbol><symbol id="cl-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol><symbol id="cl-waypoints" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2.5"/><path d="m10.2 6.3-3.9 3.9"/><circle cx="4.5" cy="12" r="2.5"/><path d="M7 12h10"/><circle cx="19.5" cy="12" r="2.5"/><path d="m13.8 17.7 3.9-3.9"/><circle cx="12" cy="19.5" r="2.5"/></symbol><symbol id="cl-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+  </defs>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <div class="nav-id">
+      <a class="home" href="index.html" aria-label="Michael J. Park, back to the portfolio">Michael J. Park</a>
+      <span class="nav-sep" aria-hidden="true"></span>
+      <a class="brand" href="#top" aria-label="Clink, back to top"><svg viewBox="0 0 336 61" aria-hidden="true"><use href="#clLogo"/></svg></a>
+    </div>
+    <span class="chapter-now" id="chapterNow"></span>
+    <nav class="nav-links" id="chapterNav" aria-label="Case study chapters">
+      <button data-go="overview">Overview</button>
+      <button data-go="problem">Problem</button>
+      <button data-go="discovery">Discovery</button>
+      <button data-go="product">Product</button>
+      <button data-go="build">Build</button>
+      <button data-go="story">Story</button>
+      <button data-go="conclusion">Conclusion</button>
+      <span class="ind" aria-hidden="true"></span>
+    </nav>
+    <div class="nav-right">
+      <button type="button" class="theme" id="themeBtn" aria-label="Switch to dark theme" title="Dark theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg></button>
+      <a class="work" href="index.html#work">All work</a>
+      <a class="nav-cta" href="index.html#contact">Contact</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- HERO -->
+<section class="hero" id="top" aria-labelledby="heroTitle">
+  <div class="wrap">
+    <div class="hero-top">
+      <div class="hero-l">
+        <p class="meta"><span>Case study</span><i>/</i><span>Full-stack web app</span><i>/</i><span>Incubating</span><i>/</i><span>2026</span></p>
+        <h1 class="h1" id="heroTitle">Your project keeps growing. <span class="soft">Clink keeps the way through it clear.</span></h1>
+      </div>
+      <div class="hero-r">
+        <p class="lede">A shared canvas where a small team plans, makes and reviews a project: notes, files, tasks, deadlines and the conversation about them on one board. I led the problem definition and built it end to end, from the board engine to the server.</p>
+        <div class="actions">
+          <a class="btn btn-ink" href="https://plak-1a653.web.app/about" target="_blank" rel="noopener">Visit Clink<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+          <a class="btn btn-text" href="#build">See how it was built</a>
+        </div>
+      </div>
+    </div>
+    <div class="stage board">
+      <div class="stage-in">
+        <video id="showcase" muted loop playsinline preload="none" width="1280" height="960" poster="assets/images/clink.webp" data-src="assets/video/clink.mp4" aria-label="Clink in one minute: a text box is added and others join it, a comment thread becomes a vote, the winner becomes a deadline and a to-do list, the team paints its free hours into a meeting, chat links a card, and a chart rises, while four people work the board."></video>
+      </div>
+      <div class="rail" id="rail" aria-label="Moments in the showcase"></div>
+      <div class="stage-foot">
+        <span class="long">One board, one minute. Each piece of Clink reshapes into the next while four people work it: tap a moment to jump to it.</span>
+        <span class="now" id="railNow">Blocks</span>
+        <button class="round" id="playBtn" type="button" aria-label="Pause the showcase"><svg viewBox="0 0 12 14" fill="currentColor" aria-hidden="true"><g class="i-pause"><rect x="1" width="3.5" height="14" rx="1"/><rect x="7.5" width="3.5" height="14" rx="1"/></g><path class="i-play" d="M2 1.2v11.6c0 .8.9 1.3 1.6.8l8.4-5.8c.6-.4.6-1.2 0-1.6L3.6.4C2.9-.1 2 .4 2 1.2Z" style="display:none"/></svg></button>
+      </div>
+    </div>
+    <dl class="facts">
+      <div><dt>Role</dt><dd>Problem definition lead, interaction design and full-stack development</dd></div>
+      <div><dt>Team</dt><dd>CNPT, with a teammate on design review and feedback</dd></div>
+      <div><dt>Timeline</dt><dd>2026 to 2027, incubating at CNPT</dd></div>
+      <div><dt>Status</dt><dd>Closed beta, 20+ active users</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- AT A GLANCE -->
+<section class="band" id="glance" aria-labelledby="glanceTitle">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="tag">At a glance</div>
+      <h2 class="h2" id="glanceTitle">A canvas can hold everything. <span class="soft">Finding your way in it is the hard part.</span></h2>
+      <p class="lede">Canvas workspaces put a team's whole project on one surface, and then the surface gets in the way: it is hard to start with, the conversation about the work is hard to follow, and once the project grows nobody can find where anything is. Clink is built around finding the way.</p>
+    </div>
+    <div class="pitch offset reveal stagger">
+      <div><span class="k">Problem</span><p>Existing canvas workspaces are not intuitive, make communication hard to track, and make it hard to find what is where.</p></div>
+      <div><span class="k">Question</span><p>Reframed on the first prototype: how can people find their way, efficiently, inside a project that keeps growing?</p></div>
+      <div><span class="k">Outcome</span><p>A full-stack web app in closed beta, run as CNPT's internal workflow tool and incubating as a product of its own.</p></div>
+      <div><span class="k">My part</span><p>I led the problem definition, built the full stack and ran the feedback loop, designing the interactions it called for, with a teammate reviewing.</p></div>
+    </div>
+    <div class="stats offset reveal stagger">
+      <div><div class="num">20+</div><span class="k">active users in the closed beta</span></div>
+      <div><div class="num">30+</div><span class="k">pieces of feedback, sent from inside the product</span></div>
+      <div><div class="num">1</div><span class="k">person on the design and the full stack</span></div>
+      <div><div class="num">2</div><span class="k">products from one project: Clink and Afterwork</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section class="sec" id="overview" data-chapter="Overview" aria-labelledby="ovTitle">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="tag">Overview</div>
+      <h2 class="h2" id="ovTitle">It started as a small part of something else.</h2>
+      <p class="lede">Clink &amp; Afterwork is two products that grew out of one project. Afterwork is a social network where students and junior professionals find their way into work they drive together. Clink is the dashboard for organising those projects, and it was never planned as a product at all.</p>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">01</span><h3>From client work to a product</h3><p>How the dashboard became Clink</p></div>
+      <ol class="path stagger">
+        <li><b>Client work</b><p>CNPT started out building things for other people, then set out to make a first service under its own name.</p></li>
+        <li><b>A mentorship program</b><p>That service brought students and junior professionals into shared work. Afterwork was conceived here.</p></li>
+        <li><b>A dashboard inside it</b><p>The program needed a sub-component to organise the projects its people would run together.</p></li>
+        <li><b>Clink</b><p>Read against the market, the dashboard was a tool on its own. It now stands beside Afterwork, not inside it.</p></li>
+      </ol>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">02</span><h3>Who did what</h3><p>Lead and review</p></div>
+      <p class="body-text small">I led the problem definition and built the product end to end, so the product decision and its implementation have to agree in one place, which is most of what the technical manager role comes down to. A teammate reviewed the work as it went, auditing the design and the feedback that came back from users.</p>
+      <ul class="team-list">
+        <li class="me"><span class="av">MP</span><div><b>Michael Joongmin Park</b><span>Problem definition, interaction design, full-stack development</span></div><em class="you">Lead</em></li>
+        <li><span class="av"><svg class="fi" aria-hidden="true"><use href="#cl-user-round"/></svg></span><div><b>A teammate</b><span>Review: design audit and feedback</span></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="sec" id="problem" data-chapter="Problem" aria-labelledby="pbTitle">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="tag">Problem definition</div>
+      <h2 class="h2" id="pbTitle">Canvas workspaces hold the work, and lose the people in it.</h2>
+      <p class="lede">I led the problem definition. Looking at the canvas workspaces teams already use, the same three problems kept coming up, and none of them was about storing things. They were about finding your way.</p>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">01</span><h3>What I found</h3><p>Three problems with canvas workspaces</p></div>
+      <div class="grid-3 stagger">
+        <div class="card ic-card"><svg class="fi" aria-hidden="true"><use href="#cl-puzzle"/></svg><h4>Not intuitive</h4><p>An empty infinite surface asks a team to invent its own structure before it can start on the work.</p></div>
+        <div class="card ic-card"><svg class="fi" aria-hidden="true"><use href="#cl-message-circle-off"/></svg><h4>Communication is hard to track</h4><p>What was said about a card, and what was decided, sits apart from the card, so the thread is hard to follow back.</p></div>
+        <div class="card ic-card"><svg class="fi" aria-hidden="true"><use href="#cl-search-x"/></svg><h4>Hard to find what is where</h4><p>As a board fills, finding a file, a task or the latest change means scanning the whole surface.</p></div>
+      </div>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">02</span><h3>Reframed on the first prototype</h3><p>The question the work started from</p></div>
+      <p class="brief">How might people find their way, efficiently, inside a project that keeps growing?</p>
+      <p class="brief-after lede">I led the build of Clink's first prototype, and it became the base for the question. Testing the direction against a working board, rather than a mockup, showed that a bigger canvas was not the answer; the way through it was. The exploration started there.</p>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">03</span><h3>Where a team's context goes</h3><p>Four places, one project</p></div>
+      <div class="scatter-panel board">
+        <div class="scatter" role="img" aria-label="Group chat, shared drive, task doc and email threads, crossed out, become one Clink board">
+          <span>Group chat</span><span>Shared drive</span><span>Task doc</span><span>Email threads</span>
+          <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          <b>One Clink board</b>
+        </div>
+        <p class="scatter-cap">The brief in a chat, files in someone's drive, tasks in a doc nobody updates: one board the whole team can see and change, in real time, on a computer or a phone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISCOVERY -->
+<section class="sec" id="discovery" data-chapter="Discovery" aria-labelledby="dcTitle">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="tag">Discovery</div>
+      <h2 class="h2" id="dcTitle">Why an internal tool was worth expanding.</h2>
+      <p class="lede">Turning an internal tool into a product is a strategic call, not a design one. Two things made the case, and the strategy that followed was to expand it independently: keep it as our internal workflow tool, and grow it from there into something other teams can pick up.</p>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">01</span><h3>Two reasons</h3><p>What made the case</p></div>
+      <div class="grid-2 stagger">
+        <div class="card ic-card"><svg class="fi" aria-hidden="true"><use href="#cl-trending-up"/></svg><h4>Market value</h4><p>Read against the tools teams already use, a workspace shaped around how a small team actually works together still looked worth making.</p></div>
+        <div class="card ic-card"><svg class="fi" aria-hidden="true"><use href="#cl-kanban"/></svg><h4>Project management</h4><p>A small team rarely has someone whose whole job is coordinating it, so the coordinating has to live in the workspace itself. The dashboard was already doing that inside the program.</p></div>
+      </div>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">02</span><h3>What the shift changed</h3><p>From our tool to anyone's</p></div>
+      <ul class="shift stagger">
+        <li><svg class="fi" aria-hidden="true"><use href="#cl-package"/></svg><div><b>From sub-component to product</b><p>The dashboard stopped being scoped by the mentorship program and needed a direction of its own.</p></div></li>
+        <li><svg class="fi" aria-hidden="true"><use href="#cl-book-open"/></svg><div><b>From our habits to the interface</b><p>Conventions we carried in our heads had to become things the interface states, because another team arrives without our context.</p></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT -->
+<section class="sec" id="product" data-chapter="Product" aria-labelledby="pdTitle">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="tag">Product</div>
+      <h2 class="h2" id="pdTitle">Three answers to one question.</h2>
+      <p class="lede">Clink is an infinite canvas where a block can be a document, a poll, an availability grid, a reference card or a conversation, all on one surface. Each of its three ideas answers one of the problems: blocks that join make the canvas easy to start, organizing keeps a growing board readable, and wayfinding keeps the talk and the way next to the work.</p>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">01</span><h3>Blocks</h3><p>Everything is a block, and blocks join up</p></div>
+      <div class="idea">
+        <div>
+          <p class="body-text">Write a note, drop in a PDF, paste a link, add a table, a chart, a to-do list or a calendar. Hold one block against another and they become one, the way a team builds a page together.</p>
+          <ul class="how">
+            <li><svg class="fi" aria-hidden="true"><use href="#cl-layout-grid"/></svg><span><b>Typed blocks</b>Text, documents, pictures, PDFs, slides, tables, charts, votes and calendars, each moved, resized and connected the same way.</span></li>
+            <li><svg class="fi" aria-hidden="true"><use href="#cl-combine"/></svg><span><b>Join into one</b>Text with text, a picture with its caption: dropped together, two blocks become one.</span></li>
+            <li><svg class="fi" aria-hidden="true"><use href="#cl-users"/></svg><span><b>Work at the same time</b>Who is here, where they point and who wrote which line, live.</span></li>
+            <li><svg class="fi" aria-hidden="true"><use href="#cl-waypoints"/></svg><span><b>Connect ideas</b>Lines between blocks show how one idea leads to the next.</span></li>
+          </ul>
+        </div>
+        <div class="art"><svg class="pen" data-pen="blocks" viewBox="0 0 320 200" role="img" aria-label="Four cards, each made by a different teammate, drift together, collide and join into one card, and the four teammates line up above it"></svg></div>
+      </div>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">02</span><h3>Organizing</h3><p>A growing project, kept tidy</p></div>
+      <div class="idea">
+        <div>
+          <p class="body-text">Projects pile up fast: references, drafts, notes from every meeting. Every block lines up on the same grid, so the board still makes sense in week ten.</p>
+          <ul class="how">
+            <li><svg class="fi" aria-hidden="true"><use href="#cl-folders"/></svg><span><b>Sections and pages</b>Group the work by topic or by week, and fold a section away when it's done.</span></li>
+            <li><svg class="fi" aria-hidden="true"><use href="#cl-layers"/></svg><span><b>Sort</b>By time, by author, by dock, or by section, with sections that say alike placed together.</span></li>
+            <li><svg class="fi" aria-hidden="true"><use href="#cl-list-checks"/></svg><span><b>To-do lists</b>Stages, priorities and due dates, with progress on the card.</span></li>
+            <li><svg class="fi" aria-hidden="true"><use href="#cl-calendar-days"/></svg><span><b>Calendar and availability</b>Everyone paints their free hours; the time that suits all of them becomes the meeting.</span></li>
+          </ul>
+        </div>
+        <div class="art"><svg class="pen" data-pen="organize" viewBox="0 0 320 200" role="img" aria-label="Text boxes strewn about with a tangled line settle neatly into three sections"></svg></div>
+      </div>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">03</span><h3>Wayfinding</h3><p>Always know where to go next</p></div>
+      <div class="idea">
+        <div>
+          <p class="body-text">Conversation points straight at the work. Come back after a weekend and Clink shows what changed and who changed it, so nobody has to ask where that file is.</p>
+          <ul class="how">
+            <li><svg class="fi" aria-hidden="true"><use href="#cl-compass"/></svg><span><b>Docks</b>One press takes you to the part of the board that matters.</span></li>
+            <li><svg class="fi" aria-hidden="true"><use href="#cl-message-square-text"/></svg><span><b>Comments in place</b>Pinned to a block, with replies and @mentions, so the discussion moves with the work.</span></li>
+            <li><svg class="fi" aria-hidden="true"><use href="#cl-messages-square"/></svg><span><b>Team chat</b>Links people, blocks and comments; a mentioned block is one tap away.</span></li>
+            <li><svg class="fi" aria-hidden="true"><use href="#cl-bell-dot"/></svg><span><b>What's new</b>What changed since your last visit, and by whom.</span></li>
+          </ul>
+        </div>
+        <div class="art"><svg class="pen" data-pen="route" viewBox="0 0 320 200" role="img" aria-label="Three docks beside a board: each one, pressed, draws a way to its spot, where a chat message, a comment or an update is waiting"></svg></div>
+      </div>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">04</span><h3>How a team uses it</h3><p>The same four steps for two people or a studio</p></div>
+      <ol class="steps stagger">
+        <li><svg class="pen step-pen" data-pen="s1" viewBox="0 0 120 76" aria-hidden="true"></svg><span class="sn">01</span><h4>Start from a template</h4><p>Task Management sets up a to-do list with progress and a calendar; Brainstorming adds idea sections and a vote.</p></li>
+        <li><svg class="pen step-pen" data-pen="s2" viewBox="0 0 120 76" aria-hidden="true"></svg><span class="sn">02</span><h4>Bring the team in</h4><p>Teammates join from the board's link as editors; a tutor or a client can join to view and comment.</p></li>
+        <li><svg class="pen step-pen" data-pen="s3" viewBox="0 0 120 76" aria-hidden="true"></svg><span class="sn">03</span><h4>Work on one canvas</h4><p>Drafts and references go up, tasks get split and dated, and the talk happens in comments and chat as you go.</p></li>
+        <li><svg class="pen step-pen" data-pen="s4" viewBox="0 0 120 76" aria-hidden="true"></svg><span class="sn">04</span><h4>Review and present</h4><p>Feedback on each draft, a vote on the options, and slides presented straight from the board.</p></li>
+      </ol>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">05</span><h3>Everything on the board</h3><p>What a small team needs, nothing it has to set up</p></div>
+      <div class="tiles">
+        <div class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><h5>Real-time together</h5><p>Everyone edits the same board at once and sees who is around.</p></div>
+        <div class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg><h5>Comments and chat</h5><p>Talk about the work right where it is, with @mentions.</p></div>
+        <div class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></svg><h5>Tasks and deadlines</h5><p>To-do lists with stages, priorities, due dates and progress.</p></div>
+        <div class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg><h5>Calendar and availability</h5><p>Plan the weeks, and find a time the whole team is free.</p></div>
+        <div class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/></svg><h5>Files, PDFs and slides</h5><p>Drop them in, flip through them, and comment on a page.</p></div>
+        <div class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg><h5>Tables and charts</h5><p>Import a spreadsheet and turn it into a chart in a click.</p></div>
+        <div class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg><h5>On your phone</h5><p>A mobile view made for reading and replying on the go.</p></div>
+        <div class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="7" x="3" y="3" rx="1"/><rect width="9" height="7" x="3" y="14" rx="1"/><rect width="5" height="7" x="16" y="14" rx="1"/></svg><h5>Templates</h5><p>Brainstorming, task boards, mood boards, document reviews and more.</p></div>
+        <div class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg><h5>History</h5><p>See what changed while you were away, and by whom.</p></div>
+        <div class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg><h5>Present from the board</h5><p>Show slides to the room while everyone follows along.</p></div>
+        <div class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg><h5>Your other apps <span class="soon-tag">Coming soon</span></h5><p>Bring in Google Drive, Notion, Asana, Figma, Discord and Canvas.</p></div>
+        <div class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg><h5>Your AI, on the board <span class="soon-tag">Coming soon</span></h5><p>Connect an AI app you use, and ask it about the board with Clink MCP.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILD -->
+<section class="sec" id="build" data-chapter="Build" aria-labelledby="bdTitle">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="tag">Build</div>
+      <h2 class="h2" id="bdTitle">Build it, put it in front of people, review, redesign.</h2>
+      <p class="lede">I took the full stack: the first prototype, then a real service with a closed beta. Every round ran the same loop. What I built went to real users, their feedback came back through a structure we ran ourselves, and a teammate's review of it set up the next round of interaction design.</p>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">01</span><h3>The loop</h3><p>One round, again and again</p></div>
+      <div class="loop" id="loop">
+        <ol class="loop-steps">
+          <li><svg class="fi" aria-hidden="true"><use href="#cl-code-xml"/></svg><span class="who">Me</span><b>Build</b><p>The board engine, the real-time back end and the server, in one pair of hands.</p></li>
+          <li><svg class="fi" aria-hidden="true"><use href="#cl-users"/></svg><span class="who">Beta users</span><b>Put it in front of people</b><p>A closed beta with tester sign-in: 20+ active users on real boards.</p></li>
+          <li><svg class="fi" aria-hidden="true"><use href="#cl-message-square-heart"/></svg><span class="who">In the product</span><b>Hear back</b><p>Feedback sent from any board lands on our own feedback board: 30+ pieces so far.</p></li>
+          <li><svg class="fi" aria-hidden="true"><use href="#cl-pencil-ruler"/></svg><span class="who">A teammate, me</span><b>Review and redesign</b><p>A teammate reviews what came back; I design the interactions it calls for.</p></li>
+        </ol>
+        <div class="loop-back" aria-hidden="true"><span>The next round starts at Build</span></div>
+      </div>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">02</span><h3>The full stack</h3><p>Prototype first, then a real service</p></div>
+      <p class="body-text small">The first prototype was a board list and a board canvas. Making it a service people could rely on meant a back end that holds a team's board, its files and who is on it at the moment, and a way to let testers in before anyone else.</p>
+      <ul class="stack stagger">
+        <li><svg class="fi" aria-hidden="true"><use href="#cl-layout-dashboard"/></svg><div><b>Board engine</b><p>The canvas, its blocks and joins, docks, sorting, and a phone view that reads the board as a feed.</p></div></li>
+        <li><svg class="fi" aria-hidden="true"><use href="#cl-zap"/></svg><div><b>Real time</b><p>Boards and comments in Firestore, files in Storage, presence and pointers in the Realtime Database.</p></div></li>
+        <li><svg class="fi" aria-hidden="true"><use href="#cl-server"/></svg><div><b>Server</b><p>Cloud Functions for the API, the feedback board, app connections and Clink MCP.</p></div></li>
+        <li><svg class="fi" aria-hidden="true"><use href="#cl-key-round"/></svg><div><b>Closed beta</b><p>Tester sign-in with a username and password, caps for everyone together, and analytics to see what is used.</p></div></li>
+      </ul>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">03</span><h3>A feedback structure of our own</h3><p>Try it: the product's dialog</p></div>
+      <p class="body-text small">Any board's help button opens Give feedback: a suggestion or a bug, a name, what happened and up to four screenshots. It lands as a card on a Clink board of our own, linked to the board it came from, with no email or account detail written in. Users' feedback is read on the same kind of board it is about.</p>
+      <div class="fbk board">
+        <div class="fbk-dlg" id="fbkDlg">
+          <div class="fbk-form">
+            <div class="fbk-h"><svg class="fi" aria-hidden="true"><use href="#cl-message-square-heart"/></svg>Give feedback</div>
+            <div class="fbk-l">Feedback type</div>
+            <div class="fbk-seg" role="radiogroup" aria-label="Feedback type"><button type="button" role="radio" aria-checked="true" data-k="suggestion">Suggestion</button><button type="button" role="radio" aria-checked="false" data-k="bug">Bug</button></div>
+            <label class="fbk-l" for="fbkName">Your name</label>
+            <input class="fbk-in" id="fbkName" maxlength="60" value="Mina" autocomplete="off">
+            <label class="fbk-l" for="fbkText" id="fbkQ">What’s your idea?</label>
+            <textarea class="fbk-in" id="fbkText" maxlength="240" rows="3" placeholder="What would make Clink better for you?">Could the dock open where my pointer is? I keep going back to the corner.</textarea>
+            <div class="fbk-f"><span class="fbk-shots">Screenshots <small>up to 4</small></span><button type="button" class="fbk-send" id="fbkSend">Send feedback</button></div>
+          </div>
+          <div class="fbk-ty" id="fbkTy" role="status" hidden><svg class="fi" aria-hidden="true"><use href="#cl-circle-check"/></svg><b>Thank you for your feedback!</b><p id="fbkTyP">Your suggestion is on the way to the team. We read every one.</p></div>
+        </div>
+        <div class="fbk-to" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+        <div class="fbk-board">
+          <div class="fbk-note"><b>Feed back</b><span>Every post from every board lands here</span></div>
+          <div class="fbk-posts" id="fbkPosts" aria-live="polite" aria-label="Posts on the feedback board">
+            <article class="post"><span class="pk bug">Bug</span><p>Our board stays on “Still loading” in Safari.</p><span class="pby">Leo · from Launch plan</span></article>
+            <article class="post"><span class="pk">Suggestion</span><p>Let me edit my own replies in a thread.</p><span class="pby">Jane · from Studio week 4</span></article>
+          </div>
+        </div>
+      </div>
+      <p class="after">The posts are illustrative. The dialog, its wording and where a post goes are the product's.</p>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">04</span><h3>What the rounds changed</h3><p>Interaction design shipped in the closed beta</p></div>
+      <div class="grid-2 stagger">
+        <div class="card ic-card"><svg class="fi" aria-hidden="true"><use href="#cl-smartphone"/></svg><h4>The board as a feed on phones</h4><p>On a phone the canvas reads as a chronological feed that scrolls like a page; nothing has to be dragged.</p></div>
+        <div class="card ic-card"><svg class="fi" aria-hidden="true"><use href="#cl-layers"/></svg><h4>Sections that find each other</h4><p>Sort by section places sections that are about the same thing one under another, not only ones that share words.</p></div>
+        <div class="card ic-card"><svg class="fi" aria-hidden="true"><use href="#cl-compass"/></svg><h4>Docks that follow the view</h4><p>The dock bar folds to the dock nearest the view and opens under the pointer, instead of sending you to a corner.</p></div>
+        <div class="card ic-card"><svg class="fi" aria-hidden="true"><use href="#cl-message-square-text"/></svg><h4>Threads people can fix</h4><p>Your own replies in comments and chat can be edited and deleted, so a thread stays readable after a slip.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="sec" id="story" data-chapter="Story" aria-labelledby="stTitle">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="tag">Story</div>
+      <h2 class="h2" id="stTitle">Explaining it in the product's own hand.</h2>
+      <p class="lede">A board is easier to show than to describe, so Clink is explained in two films and a set of drawings, all made from the product's own pieces and drawn in one marker ink.</p>
+    </div>
+    <div class="block reveal" id="film">
+      <div class="subhead"><span class="no">01</span><h3>How Clink works</h3><p>The explainer film</p></div>
+      <div class="film board">
+        <video controls playsinline preload="none" width="1280" height="720" poster="assets/images/clink-how-it-works.webp" src="assets/video/clink-how-it-works.mp4" aria-label="How Clink works: Mark asks how to do things, and Jane shows him on a Clink board"></video>
+      </div>
+      <div class="film-cap"><p>An animated two-person explainer: Mark asks how to do things, and Jane shows him. The film is an HTML page that draws every frame from one clock, so it scrubs, stays in sync with the voices and exports to MP4 frame by frame.</p><span class="len">4 min · with sound</span></div>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">02</span><h3>One hand-drawn voice</h3><p>The film's marker ink, everywhere</p></div>
+      <p class="body-text small">The film's Jane and Mark and its doodles carry the brand: black marker ink, the showcase's yellow and white paper cards, the line roughened like a marker's and redrawn twelve times a second. The showcase at the top of this page is the other film. The drawings here are the product page's own, run from the same script.</p>
+      <div class="cast-panel board">
+        <div class="cast" aria-hidden="true"><svg class="dd dd-compass" data-cast="compass" viewBox="0 0 300 300"></svg><svg class="dd dd-jane" data-cast="jane" viewBox="0 0 300 300"></svg><svg class="dd dd-mouth" data-cast="mouth" viewBox="0 0 300 300"></svg><svg class="dd dd-mark" data-cast="mark" viewBox="0 0 300 300"></svg><svg class="dd dd-dividers" data-cast="dividers" viewBox="0 0 300 300"></svg></div>
+        <p class="cast-names">Jane and Mark, with three of the film's doodles</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONCLUSION -->
+<section class="sec" id="conclusion" data-chapter="Conclusion" aria-labelledby="cnTitle">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="tag">Conclusion</div>
+      <h2 class="h2" id="cnTitle">We did not set out to make this one.</h2>
+      <p class="lede">Clink &amp; Afterwork is a work in progress, incubating through 2026 and 2027. The lesson I would carry forward is about where products come from: this one came out of building something else carefully enough to notice what we kept needing, and the sub-component turned out to be the part with a future of its own.</p>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">01</span><h3>The open question</h3><p>What incubation is for</p></div>
+      <p class="lede body-text">Conventions that are obvious to the people who made them have to become obvious to a team that was not in the room. Every internal tool meets that question on the way out, and the loop of building, hearing back and reviewing is how Clink answers it.</p>
+    </div>
+    <div class="block reveal">
+      <div class="subhead"><span class="no">02</span><h3>Next on the board</h3><p>What comes after the beta</p></div>
+      <ul class="next stagger">
+        <li><svg class="fi" aria-hidden="true"><use href="#cl-plug"/></svg><div><b>Your other apps <em>Coming soon</em></b><p>Google Drive, Notion, Asana, Figma, Discord and Canvas, brought onto the board.</p></div></li>
+        <li><svg class="fi" aria-hidden="true"><use href="#cl-sparkles"/></svg><div><b>Your AI, on the board <em>Coming soon</em></b><p>Connect an AI app you already use and ask it about the board, through Clink MCP.</p></div></li>
+      </ul>
+    </div>
+    <div class="end-card reveal">
+      <h3>Bring your team onto one board.</h3>
+      <svg class="pen team" data-pen="team" viewBox="0 0 360 100" role="img" aria-label="The team, Leo, Mark, Jane and Mina, drawn in marker, facing one another"></svg>
+      <p>Clink has its own page for student teams and small studios: what it does, and a board to start on.</p>
+      <a class="btn btn-dark" href="https://plak-1a653.web.app/about" target="_blank" rel="noopener">Visit Clink<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="close" id="end">
+  <div class="wrap">
+    <div class="eyebrow"><svg viewBox="0 0 336 61" aria-hidden="true"><use href="#clLogo"/></svg>· Full-stack web app · 2026</div>
+    <h2 class="h2">A canvas can hold everything. <span class="soft">The work is making the way through it clear.</span></h2>
+    <div class="close-links reveal stagger">
+      <a class="out" href="https://plak-1a653.web.app/about" target="_blank" rel="noopener"><div><div class="t">Clink</div><div class="s">The product page, in a new tab</div></div><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14 14 6M7 6h7v7"/></svg></a>
+      <a href="ongenoverview.html"><div><div class="t">OnGen Radio</div><div class="s">Next case study</div></div><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg></a>
+      <a href="index.html#work"><div><div class="t">More work</div><div class="s">Back to the portfolio</div></div><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h8v8M6 14l8-8"/></svg></a>
+    </div>
+    <div class="foot"><span class="foot-brand">© 2026 Michael Joongmin Park</span><nav aria-label="Site"><a href="index.html#work">Work</a><a href="principle.html">Principle</a><a href="about.html">About</a><a href="index.html#contact">Contact</a><a href="https://michaeljpark.github.io/portfolio2026/Joongmin_Park_Resume.pdf">Résumé</a></nav></div>
+  </div>
+</footer>
+
+<script>
+/* The drawings below are the product page's own (plak, public/about.js), carried over unchanged up to its film and
+   page-entrance parts, which this page does in its own way. */
+/* Clink: the value page's drawings (about.html), in the marker ink of the Jane & Mark film: black ink on the yellow of
+   the showcase's avatar discs, white paper cards, the film's doodled teammates. The ink is roughened as the film's is
+   (a slow wobble, a fine grain, a hard alpha edge) and every hand-drawn frame gets a new grain and a hair of paper shift:
+   12 frames a second, each movement eased and then held frame to frame. Each scene loops without a seam; drawn only
+   while on screen, one still frame with reduced motion. The page's small icons are redrawn in the same ink. Also: the
+   showcase film plays while it is on screen, and blocks of the page rise into view once. */
+(() => {
+  'use strict';
+  const FPS = 12;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const clamp = (v, a = 0, b = 1) => (v < a ? a : v > b ? b : v);
+  const seg = (u, a, b) => clamp((u - a) / (b - a));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const E = {
+    io: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
+    in: (t) => t * t * t,
+    out: (t) => 1 - Math.pow(1 - t, 3),
+    back: (t) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); },
+  };
+  let frame = 0, vi = 0, still = false;
+  const rnd = (n) => { n = Math.imul(n ^ (n >>> 15), 0x2c1b3c6d); n = Math.imul(n ^ (n >>> 12), 0x297a2d39); n ^= n >>> 15; return (n >>> 0) / 4294967296; };
+  const jit = (a = 0.28) => (still ? 0 : (rnd(frame * 7919 + (vi++) * 104729 + 17) - 0.5) * 2 * a);
+  const J = (p) => [p[0] + jit(), p[1] + jit()];
+  const n1 = (v) => Math.round(v * 10) / 10;
+
+  // ---- shapes as points; a smooth line through them ----
+  function curve(pts, closed) {
+    const n = pts.length; if (n < 2) return '';
+    const g = (i) => pts[closed ? (i + n) % n : Math.max(0, Math.min(n - 1, i))];
+    let d = `M${n1(pts[0][0])} ${n1(pts[0][1])}`;
+    for (let i = 0, m = closed ? n : n - 1; i < m; i++) {
+      const p0 = g(i - 1), p1 = g(i), p2 = g(i + 1), p3 = g(i + 2);
+      d += `C${n1(p1[0] + (p2[0] - p0[0]) / 6)} ${n1(p1[1] + (p2[1] - p0[1]) / 6)} ${n1(p2[0] - (p3[0] - p1[0]) / 6)} ${n1(p2[1] - (p3[1] - p1[1]) / 6)} ${n1(p2[0])} ${n1(p2[1])}`;
+    }
+    return d + (closed ? 'Z' : '');
+  }
+  const place = (pts, cx, cy, rot = 0, sx = 1, sy = 1) => { const a = rot * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+    return pts.map(([x, y]) => { const dx = (x - cx) * sx, dy = (y - cy) * sy; return J([cx + dx * c - dy * s, cy + dx * s + dy * c]); }); };
+  function rrPts(x, y, w, h, r) {
+    const pts = [], C = [[x + w - r, y + r, -90], [x + w - r, y + h - r, 0], [x + r, y + h - r, 90], [x + r, y + r, 180]];
+    C.forEach(([ox, oy, a0], i) => { for (const k of [0, 0.5, 1]) { const a = (a0 + k * 90) * Math.PI / 180; pts.push([ox + Math.cos(a) * r, oy + Math.sin(a) * r]); }
+      const nx = C[(i + 1) % 4], a1 = (a0 + 90) * Math.PI / 180, a2 = nx[2] * Math.PI / 180;
+      pts.push([(ox + Math.cos(a1) * r + nx[0] + Math.cos(a2) * r) / 2, (oy + Math.sin(a1) * r + nx[1] + Math.sin(a2) * r) / 2]); });
+    return pts;
+  }
+  const circlePts = (cx, cy, r, n = 14) => Array.from({ length: n }, (_, i) => { const a = i / n * Math.PI * 2; return [cx + Math.cos(a) * r, cy + Math.sin(a) * r]; });
+  const straight = (a, b, k = 3) => Array.from({ length: k + 1 }, (_, i) => [lerp(a[0], b[0], i / k), lerp(a[1], b[1], i / k)]);
+  // a stroke drawn in up to p, or rubbed out from its start up to e (a gap of 2 after each dash: none lands on its end)
+  const draw = (p) => (p >= 1 ? '' : ` pathLength="1" stroke-dasharray="1 2" stroke-dashoffset="${(1 - Math.max(0, p)).toFixed(3)}"`);
+  const rub = (e) => (e <= 0 ? '' : ` pathLength="1" stroke-dasharray="1 2" stroke-dashoffset="${(-Math.min(1, e)).toFixed(3)}"`);
+  const ink = (d, cls = '', x = '') => `<path d="${d}" class="mk ${cls}"${x}/>`;
+  const card = (pts, x = '') => `<path d="${curve(pts, true)}" class="pp"${x}/>` + ink(curve(pts, true), '', x);
+  const blob = (x, y, r) => { const p = J([x, y]); return `<circle cx="${n1(p[0])}" cy="${n1(p[1])}" r="${r}" class="ik"/>`; };
+  const pop = (cx, cy, k, body) => (k <= 0.01 ? '' : `<g transform="translate(${n1(cx)} ${n1(cy)}) scale(${(Math.max(0.001, k)).toFixed(3)}) translate(${n1(-cx)} ${n1(-cy)})">${body}</g>`);
+
+  // ---- the film's teammates: a floating doodled head in a white disc (drawn in a 300 box, scaled down) ----
+  const ART = {
+    jane: { head: 'M 150,74 C 214,74 254,118 254,172 C 254,228 210,264 150,264 C 92,264 48,228 48,170 C 48,116 90,74 150,74 Z', hair: 'M 98,62 C 74,58 66,28 90,18 C 116,10 130,38 112,56', nose: 'M 206,174 C 220,180 220,194 206,196', eyes: [[170, 160], [208, 158]], mouth: [186, 222] },
+    mark: { head: 'M 98,96 C 62,114 46,150 50,186 C 56,236 104,264 156,262 C 214,260 254,224 252,172 C 250,130 226,100 188,88', hair: 'M 102,72 L 122,42 L 138,68 L 158,36 L 174,66 L 194,46', nose: 'M 214,174 C 228,180 228,194 214,196', eyes: [[172, 160], [212, 156]], mouth: [190, 222] },
+    leo: { head: 'M 96,86 C 66,112 56,150 60,192 C 66,238 106,264 158,264 C 212,264 250,232 252,184 C 254,138 236,100 200,84 C 166,70 124,70 96,86 Z', hair: 'M 70,128 C 84,70 176,44 238,104', nose: 'M 214,176 C 228,182 228,196 214,198', eyes: [[172, 160], [214, 157]], mouth: [192, 224],
+      extra: ['M 192,159 C 192,147 186,141 172,141 C 158,141 152,147 152,160 C 152,173 158,180 172,180 C 186,180 192,173 192,159 Z', 'M 234,156 C 234,144 228,138 214,138 C 200,138 194,144 194,157 C 194,170 200,177 214,177 C 228,177 234,170 234,156 Z', 'M 152,156 L 112,148'] },
+    mina: { head: 'M 150,74 C 212,74 252,116 252,172 C 252,228 210,264 150,264 C 92,264 50,228 50,172 C 50,116 90,74 150,74 Z', hair: 'M 56,150 C 64,98 108,80 150,80 C 196,80 236,104 246,140', nose: 'M 208,174 C 222,180 222,194 208,196', eyes: [[170, 160], [210, 158]], mouth: [188, 224],
+      extra: ['M 56,150 C 50,184 52,214 64,236'], dots: [[150, 196], [162, 202], [146, 208], [232, 190], [240, 198]] },
+  };
+  // the disc goes with the paper (rough ink); the face is drawn finer, as the film drew its small avatars
+  function head(kind, cx, cy, r) {
+    const A = ART[kind], s = (r * 2.15) / 300, c = J([cx, cy]);
+    const disc = card(circlePts(c[0], c[1], r, 12).map(J));
+    const g = [A.head, A.hair, A.nose, ...(A.extra || [])].map((d) => `<path d="${d}" class="hf"/>`).join('')
+      + A.eyes.map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="11" ry="12" class="ik"/>`).join('')
+      + `<path d="M ${A.mouth[0] - 18},${A.mouth[1] - 6} Q ${A.mouth[0]},${A.mouth[1] + 12} ${A.mouth[0] + 18},${A.mouth[1] - 6}" class="hf"/>`
+      + (A.dots || []).map(([x, y]) => `<circle cx="${x}" cy="${y}" r="7" class="ik"/>`).join('');
+    return { disc, face: `<g transform="translate(${n1(c[0] - 150 * s)} ${n1(c[1] - 150 * s + r * 0.08)}) scale(${s.toFixed(4)})">${g}</g>` };
+  }
+
+  // =================== 1. Blocks: four cards, each someone's, drift in, collide, and join into one ===================
+  // (ow, oh: the size each card's contents were drawn for; they are stretched to its size now)
+  const SLOT = [{ x: 60, y: 52, w: 86, h: 124, ow: 70, oh: 100 }, { x: 146, y: 52, w: 114, h: 70, ow: 88, oh: 56 }, { x: 146, y: 122, w: 57, h: 54, ow: 44, oh: 44 }, { x: 203, y: 122, w: 57, h: 54, ow: 44, oh: 44 }];
+  const FROM = [{ x: 8, y: 40, r: -9 }, { x: 196, y: 10, r: 8 }, { x: 34, y: 140, r: 12 }, { x: 256, y: 138, r: -14 }];
+  const WHO = ['jane', 'mark', 'leo', 'mina'];
+  const SPARK = [[146, 52, 0, -1], [146, 176, 0, 1], [260, 122, 1, 0], [203, 176, 0, 1], [60, 114, -1, 0]];
+  function blocks(u, M, H) {
+    const go = E.in(seg(u, 0.1, 0.36)), back = E.io(seg(u, 0.84, 1)), joined = u >= 0.36 && u < 0.84, hit = seg(u, 0.36, 0.52);
+    const sq = joined ? Math.sin(Math.PI * Math.min(1, hit * 1.7)) * Math.pow(1 - hit, 1.6) * 0.075 : 0;
+    const G = (p) => (joined ? [160 + (p[0] - 160) * (1 + sq), 114 + (p[1] - 114) * (1 - sq)] : p);
+    // each card's own outline goes once they are one (the ink's hard edge would only flicker a fade)
+    const own = !joined || seg(u, 0.42, 0.5) < 0.5 || seg(u, 0.78, 0.84) > 0.5;
+    const T = u < 0.84 ? go : 1 - back;
+    const bx = SLOT.map((b, i) => { const bob = Math.sin((u * 3 + i * 0.27) * Math.PI * 2) * 2.2 * (1 - T);
+      return { x: lerp(FROM[i].x, b.x, T), y: lerp(FROM[i].y, b.y, T) + bob, rot: lerp(FROM[i].r, 0, T), b }; });
+    // what each card holds: words, a picture, a tick, a chat; drawn in place (turned with its card)
+    const inside = (i, x, y, rot) => { const b = SLOT[i], kx = b.w / b.ow, ky = b.h / b.oh, cc = G([x + b.w / 2, y + b.h / 2]), P = (pts) => place(pts.map(([a, c]) => G([x + a * kx, y + c * ky])), cc[0], cc[1], rot);
+      if (i === 0) return ink(curve(P(straight([10, 16], [44, 16], 2))), 'b') + [[30, 56], [42, 50], [54, 56], [66, 36]].map(([yy, xx]) => ink(curve(P(straight([10, yy], [xx, yy], 2))), 't')).join('');
+      if (i === 1) return ink(curve(P([[10, 46], [28, 26], [39, 37], [53, 20], [78, 46]])), 't') + ink(curve(P(circlePts(67, 13, 5, 9)), true), 't');
+      if (i === 2) return ink(curve(P(rrPts(11, 9, 14, 14, 3)), true), 't') + ink(curve(P([[14.5, 16], [17.5, 19.5], [22.5, 12.5]])), 't') + ink(curve(P(straight([11, 32], [33, 32], 2))), 't');
+      return ink(curve(P(rrPts(8, 9, 28, 17, 5)), true), 't') + ink(curve(P([[14, 26], [11.5, 32.5], [20, 26]])), 't') + [16, 22, 28].map((xx) => { const q = P([[xx, 17.5]])[0]; return `<circle cx="${n1(q[0])}" cy="${n1(q[1])}" r="1.6" class="ik"/>`; }).join(''); };
+    bx.forEach(({ x, y, rot, b }, i) => {
+      const pts = place(rrPts(x, y, b.w, b.h, 7).map(G), x + b.w / 2, y + b.h / 2, rot);
+      M.push(`<path d="${curve(pts, true)}" class="pp"/>` + (own ? ink(curve(pts, true)) : '') + inside(i, x, y, rot));
+    });
+    if (joined) {
+      if (seg(u, 0.78, 0.84) < 0.5) {
+        M.push(ink(curve(rrPts(60, 52, 200, 124, 13).map(G).map(J), true), 'b', draw(E.out(seg(u, 0.42, 0.54)))));
+        [[[146, 54], [146, 174]], [[148, 122], [258, 122]], [[203, 124], [203, 174]]].forEach(([a, b], k) => M.push(ink(curve(straight(a, b).map(G).map(J)), 't', draw(E.out(seg(u, 0.46 + k * 0.02, 0.56 + k * 0.02))))));
+      }
+      const sp = seg(u, 0.35, 0.48);
+      if (sp > 0 && sp < 0.82) SPARK.forEach(([x, y, dx, dy]) => [-34, 0, 34].forEach((deg) => { const a = Math.atan2(dy, dx) + deg * Math.PI / 180, r0 = 6 + 7 * E.out(sp), r1 = 9 + 15 * E.out(sp);
+        M.push(ink(curve([J([x + Math.cos(a) * r0, y + Math.sin(a) * r0]), J([x + Math.cos(a) * r1, y + Math.sin(a) * r1])]), 't')); }));
+    }
+    // whose each card is: their head at its corner; joined, the four line up over the one card, as the people on a board
+    WHO.forEach((w, i) => { const { x, y } = bx[i], k = E.io(seg(u, 0.46 + i * 0.02, 0.6 + i * 0.02)) * (1 - E.io(seg(u, 0.8, 0.9)));
+      const h = head(w, lerp(x - 2, 121 + i * 26, k), lerp(y - 2, 30, k), 14); M.push(h.disc); H.push(h.face); });
+  }
+
+  // =================== 2. Organizing: text boxes strewn about settle into three sections ===================
+  const SEC = [22, 118, 214];
+  const NOTES = [
+    { c: 0, r: 0, x: 40, y: 30, a: -16 }, { c: 1, r: 0, x: 238, y: 42, a: 12 }, { c: 2, r: 0, x: 150, y: 150, a: -8 }, { c: 0, r: 1, x: 252, y: 150, a: 22 },
+    { c: 1, r: 1, x: 24, y: 120, a: 9 }, { c: 2, r: 1, x: 172, y: 22, a: -20 }, { c: 0, r: 2, x: 112, y: 92, a: 6 }, { c: 1, r: 2, x: 84, y: 166, a: -12 },
+  ];
+  const TANGLE = [[52, 92], [104, 58], [150, 104], [102, 138], [82, 98], [140, 70], [204, 120], [172, 162], [128, 122], [212, 70], [262, 108], [232, 150], [190, 132]];
+  function organize(u, M) {
+    const tg = u < 0.5 ? rub(E.io(seg(u, 0.12, 0.32))) : draw(E.io(seg(u, 0.84, 1)));
+    if (u < 0.32 || u > 0.84) M.push(ink(curve(TANGLE.map(J)), 't', tg));
+    if (u > 0.28 && seg(u, 0.78, 0.86) < 0.5) SEC.forEach((x, c) => {
+      const pd = E.out(seg(u, 0.3 + c * 0.04, 0.5 + c * 0.04)), out = curve(rrPts(x, 30, 84, 150, 12).map(J), true);
+      if (pd > 0.98) M.push(`<path d="${out}" class="pp sec"/>`);
+      M.push(ink(out, '', draw(pd)));
+      const h = E.out(seg(u, 0.44 + c * 0.04, 0.56 + c * 0.04));
+      if (h > 0) { // its header: a folder and its name
+        M.push(ink(curve([[x + 10, 52], [x + 10, 42], [x + 15, 42], [x + 17, 44.5], [x + 24, 44.5], [x + 24, 52]].map(J), true), 't', draw(h)));
+        M.push(ink(curve(straight([x + 30, 47], [x + 64, 47], 2).map(J)), 'b', draw(h)));
+      }
+    });
+    NOTES.forEach((it, i) => {
+      const d = i * 0.012, t = u < 0.8 ? E.io(seg(u, 0.12 + d, 0.44 + d)) : 1 - E.io(seg(u, 0.8 + d * 0.5, 0.98));
+      const drift = (1 - t) * 2.4, tx = SEC[it.c] + 10, ty = 62 + it.r * 34;
+      const x = lerp(it.x, tx, t) + Math.sin((u * 2 + i * 0.37) * Math.PI * 2) * drift, y = lerp(it.y, ty, t) + Math.cos((u * 2 + i * 0.29) * Math.PI * 2) * drift;
+      const a = lerp(it.a, 0, t), w = 64, h = 26, cx = x + w / 2, cy = y + h / 2;
+      M.push(card(place(rrPts(x, y, w, h, 6), cx, cy, a)));
+      M.push(ink(curve(place(straight([x + 8, y + 9], [x + 40, y + 9], 2), cx, cy, a)), 'b'));
+      M.push(ink(curve(place(straight([x + 8, y + 17.5], [x + (i % 2 ? 50 : 32), y + 17.5], 2), cx, cy, a)), 't'));
+    });
+  }
+
+  // =================== 3. Wayfinding: docks take you to the spot, and what happened there is waiting ===================
+  const SPOT = [{ x: 18, y: 24, w: 100, h: 58 }, { x: 140, y: 52, w: 104, h: 62 }, { x: 34, y: 120, w: 116, h: 58 }];
+  const BTN = [[290, 72], [290, 102], [290, 132]];
+  const LEG = [[0.04, 0.3], [0.34, 0.6], [0.64, 0.88]];
+  function route(u, M, H) {
+    // the board's spots, each with its dock's marker; the dock bar at the right
+    SPOT.forEach((s, i) => {
+      M.push(card(rrPts(s.x, s.y, s.w, s.h, 9).map(J)));
+      M.push(ink(curve(straight([s.x + 12, s.y + 16], [s.x + 52, s.y + 16], 2).map(J)), 'b'));
+      [[28, 0.55], [40, 0.75]].forEach(([yy, f]) => M.push(ink(curve(straight([s.x + 12, s.y + yy], [s.x + 12 + (s.w - 24) * f, s.y + yy], 2).map(J)), 't')));
+      M.push(card(circlePts(s.x + s.w - 2, s.y + 2, 9, 10).map(J)) + `<text x="${s.x + s.w - 2}" y="${s.y + 5.6}" class="num">${i + 1}</text>`);
+    });
+    M.push(card(rrPts(276, 54, 28, 96, 14).map(J)));
+    BTN.forEach(([x, y], i) => { const [a, b] = LEG[i], on = u > a && u < b - 0.02;
+      M.push(on ? `<path d="${curve(circlePts(x, y, 9, 10).map(J), true)}" class="ik"/><text x="${x}" y="${y + 3.6}" class="num inv">${i + 1}</text>`
+        : ink(curve(circlePts(x, y, 9, 10).map(J), true), 't') + `<text x="${x}" y="${y + 3.6}" class="num">${i + 1}</text>`); });
+    // each leg: the dock is pressed, a dashed way runs to its spot, Jane goes along it, and the spot shows what's new
+    LEG.forEach(([a, b], i) => {
+      const k = seg(u, a, b), go = E.io(seg(k, 0.08, 0.55)), wipe = E.io(seg(k, 0.72, 1)), s = SPOT[i];
+      const [sx, sy] = BTN[i], ex = s.x + s.w - 2, ey = s.y + 2, mx = (sx + ex) / 2, my = Math.min(sy, ey) - 22 - i * 4;
+      const way = [[sx - 10, sy], [mx + 20, my + 8], [mx - 10, my + 4], [ex + 12, ey - 6], [ex + 2, ey - 9]];
+      if (k > 0.08 && k < 1) M.push(ink(curve(way.map(J)), 't dash', k < 0.72 ? draw(go) : rub(wipe)));
+      if (k > 0.08 && k < 0.72) { const t = go * (way.length - 1), j = Math.min(way.length - 2, Math.floor(t)), f = t - j;
+        const h = head('jane', lerp(way[j][0], way[j + 1][0], f), lerp(way[j][1], way[j + 1][1], f) - 14, 12.5); M.push(h.disc); H.push(h.face); }
+      // the spot lit, and what's waiting there: a chat message, a comment, an update
+      const kp = u < 0.9 ? E.back(seg(u, a + (b - a) * 0.52, a + (b - a) * 0.66)) : 1 - E.in(seg(u, 0.9, 0.97));
+      if (k > 0.52 && k < 0.98) M.push(ink(curve(rrPts(s.x - 4, s.y - 4, s.w + 8, s.h + 8, 12).map(J), true), 't'));
+      if (u > a + (b - a) * 0.52) {
+        if (i === 0) M.push(pop(s.x + 70, s.y + 52, kp, card(rrPts(s.x + 44, s.y + 34, 58, 22, 8).map(J)) + ink(curve([[s.x + 60, s.y + 56], [s.x + 57, s.y + 63], [s.x + 70, s.y + 56]].map(J)), 't') + blob(s.x + 54, s.y + 45, 3.4)
+          + ink(curve(straight([s.x + 62, s.y + 42], [s.x + 92, s.y + 42], 2).map(J)), 't') + ink(curve(straight([s.x + 62, s.y + 49], [s.x + 82, s.y + 49], 2).map(J)), 't')));
+        if (i === 1) M.push(pop(s.x + 26, s.y + s.h, kp, card(circlePts(s.x + 22, s.y + s.h - 2, 10, 10).map(J)) + ink(curve([[s.x + 16, s.y + s.h + 6], [s.x + 12, s.y + s.h + 14], [s.x + 24, s.y + s.h + 7]].map(J)), 't')
+          + ink(curve(straight([s.x + 17, s.y + s.h - 4], [s.x + 27, s.y + s.h - 4], 1).map(J)), 't') + ink(curve(straight([s.x + 17, s.y + s.h + 1], [s.x + 24, s.y + s.h + 1], 1).map(J)), 't')));
+        if (i === 2) M.push(pop(s.x + s.w - 20, s.y + s.h - 6, kp, card(rrPts(s.x + s.w - 44, s.y + s.h - 15, 40, 16, 8).map(J)) + `<text x="${s.x + s.w - 24}" y="${s.y + s.h - 4}" class="num sm">NEW</text>`));
+      }
+    });
+  }
+
+  // =================== the four steps (How it works): a little doodle each, in the page's ink ===================
+  // 1. a template: its blocks drop into a page, one after another, then lift off again
+  function stTemplate(u, M) {
+    M.push(card(rrPts(14, 6, 92, 62, 8).map(J)));
+    [[22, 14, 76, 10, 0], [22, 30, 34, 30, 1], [62, 30, 36, 14, 2], [62, 48, 36, 12, 3]].forEach(([x, y, w, h, i]) => {
+      const k = E.back(seg(u, 0.08 + i * 0.1, 0.24 + i * 0.1)) * (1 - E.in(seg(u, 0.84, 0.96))); if (k <= 0.01) return;
+      const dy = (1 - Math.min(1, k)) * -18; M.push(`<g opacity="${Math.min(1, k * 1.4).toFixed(2)}">` + card(rrPts(x, y + dy, w, h, 3).map(J)) + `</g>`); });
+  }
+  // 2. the team: Jane and Mark come in from either side and a link joins them
+  function stTeam(u, M, H) {
+    const come = E.out(seg(u, 0.04, 0.26)), go = E.in(seg(u, 0.86, 0.98)), x1 = lerp(8, 27, come) - go * 18, x2 = lerp(112, 93, come) + go * 18;
+    if (u < 0.98) { const a = head('jane', x1, 38, 19), b = head('mark', x2, 38, 19); M.push(a.disc + b.disc); H.push(a.face + b.face); }
+    const l = E.out(seg(u, 0.3, 0.5)) * (1 - go);
+    if (l > 0) { M.push(ink(curve(rrPts(45, 29, 20, 18, 9).map(J), true), '', draw(l)) + ink(curve(rrPts(55, 29, 20, 18, 9).map(J), true), '', draw(E.out(seg(u, 0.38, 0.58)) * (1 - go)))); }
+    const sp = seg(u, 0.56, 0.7); if (sp > 0 && sp < 1) [[60, 19, 0, -1], [51, 21, -0.7, -0.7], [69, 21, 0.7, -0.7]].forEach(([x, y, dx, dy]) => M.push(ink(curve([J([x + dx * 2, y + dy * 2]), J([x + dx * (4 + 6 * sp), y + dy * (4 + 6 * sp)])]), 't')));
+  }
+  // 3. one canvas: a pencil writes two lines on a card, then they are wiped for the next go
+  function stCanvas(u, M) {
+    M.push(card(rrPts(12, 10, 96, 56, 8).map(J)));
+    const l1 = E.io(seg(u, 0.08, 0.38)), l2 = E.io(seg(u, 0.42, 0.68)), wipe = E.io(seg(u, 0.84, 0.96));
+    const w1 = [[22, 26], [34, 22], [46, 28], [58, 22], [70, 27], [84, 23], [96, 26]], w2 = [[22, 44], [36, 41], [50, 46], [64, 41], [78, 45]];
+    if (l1 > 0) M.push(ink(curve(w1.map(J)), '', wipe > 0 ? rub(wipe) : draw(l1)));
+    if (l2 > 0) M.push(ink(curve(w2.map(J)), '', wipe > 0 ? rub(wipe) : draw(l2)));
+    // the pencil, at the tip of the line being written
+    const at = (pts, t) => { const k = t * (pts.length - 1), j = Math.min(pts.length - 2, Math.floor(k)), f = k - j; return [lerp(pts[j][0], pts[j + 1][0], f), lerp(pts[j][1], pts[j + 1][1], f)]; };
+    const tip = u < 0.4 ? at(w1, l1) : u < 0.72 ? at(w2, l2) : [lerp(78, 100, E.io(seg(u, 0.72, 0.84))), lerp(45, 60, E.io(seg(u, 0.72, 0.84)))];
+    const [tx, ty] = tip, P = (pts) => pts.map(([a, b]) => J([tx + a, ty + b]));
+    M.push(`<path d="${curve(P([[0, 0], [5, -9], [24, -30], [31, -24], [10, -3]]), true)}" class="pp"/>` + ink(curve(P([[0, 0], [5, -9], [24, -30], [31, -24], [10, -3]]), true), 't') + ink(curve(P([[5, -9], [10, -3]])), 't') + ink(curve(P([[20, -26], [27, -20]])), 't'));
+  }
+  // 4. review and present: a screen on its stand, its bars grow, a tick goes on
+  function stPresent(u, M) {
+    M.push(card(rrPts(16, 6, 88, 50, 6).map(J)) + ink(curve(straight([60, 56], [60, 64], 1).map(J)), '') + ink(curve([[46, 70], [60, 64], [74, 70]].map(J)), ''));
+    const out = 1 - E.in(seg(u, 0.84, 0.96));
+    [[30, 0.08, 22], [44, 0.16, 32], [58, 0.24, 14]].forEach(([x, a, h]) => { const k = E.back(seg(u, a, a + 0.16)) * out; if (k <= 0.01) return; const top = 48 - h * Math.min(1.15, k);
+      M.push(card(rrPts(x - 4, top, 9, 48 - top, 2).map(J))); });
+    const t = E.out(seg(u, 0.44, 0.58)) * out; if (t > 0) M.push(ink(curve([[74, 30], [81, 38], [94, 20]].map(J)), 'b', draw(t)));
+  }
+
+  // =================== the team: Leo and Mark facing Jane and Mina, bobbing a little, now and then a blink ===================
+  const TEAM = [['leo', 1], ['mark', 1], ['jane', -1], ['mina', -1]];
+  function team(u, M) {
+    TEAM.forEach(([w, dir], i) => {
+      const A = ART[w], cx = 54 + i * 84, bob = Math.sin((u + i * 0.23) * Math.PI * 2) * 2.6, tilt = Math.sin((u * 2 + i * 0.31) * Math.PI * 2) * 2.4;
+      const blink = [0.18, 0.52, 0.71, 0.34][i], shut = Math.abs(u - blink) < 0.035, s = 0.3, x0 = jit(0.5), y0 = jit(0.5);
+      const g = [A.head, A.hair, A.nose, ...(A.extra || [])].map((d) => `<path d="${d}" class="hf big"/>`).join('')
+        + A.eyes.map(([x, y]) => (shut ? `<path d="M ${x - 11},${y} L ${x + 11},${y}" class="hf big"/>` : `<ellipse cx="${x}" cy="${y}" rx="8.5" ry="9.5" class="ik"/>`)).join('')
+        + `<path d="M ${A.mouth[0] - 20},${A.mouth[1] - 8} Q ${A.mouth[0]},${A.mouth[1] + 14} ${A.mouth[0] + 20},${A.mouth[1] - 8}" class="hf big"/>`
+        + (A.dots || []).map(([x, y]) => `<circle cx="${x}" cy="${y}" r="7" class="ik"/>`).join('');
+      M.push(`<g transform="translate(${n1(cx + x0)} ${n1(52 + bob + y0)}) rotate(${n1(tilt)}) scale(${(s * dir).toFixed(3)} ${s}) translate(-150 -160)">${g}</g>`);
+    });
+  }
+
+  // =================== the hero's cast: the film's Jane and Mark and three of its doodles around the heading ===================
+  /* each traced in stroke by stroke once it is first seen (as the film draws its doodles), then left floating a little on
+     the stepped clock, its ink boiling; Jane and Mark blink now and then. The doodles' strokes are the film's, in its
+     300 box, its marker 12 wide (w: a share of that) */
+  const DOODLE = {
+    dividers: { g: 'rotate(45 150 150)', s: [{ d: 'M 150,46 L 150,16', w: 0.9 }, { d: 'M 150,46 C 160,46 166,54 166,62 C 166,72 158,78 150,78 C 142,78 134,72 134,62 C 134,54 142,46 150,46 Z' },
+      { d: 'M 140,76 L 92,252' }, { d: 'M 160,76 L 208,252' }, { d: 'M 108,196 Q 150,214 192,196', w: 0.7 }, { d: 'M 150,62 m -4,0 a 4,4 0 1,0 8,0 a 4,4 0 1,0 -8,0', fill: 1 }] },
+    compass: { g: 'rotate(45 150 150)', s: [{ d: 'M 150,46 C 208,46 254,92 254,150 C 254,208 208,254 150,254 C 92,254 46,208 46,150 C 46,92 92,46 150,46 Z' },
+      { d: 'M 150,60 L 150,78 M 150,222 L 150,240 M 60,150 L 78,150 M 222,150 L 240,150', w: 0.6 },
+      { d: 'M 150,86 L 172,150 L 150,214 L 128,150 Z', w: 0.75 }, { d: 'M 150,86 L 172,150 L 128,150 Z', fill: 1 }, { d: 'M 150,150 m -6,0 a 6,6 0 1,0 12,0 a 6,6 0 1,0 -12,0', fill: 1 }] },
+    mouth: { g: 'rotate(-10 150 150)', s: [{ d: 'M 40,104 C 100,86 196,86 252,104 C 250,186 206,236 146,236 C 88,236 44,186 40,104 Z' },
+      { d: 'M 56,118 C 110,138 186,138 238,118', w: 0.7 }, { d: 'M 104,130 L 106,112 M 148,134 L 148,114 M 192,130 L 190,112', w: 0.55 },
+      { d: 'M 92,214 C 112,184 180,182 202,214', w: 0.75 },
+      { d: 'M 266,104 L 290,86', w: 0.75 }, { d: 'M 274,146 L 300,146', w: 0.75 }, { d: 'M 266,188 L 290,206', w: 0.75 }] },
+  };
+  // a character as strokes in the same box: head, hair, nose and the rest; eyes and freckles as dabs; a small smile
+  const charStrokes = (w) => { const A = ART[w];
+    return [{ d: A.head }, { d: A.hair }, ...(A.extra || []).map((d) => ({ d, w: 0.8 })), { d: A.nose, w: 0.8 }, { d: `M ${A.mouth[0] - 22},${A.mouth[1] - 8} Q ${A.mouth[0]},${A.mouth[1] + 14} ${A.mouth[0] + 22},${A.mouth[1] - 8}`, w: 0.85 },
+      ...A.eyes.map(([x, y]) => ({ eye: [x, y] })), ...(A.dots || []).map(([x, y]) => ({ d: `M ${x},${y} m -6,0 a 6,6 0 1,0 12,0 a 6,6 0 1,0 -12,0`, fill: 1 }))]; };
+  const CAST = {
+    jane: { s: charStrokes('jane'), flip: false, blink: 0.3 },
+    mark: { s: charStrokes('mark'), flip: true, blink: 0.75 },
+    compass: { s: DOODLE.compass.s, g: DOODLE.compass.g },
+    dividers: { s: DOODLE.dividers.s, g: DOODLE.dividers.g },
+    mouth: { s: DOODLE.mouth.s, g: DOODLE.mouth.g },
+  };
+  const castInk = (id, f) => { const s1 = (f % 97) + 1, s2 = ((f * 7) % 89) + 2;
+    return `<defs><filter id="${id}" x="-12%" y="-12%" width="124%" height="124%"><feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="2" seed="${s1}" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="7" xChannelSelector="R" yChannelSelector="G" result="a"/><feTurbulence type="fractalNoise" baseFrequency="0.32" numOctaves="1" seed="${s2}" result="g"/><feDisplacementMap in="a" in2="g" scale="3.6" xChannelSelector="R" yChannelSelector="G" result="b"/><feComponentTransfer in="b"><feFuncA type="discrete" tableValues="0 0 1 1 1"/></feComponentTransfer></filter></defs>`; };
+  const cast = [];
+  function castPaint(o, now) {
+    const C = o.c, t = (now - o.t0) / 1000, tr = still ? 1 : clamp((t - o.delay) / 1.5), n = C.s.length;
+    const ph = o.i * 0.37, fy = still ? 0 : Math.sin((t / 3.4 + ph) * Math.PI * 2) * 5, rot = still ? 0 : Math.sin((t / 4.6 + ph) * Math.PI * 2) * 2.2;
+    const shut = !still && C.blink != null && ((t / 3.8 + C.blink) % 1) < 0.045;
+    const body = C.s.map((q, i) => { const r = clamp((tr - i / n) / (1 / n)); if (r <= 0) return '';
+      if (q.eye) return shut ? `<path d="M ${q.eye[0] - 11},${q.eye[1]} L ${q.eye[0] + 11},${q.eye[1]}" class="cd" style="stroke-width:11"/>` : `<ellipse cx="${q.eye[0]}" cy="${q.eye[1]}" rx="9" ry="10.5" class="ik"/>`;
+      if (q.fill) return `<path d="${q.d}" class="ik"/>`;
+      return `<path d="${q.d}" class="cd" style="stroke-width:${(12 * (q.w || 1)).toFixed(1)}"${r < 1 ? ` pathLength="1" stroke-dasharray="1 2" stroke-dashoffset="${(1 - r).toFixed(3)}"` : ''}/>`; }).join('');
+    const flip = C.flip ? ' translate(300 0) scale(-1 1)' : '';
+    o.svg.innerHTML = castInk(o.id, still ? 1 : frame) + `<g filter="url(#${o.id})"><g transform="translate(${(jit(0.6)).toFixed(2)} ${(fy + jit(0.6)).toFixed(2)}) rotate(${rot.toFixed(2)} 150 150)${flip}"><g${C.g ? ` transform="${C.g}"` : ''}>${body}</g></g></g>`;
+  }
+  document.querySelectorAll('svg[data-cast]').forEach((svg, i) => { const c = CAST[svg.dataset.cast]; if (!c) return;
+    const o = { svg, c, i, id: 'cast' + i, t0: performance.now(), delay: 0.15 + i * 0.22 }; cast.push(o);
+    if (reduce) { still = true; castPaint(o, 0); still = false; } });
+  const castBox = document.querySelector('.cast'); let castOn = false, castSeen = false;
+  if (castBox && !reduce) new IntersectionObserver((es) => { castOn = es[0].isIntersecting; if (castOn && !castSeen) { castSeen = true; const t = performance.now(); cast.forEach((o) => { o.t0 = t; }); } }).observe(castBox);
+
+  // =================== the page's little icons, as doodles ===================
+  /* the tiles' icons, the idea pills' and the problem's arrow, redrawn in the same marker: traced in stroke by stroke once
+     first seen (and again when a tile is pointed at), then left to boil through a finer cut of the film's ink, a new
+     drawing every other frame (6 a second), each a hair off the last */
+  const shapeD = (el) => { const n = (a) => parseFloat(el.getAttribute(a)) || 0;
+    switch (el.tagName.toLowerCase()) {
+      case 'path': return el.getAttribute('d') || '';
+      case 'line': return `M${n('x1')} ${n('y1')}L${n('x2')} ${n('y2')}`;
+      case 'polyline': return 'M' + (el.getAttribute('points') || '');
+      case 'circle': { const cx = n('cx'), cy = n('cy'), r = n('r'); return `M${cx - r} ${cy}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0`; }
+      case 'rect': { const x = n('x'), y = n('y'), w = n('width'), h = n('height'), r = Math.min(n('rx') || n('ry'), w / 2, h / 2), a = (dx, dy) => `a${r} ${r} 0 0 1 ${dx} ${dy}`;
+        return r ? `M${x + r} ${y}h${w - 2 * r}${a(r, r)}v${h - 2 * r}${a(-r, r)}h${2 * r - w}${a(-r, -r)}v${2 * r - h}${a(r, -r)}Z` : `M${x} ${y}h${w}v${h}h${-w}Z`; }
+    }
+    return ''; };
+  const iconInk = (id, f) => { const s1 = (f % 97) + 1, s2 = ((f * 7) % 89) + 2;
+    return `<defs><filter id="${id}" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="2" seed="${s1}" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="1.5" xChannelSelector="R" yChannelSelector="G" result="a"/><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="1" seed="${s2}" result="g"/><feDisplacementMap in="a" in2="g" scale="0.6" xChannelSelector="R" yChannelSelector="G" result="b"/><feComponentTransfer in="b"><feFuncA type="discrete" tableValues="0 0 1 1 1"/></feComponentTransfer></filter></defs>`; };
+  const icons = [];
+  function iconPaint(o, now) {
+    const n = o.ds.length, dur = Math.min(1.3, 0.45 + 0.17 * n), tr = still ? 1 : clamp((now - o.start) / 1000 / dur);
+    const h = still ? 0 : Math.floor(frame / 2), key = tr > 0 && tr < 1 ? -1 - frame : h * 2 + (tr >= 1 ? 1 : 0);
+    if (key === o.key) return; o.key = key;
+    const w = (k, a) => (still ? 0 : (rnd(h * 7919 + o.i * 104729 + k * 31337) - 0.5) * 2 * a);
+    const body = o.ds.map((d, i) => { const r = clamp((tr - i / n) * n); return r <= 0 ? '' : `<path d="${d}"${r < 1 ? ` pathLength="1" stroke-dasharray="1 2" stroke-dashoffset="${(1 - r).toFixed(3)}"` : ''}/>`; }).join('');
+    o.svg.innerHTML = iconInk(o.id, still ? 1 : h + o.i * 13) + `<g filter="url(#${o.id})"><g transform="translate(${w(1, 0.25).toFixed(2)} ${w(2, 0.25).toFixed(2)}) rotate(${w(3, 1.6).toFixed(2)} 12 12)">${body}</g></g>`;
+  }
+  document.querySelectorAll('.tile>svg, .feat-ic>svg, .scatter>svg').forEach((svg, i) => {
+    const ds = [...svg.querySelectorAll('path,rect,circle,line,polyline')].map(shapeD).filter(Boolean); if (!ds.length) return;
+    svg.classList.add('doodle');
+    const o = { svg, ds, i, id: 'ic' + i, start: Infinity, on: false, seen: false, key: null };
+    if (reduce) { still = true; iconPaint(o, 0); still = false; return; }
+    iconPaint(o, 0); icons.push(o);
+    const tile = svg.closest('.tile'), lag = tile ? 0.25 + ([...tile.parentNode.children].indexOf(tile) % 4) * 0.07 : 0.2;
+    new IntersectionObserver((es) => { o.on = es[0].isIntersecting; if (o.on && !o.seen) { o.seen = true; o.start = performance.now() + lag * 1000; } }, { rootMargin: '0px 0px -8% 0px' }).observe(svg);
+    if (tile) tile.addEventListener('pointerenter', () => { const now = performance.now(); if (now > o.start + 1400) o.start = now; });
+  });
+
+  // =================== playing them ===================
+  // the film's ink: a slow wobble, then a fine grain, then a hard alpha edge; a finer version for the little faces
+  const ROUGH = (id, f, k = 1) => {
+    const s1 = (f % 97) + 1, s2 = ((f * 7) % 89) + 2;
+    return `<defs><filter id="${id}" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="${(0.035 / k).toFixed(3)}" numOctaves="2" seed="${s1}" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="${(3.4 * k).toFixed(2)}" xChannelSelector="R" yChannelSelector="G" result="a"/><feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="1" seed="${s2}" result="g"/><feDisplacementMap in="a" in2="g" scale="${(1.5 * k).toFixed(2)}" xChannelSelector="R" yChannelSelector="G" result="b"/><feComponentTransfer in="b"><feFuncA type="discrete" tableValues="0 0 1 1 1"/></feComponentTransfer></filter>`
+      + `<filter id="${id}s" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" seed="${s1}" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="1.1" xChannelSelector="R" yChannelSelector="G"/></filter></defs>`;
+  };
+  const SCENES = { blocks: { T: 6.6, still: 0.7, draw: blocks }, organize: { T: 7.2, still: 0.7, draw: organize }, route: { T: 9, still: 0.62, draw: route }, team: { T: 4.2, still: 0.05, draw: team },
+    s1: { T: 4.4, still: 0.6, draw: stTemplate, k: 0.6 }, s2: { T: 4.8, still: 0.7, draw: stTeam, k: 0.6 }, s3: { T: 5, still: 0.62, draw: stCanvas, k: 0.6 }, s4: { T: 4.6, still: 0.7, draw: stPresent, k: 0.6 } };
+  const live = [];
+  let uidN = 0;
+  const paint = (o, u) => {
+    vi = 0; const M = [], H = []; o.sc.draw(u, M, H);
+    const sx = still ? 0 : (rnd(frame * 31 + 7) - 0.5) * 0.9, sy = still ? 0 : (rnd(frame * 53 + 3) - 0.5) * 0.9; // (the paper, nudged a hair each frame)
+    o.svg.innerHTML = ROUGH(o.id, still ? 1 : frame, o.sc.k || 1) + `<g transform="translate(${sx.toFixed(2)} ${sy.toFixed(2)})"><g filter="url(#${o.id})">${M.join('')}</g><g filter="url(#${o.id}s)">${H.join('')}</g></g>`;
+  };
+  document.querySelectorAll('svg[data-pen]').forEach((svg) => {
+    const sc = SCENES[svg.dataset.pen]; if (!sc) return; const o = { svg, sc, on: false, t0: performance.now(), id: 'ink' + (++uidN) };
+    if (reduce) { still = true; paint(o, sc.still); still = false; return; }
+    paint(o, 0); live.push(o);
+    new IntersectionObserver((es) => { const was = o.on; o.on = es[0].isIntersecting; if (o.on && !was) o.t0 = performance.now(); }, { rootMargin: '60px' }).observe(svg);
+  });
+  if (!reduce && (live.length || cast.length || icons.length)) {
+    let last = -1;
+    const tick = (now) => {
+      const f = Math.floor(now / (1000 / FPS));
+      if (f !== last && !document.hidden) { last = f; frame = f;
+        for (const o of live) { if (!o.on) continue; const n = o.sc.T * FPS, k = Math.floor(((now - o.t0) / 1000) * FPS) % n; paint(o, k / n); }
+        if (castOn) for (const o of cast) castPaint(o, now);
+        for (const o of icons) if (o.on) iconPaint(o, now); }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+})();
+</script>
+<script>
+/* ==========================================================================
+   Page: the showcase and its moments, chapter tracking, reveals, theme
+   ========================================================================== */
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp01 = x => Math.min(1, Math.max(0, x));
+
+/* the showcase: the product's one-minute UI loop (the same file the product page plays). Its moments are the loop's
+   beats; the rail follows the clip and a tap jumps to a moment. It loads once the page has, plays only on screen, and
+   waits for a tap with reduced motion. */
+(function () {
+  const v = document.getElementById('showcase'), rail = document.getElementById('rail'), now = document.getElementById('railNow'), btn = document.getElementById('playBtn');
+  const BEATS = [['Blocks', 0], ['Comments', 12], ['Votes', 16], ['To-dos', 22], ['Availability', 29], ['Chat', 36], ['The board', 44]];
+  const END = 60;
+  rail.innerHTML = BEATS.map(([n], i) => `<button type="button" data-i="${i}"><span>${String(i + 1).padStart(2, '0')}</span>${n}<i></i></button>`).join('');
+  const bs = [...rail.children];
+  let loaded = false, held = REDUCED, seen = false, raf = 0;
+  const load = () => { if (loaded) return; loaded = true; v.src = v.dataset.src; };
+  const beatAt = t => { let k = 0; BEATS.forEach(([, s], i) => { if (t >= s) k = i; }); return k; };
+  function paint() {
+    const t = v.currentTime || 0, k = beatAt(t);
+    bs.forEach((b, i) => {
+      const s = BEATS[i][1], e = i < BEATS.length - 1 ? BEATS[i + 1][1] : END;
+      const f = i < k ? 1 : i > k ? 0 : clamp01((t - s) / (e - s));
+      b.classList.toggle('on', i === k); b.classList.toggle('done', i < k);
+      b.querySelector('i').style.width = `calc((100% - 4px) * ${f.toFixed(4)})`;
+    });
+    if (now.textContent !== BEATS[k][0]) now.textContent = BEATS[k][0];
+  }
+  const loop = () => { paint(); raf = v.paused ? 0 : requestAnimationFrame(loop); };
+  function sync() {
+    const playing = !v.paused;
+    btn.querySelector('.i-pause').style.display = playing ? '' : 'none';
+    btn.querySelector('.i-play').style.display = playing ? 'none' : '';
+    btn.setAttribute('aria-label', playing ? 'Pause the showcase' : 'Play the showcase');
+  }
+  const play = () => { load(); v.play().catch(() => {}); };
+  v.addEventListener('play', () => { if (!raf) raf = requestAnimationFrame(loop); sync(); });
+  v.addEventListener('pause', () => { paint(); sync(); });
+  v.addEventListener('seeked', paint);
+  bs.forEach((b, i) => b.addEventListener('click', () => {
+    held = false; load();
+    const go = () => { v.currentTime = BEATS[i][1] + .04; paint(); play(); };
+    if (v.readyState >= 1) go(); else v.addEventListener('loadedmetadata', go, { once: true });
+  }));
+  btn.addEventListener('click', () => { if (v.paused) { held = false; play(); } else { held = true; v.pause(); } });
+  const watch = () => new IntersectionObserver(es => {
+    seen = es[0].isIntersecting;
+    if (seen) { load(); if (!held) play(); } else if (!v.paused) v.pause();
+  }, { rootMargin: '200px 0px' }).observe(v);
+  if (document.readyState === 'complete') watch(); else addEventListener('load', watch, { once: true });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) v.pause(); else if (seen && !held) play(); });
+  paint(); sync();
+})();
+
+/* the explainer: one film plays at a time with the showcase out of the way */
+(function () {
+  const f = document.querySelector('.film video'), s = document.getElementById('showcase');
+  f.addEventListener('play', () => { if (!s.paused) s.pause(); });
+})();
+
+/* the loop: the round in hand moves on every few seconds while the loop is on screen; pointing at it holds it */
+(function () {
+  const box = document.getElementById('loop'), items = [...box.querySelectorAll('.loop-steps li')];
+  let k = 0, on = false, held = false, t = 0;
+  const show = () => items.forEach((li, i) => li.classList.toggle('on', i === k));
+  if (REDUCED) { show(); return; }
+  const tick = () => { clearTimeout(t); if (on && !held && !document.hidden) { k = (k + 1) % items.length; show(); } t = setTimeout(tick, 2400); };
+  box.addEventListener('pointerenter', () => { held = true; });
+  box.addEventListener('pointerleave', () => { held = false; });
+  items.forEach((li, i) => li.addEventListener('pointerenter', () => { k = i; show(); }));
+  new IntersectionObserver(es => { const was = on; on = es[0].isIntersecting; if (on && !was) { k = 0; show(); t = setTimeout(tick, 2400); } }, { threshold: .4 }).observe(box);
+  show();
+})();
+
+/* the feedback board: the product's Give feedback, working. A sent post lands on the board as a card, newest first */
+(function () {
+  const K = { suggestion: { l: 'Suggestion', q: 'What’s your idea?', ph: 'What would make Clink better for you?' },
+              bug: { l: 'Bug', q: 'What went wrong?', ph: 'What you did, what you expected, and what happened instead' } };
+  const seg = [...document.querySelectorAll('.fbk-seg button')], q = document.getElementById('fbkQ'), ta = document.getElementById('fbkText'),
+        name = document.getElementById('fbkName'), send = document.getElementById('fbkSend'), form = document.querySelector('.fbk-form'),
+        ty = document.getElementById('fbkTy'), tyP = document.getElementById('fbkTyP'), posts = document.getElementById('fbkPosts');
+  const FROM = ['Group brief', 'Thesis crit', 'Launch plan', 'Studio week 4'];
+  let kind = 'suggestion', sent = 0, t = 0;
+  seg.forEach(b => b.addEventListener('click', () => {
+    kind = b.dataset.k; seg.forEach(x => x.setAttribute('aria-checked', x === b ? 'true' : 'false'));
+    q.textContent = K[kind].q; ta.placeholder = K[kind].ph;
+  }));
+  const ready = () => { send.disabled = !ta.value.trim(); };
+  ta.addEventListener('input', ready); ready();
+  send.addEventListener('click', () => {
+    const text = ta.value.trim(); if (!text) return;
+    const a = document.createElement('article'); a.className = 'post new';
+    a.innerHTML = '<span class="pk"></span><p></p><span class="pby"></span>';
+    a.querySelector('.pk').textContent = K[kind].l; if (kind === 'bug') a.querySelector('.pk').classList.add('bug');
+    a.querySelector('p').textContent = text;
+    a.querySelector('.pby').textContent = `${name.value.trim() || 'Someone'} · from ${FROM[sent++ % FROM.length]}`;
+    posts.prepend(a); while (posts.children.length > 4) posts.lastElementChild.remove();
+    tyP.textContent = `Your ${kind === 'bug' ? 'bug report' : 'suggestion'} is on the way to the team. We read every one.`;
+    form.style.visibility = 'hidden'; ty.hidden = false;
+    clearTimeout(t); t = setTimeout(() => { ty.hidden = true; form.style.visibility = ''; ta.value = ''; ready(); }, 2600);
+  });
+})();
+
+/* page chrome: solid bar on scroll, chapter tracking, reveals */
+(function () {
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('solid', scrollY > 12);
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  const links = [...document.querySelectorAll('#chapterNav button')], ind = document.querySelector('#chapterNav .ind'), nowEl = document.getElementById('chapterNow');
+  links.forEach(b => b.addEventListener('click', () => document.getElementById(b.dataset.go).scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth' })));
+  const secs = [...document.querySelectorAll('section[data-chapter]')];
+  function track() {
+    let cur = null; const y = innerHeight * .35;
+    secs.forEach(s => { if (s.getBoundingClientRect().top < y) cur = s; });
+    links.forEach(b => b.setAttribute('aria-current', cur && b.dataset.go === cur.id ? 'true' : 'false'));
+    const on = cur && links.find(b => b.dataset.go === cur.id);
+    if (on) { ind.style.opacity = 1; ind.style.transform = `translateX(${on.offsetLeft + on.offsetWidth / 2 - 2.5}px)`; } else ind.style.opacity = 0;
+    const label = cur ? cur.dataset.chapter : '';
+    if (nowEl.textContent !== label) nowEl.textContent = label;
+  }
+  addEventListener('scroll', track, { passive: true }); addEventListener('resize', track); track();
+  document.querySelectorAll('.stagger').forEach(g => [...g.children].forEach((c, i) => c.style.setProperty('--i', i)));
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+})();
+
+/* theme: the header switch, remembered */
+(function () {
+  var root = document.documentElement, btn = document.getElementById('themeBtn'), meta = document.querySelector('meta[name="theme-color"]');
+  function sync() {
+    var dark = root.getAttribute('data-theme') === 'dark';
+    btn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+    btn.title = dark ? 'Light theme' : 'Dark theme';
+    if (meta) meta.setAttribute('content', dark ? '#1E1E1C' : '#FFFFFF');
+  }
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('clink-theme', next); } catch (e) {}
+    sync();
+  });
+  sync();
+})();
+</script>
+</body>
+</html>
