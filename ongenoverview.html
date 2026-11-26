@@ -1102,6 +1102,101 @@ html[data-theme="light"] .msg.u{color:#FFFFFF}
 html[data-theme="light"] .msg.a.err{color:#D42A23}
 html[data-theme="light"] .ask-f textarea:focus-visible{outline-color:#C4C4C0}
 </style>
+<style>
+/* ===== Layout system =====
+   One grid for all three pages: the 1180 wrap, two equal columns with one gap, cards filling their column.
+   One type scale (h1, h2, lede), one section rhythm, one card radius and padding.
+   This block only sets layout and type; it comes last so it settles what the blocks above left uneven. */
+:root{
+  --cg:clamp(40px,6vw,72px);          /* the gap between the two columns, everywhere */
+  --sy:clamp(64px,7vw,104px);         /* a section's top and bottom padding */
+  --hero-top:clamp(40px,6vw,96px);    /* space under the bar before each page's title */
+  --stack:48px;                       /* heading block to the figure or cards it introduces */
+  --h1:clamp(44px,5.2vw,72px);
+  --h2:clamp(30px,3.1vw,42px);
+  --r:28px;                           /* page cards */
+  --cp:28px;                          /* page card padding */
+}
+/* clip, not hidden: "hidden" on body made it a scroll box of its own, so the sticky bar and sticky text never stuck */
+html,body{overflow-x:clip}
+
+/* --- type: one size per level on every page --- */
+.p-intro h1,.wx-h1,.w-h1,.r-h1{font-size:var(--h1);line-height:1;letter-spacing:-.045em;max-width:13ch}
+.p-text h2,.wx h2,.p-sec h2,.w-sec h2,.r-sec h2{font-size:var(--h2);line-height:1.08;letter-spacing:-.03em;max-width:20ch}
+.p-lede,.wx-lede{margin-top:20px;font-size:17px;line-height:1.6;color:var(--ink-2);max-width:none}
+/* the opening paragraph of each page is one step larger */
+.p-intro .p-lede,.wx-hero .wx-lede,.r-summary .p-lede{font-size:19px;line-height:1.55;max-width:28em}
+/* a paragraph that runs across the full width stops at the middle line, like the text in the two-column rows */
+.p-sec > .p-wrap > .p-lede,.r-sec .p-wrap > .p-lede{max-width:31em}
+.p-how{margin-top:28px;gap:14px}
+.p-state{margin-top:32px}
+
+/* --- rhythm: every section shares one padding; each page title sits the same distance under the bar --- */
+.p-ch,.p-sec,.wx,.w-sec,.r-sec{padding:var(--sy) 0}
+.p-ch.p-intro,.wx.wx-hero,.w-sec.w-hero{padding:var(--hero-top) 0 var(--sy)}
+.p-ch.p-pad-end{padding-bottom:var(--sy)}
+
+/* --- two-column rows: text and card start on the same line; text stays in view beside a tall card --- */
+.p-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--cg);align-items:start}
+.p-ch.p-intro .p-row{align-items:center}
+@media (min-width:861px){
+  .p-ch:not(.p-intro) .p-row > .p-text,.wx .p-row > .p-text{position:sticky;top:calc(var(--nav) + 40px)}
+}
+/* heading on the left, paragraph on the right: both start on the top line, on the same columns as the rows */
+.wx-split{gap:var(--cg);align-items:start}
+.fx-wide{margin-top:var(--stack)}
+.fx figcaption{margin-top:14px;font-size:12.5px;line-height:1.6}
+
+/* --- full-width blocks under a heading start one step down --- */
+.p-grid{margin-top:var(--stack);gap:14px}
+.p-research{margin-top:14px;gap:var(--cg);padding:var(--cp);border-radius:var(--r)}
+.r-table-wrap,.r-find{margin-top:var(--stack)}
+.r-summary{margin-top:32px;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--cg)}
+.r-summary .p-lede{margin-top:0}
+.spec{margin-top:64px}
+
+/* methods and frameworks: two columns on the page grid instead of one long run-on line */
+.wx-methods{margin-top:32px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--cg);max-width:none}
+.wx-methods p{font-size:13px;line-height:1.7;color:var(--grey)}
+.wx-methods span{display:block;margin:0 0 6px;color:var(--dim)}
+.wx-methods span + span,.wx-methods span:not(:first-child){margin-left:0}
+.r-src{margin-top:24px;font-size:12px;line-height:1.7;max-width:62em}
+
+/* --- cards: one radius and one inner padding --- */
+.card,.p-cell,.r-card,.r-find div,.r-tiles,.r-table-wrap,.nx,.p-cta-card{border-radius:var(--r)}
+.card,.cm,.gantt,.flow,.p-cell,.r-card,.r-find div,.nx,.p-cta-card{padding:var(--cp)}
+.stk{padding:var(--cp) var(--cp) 10px}
+.r-tile{padding:24px var(--cp)}
+.r-find{gap:14px}
+/* the table's first and last columns line up with the padding of every other card */
+@media (min-width:721px){
+  .r-table th:first-child,.r-table td:first-child{padding-left:var(--cp)}
+  .r-table th:last-child,.r-table td:last-child{padding-right:var(--cp)}
+}
+
+/* --- the closing cards (Up next, Book a demo) stack as one group with the card gap between them --- */
+.wx-next{padding:var(--sy) 0 0}
+.p-cta{padding:14px 0 0}
+.p-foot{padding:var(--sy) 0 72px}
+
+@media (max-width:860px){
+  :root{--cp:20px;--r:24px;--stack:32px}
+  /* phones: the content gutter is the bar's gutter, so the name and the text share one left edge */
+  .p-wrap{padding:0 var(--pm)}
+  .p-row{grid-template-columns:minmax(0,1fr);gap:32px}
+  .wx-split,.r-summary,.wx-methods{grid-template-columns:minmax(0,1fr);gap:24px}
+  /* every page reads text first, then its card */
+  .p-ch .p-text,.p-ch[data-side="right"] .p-text{order:1}
+  .p-ch .p-slot{order:2}
+  .p-ch.p-intro{padding:var(--hero-top) 0 var(--sy)}
+  .p-intro .p-lede,.wx-hero .wx-lede,.r-summary .p-lede{font-size:17px;line-height:1.6}
+  .p-research{grid-template-columns:minmax(0,1fr);gap:12px}
+  .spec{margin-top:40px}
+  .nx{padding:var(--cp)}
+  .p-cta-card{padding:24px var(--cp)}
+  .r-table tr{padding:var(--cp);border-radius:var(--r)}
+}
+</style>
 </head>
 <body>
 
@@ -1629,7 +1724,10 @@ html[data-theme="light"] .ask-f textarea:focus-visible{outline-color:#C4C4C0}
         </div>
         <figcaption>Phases dated “winter 2026” in the case study are placed in January and February.</figcaption>
       </figure>
-      <p class="wx-methods"><span>Methods</span> Service map (14 entities, 17 relations) · journey mapping · hypothesis-led research plan · concept survey (n = 22) · pre-pilot peer review on concept clarity, flow predictability, trust and value · usability testing with SUS, session time and touchpoint regressions · qualitative interview coding · five journey maps of cognitive load, emotion and motivation · three personas · field pilot (408 sessions) <span>Frameworks</span> Business model canvas · MECE · VRIO · BCG · four positioning matrices across platform, delivery, revenue and intelligence · TCPS 2 research ethics</p>
+      <div class="wx-methods">
+        <p><span>Methods</span> Service map (14 entities, 17 relations) · journey mapping · hypothesis-led research plan · concept survey (n = 22) · pre-pilot peer review on concept clarity, flow predictability, trust and value · usability testing with SUS, session time and touchpoint regressions · qualitative interview coding · five journey maps of cognitive load, emotion and motivation · three personas · field pilot (408 sessions)</p>
+        <p><span>Frameworks</span> Business model canvas · MECE · VRIO · BCG · four positioning matrices across platform, delivery, revenue and intelligence · TCPS 2 research ethics</p>
+      </div>
     </div>
   </section>
 
@@ -2884,13 +2982,17 @@ html[data-theme="light"] .ask-f textarea:focus-visible{outline-color:#C4C4C0}
     var W = o.el.clientWidth || 360, w = cardW(o), vh = window.innerHeight, P = plateP(o);
     var s;
     if (!o.card) s = narrow() ? Math.min(.66, (W - 8) / w) : Math.min(.92, (vh - 150) / 844, W / w);
-    else s = narrow() ? Math.min(1.12, (W - P * 2) / w) : Math.min(1.32, (W - P * 2) / w, (vh * .74 - P * 2) / o.h);
+    // every card fills its column, so card edges sit on the same grid lines as the text and the What page's cards;
+    // only a card taller than the screen (the player) gives way, and then it keeps to the column's outer edge
+    else s = narrow() ? Math.min(1.12, (W - P * 2) / w) : Math.min(1.5, (W - P * 2) / w, (vh * .9 - P * 2) / o.h);
     o.s = s;
     o.el.style.height = Math.round(Math.max(o.h, o.hl || 0) * s + P * 2) + 'px';
   }
   function boxFor(o, rw, rh){
-    var W = o.el.clientWidth, H = o.el.clientHeight;
-    return { x: (W - rw * o.s) / 2, y: (H - rh * o.s) / 2, w: rw * o.s, h: rh * o.s };
+    var W = o.el.clientWidth, H = o.el.clientHeight, cw = rw * o.s;
+    // cards keep to the outer edge of their column (text left: card right); the hero phone stays centred
+    var x = !o.card ? (W - cw) / 2 : (o.ch.dataset.side === 'left' && !narrow() ? W - cw : 0);
+    return { x: x, y: (H - rh * o.s) / 2, w: cw, h: rh * o.s };
   }
   function placePh(o){
     if (!o.ph) return;
