@@ -1236,7 +1236,7 @@ html{scroll-behavior:smooth}
 .cs-meta i{font-style:normal;margin:0 9px;color:var(--dim)}
 /* the chapter tag carries the radio's red needle */
 .cs-tag{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-2)}
-.cs-tag::before{content:"";flex:none;width:2px;height:13px;border-radius:1px;background:var(--red);box-shadow:0 0 8px rgba(232,50,43,.55)}
+.cs-tag::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 8px rgba(232,50,43,.55)}
 
 /* ---------- top bar: name and mark, the chapters in the centre, theme and demo on the right ---------- */
 .cs-top .p-wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px}
@@ -1291,6 +1291,7 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
 .p-ch.cs-block{padding:0;border:0}
 .cs-sub{grid-column:1;align-self:start;position:sticky;top:calc(var(--nav) + 40px)}
 .cs-sub .no{display:block;margin-bottom:12px;font-size:12.5px;color:var(--dim);font-variant-numeric:tabular-nums}
+.cs-sub .ic{display:block;width:22px;height:22px;margin-bottom:12px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;color:var(--ink)}
 .cs-sub h3{font-size:20px;line-height:1.25;letter-spacing:-.02em}
 .cs-sub p{margin-top:6px;font-size:14.5px;line-height:1.45;color:var(--grey);max-width:24ch}
 .cs-body{grid-column:2;min-width:0}
@@ -1349,7 +1350,7 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
   .cs-head .cs-h2{grid-row:2}
   .cs-block{grid-template-columns:minmax(0,1fr)}
   .cs-sub{grid-column:1;position:static;margin-bottom:26px}
-  .cs-sub .no{margin-bottom:8px}
+  .cs-sub .no,.cs-sub .ic{margin-bottom:8px}
   .cs-sub p{max-width:none}
   .cs-body{grid-column:1}
   .cs-offset{margin-left:0}
@@ -1436,7 +1437,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="og-arrow-left-right" viewBox="0 0 24 24"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></symbol><symbol id="og-audio-lines" viewBox="0 0 24 24"><path d="M2 10v3"/><path d="M6 6v11"/><path d="M10 3v18"/><path d="M14 8v7"/><path d="M18 5v13"/><path d="M22 10v3"/></symbol><symbol id="og-calendar-clock" viewBox="0 0 24 24"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h5"/><path d="M17.5 17.5 16 16.3V14"/><circle cx="16" cy="16" r="6"/></symbol><symbol id="og-circle-pause" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="10" x2="10" y1="15" y2="9"/><line x1="14" x2="14" y1="15" y2="9"/></symbol><symbol id="og-highlighter" viewBox="0 0 24 24"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></symbol><symbol id="og-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol><symbol id="og-list-music" viewBox="0 0 24 24"><path d="M21 15V6"/><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path d="M12 12H3"/><path d="M16 6H3"/><path d="M12 18H3"/></symbol><symbol id="og-list-plus" viewBox="0 0 24 24"><path d="M11 12H3"/><path d="M16 6H3"/><path d="M16 18H3"/><path d="M18 9v6"/><path d="M21 12h-6"/></symbol><symbol id="og-panel-top-open" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="m15 14-3 3-3-3"/></symbol><symbol id="og-plug-zap" viewBox="0 0 24 24"><path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z"/><path d="m2 22 3-3"/><path d="M7.5 13.5 10 11"/><path d="M10.5 16.5 13 14"/><path d="m18 3-4 4h6l-4 4"/></symbol><symbol id="og-radio" viewBox="0 0 24 24"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></symbol><symbol id="og-refresh-cw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol><symbol id="og-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol><symbol id="og-scroll-text" viewBox="0 0 24 24"><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></symbol><symbol id="og-sparkles" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></symbol><symbol id="og-square-pen" viewBox="0 0 24 24"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></symbol></defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="og-palette" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></symbol><symbol id="og-smartphone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></symbol><symbol id="og-arrow-left-right" viewBox="0 0 24 24"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></symbol><symbol id="og-audio-lines" viewBox="0 0 24 24"><path d="M2 10v3"/><path d="M6 6v11"/><path d="M10 3v18"/><path d="M14 8v7"/><path d="M18 5v13"/><path d="M22 10v3"/></symbol><symbol id="og-calendar-clock" viewBox="0 0 24 24"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h5"/><path d="M17.5 17.5 16 16.3V14"/><circle cx="16" cy="16" r="6"/></symbol><symbol id="og-circle-pause" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="10" x2="10" y1="15" y2="9"/><line x1="14" x2="14" y1="15" y2="9"/></symbol><symbol id="og-highlighter" viewBox="0 0 24 24"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></symbol><symbol id="og-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol><symbol id="og-list-music" viewBox="0 0 24 24"><path d="M21 15V6"/><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path d="M12 12H3"/><path d="M16 6H3"/><path d="M12 18H3"/></symbol><symbol id="og-list-plus" viewBox="0 0 24 24"><path d="M11 12H3"/><path d="M16 6H3"/><path d="M16 18H3"/><path d="M18 9v6"/><path d="M21 12h-6"/></symbol><symbol id="og-panel-top-open" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="m15 14-3 3-3-3"/></symbol><symbol id="og-plug-zap" viewBox="0 0 24 24"><path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z"/><path d="m2 22 3-3"/><path d="M7.5 13.5 10 11"/><path d="M10.5 16.5 13 14"/><path d="m18 3-4 4h6l-4 4"/></symbol><symbol id="og-radio" viewBox="0 0 24 24"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></symbol><symbol id="og-refresh-cw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol><symbol id="og-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol><symbol id="og-scroll-text" viewBox="0 0 24 24"><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></symbol><symbol id="og-sparkles" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></symbol><symbol id="og-square-pen" viewBox="0 0 24 24"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></symbol></defs></svg>
 
 <header class="p-top cs-top">
   <div class="p-wrap">
@@ -1799,11 +1800,11 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
     <div class="cs-wrap">
       <div class="cs-head">
         <div class="cs-tag">How it works</div>
-        <h2 class="cs-h2" id="howTitle">The phone on this page is the real prototype.</h2>
-        <p class="cs-lede">Each block below shows one of its cards, and you can use the card directly. The clock is held at 17:50 on a Wednesday: John, in Toronto, is hearing the Traffic Update, and the Commute Briefing airs next at 18:10.</p>
+        <h2 class="cs-h2" id="howTitle">A Context Adaptive Model. <span class="soft">Every show is shaped by the user’s context.</span></h2>
+        <p class="cs-lede">OnGen reads the user’s context, their calendar, mail, AI chats and where they are, and adapts each show to it: when it airs, how long it runs and what it covers. Each block below is one card of the working prototype, and you can use it directly. The context is held at 17:50 on a Wednesday: John, in Toronto, is hearing the Traffic Update, and the Commute Briefing airs next at 18:10.</p>
       </div>
       <article class="p-ch cs-block cs-demo" id="ch-timetable" data-h="292" data-side="right" data-card="screen" data-needs="home" data-intro="screen">
-        <div class="cs-sub"><span class="no">01</span><h3>Today's shows on a timetable</h3><p>The top screen</p></div>
+        <div class="cs-sub"><svg class="ic" aria-hidden="true"><use href="#og-calendar-clock"/></svg><h3>Daily Program Lineup</h3><p>Today's shows on a timetable</p></div>
         <div class="cs-body">
           <div class="cs-demo-grid">
             <div class="p-slot" aria-hidden="true"></div>
@@ -1816,7 +1817,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
         </div>
       </article>
       <article class="p-ch cs-block cs-demo" id="ch-program" data-h="212" data-side="right" data-card="program" data-intro="program">
-        <div class="cs-sub"><span class="no">02</span><h3>Editing a show's program</h3><p>Corners and their minutes</p></div>
+        <div class="cs-sub"><svg class="ic" aria-hidden="true"><use href="#og-list-music"/></svg><h3>Program Details</h3><p>Editing a show's corners and their minutes</p></div>
         <div class="cs-body">
           <div class="cs-demo-grid">
             <div class="p-slot" aria-hidden="true"></div>
@@ -1829,7 +1830,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
         </div>
       </article>
       <article class="p-ch cs-block cs-demo" id="ch-sources" data-h="206" data-side="right" data-card="source" data-needs="idle" data-intro="source">
-        <div class="cs-sub"><span class="no">03</span><h3>Choosing sources and generating a show</h3><p>The connection card and the Generate key</p></div>
+        <div class="cs-sub"><svg class="ic" aria-hidden="true"><use href="#og-plug-zap"/></svg><h3>Resources &amp; Context</h3><p>Choosing sources and generating a show</p></div>
         <div class="cs-body">
           <div class="cs-demo-grid">
             <div class="p-slot" aria-hidden="true"></div>
@@ -1842,7 +1843,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
         </div>
       </article>
       <article class="p-ch cs-block cs-demo" id="ch-listen" data-h="554" data-side="right" data-card="screen" data-require="player" data-ph-t="The player is closed" data-ph-s="Open the player to read the show line by line." data-ph-act="open-player" data-ph-btn="Open the player">
-        <div class="cs-sub"><span class="no">04</span><h3>The script, line by line</h3><p>The player</p></div>
+        <div class="cs-sub"><svg class="ic" aria-hidden="true"><use href="#og-radio"/></svg><h3>Personalized Radio</h3><p>The script, line by line</p></div>
         <div class="cs-body">
           <div class="cs-demo-grid">
             <div class="p-slot" aria-hidden="true"></div>
@@ -1855,7 +1856,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
         </div>
       </article>
       <article class="p-ch cs-block cs-demo" id="ch-live" data-h="300" data-side="right" data-card="now">
-        <div class="cs-sub"><span class="no">05</span><h3>The Now Playing panel</h3><p>It opens from the camera cutout</p></div>
+        <div class="cs-sub"><svg class="ic" aria-hidden="true"><use href="#og-panel-top-open"/></svg><h3>iOS Native Player</h3><p>The Now Playing panel, opening from the camera cutout</p></div>
         <div class="cs-body">
           <div class="cs-demo-grid">
             <div class="p-slot" aria-hidden="true"></div>
@@ -1868,7 +1869,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
         </div>
       </article>
       <article class="p-ch cs-block cs-demo" id="ch-modes" data-h="76" data-side="right" data-card="modes" data-needs="idle" data-intro="modes">
-        <div class="cs-sub"><span class="no">06</span><h3>The mode dial</h3><p>Daily, Hourly or Weekly Radio</p></div>
+        <div class="cs-sub"><svg class="ic" aria-hidden="true"><use href="#og-repeat"/></svg><h3>Radio Modes</h3><p>The mode dial: Daily, Hourly or Weekly Radio</p></div>
         <div class="cs-body">
           <div class="cs-demo-grid">
             <div class="p-slot" aria-hidden="true"></div>
@@ -1881,7 +1882,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
         </div>
       </article>
       <div class="cs-block" id="ch-system">
-        <div class="cs-sub"><span class="no">07</span><h3>Colour, type and shape</h3><p>A radio: flat dark keys, a black screen</p></div>
+        <div class="cs-sub"><svg class="ic" aria-hidden="true"><use href="#og-palette"/></svg><h3>Design Language</h3><p>Colour, type and shape: flat dark keys, a black screen</p></div>
         <div class="cs-body">
           <p class="cs-text">The interface follows the look of a radio, with flat dark keys around a black screen. Four greys build the structure, and red is used only for something that is on air or about to air.</p><div class="p-grid">
       <div class="p-cell c-color">
@@ -1915,7 +1916,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
         </div>
       </div>
       <div class="cs-block">
-        <div class="cs-sub"><span class="no">08</span><h3>The mobile app is one part of the research</h3><p>Which medium suits OnGen</p></div>
+        <div class="cs-sub"><svg class="ic" aria-hidden="true"><use href="#og-smartphone"/></svg><h3>Mobile as Current Medium</h3><p>The mobile app is one part of the research</p></div>
         <div class="cs-body">
           <p class="cs-text">The phone app on this page is a research prototype, one of the media OnGen was tested on. GradEX 111 showed that an AR device is not an effective medium for it, so the work now goes into devices already in the home, such as Amazon Alexa, together with research into SDKs across the platforms people already use.</p>
         </div>
@@ -3168,7 +3169,8 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
      Each chapter owns a slot beside its text. The live prototype sits in the active chapter's slot,
      cropped to that chapter's card; every other slot holds a static copy of its card. */
   var CARD = { screen: ['.screen'], program: ['.program'], sync: ['.sync'], keys: ['.keys'], source: ['.sync', '.keys'], modes: ['.modes'], now: ['.sbar', '.island', '.nowpanel'] };
-  var RAD = { now: 42, modes: 26 };
+  // the Now Playing card is cut to the status bar's own curve (a 56px pill: 28), so the bar and the panel share it
+  var RAD = { now: 28, modes: 26 };
   var story = document.getElementById('story');
   var slots = chapters.map(function(ch){
     var el = ch.querySelector('.p-slot');
@@ -3568,8 +3570,11 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
       else {
         measure();
         var g = geo(), W = g.W, H = g.H, wc = Math.min(1, w), hc = Math.min(1, h);
-        var x0 = lerp(g.x0, 0, wc), x1 = lerp(g.x1, W, wc), y0 = lerp(g.y0, 0, hc), y1 = lerp(g.y1, H, hc), r = lerp(g.r, 42, Math.min(wc, hc));
-        np.style.clipPath = 'inset(' + y0.toFixed(1) + 'px ' + (W - x1).toFixed(1) + 'px ' + (H - y1).toFixed(1) + 'px ' + x0.toFixed(1) + 'px round ' + r.toFixed(1) + 'px)';
+        var x0 = lerp(g.x0, 0, wc), x1 = lerp(g.x1, W, wc), y0 = lerp(g.y0, 0, hc), y1 = lerp(g.y1, H, hc);
+        // the curve follows the shape: while it is low it stays a pill (half its height), as the island is; the top corners
+        // stop at the status bar's 28, so the two curves meet exactly, and only the bottom ones open on to the panel's 42
+        var half = Math.min(y1 - y0, x1 - x0) / 2, rt = Math.min(half, 28), rb = Math.min(half, 42);
+        np.style.clipPath = 'inset(' + y0.toFixed(1) + 'px ' + (W - x1).toFixed(1) + 'px ' + (H - y1).toFixed(1) + 'px ' + x0.toFixed(1) + 'px round ' + rt.toFixed(1) + 'px ' + rt.toFixed(1) + 'px ' + rb.toFixed(1) + 'px ' + rb.toFixed(1) + 'px)';
       }
       sbar.style.transition = 'none'; sbar.style.opacity = String(Math.max(0, 1 - Math.max(w, h) * 1.6).toFixed(3));
       var o = c.toFixed(3), tf = 'translateY(' + ((1 - c) * -8).toFixed(2) + 'px) scale(' + (.965 + .035 * c).toFixed(4) + ')', bl = c >= .999 ? 'none' : 'blur(' + ((1 - c) * 6).toFixed(2) + 'px)';
