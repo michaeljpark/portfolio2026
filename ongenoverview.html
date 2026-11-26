@@ -1291,6 +1291,11 @@ html[data-theme="light"] .cs-chapters::before{background:repeating-linear-gradie
 .cs-photo figcaption{margin-top:12px;font-size:13px;line-height:1.5;color:var(--grey)}
 /* on a phone the photo is only ~120px tall, so its corners tighten with it */
 @media (max-width:640px){.cs-photo img{border-radius:16px}}
+/* the widget board (ongenwidgets.html) under the overview: live HTML in its own shadow root; 16:9, or 3:4 under a 760px column.
+   The board keeps its dark finish in the light theme too, since it is the product itself. */
+.ogw{display:block;width:100%;aspect-ratio:16/9;border-radius:24px;overflow:hidden;background:#141414}
+.ogw.tall{aspect-ratio:3/4;max-width:560px;margin-inline:auto}
+@media (max-width:640px){.ogw{border-radius:16px}}
 .cs-offset{margin-left:calc(var(--cs-label) + var(--cs-col))}
 .cs-block{display:grid;grid-template-columns:var(--cs-label) minmax(0,1fr);column-gap:var(--cs-col)}
 .cs-block + .cs-block{margin-top:clamp(80px,8.5vw,120px)}
@@ -1704,6 +1709,10 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
         <div class="cs-tag">Overview</div>
         <h2 class="cs-h2" id="ovTitle">A radio about your own day.</h2>
         <p class="cs-lede">OnGen is an AI-curated listening app. It reads your calendar, mail, AI chats and location, and plays short shows between your plans about what you need to do, what you missed, what to remember and what's happening nearby.</p>
+        <figure class="cs-photo">
+          <div class="ogw" id="ogWidgets" role="img" aria-label="OnGen at 9:41 on a Wednesday commute. The Dynamic Island carries the show, and a Live Activity plays the Commute Briefing with 19 minutes remaining. On a wide screen the board also shows the lock screen, today’s lineup with the Commute Briefing on air since 9:30, Now Playing, the controls, the Google Home Mini’s output level, the radio mode set to Hourly, the connected sources and the day’s timeline."></div>
+          <figcaption>OnGen at 9:41, mid-commute: the Dynamic Island, a Live Activity and the Home Screen widgets follow the same show.</figcaption>
+        </figure>
       </div>
       <div class="cs-block">
         <div class="cs-sub"><span class="no">01</span><h3>How each medium reaches you</h3><p>Comes to you, live, about you</p></div>
@@ -4129,6 +4138,349 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
 
 })();
 
+</script>
+<script>
+/* ==========================================================================
+   The widget board under the overview (from ongenwidgets.html).
+   It lives in its own shadow root, so its styles and the page's never touch.
+   Wide: the full 16:9 board. Narrow: a 3:4 board with the island, the Live
+   Activity and the lineup. Widgets never reflow inside; only the board they
+   sit on changes, and it scales as one piece to the column. Time holds at
+   9:41 while the waveforms, the meters and the transcript keep going, so the
+   loop has no end to jump from.
+   ========================================================================== */
+(function(){
+  var host = document.getElementById('ogWidgets');
+  if (!host || !host.attachShadow) return;
+  var root = host.attachShadow({ mode:'open' });
+  root.innerHTML = '<style>' + ":host{display:block;position:relative;overflow:hidden;background:var(--body);font-family:var(--font);-webkit-font-smoothing:antialiased;color:var(--ink);font-variant-numeric:tabular-nums;line-height:normal;letter-spacing:normal;text-align:left;\n  --page:#0A0A0A; --body:#141414; --key:#232323; --tile:#1A1A1A; --screen:#0B0B0B;\n  --ink:#F0F0ED; --soft:#BDBDBA; --grey:#8B8B88; --dim:#5C5C5A; --off:#2A2A29;\n  --red:#E8322B; --dimple:#E9E9E6;\n  --font:\"Geist\",-apple-system,\"Helvetica Neue\",Arial,sans-serif;\n  --sys:-apple-system,\"SF Pro Display\",\"SF Pro Text\",BlinkMacSystemFont,\"Geist\",\"Helvetica Neue\",Arial,sans-serif;\n}\n*{box-sizing:border-box;margin:0;padding:0}\n.stage{position:absolute;left:0;top:0;transform-origin:0 0;background:var(--body);overflow:hidden}\n/* every widget sits at a fixed position on a fixed grid, so nothing reflows */\n.w{position:absolute;border-radius:40px;overflow:hidden}\n.wi{position:absolute;left:0;top:0;transform-origin:0 0;display:flex;flex-direction:column;padding:24px}\n.bare{background:transparent}\n.bare .wi{padding:0}\n.btn{border-radius:50%;display:grid;place-items:center}\n.scr{background:var(--screen);box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}\n.key{background:var(--key)}\n.live{background:var(--red);color:#0B0B0B}\n.k{font-size:16px;color:var(--grey);letter-spacing:-.005em;white-space:nowrap}\n.live .k{color:rgba(11,11,11,.55)}\n.t{letter-spacing:-.025em;line-height:1.15}\n.big{font-weight:300;letter-spacing:-.045em;line-height:.9;white-space:nowrap}\n.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}\n.row{display:flex;align-items:center;min-width:0}\n.col{display:flex;flex-direction:column;min-width:0;min-height:0}\n.sp{flex:1;min-width:0;min-height:0}\n.ic{display:block;flex-shrink:0}\n.cvw{position:relative;min-height:0;flex-shrink:0}\n.cvw canvas{position:absolute;left:0;top:0;display:block}\n.tile{width:56px;height:56px;border-radius:16px;background:var(--tile);display:grid;place-items:center;color:var(--ink);flex-shrink:0}\n.logo{height:auto;fill:currentColor;display:block;flex-shrink:0}\n.play{width:56px;height:56px;border-radius:16px;background:var(--red);color:#232323;display:grid;place-items:center;flex-shrink:0;box-shadow:0 0 18px rgba(232,50,43,.55),0 0 42px rgba(232,50,43,.22)}\n.dot{width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0}\n.live .dot{background:#0B0B0B}\n.lamp{width:8px;height:8px;border-radius:50%;background:#3A3A39;flex-shrink:0}\n.lamp.on{background:#F4F4F1;box-shadow:0 0 8px rgba(255,255,255,.55)}\n.ledbar{display:flex;gap:2px;height:12px;overflow:hidden}\n.ledbar i{flex:0 0 5px;border-radius:2px;background:var(--off)}\n.ledbar i.on{background:var(--ink)}\n.lead{flex:1;height:2px;margin:0 12px;min-width:12px;background:radial-gradient(circle,#3C3C3A 1px,transparent 1.2px) 0 0/6px 2px repeat-x}\n.hatch{background:repeating-linear-gradient(135deg,#262625 0 2px,transparent 2px 7px);box-shadow:inset 0 0 0 1px #262625}\n.hatch.lit{background:repeating-linear-gradient(135deg,#3C3C3B 0 2px,transparent 2px 7px);box-shadow:inset 0 0 0 1px #3C3C3B}\n.fade{-webkit-mask-image:linear-gradient(transparent,#000 20%,#000 80%,transparent);mask-image:linear-gradient(transparent,#000 20%,#000 80%,transparent)}\n.dialfade{-webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.25) 12%,rgba(0,0,0,.75) 30%,#000 44%,#000 56%,rgba(0,0,0,.75) 70%,rgba(0,0,0,.25) 88%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.25) 12%,rgba(0,0,0,.75) 30%,#000 44%,#000 56%,rgba(0,0,0,.75) 70%,rgba(0,0,0,.25) 88%,transparent 100%)}\n.fadex{-webkit-mask-image:linear-gradient(90deg,transparent,#000 26%,#000 74%,transparent);mask-image:linear-gradient(90deg,transparent,#000 26%,#000 74%,transparent)}\nsvg.rl{position:absolute;overflow:visible;display:block}\n.nowline{position:absolute;height:2px;background:var(--red)}\n.nowline::before{content:\"\";position:absolute;left:-4px;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--red)}\n.needle{position:absolute;width:2px;background:var(--red);border-radius:1px}\n.pgbar{display:flex;gap:6px;height:48px;flex-shrink:0}\n.pgbar b{border-radius:14px;background:#8E8E8C}\n.pgbar b.d{background:#4A4A49}\n.pgbar b.a{background:var(--ink);box-shadow:0 0 22px rgba(255,255,255,.18)}\n.lgd{position:relative;flex-shrink:0}\n.lgd > div{position:absolute;top:0;white-space:nowrap}\n.lgd .n{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--grey)}\n.lgd .m{font-size:21px;color:var(--soft);margin-top:4px;letter-spacing:-.02em}\n.lgd .a .n{color:var(--ink)}\n.lgd .a .m{color:var(--ink);font-weight:500}\n.lgd .n i{width:6px;height:6px;border-radius:50%;background:#6A6A68;flex-shrink:0}\n.lgd .a .n i{background:var(--ink);box-shadow:0 0 6px rgba(255,255,255,.6)}\n.lb{position:absolute;top:0;transform:translateX(-50%);color:#5C5C5A;letter-spacing:-.02em;white-space:nowrap}\n.lb.a{color:var(--ink)}\n.tx span{transition:color .35s ease}\n.tx .f{color:rgba(240,240,237,.3)}\n.live .tx .f{color:rgba(11,11,11,.4)}\n.isl{position:absolute;background:#000;color:#F2F2EF;display:flex;align-items:center}\n.cc{position:absolute;border-radius:40px;background:var(--key);display:flex;flex-direction:column;padding:24px;overflow:hidden}\n.cc.round{border-radius:50%;padding:0;display:grid;place-items:center}\n.sys{font-family:var(--sys);color:#F2F2EF}" + '</style><div class="stage" aria-hidden="true"></div>';
+  var stage = root.querySelector('.stage');
+
+  /* ================= data ================= */
+  var LOGO = '<path d="M84.5 0C112.993 0 138.191 14.1027 153.497 35.708C144.147 42.3237 138.034 53.2109 138.001 65.5283C138.013 65.5623 138.027 65.5959 138.039 65.6299H166.884C167.583 68.6933 168.115 71.8199 168.471 75H86.627C81.3804 75.0002 77.127 79.2534 77.127 84.5C77.127 89.7466 81.3804 93.9998 86.627 94H168.471C168.115 97.1801 167.583 100.307 166.884 103.37H138.039C138.027 103.404 138.013 103.437 138.001 103.471C138.034 115.788 144.147 126.675 153.497 133.291C138.191 154.897 112.993 169 84.5 169C37.8319 169 0 131.168 0 84.5C0 37.8319 37.8319 0 84.5 0ZM85.6699 29C54.9243 29.0001 30 53.8483 30 84.5C30 115.152 54.9243 140 85.6699 140C109.732 140 130.227 124.78 138.001 103.471L138 103.37H85.0557C74.6341 103.37 66.1855 94.9216 66.1855 84.5C66.1855 74.0784 74.6341 65.6299 85.0557 65.6299H138C138 65.596 138.001 65.5622 138.001 65.5283C130.227 44.2193 109.732 29 85.6699 29ZM246 140H174.63C166.759 140 159.468 137.516 153.497 133.291C159.776 124.428 164.39 114.303 166.884 103.37H246V140ZM310 29C340.376 29 365 53.6243 365 84V140H326V87.5C326 78.3873 318.613 71 309.5 71C300.387 71 293 78.3873 293 87.5V140H255V84C255 53.6243 279.624 29 310 29ZM246 94H168.471C168.82 90.8814 169 87.7117 169 84.5C169 81.2883 168.82 78.1186 168.471 75H246V94ZM246 65.6299H166.884C164.39 54.6968 159.776 44.5712 153.497 35.708C159.468 31.4832 166.759 29 174.63 29H246V65.6299Z" fill="currentColor"/>';
+  var NOW = '9:41', NOWM = 581;
+  var SHOWS = [ ['8:50','Morning Briefing'], ['9:10','Apple Music','m'], ['9:30','Commute Briefing','a'], ['10:40','Midday Recap'], ['11:00','Apple Music','m'], ['12:20','Lunch Recap'] ];
+  var PARTS = [ ['Highway 407',4], ['Local',7], ['Calendar',12], ['Reminders',7] ], ACTIVE = 1, DONE = [1, .86, 0, 0];
+  var SRC = [ ['mail','Mail',1], ['cal','Calendar',1], ['list','Reminders',1], ['road','Traffic',1], ['pin','Local news',1], ['cloud','Weather',0] ];
+  var LINES = [ 'The farmers market on King Street opens at ten this morning.', 'Roadwork on Dundas closes the right lane until noon.', 'Team sync moved to Studio B, same time.' ];
+  var DAY = { a:480, z:720, now:581,
+    events:[ [480,530,'Standup'], [600,640,'Team sync'], [680,720,'Lunch'] ],
+    shows:[ [530,550,'Morning Briefing','s'], [550,570,'Apple Music','m'], [570,600,'Commute Briefing','a'], [640,660,'Midday Recap','s'], [660,680,'Apple Music','m'] ] };
+
+  /* ================= primitives ================= */
+  var P = {
+    mail:'<rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="m4.5 7 7.5 5.5L19.5 7"/>',
+    cal:'<rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+    list:'<path d="M10 7h9.5M10 12h9.5M10 17h9.5"/><circle cx="5.5" cy="7" r="1.3"/><circle cx="5.5" cy="12" r="1.3"/><circle cx="5.5" cy="17" r="1.3"/>',
+    road:'<path d="M8.5 3.5 5 20.5M15.5 3.5l3.5 17M12 5v2.5M12 10.75v2.5M12 16.5V19"/>',
+    pin:'<path d="M12 20.5s6.5-5.6 6.5-11a6.5 6.5 0 0 0-13 0c0 5.4 6.5 11 6.5 11z"/><circle cx="12" cy="9.5" r="2.2"/>',
+    cloud:'<path d="M7.2 18.5h9.6a4 4 0 0 0 .6-7.95 5.8 5.8 0 0 0-11.1.9 3.6 3.6 0 0 0 .9 7.05z"/>',
+    spk:'<rect x="6" y="3" width="12" height="18" rx="3.5"/><circle cx="12" cy="14" r="3"/><circle cx="12" cy="7.5" r=".9"/>',
+    voice:'<rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5"/>',
+    play:'<path d="M8 5.6v12.8a1 1 0 0 0 1.5.86l10.2-6.4a1 1 0 0 0 0-1.72L9.5 4.74A1 1 0 0 0 8 5.6z" fill="currentColor" stroke="none"/>'
+  };
+  function ic(n, s){ s = s || 24; return '<svg class="ic" viewBox="0 0 24 24" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + P[n] + '</svg>'; }
+  function logo(w){ return '<svg class="logo" viewBox="0 0 366 169" style="width:' + (w || 32) + 'px" aria-hidden="true">' + LOGO + '</svg>'; }
+  function led(n, lit){ var h = '<span class="ledbar">'; for (var i = 0; i < n; i++) h += '<i' + (i < lit ? ' class="on"' : '') + '></i>'; return h + '</span>'; }
+  function cv(o, css){ return '<div class="cvw" style="' + (css || '') + '"><canvas data-o=\'' + JSON.stringify(o) + '\'></canvas></div>'; }
+  function hm(m){ var h = Math.floor(m / 60), mm = m % 60; return h + ':' + (mm < 10 ? '0' : '') + mm; }
+  function ruler(o){
+    var h = '', v = o.dir === 'v', g = o.len / (o.n - 1);
+    for (var i = 0; i < o.n; i++) {
+      var p = (i * g).toFixed(2), l = i % o.maj === o.off ? o.long : o.short;
+      h += v ? '<line x1="0" x2="' + l + '" y1="' + p + '" y2="' + p + '"/>' : '<line y1="0" y2="' + l + '" x1="' + p + '" x2="' + p + '"/>';
+    }
+    return '<svg class="rl" style="' + (o.css || '') + '" width="' + (v ? o.long : o.len) + '" height="' + (v ? o.len : o.long) + '" stroke="' + (o.c || '#3A3A39') + '" stroke-width="2" stroke-linecap="round">' + h + '</svg>';
+  }
+  function bars(r){ return PARTS.map(function(p, i){ return '<b class="' + (i < ACTIVE ? 'd' : i === ACTIVE ? 'a' : '') + '" style="flex:' + p[1] + (r ? ';border-radius:' + r + 'px' : '') + '"></b>'; }).join(''); }
+  function legend(){ return '<div class="lgd" data-lgd style="height:50px">' + PARTS.map(function(p, i){ return '<div class="' + (i === ACTIVE ? 'a' : '') + '" data-f="' + p[1] + '"><div class="n"><i></i>' + p[0] + '</div><div class="m">' + p[1] + 'm</div></div>'; }).join('') + '</div>'; }
+  function transcript(o){ return '<div class="tx" data-tx=\'' + JSON.stringify(o) + '\'></div>'; }
+  function mins(t){ var p = t.split(':'); return +p[0] * 60 + +p[1]; }
+  function nowFrac(rows, cur){ var a = mins(rows[cur][0]), b = rows[cur + 1] ? mins(rows[cur + 1][0]) : a + 30; return Math.max(.36, Math.min(.88, (NOWM - a) / (b - a))); }
+  function dialBody(o){
+    var rows = o.rows, n = rows.length, H = o.h, gap = H / n, h = '';
+    rows.forEach(function(s, i){
+      var y = gap * (i + .5), a = s[2] === 'a', m = s[2] === 'm';
+      var nc = a ? 'var(--ink)' : m ? 'var(--dim)' : 'var(--grey)', fw = a ? ';font-weight:500' : '';
+      if (o.stack) h += '<div style="position:absolute;left:' + o.x + 'px;right:0;top:' + (y - o.ts - o.ns * .9 - 2) + 'px"><div style="font-size:' + o.ts + 'px;color:' + (a ? 'var(--ink)' : 'var(--dim)') + '">' + s[0] + '</div><div class="one" style="font-size:' + o.ns + 'px;margin-top:3px;color:' + nc + fw + '">' + s[1] + '</div></div>';
+      else h += '<div class="row" style="position:absolute;left:' + o.x + 'px;right:0;top:' + (y - o.ns * .65) + 'px;height:' + (o.ns * 1.3) + 'px"><span style="font-size:' + o.ts + 'px;color:' + (a ? 'var(--ink)' : 'var(--dim)') + '">' + s[0] + '</span><span class="lead" style="margin:0 ' + o.lm + 'px"></span><span class="one" style="font-size:' + o.ns + 'px;letter-spacing:-.015em;color:' + nc + fw + '">' + s[1] + '</span></div>';
+    });
+    var cur = 0; rows.forEach(function(s, i){ if (s[2] === 'a') cur = i; });
+    return '<div class="fade" style="position:relative;flex:1">' +
+      ruler({dir:'v', len:H - gap / 3, n:n * 3, maj:3, off:1, long:o.tl, short:o.tl / 2, css:'left:0;top:' + (gap / 6) + 'px'}) + h +
+      '<div class="nowline" style="top:' + (gap * (cur + .5 + nowFrac(rows, cur)) - 1) + 'px;left:' + o.nl + 'px;right:' + o.nr + 'px"></div></div>';
+  }
+
+  /* ================= Home Screen widgets (as in the template) ================= */
+  var U = 290, G = 32, K = 290 / 220;
+  var SZ = { s:[1,1], m:[2,1], l:[2,2], xl:[4,2] };
+  function outer(sz){ var c = SZ[sz]; return [c[0] * U + (c[0] - 1) * G, c[1] * U + (c[1] - 1) * G]; }
+  function dims(sz){ var d = outer(sz); return [d[0] / K, d[1] / K]; }
+  var W = {
+    ctl: function(){
+      var b = function(bg, fg, inner){ return '<span class="btn" style="background:' + bg + ';color:' + fg + '">' + inner + '</span>'; };
+      return ['bare', '<div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:9px;width:100%;height:100%">' +
+        b('var(--red)', '#232323', ic('play', 38)) + b('var(--dimple)', '#232323', ic('voice', 34)) +
+        b('var(--key)', 'var(--soft)', ic('spk', 34)) + b('var(--key)', 'var(--soft)', logo(54)) + '</div>'];
+    },
+    level: function(){
+      var sc = ['-48', '-24', '-12', '-6', '0'];
+      return ['scr',
+        '<div class="row" style="gap:14px"><span class="tile" style="width:50px;height:50px">' + ic('spk', 22) + '</span><div class="col"><span class="one" style="font-size:19px;letter-spacing:-.015em">Google Home Mini</span><span class="k" style="font-size:14px;margin-top:3px">Connected</span></div><div class="sp"></div><span class="lamp on"></span></div>' +
+        '<div class="sp"></div>' +
+        '<div class="row" style="margin:0 0 10px 26px"><span class="k" style="font-size:13px">Output level</span></div>' +
+        '<div class="row" style="gap:14px"><span class="k" style="width:12px;font-size:13px">L</span>' + cv({kind:'meter', ch:0}, 'flex:1;height:20px') + '</div>' +
+        '<div class="row" style="gap:14px;margin-top:8px"><span class="k" style="width:12px;font-size:13px">R</span>' + cv({kind:'meter', ch:1}, 'flex:1;height:20px') + '</div>' +
+        '<div style="position:relative;height:16px;margin:10px 0 0 26px">' + sc.map(function(v, i){ return '<span class="k" style="position:absolute;top:0;left:' + (i / 4 * 100) + '%;transform:translateX(' + (i === 0 ? '0' : i === 4 ? '-100%' : '-50%') + ');font-size:13px">' + v + '</span>'; }).join('') + '</div>'];
+    },
+    dial: function(sz){
+      var d = dims(sz), H = d[1] - 48;
+      if (sz === 's') return ['scr', dialBody({rows:SHOWS.slice(2, 4), h:H, stack:1, x:28, ts:15, ns:16, tl:14, nl:0, nr:-24})];
+      if (sz === 'm') return ['scr', dialBody({rows:SHOWS.slice(1, 4), h:H, x:36, ts:15, ns:17, lm:12, tl:16, nl:0, nr:-24})];
+      return ['scr', dialBody({rows:SHOWS, h:H, x:36, ts:15, ns:17, lm:12, tl:16, nl:0, nr:-24})];
+    },
+    prog: function(sz){
+      if (sz === 's') return ['scr',
+        '<span class="k">Now Playing</span><div class="pgbar" style="height:26px;gap:4px;margin-top:16px">' + bars(8) + '</div><div class="sp"></div>' +
+        '<div class="t" style="font-size:28px">Local</div><div class="row" style="margin-top:6px"><span class="k">7m</span><div class="sp"></div><span class="k">2 of 4</span></div>'];
+      var head = '<div class="row"><span style="font-size:15px;font-weight:500;white-space:nowrap">Now Playing</span><span class="k one" style="font-size:15px;margin-left:8px">Commute Briefing</span><div class="sp"></div><span class="k" style="font-size:15px">Edit</span></div>';
+      if (sz === 'm') return ['scr', head + '<div class="pgbar" style="margin-top:16px">' + bars() + '</div><div class="sp"></div>' + legend()];
+      var rows = '';
+      PARTS.forEach(function(p, i){
+        var a = i === ACTIVE;
+        rows += '<div class="row" style="height:46px;gap:14px"><span style="font-size:17px;width:124px;color:' + (a ? 'var(--ink)' : i < ACTIVE ? 'var(--grey)' : 'var(--soft)') + '">' + p[0] + '</span>' +
+          '<div class="sp">' + led(40, Math.round(40 * DONE[i])) + '</div><span style="font-size:17px;width:36px;text-align:right;color:' + (a ? 'var(--ink)' : 'var(--grey)') + '">' + p[1] + 'm</span></div>';
+      });
+      return ['scr', head + '<div class="pgbar" style="margin-top:16px">' + bars() + '</div><div style="margin-top:14px">' + legend() + '</div><div class="sp"></div>' + rows];
+    },
+    src: function(sz){
+      if (sz === 's') return ['key',
+        '<div style="display:grid;grid-template-columns:repeat(2,52px);gap:10px">' + SRC.slice(0, 4).map(function(s){ return '<span class="tile" style="width:52px;height:52px">' + ic(s[0], 22) + '</span>'; }).join('') + '</div><div class="sp"></div>' +
+        '<div class="row" style="gap:8px"><span class="lamp on"></span><span class="k">5 connected</span></div>'];
+      if (sz === 'm') return ['key',
+        '<div class="row" style="flex:1;align-items:stretch;gap:28px">' +
+          '<div class="col" style="flex:1.5"><div class="row" style="gap:8px;align-items:flex-start">' + SRC.slice(0, 4).map(function(s){ return '<div class="col" style="width:50px;align-items:center;gap:8px"><span class="tile" style="width:50px;height:50px">' + ic(s[0], 22) + '</span><span class="k" style="font-size:11px;white-space:nowrap">' + s[1] + '</span></div>'; }).join('') + '</div><div class="sp"></div>' +
+            '<div class="row"><span class="k" style="font-size:14px">App Connector</span><div class="sp"></div><span style="font-size:14px">Connected</span></div></div>' +
+          '<div class="col" style="flex:1"><div class="row" style="gap:12px"><span class="tile" style="width:50px;height:50px">' + ic('spk', 22) + '</span><div class="col"><span class="one" style="font-size:15px">Home Mini</span><span class="k" style="font-size:12px;margin-top:2px">6313DDAZMK</span></div></div><div class="sp"></div>' +
+            '<div class="row"><span class="k" style="font-size:14px">Speaker</span><div class="sp"></div><span style="font-size:14px">Connected</span></div></div></div>'];
+      var rows = '';
+      SRC.forEach(function(s){
+        rows += '<div class="row" style="gap:14px;height:62px"><span class="tile" style="width:48px;height:48px;color:' + (s[2] ? 'var(--ink)' : 'var(--dim)') + '">' + ic(s[0], 21) + '</span>' +
+          '<span style="font-size:19px;color:' + (s[2] ? 'var(--ink)' : 'var(--dim)') + '">' + s[1] + '</span><div class="sp"></div><span class="lamp' + (s[2] ? ' on' : '') + '"></span></div>';
+      });
+      return ['key', '<div class="col" style="flex:1;justify-content:space-between">' + rows + '</div>'];
+    },
+    mode: function(sz){
+      var d = dims(sz), L = d[0] - 48, h = '';
+      if (sz === 's') {
+        return ['scr', '<span class="k">Radio</span><div class="sp"></div>' +
+          '<div style="text-align:center;font-size:30px;letter-spacing:-.03em">Hourly</div>' +
+          '<div style="position:relative;height:22px;margin-top:14px">' +
+            '<div class="dialfade" style="position:absolute;inset:0">' + ruler({dir:'h', len:L, n:23, maj:4, off:3, long:22, short:11, c:'#55554F'}) + '</div>' +
+            '<span class="needle" style="left:' + (L / 2 - 1) + 'px;top:-6px;height:30px"></span></div>' +
+          '<div class="row" style="margin-top:10px"><span class="k" style="font-size:13px">Daily</span><div class="sp"></div><span class="k" style="font-size:13px">Weekly</span></div>'];
+      }
+      ['Daily Radio', 'Hourly Radio', 'Weekly Radio'].forEach(function(n, i){ h += '<span class="lb' + (i === 1 ? ' a' : '') + '" style="left:' + ((i + .5) / 3 * L) + 'px;font-size:21px">' + n + '</span>'; });
+      return ['scr', '<div class="sp"></div><div style="position:relative;height:84px">' + h +
+        '<div style="position:absolute;left:0;bottom:0;height:24px">' + ruler({dir:'h', len:L, n:43, maj:7, off:3, long:24, short:12}) + '</div>' +
+        '<span class="needle" style="left:' + (L / 2 - 1) + 'px;bottom:-4px;height:32px"></span></div><div class="sp"></div>'];
+    },
+    day: function(sz){
+      var d = dims(sz), L = d[0] - 48, tall = sz !== 'm', A = tall ? DAY.a : 540, Z = tall ? DAY.z : 680;
+      var lane = tall ? Math.floor((d[1] - 48 - 44 - 30 - 12) / 2) : 70, ev = '', sh = '';
+      function x(m){ return (Math.max(A, Math.min(Z, m)) - A) / (Z - A) * L; }
+      var al = tall ? 'flex-start;padding-top:16px;white-space:normal;line-height:1.2' : 'center;white-space:nowrap';
+      function block(a, z, label, st, cls, fs){
+        if (z <= A || a >= Z) return '';
+        return '<div' + (tall ? '' : ' data-fit') + ' class="' + (cls || '') + '" style="position:absolute;left:' + x(a) + 'px;width:' + (x(z) - x(a) - 4) + 'px;top:0;bottom:0;border-radius:14px;padding:0 10px;display:flex;align-items:' + al + ';font-size:' + fs + 'px;overflow:hidden;' + st + '"><span>' + label + '</span></div>';
+      }
+      DAY.events.forEach(function(e){ ev += block(e[0], e[1], e[2], 'background:#2B2B2A;color:var(--soft)', '', tall ? 15 : 14); });
+      DAY.shows.forEach(function(s){
+        var st = s[3] === 'a' ? 'background:var(--ink);color:#0B0B0B;box-shadow:0 0 22px rgba(255,255,255,.18)' : s[3] === 'm' ? 'color:#8B8B88' : 'background:#ADADAA;color:#0B0B0B';
+        var name = s[3] === 'm' ? 'Music' : tall ? s[2] : s[2].split(' ')[0];
+        sh += block(s[0], s[1], name, st, s[3] === 'm' ? 'hatch lit' : '', 14);
+      });
+      var labels = '';
+      for (var m = A; m <= Z; m += 60) labels += '<span class="k" style="color:var(--soft);position:absolute;left:' + x(m) + 'px;top:0;transform:translateX(' + (m === A ? '0' : m === Z ? '-100%' : '-50%') + ');font-size:13px">' + hm(m) + '</span>';
+      return ['scr', (tall ? '<div class="row" style="height:22px;margin-bottom:22px"><span class="k">Today</span><div class="sp"></div><span class="k" style="color:var(--ink)">' + NOW + '</span></div>' : '') +
+        '<div style="position:relative;flex:1">' +
+        '<span class="needle" style="left:' + (x(DAY.now) - 1) + 'px;top:-8px;height:' + (lane * 2 + 28) + 'px"></span>' +
+        '<div style="position:absolute;left:0;right:0;top:0;height:' + lane + 'px">' + ev + '</div>' +
+        '<div style="position:absolute;left:0;right:0;top:' + (lane + 12) + 'px;height:' + lane + 'px">' + sh + '</div>' +
+        '<div style="position:absolute;left:0;right:0;bottom:0;height:18px">' + labels + '</div></div>'];
+    }
+  };
+
+  /* ================= board pieces, placed by x and y so either board can use them ================= */
+  function put(name, sz, x, y){
+    var o = outer(sz), d = dims(sz), out = W[name](sz);
+    return '<div class="w ' + out[0] + '" data-w="' + name + '-' + sz + '" style="left:' + x + 'px;top:' + y + 'px;width:' + o[0] + 'px;height:' + o[1] + 'px">' +
+      '<div class="wi" data-k="' + K + '" style="width:' + d[0] + 'px;height:' + d[1] + 'px;transform:scale(' + K + ')">' + out[1] + '</div></div>';
+  }
+  function timeBlock(x, y, w, h){
+    return '<div class="col" style="position:absolute;left:' + x + 'px;top:' + y + 'px;width:' + w + 'px;height:' + h + 'px;align-items:center;justify-content:center;padding-top:18px">' +
+      '<div class="row sys" style="gap:10px;font-size:25px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;line-height:1"><span>Wed, March 11</span><span class="dot" style="margin-left:4px"></span><span>Commute 19m</span></div>' +
+      '<div class="sys" style="font-size:170px;font-weight:600;letter-spacing:-.035em;line-height:1;margin-top:0px">' + NOW + '</div></div>';
+  }
+  // compact on top; minimal under it, as a pill beside the detached circle
+  function islands(cx, y){
+    return '<div class="isl" style="left:' + (cx - 172) + 'px;top:' + y + 'px;width:344px;height:78px;border-radius:39px;padding:0 28px;justify-content:space-between">' + logo(36) + cv({mode:'island', hx:1, step:5, win:120}, 'width:84px;height:42px') + '</div>' +
+      '<div class="isl" style="left:' + (cx - 172) + 'px;top:' + (y + 98) + 'px;width:250px;height:78px;border-radius:39px"></div>' +
+      '<div class="isl" style="left:' + (cx + 94) + 'px;top:' + (y + 98) + 'px;width:78px;height:78px;border-radius:50%;justify-content:center">' + cv({mode:'island', hx:1, step:5, win:42}, 'width:42px;height:36px') + '</div>';
+  }
+  // the red panel the island opens into, drawn at app width (390) and scaled to the slot it is given
+  function nowPanel(x, y, w, h){
+    var k = w / 390, ih = h / k;
+    var sig = '<svg width="18" height="12" viewBox="0 0 18 12" fill="#0B0B0B"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="6" width="3" height="6" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>';
+    var wifi = '<svg width="17" height="12" viewBox="0 0 17 12" fill="#0B0B0B"><path d="M8.5 2.2c2.4 0 4.6.9 6.3 2.5l1.2-1.3A10.6 10.6 0 0 0 8.5.4 10.6 10.6 0 0 0 1 3.4l1.2 1.3a9 9 0 0 1 6.3-2.5zm0 3.6c1.4 0 2.7.5 3.7 1.4l1.2-1.3a7.2 7.2 0 0 0-9.8 0l1.2 1.3c1-.9 2.3-1.4 3.7-1.4zm0 3.5c-.5 0-1 .2-1.3.5l1.3 1.4 1.3-1.4c-.3-.3-.8-.5-1.3-.5z"/></svg>';
+    var bat = '<svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#0B0B0B" stroke-opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2" fill="#0B0B0B"/><path d="M25 4.5v4a2 2 0 0 0 0-4z" fill="#0B0B0B" fill-opacity=".4"/></svg>';
+    return '<div class="w live" data-w="island-open" style="left:' + x + 'px;top:' + y + 'px;width:' + w + 'px;height:' + h + 'px;border-radius:' + (46 * k) + 'px ' + (46 * k) + 'px ' + (42 * k) + 'px ' + (42 * k) + 'px">' +
+      '<div class="wi" data-k="' + k + '" style="width:390px;height:' + ih + 'px;transform:scale(' + k + ');padding:0 24px 14px">' +
+        '<div class="row sys" style="height:56px;flex-shrink:0;margin:0 -6px 0 14px;color:#0B0B0B;font-size:16px;font-weight:600;letter-spacing:-.01em"><span>' + NOW + '</span><div class="sp"></div>' +
+          '<span style="position:absolute;left:50%;top:10px;transform:translateX(-50%);width:124px;height:36px;border-radius:18px;background:#000"></span>' +
+          '<div class="row" style="gap:6px">' + sig + wifi + bat + '</div></div>' +
+        '<div class="one" style="font-size:24px;letter-spacing:-.03em;margin-top:6px">Commute Briefing</div>' +
+        transcript({size:22, lines:1, mt:4}) +
+        cv({mode:'live', hx:.5, win:150}, 'height:52px;margin:8px -4px 0') +
+        '<div style="font-size:12px;color:rgba(11,11,11,.55);margin-top:4px">19 minutes remaining</div>' +
+      '</div></div>';
+  }
+
+  /* ================= the two boards ================= */
+  var M = 72, LW = 488, GX = M + LW + G, GY = M;
+  function cell(c, r){ return [GX + (c - 1) * (U + G), GY + (r - 1) * (U + G)]; }
+  function rowY(r){ return GY + (r - 1) * (U + G); }
+  var BOARDS = {
+    // 16:9: the lock screen column on the left, eight widgets on a 4 x 3 grid on the right (the template's board)
+    wide: { w:1920, h:1080, html:function(){
+      var items = [ ['dial','m',1,1], ['prog','s',3,1], ['ctl','s',4,1], ['level','m',1,2], ['dial','s',3,2], ['mode','s',4,2], ['src','m',1,3], ['day','m',3,3] ];
+      return timeBlock(M, rowY(1), LW, U) + islands(M + LW / 2, rowY(2) + 57) + nowPanel(M, rowY(3), LW, U) +
+        items.map(function(it){ var p = cell(it[2], it[3]); return put(it[0], it[1], p[0], p[1]); }).join('');
+    } },
+    // 3:4: the island, the Live Activity and the lineup, at the same widget sizes; the rest is left out
+    tall: { w:684, h:912, html:function(){
+      // islands 176 tall, the panel 340, the lineup 290, 32 between each: 870 of the 912, centred
+      var x = 36, cw = 612, y = 21;
+      return islands(342, y) + nowPanel(x, y + 208, cw, 340) + put('dial', 'm', x, y + 580);
+    } }
+  };
+
+  /* ================= build, fit, draw ================= */
+  var S = 1, dpr = 1, board = null, canv = [], txs = [];
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function build(name){
+    board = BOARDS[name];
+    stage.style.width = board.w + 'px'; stage.style.height = board.h + 'px';
+    stage.innerHTML = board.html();
+    canv = [].slice.call(stage.querySelectorAll('canvas')).map(function(c){ return { el:c, o:JSON.parse(c.dataset.o) }; });
+    txs = [].slice.call(stage.querySelectorAll('[data-tx]')).map(function(el){ return { el:el, o:JSON.parse(el.dataset.tx) }; });
+    txs.forEach(function(x){ setLine(x, 0); if (reduce) [].forEach.call(x.spans, function(s){ s.className = ''; }); });
+  }
+  function layoutLegends(){
+    [].forEach.call(stage.querySelectorAll('[data-lgd]'), function(lg){
+      var W0 = lg.clientWidth, items = [].slice.call(lg.children), tot = 0, acc = 0, i;
+      items.forEach(function(el){ tot += +el.dataset.f; });
+      var free = W0 - 6 * (items.length - 1);
+      var want = items.map(function(el, k){ var x = acc / tot * free + k * 6; acc += +el.dataset.f; return x; });
+      var ws = items.map(function(el){ return el.offsetWidth; }), pos = want.slice();
+      for (i = 1; i < pos.length; i++) pos[i] = Math.max(pos[i], pos[i - 1] + ws[i - 1] + 12);
+      var last = pos.length - 1;
+      if (pos[last] + ws[last] > W0) pos[last] = W0 - ws[last];
+      for (i = last - 1; i >= 0; i--) pos[i] = Math.min(pos[i], pos[i + 1] - 12 - ws[i]);
+      items.forEach(function(el, k){ el.style.left = Math.max(0, pos[k]) + 'px'; });
+    });
+    [].forEach.call(stage.querySelectorAll('[data-fit]'), function(b){ var s = b.firstChild; s.style.visibility = s.offsetWidth + 20 <= b.clientWidth ? '' : 'hidden'; });
+  }
+  /* the column decides the board: under 760px, where the 16:9 one would shrink its small labels past reading, it is the 3:4 one, held to a phone's width on a tablet */
+  function fit(){
+    var avail = host.parentNode.clientWidth; if (!avail) return;
+    var name = avail < 760 ? 'tall' : 'wide';
+    if (!board || board !== BOARDS[name]) { host.classList.toggle('tall', name === 'tall'); build(name); }
+    S = host.clientWidth / board.w;
+    stage.style.transform = 'scale(' + S + ')';
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    layoutLegends();
+    canv.forEach(size);
+    canv.forEach(function(c){ wave(c, performance.now()); });
+  }
+
+  /* ================= waveforms (as in the template) ================= */
+  function size(c){
+    var p = c.el.parentNode, w = p.offsetWidth, h = p.offsetHeight, face = c.el.closest('[data-k]');
+    c.k = face ? +face.dataset.k : 1;
+    c.w = w; c.h = h; c.el.style.width = w + 'px'; c.el.style.height = h + 'px';
+    c.el.width = Math.max(1, Math.round(w * S * c.k * dpr)); c.el.height = Math.max(1, Math.round(h * S * c.k * dpr));
+    c.ctx = c.el.getContext('2d');
+  }
+  function hash(i){ var x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+  function pill(ctx, x, y, w, h, r){ if (ctx.roundRect) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r == null ? Math.min(w, h) / 2 : r); ctx.fill(); } else ctx.fillRect(x, y, w, h); }
+  function meter(c, t){
+    var ctx = c.ctx, w = c.w, h = c.h, k = S * c.k * dpr, pitch = 7, seg = 5, n = Math.max(1, Math.floor((w + 2) / pitch));
+    ctx.setTransform(k, 0, 0, k, 0, 0); ctx.clearRect(0, 0, w, h);
+    var target = reduce ? .62 - c.o.ch * .2 : .58 + .2 * Math.sin(t / 900 + c.o.ch * 1.7) + .16 * (hash(Math.floor(t / 90) + c.o.ch * 31) - .5);
+    c.lv = (c.lv || target) + (target - (c.lv || target)) * .35;
+    c.pk = Math.max((c.pk || 0) - .004, c.lv);
+    var lit = Math.round(n * Math.max(0, Math.min(1, c.lv))), pk = Math.min(n - 1, Math.round(n * c.pk));
+    for (var i = 0; i < n; i++) { ctx.fillStyle = i < lit ? '#F0F0ED' : i === pk ? '#8B8B88' : '#252524'; pill(ctx, i * pitch, 0, seg, h, 2); }
+  }
+  function wave(c, t){
+    if (!c.ctx) return;
+    if (c.o.kind === 'meter') return meter(c, t);
+    var ctx = c.ctx, o = c.o, w = c.w, h = c.h, k = S * c.k * dpr, step = o.step || 6, mid = h / 2, m = o.mode;
+    var ink = m === 'live' ? '#0B0B0B' : m === 'island' ? '#E8322B' : '#F0F0ED';
+    var dim = m === 'live' ? 'rgba(11,11,11,.3)' : '#3A3A39', head = m === 'live' ? '#F7F7F4' : '#E8322B';
+    if (reduce) t = 0;
+    ctx.setTransform(k, 0, 0, k, 0, 0); ctx.clearRect(0, 0, w, h);
+    var hx = Math.round(w * o.hx), off = t * .022, sh = off % step, base = Math.floor(off / step), win = o.win || 150, bw = step > 6 ? 3 : 2;
+    for (var x = -step; x < w + step; x += step) {
+      var px = x - sh, i = base + Math.round(x / step);
+      if (px > hx - win && px < hx - 2) {
+        var near = 1 - (hx - px) / win, amp = h * .44 * (.25 + .75 * hash(i)) * (.35 + .65 * Math.min(1, near * 1.6));
+        ctx.fillStyle = ink; pill(ctx, px - bw / 2, mid - amp, bw, amp * 2);
+      } else if (m !== 'island' && (px >= hx + 4 || o.dots || m === 'live')) { ctx.fillStyle = dim; ctx.fillRect(px - 1, mid - 1, 2, 2); }
+    }
+    if (m === 'island') return;
+    ctx.fillStyle = head; ctx.fillRect(hx - 1, h * .1, 2, h * .8);
+    ctx.beginPath(); ctx.arc(hx, h * .1, step > 6 ? 6 : 3.5, 0, 7); ctx.fill();
+  }
+
+  /* ================= the transcript (as in the template) ================= */
+  function setLine(x, li){
+    var o = x.o, words = LINES[li].split(' '), lh = 1.2;
+    x.line = li; x.word = 0; x.hold = 0;
+    x.el.innerHTML = '<div style="font-size:' + o.size + 'px;line-height:' + lh + ';letter-spacing:-.025em;margin-top:' + o.mt + 'px;height:' + Math.ceil(o.size * lh * o.lines) + 'px;overflow:hidden' + (o.lines === 1 ? ';white-space:nowrap;text-overflow:ellipsis' : '') + '">' +
+      words.map(function(w){ return '<span class="f">' + w + '</span>'; }).join(' ') + '</div>';
+    x.spans = x.el.querySelectorAll('span.f');
+  }
+
+  /* ================= one loop, only while the board is on screen ================= */
+  var seen = false, raf = 0, last = 0, lastWord = 0;
+  function frame(now){
+    raf = 0;
+    if (now - last >= 33) {
+      last = now;
+      canv.forEach(function(c){ wave(c, now); });
+      if (now - lastWord > 260) {
+        lastWord = now;
+        txs.forEach(function(x){
+          if (x.word < x.spans.length) { x.spans[x.word].className = ''; x.word++; }
+          else if (++x.hold > 7) setLine(x, (x.line + 1) % LINES.length);
+        });
+      }
+    }
+    tick();
+  }
+  function tick(){ if (!raf && seen && !document.hidden && !reduce) raf = requestAnimationFrame(frame); }
+  if ('IntersectionObserver' in window) new IntersectionObserver(function(es){ seen = es[0].isIntersecting; tick(); }, { threshold:.05 }).observe(host);
+  else seen = true;
+  document.addEventListener('visibilitychange', tick);
+
+  var rt = 0;
+  if ('ResizeObserver' in window) new ResizeObserver(function(){ cancelAnimationFrame(rt); rt = requestAnimationFrame(fit); }).observe(host.parentNode);
+  else window.addEventListener('resize', function(){ cancelAnimationFrame(rt); rt = requestAnimationFrame(fit); });
+  fit(); tick();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+})();
 </script>
 </body>
 </html>
