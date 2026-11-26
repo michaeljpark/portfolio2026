@@ -51,7 +51,7 @@ const PROJECTS = [
     problem: "Early-career adults can't read their own spending. Bank apps already collect the data, but keep it behind a login, so it never becomes self-understanding.",
     kpi: [{ v: "8", l: "Screens audited, WCAG 2.2 AA" }, { v: "224", l: "Text layers measured for contrast" }, { v: "105", l: "Below 4.5:1 before the redesign" }],
     tldr: "An iOS banking app that puts spending on the Home Screen, Lock Screen and Dynamic Island, readable without opening the app, and audited to WCAG 2.2 AA.",
-    href: BASE + "finboard.html"
+    href: "finboard.html"
   },
   {
     title: "TokenTrust", pitch: "AI transparency and user data governance", year: "2026",
