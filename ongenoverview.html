@@ -3097,18 +3097,18 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
     // home: the dial rolls in and the program card builds, then a show plays, goes home with the red panel live, and stops
     var STEPS = [
       [550, function(){ A.prepare(); A.setVoice(false); if (A.rewind) A.rewind(); A.introDial(); show(dialCv); }],
-      [1500, function(){ introProgram.play(); }],
-      [4200, function(){ SR && SR.play(); }],
-      [5700, function(){ introKeys.play(); }],
-      [7600, function(){ A.openPlayer(); A.play(); }],
-      [13200, function(){ A.home(); }],
-      [18200, function(){ A.pause(); }]
-    ], CYCLE = 20500;
+      [3200, function(){ introProgram.play(); }],
+      [5900, function(){ SR && SR.play(); }],
+      [7400, function(){ introKeys.play(); }],
+      [9600, function(){ A.openPlayer(); A.play(); }],
+      [15200, function(){ A.home(); }],
+      [20200, function(){ A.pause(); }]
+    ], CYCLE = 22800;
     // the camera's moments: when each starts, which part of the phone it frames
-    var FOCUS = [[0, 'screen'], [1300, 'program'], [4000, 'source'], [7400, 'screen'], [13100, 'now'], [18000, '']];
+    var FOCUS = [[0, 'screen'], [3000, 'program'], [5700, 'source'], [9400, 'screen'], [15350, 'now'], [20350, '']];
     var rail = document.getElementById('heroRail'), railB = rail ? [].slice.call(rail.querySelectorAll('button')) : [], heroNow = document.getElementById('heroNow');
     function focus(i, into){
-      HERO.key = FOCUS[i][1]; HERO.i = i;
+      HERO.key = FOCUS[i][1]; HERO.i = i; card(HERO.key);
       var end = i < FOCUS.length - 1 ? FOCUS[i + 1][0] : CYCLE, len = end - FOCUS[i][0], done = Math.max(0, into || 0);
       railB.forEach(function(b, j){
         b.classList.toggle('on', j === i); b.classList.toggle('done', j < i);
@@ -3141,14 +3141,15 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
     }
     railB.forEach(function(b, i){ b.addEventListener('click', function(){
       if (on) cycle(FOCUS[i][0] + 1);
-      else { HERO.key = FOCUS[i][1]; railB.forEach(function(x, j){ x.classList.toggle('on', j === i); }); wake(); }
+      else { HERO.key = FOCUS[i][1]; card(HERO.key); railB.forEach(function(x, j){ x.classList.toggle('on', j === i); }); wake(); }
     }); });
+    function card(k){ fit.classList.toggle('carded', !!k); fit.setAttribute('data-card', k || ''); }
     function want(){ return !reduce && !document.hidden && !howView.hidden && activeSlot && activeSlot.ch.id === 'ch-intro'; }
     return {
       sync: function(){
         var w = !!want();
         if (w && !on) { on = true; cycle(0); }
-        else if (!w && on) { on = false; clear(); settle(); HERO.key = ''; }
+        else if (!w && on) { on = false; clear(); settle(); HERO.key = ''; if (activeSlot && activeSlot.ch.id === 'ch-intro') card(''); }
       }
     };
   })();
