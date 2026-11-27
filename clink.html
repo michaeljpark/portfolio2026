@@ -66,6 +66,9 @@ html[data-theme="dark"]{
   color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+/* line breaks on phones: headings balance their lines so none ends on a lone word, and body text avoids a one-word last line */
+h1,h2,h3,h4{text-wrap:balance}
+p,li,dd,figcaption{text-wrap:pretty}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--page)}
 [id]{scroll-margin-top:84px}
 body{font-family:var(--font);background:var(--page);color:var(--ink);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;transition:background .3s,color .3s}
@@ -220,7 +223,9 @@ html[data-theme="dark"] .theme svg{transform:rotate(180deg)}
 .team-list .me .av{background:var(--yellow);color:var(--marker);box-shadow:inset 0 0 0 1.5px var(--marker)}
 .team-list b{display:block;font-size:16px;font-weight:600;letter-spacing:-.01em}
 .team-list span{display:block;font-size:14px;color:var(--ink-3)}
-.team-list .you{margin-left:auto;font-style:normal;font-size:12.5px;font-weight:500;padding:3px 10px;border-radius:999px;background:var(--s2);color:var(--ink-2)}
+/* on a phone the role tag drops under the name, to the right, instead of squeezing it */
+@media (max-width:420px){.team-list li{flex-wrap:wrap}.team-list li>div{flex:1 1 160px;min-width:0}}
+.team-list .you{flex:none;white-space:nowrap;margin-left:auto;font-style:normal;font-size:12.5px;font-weight:500;padding:3px 10px;border-radius:999px;background:var(--s2);color:var(--ink-2)}
 
 /* the brief */
 .brief{font-size:clamp(25px,2.6vw,36px);line-height:1.22;letter-spacing:-.028em;font-weight:600;max-width:26ch}
@@ -565,7 +570,7 @@ html[data-theme="dark"] .post .pk.bug{background:rgba(232,80,60,.2);color:#F4ABA
       </div>
     </div>
     <dl class="facts">
-      <div><dt>Role</dt><dd>Problem definition lead, interaction design and full-stack development</dd></div>
+      <div><dt>Role</dt><dd>Problem definition lead, interaction design and full-&#8288;stack development</dd></div>
       <div><dt>Team</dt><dd>CNPT, with a teammate on design review and feedback</dd></div>
       <div><dt>Timeline</dt><dd>2026 to 2027, incubating at CNPT</dd></div>
       <div><dt>Status</dt><dd>Closed beta, 20+ active users</dd></div>
@@ -617,7 +622,7 @@ html[data-theme="dark"] .post .pk.bug{background:rgba(232,80,60,.2);color:#F4ABA
       <div class="subhead"><span class="no">02</span><h3>Who did what</h3><p>Lead and review</p></div>
       <p class="body-text small">I led the problem definition and built the product end to end, so the product decision and its implementation have to agree in one place, which is most of what the technical manager role comes down to. A teammate reviewed the work as it went, auditing the design and the feedback that came back from users.</p>
       <ul class="team-list">
-        <li class="me"><span class="av">MP</span><div><b>Michael Joongmin Park</b><span>Problem definition, interaction design, full-stack development</span></div><em class="you">Product Lead</em></li>
+        <li class="me"><span class="av">MP</span><div><b>Michael Joongmin Park</b><span>Problem definition, interaction design, full-&#8288;stack development</span></div><em class="you">Product Lead</em></li>
         <li><span class="av"><svg class="fi" aria-hidden="true"><use href="#cl-user-round"/></svg></span><div><b>A teammate</b><span>Review: design audit and feedback</span></div></li>
       </ul>
     </div>
@@ -849,10 +854,10 @@ html[data-theme="dark"] .post .pk.bug{background:rgba(232,80,60,.2);color:#F4ABA
       <div class="film board">
         <video controls playsinline preload="none" width="1280" height="720" poster="assets/images/clink-how-it-works.webp" src="assets/video/clink-how-it-works.mp4" aria-label="How Clink works: Mark asks how to do things, and Jane shows him on a Clink board"></video>
       </div>
-      <div class="film-cap"><p>An animated two-person explainer: Mark asks how to do things, and Jane shows him. The film is an HTML page that draws every frame from one clock, so it scrubs, stays in sync with the voices and exports to MP4 frame by frame.</p><span class="len">4 min · with sound</span></div>
+      <div class="film-cap"><p>An animated two-person explainer: Mark asks how to do things, and Jane shows him. The film is an HTML page that draws every frame from one clock, so it scrubs, stays in sync with the voices and exports to MP4 frame by frame.</p><span class="len">4&nbsp;min · with sound</span></div>
     </div>
     <div class="block reveal">
-      <div class="subhead"><span class="no">02</span><h3>One hand-drawn voice</h3><p>The film's marker ink, everywhere</p></div>
+      <div class="subhead"><span class="no">02</span><h3>One hand-&#8288;drawn voice</h3><p>The film's marker ink, everywhere</p></div>
       <p class="body-text small">The film's Jane and Mark and its doodles carry the brand: black marker ink, the showcase's yellow and white paper cards, the line roughened like a marker's and redrawn twelve times a second. The showcase at the top of this page is the other film. The drawings here are the product page's own, run from the same script.</p>
       <div class="cast-panel board">
         <div class="cast" aria-hidden="true"><svg class="dd dd-compass" data-cast="compass" viewBox="0 0 300 300"></svg><svg class="dd dd-jane" data-cast="jane" viewBox="0 0 300 300"></svg><svg class="dd dd-mouth" data-cast="mouth" viewBox="0 0 300 300"></svg><svg class="dd dd-mark" data-cast="mark" viewBox="0 0 300 300"></svg><svg class="dd dd-dividers" data-cast="dividers" viewBox="0 0 300 300"></svg></div>

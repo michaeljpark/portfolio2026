@@ -178,7 +178,9 @@ svg{display:block}
 
 .program{flex-shrink:0;border-radius:32px;background:#0B0B0B;box-shadow:0 0 0 1px rgba(255,255,255,.04);padding:16px 18px 18px;color:#F0F0ED}
 .pg-head{display:flex;justify-content:space-between;align-items:center;height:22px}
-.pg-head b{font-size:13px;font-weight:500}
+.pg-head b{font-size:13px;font-weight:500;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* the header row is one line high; on the narrowest phones the show name gives way with an ellipsis instead of wrapping into the bar below */
+.pg-head .pg-edit{flex:none}
 .pg-head b span{color:#6E6E6B;font-weight:400;margin-left:6px}
 .pg-head b span.pg-name{color:#F0F0ED;font-weight:500;margin-left:0}
 .pg-edit{font-size:13px;color:#8B8B88;height:32px;padding:0 2px}

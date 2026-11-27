@@ -48,6 +48,9 @@
   --gap:clamp(24px,3vw,44px); /* gap inside body grids */
 }
 *{box-sizing:border-box;margin:0;padding:0}
+/* line breaks on phones: headings balance their lines so none ends on a lone word, and body text avoids a one-word last line */
+h1,h2,h3,h4,.h3,.card-h .t{text-wrap:balance}
+p,li,dd,figcaption{text-wrap:pretty}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 [id]{scroll-margin-top:96px}
 .anchor{display:block;height:0}
@@ -1121,7 +1124,7 @@ html[data-theme="dark"] figure.diagram svg{filter:invert(1) hue-rotate(180deg)}
         <div class="ladder-read" aria-live="polite">
           <div class="op morph" id="ldOp">One median text prompt</div>
           <div class="num morph" id="ldNum">0.24<small>Wh</small></div>
-          <div class="small morph" id="ldSub">+ 0.26 mL of water · 0.03 g CO₂e</div>
+          <div class="small morph" id="ldSub">+ 0.26&nbsp;mL of water · 0.03&nbsp;g CO₂e</div>
           <div class="src morph" id="ldSrc"><span class="av" style="width:24px;height:24px;font-size:10px">JH</span><span>Google Cloud, Aug 2025</span></div>
         </div>
         <div style="min-width:0">
@@ -1135,7 +1138,7 @@ html[data-theme="dark"] figure.diagram svg{filter:invert(1) hue-rotate(180deg)}
       <div class="subhead"><span class="sh-ico"><svg class="lc" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" pathLength="1" style="transition-delay:120ms"/></svg></span><div><h3>Six axes</h3><p>System-level, not a list of complaints</p><span class="own">My structure, team evidence</span></div></div>
       <div class="seg" role="tablist" id="axSeg" aria-label="Audit axes"><span class="thumb"></span></div>
       <div class="card axes-card panel">
-        <div aria-live="polite" style="min-width:0"><div class="sub morph" id="axK">Energy</div><div class="num morph" id="axNum">415 TWh</div><p class="claim morph" id="axClaim"></p></div>
+        <div aria-live="polite" style="min-width:0"><div class="sub morph" id="axK">Energy</div><div class="num morph" id="axNum">415&nbsp;TWh</div><p class="claim morph" id="axClaim"></p></div>
         <div class="ev" id="axEv"></div>
       </div>
       <p class="sub" style="margin-top:14px;max-width:80ch">Every research card carried a citation and the initials of the person who found it. When a team researches in parallel, that's the only way to know who stands behind a number.</p>
@@ -1175,7 +1178,7 @@ html[data-theme="dark"] figure.diagram svg{filter:invert(1) hue-rotate(180deg)}
             </div>
             <div class="sub sy-cap">And at the scale of the whole system</div>
             <div class="sy-facts">
-              <div class="sy-fact"><b>415 TWh</b><span>data-centre electricity</span></div>
+              <div class="sy-fact"><b>415&nbsp;TWh</b><span>data-centre electricity</span></div>
               <div class="sy-fact"><b>552 t</b><span>CO₂e to train one model</span></div>
               <div class="sy-fact"><b>$1.32/h</b><span>labelling wage</span></div>
               <div class="sy-fact"><b>10 of 13</b><span>disclose no footprint</span></div>

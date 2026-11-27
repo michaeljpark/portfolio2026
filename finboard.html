@@ -48,6 +48,10 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+/* line breaks on phones: headings balance their lines so none ends on a lone word, and body text avoids a one-word last line */
+h1,h2,h3,h4,.viz-h .t{text-wrap:balance}
+p,li,dd,figcaption{text-wrap:pretty}
+.seg button,.node{text-wrap:balance}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--page)}
 [id],.block{scroll-margin-top:84px}
 body{font-family:var(--font);background:var(--page);color:var(--ink);font-size:17px;line-height:1.6;letter-spacing:-.004em;-webkit-font-smoothing:antialiased;overflow-x:hidden}
@@ -695,6 +699,10 @@ main{overflow-x:clip}
   .seg{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);width:100%;overflow:visible}
   .seg button{white-space:normal;text-align:center;line-height:1.2;padding:9px 6px;min-height:44px}
   #audFseg button{padding:9px 4px;font-size:12.5px}
+}
+/* under 380px "Transactions" no longer fits a quarter of the row, so the four views sit two by two */
+@media (max-width:380px){
+  #audFseg{grid-auto-flow:row;grid-template-columns:repeat(2,minmax(0,1fr))}
   #audFk{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 .aud .x-w{position:absolute;background:var(--surface);border-radius:22px;overflow:hidden;color:#fff;font-variant-numeric:tabular-nums}
@@ -883,7 +891,7 @@ main{overflow-x:clip}
       <div><div class="num">8</div><span class="k">redesigned screens and stages audited</span></div>
       <div><div class="num">224</div><span class="k">text layers measured for contrast</span></div>
       <div><div class="num">105</div><span class="k">below 4.5:1 before the redesign</span></div>
-      <div><div class="num">107</div><span class="k">text layers set under 11 pt</span></div>
+      <div><div class="num">107</div><span class="k">text layers set under 11&nbsp;pt</span></div>
     </div>
   </div>
 </section>
@@ -893,7 +901,7 @@ main{overflow-x:clip}
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="tag">Overview</div>
-      <h2 class="h2" id="ovTitle">A widget-first banking dashboard for financial cognition.</h2>
+      <h2 class="h2" id="ovTitle">A widget-&#8288;first banking dashboard for financial cognition.</h2>
       <div class="lede"><p>As payments go cashless, the felt sense of spending money fades, and budgeting apps that are good at collecting data rarely turn it into self-understanding. finboard reframes spending as something to explore rather than track.</p><p>I treated native widgets as new interaction points and designed them to optimise financial cognition, so a person can understand their money without opening an app or logging in.</p></div>
     </div>
     <div class="block">
@@ -986,7 +994,7 @@ main{overflow-x:clip}
           <li><b>Adoption, not availability,</b> is the bottleneck: promoting wider tool use is the first hurdle.</li>
           <li>Canada lagged the US on PFM "super tools", <b>a structural gap</b>, not an incidental one.</li>
         </ul><span class="src">J.D. Power Canada, 2023</span></div>
-        <div class="front"><h4>In-app behaviour</h4><ul>
+        <div class="front"><h4>In-&#8288;app behaviour</h4><ul>
           <li><b>Information ranks first</b> of four satisfaction factors in 2026, ahead of tools, performance and design.</li>
           <li>Category satisfaction is flat at <b>678 of 1,000</b>. Apps feel interchangeable.</li>
           <li>Alerts already move the needle: <b>+33 points</b> for financially vulnerable users. Passive signals work.</li>
@@ -1080,7 +1088,7 @@ main{overflow-x:clip}
           <div class="t">Press play, then answer</div>
           <ol class="steps"><li><span>01</span>Today's summary is ready</li><li><span>02</span>It reads the day aloud, and the island becomes a Live Activity</li><li><span>03</span>The forward-looking range is marked as it's read</li><li><span>04</span>The question becomes one button</li></ol>
           <div class="demo-act"><button class="btn btn-brand" type="button" data-act>Play today's summary</button></div>
-          <ul class="how"><li><svg class="fi" aria-hidden="true"><use href="#fb-audio-lines"/></svg><span><b>Spoken summary</b><span class="pr"><span class="vh">Problem: </span>A widget full of numbers still has to be read and worked out, and the people most overwhelmed skip it.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>Today’s spending is read aloud in a few sentences, and the Dynamic Island carries it as a Live Activity.</span></span></span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-highlighter"/></svg><span><b>What’s ahead, marked</b><span class="pr"><span class="vh">Problem: </span>In a full summary, the part you can still act on is easy to miss.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>Only the forward-looking range, $35–55 tonight, is highlighted.</span></span></span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-circle-check"/></svg><span><b>One-tap action</b><span class="pr"><span class="vh">Problem: </span>Acting on a summary usually means opening the app and finding the right setting.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>The closing question becomes a button that sets tonight’s cap from the widget.</span></span></span></li></ul>
+          <ul class="how"><li><svg class="fi" aria-hidden="true"><use href="#fb-audio-lines"/></svg><span><b>Spoken summary</b><span class="pr"><span class="vh">Problem: </span>A widget full of numbers still has to be read and worked out, and the people most overwhelmed skip it.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>Today’s spending is read aloud in a few sentences, and the Dynamic Island carries it as a Live Activity.</span></span></span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-highlighter"/></svg><span><b>What’s ahead, marked</b><span class="pr"><span class="vh">Problem: </span>In a full summary, the part you can still act on is easy to miss.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>Only the forward-looking range, $35–&#8288;55 tonight, is highlighted.</span></span></span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-circle-check"/></svg><span><b>One-tap action</b><span class="pr"><span class="vh">Problem: </span>Acting on a summary usually means opening the app and finding the right setting.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>The closing question becomes a button that sets tonight’s cap from the widget.</span></span></span></li></ul>
         </div>
       </div>
     </div>
@@ -1093,7 +1101,7 @@ main{overflow-x:clip}
           <div class="t">Tap the ordinary widget</div>
           <ol class="steps"><li><span>01</span>A market widget nobody reads for spending</li><li><span>02</span>Marked not relevant, it greys out into a droplet</li><li><span>03</span>It splits into the Daily Tracker and the app icon</li></ol>
           <div class="demo-act"><button class="btn btn-brand" type="button" data-act>Mark it not relevant</button></div>
-          <ul class="how"><li><svg class="fi" aria-hidden="true"><use href="#fb-layout-grid"/></svg><span><b>Space reused</b><span class="pr"><span class="vh">Problem: </span>Home Screen space is already taken by widgets that say nothing about spending.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>The irrelevant widget’s slot becomes the Daily Tracker and the app icon, so the screen gets no busier.</span></span></span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-gauge"/></svg><span><b>Today at a glance</b><span class="pr"><span class="vh">Problem: </span>Bank widgets show a balance, and a balance doesn’t say how today is going.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>The Daily Tracker shows today’s spending, −$57.30, the moment it appears.</span></span></span></li></ul>
+          <ul class="how"><li><svg class="fi" aria-hidden="true"><use href="#fb-layout-grid"/></svg><span><b>Space reused</b><span class="pr"><span class="vh">Problem: </span>Home Screen space is already taken by widgets that say nothing about spending.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>The irrelevant widget’s slot becomes the Daily Tracker and the app icon, so the screen gets no busier.</span></span></span></li><li><svg class="fi" aria-hidden="true"><use href="#fb-gauge"/></svg><span><b>Today at a glance</b><span class="pr"><span class="vh">Problem: </span>Bank widgets show a balance, and a balance doesn’t say how today is going.</span><span class="so"><svg aria-hidden="true"><use href="#fb-to"/></svg><span><span class="vh">What it does: </span>The Daily Tracker shows today’s spending, −&#8288;$57.30, the moment it appears.</span></span></span></li></ul>
         </div>
       </div>
     </div>
@@ -1117,13 +1125,13 @@ main{overflow-x:clip}
         <div class="mini" style="--ar:393/452" data-w="393" data-h="452">
           <div class="mini-in" style="width:393px;height:452px">
             <div class="island" id="ctlIsland" style="left:133px;top:11px;width:127px;height:37.33px;border-radius:18.67px">
-              <div class="lay" id="ctlLa"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 14px 0 12px"><svg width="17" height="14" viewBox="27 0 280 236" style="color:var(--brand)"><use href="#fbLogo"/></svg><span style="font-size:15px;font-variant-numeric:tabular-nums" id="ctlLaAmt">−$4.75</span></div></div>
+              <div class="lay" id="ctlLa"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 14px 0 12px"><svg width="17" height="14" viewBox="27 0 280 236" style="color:var(--brand)"><use href="#fbLogo"/></svg><span style="font-size:15px;font-variant-numeric:tabular-nums" id="ctlLaAmt">−&#8288;$4.75</span></div></div>
             </div>
             <div class="w-shell" style="left:27.5px;top:66px;width:338px;height:158px;padding:14px 16px">
               <div class="w-row"><span class="w-k">Today</span><span class="w-k" id="ctlLimTop">Limit $40</span></div>
               <div class="w-row" style="margin-top:8px;justify-content:flex-start;gap:8px;align-items:baseline"><span class="w-amt" id="ctlSpent"><small>$</small>23.50</span><span class="w-k" id="ctlLeft">$16.50 left</span></div>
               <div class="w-bar" id="ctlBar" style="margin-top:10px"><i style="width:59%"></i></div>
-              <div class="w-swap"><ul class="w-tx" id="ctlTx"><li><span>Tim Hortons<small>TD ••2075</small></span><b>−$7.85</b></li><li><span>Presto<small>Scotiabank ••6390</small></span><b>−$3.30</b></li></ul><div class="w-ai off" id="ctlAi"><svg width="14" height="14" aria-hidden="true"><use href="#iSpark"/></svg><p><b>AI Accountant</b> <span id="ctlAiTx">Already over the new limit.</span></p></div></div>
+              <div class="w-swap"><ul class="w-tx" id="ctlTx"><li><span>Tim Hortons<small>TD ••2075</small></span><b>−&#8288;$7.85</b></li><li><span>Presto<small>Scotiabank ••6390</small></span><b>−&#8288;$3.30</b></li></ul><div class="w-ai off" id="ctlAi"><svg width="14" height="14" aria-hidden="true"><use href="#iSpark"/></svg><p><b>AI Accountant</b> <span id="ctlAiTx">Already over the new limit.</span></p></div></div>
             </div>
             <div class="lbl12" style="left:196.5px;top:230px">Today</div>
             <div class="w-shell" style="left:27.5px;top:258px;width:338px;height:158px;padding:14px 16px">
@@ -1238,8 +1246,8 @@ main{overflow-x:clip}
           <div><div class="num">83</div><span class="k">icons and shapes</span></div>
           <div><div class="num">104</div><span class="k">named interactive layers</span></div>
         </div>
-        <div class="thr"><span class="chipx">Text 4.5:1</span><span class="chipx">Large text 3:1</span><span class="chipx">Non-text 3:1</span><span class="chipx">Touch targets 44 pt</span></div>
-        <p class="fine">Contrast is the WCAG relative luminance of each layer against its flattened parent background. Touch targets follow Apple's HIG at 44 pt; the WCAG 2.5.8 AA minimum is 24 pt.</p>
+        <div class="thr"><span class="chipx">Text 4.5:1</span><span class="chipx">Large text 3:1</span><span class="chipx">Non-text 3:1</span><span class="chipx">Touch targets 44&nbsp;pt</span></div>
+        <p class="fine">Contrast is the WCAG relative luminance of each layer against its flattened parent background. Touch targets follow Apple's HIG at 44&nbsp;pt; the WCAG 2.5.8 AA minimum is 24&nbsp;pt.</p>
       </div>
     </div>
 
@@ -1247,8 +1255,8 @@ main{overflow-x:clip}
       <div class="subhead reveal"><span class="no">02</span><h3>What I missed</h3><p>Three failures, with what was measured</p></div>
       <div class="panel miss reveal stagger">
         <div><h4>1.4.3 Text contrast</h4><p>Text layers that fell below 4.5:1 against their background.</p><span class="chipx">105 layers</span></div>
-        <div><h4>Text size</h4><p>Layers under 11 pt, from 7 pt to 10.5 pt. Card labels sat at 7 pt and tab labels at 9.5 pt.</p><span class="chipx">107 layers</span></div>
-        <div><h4>Non-text contrast</h4><p>Inactive tab icons 2.6:1, chevrons 2.0:1, unselected radios 1.4:1, the switch off-state about 1.4:1.</p><span class="chipx">4 components</span></div>
+        <div><h4>Text size</h4><p>Layers under 11&nbsp;pt, from 7&nbsp;pt to 10.5&nbsp;pt. Card labels sat at 7&nbsp;pt and tab labels at 9.5&nbsp;pt.</p><span class="chipx">107 layers</span></div>
+        <div><h4>Non-&#8288;text contrast</h4><p>Inactive tab icons 2.6:1, chevrons 2.0:1, unselected radios 1.4:1, the switch off-state about 1.4:1.</p><span class="chipx">4 components</span></div>
       </div>
     </div>
 
@@ -1257,8 +1265,8 @@ main{overflow-x:clip}
       <div class="panel reveal" id="labC">
         <div class="lab-g">
           <div class="swatch" id="labSw" aria-hidden="true">
-            <div class="rowx"><span>Groceries</span><b>−$32.05</b></div>
-            <div class="rowx"><span style="font-size:11px">Card label at 11 pt</span><span style="font-size:11px">Today</span></div>
+            <div class="rowx"><span>Groceries</span><b>−&#8288;$32.05</b></div>
+            <div class="rowx"><span style="font-size:11px">Card label at 11&nbsp;pt</span><span style="font-size:11px">Today</span></div>
             <div class="ctrls">
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5 11 3l7 5.5V18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/></svg>
               <svg width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l6 7-6 7"/></svg>
@@ -1305,7 +1313,7 @@ main{overflow-x:clip}
             <div class="aud-kpis" id="audBAk"></div>
             <div class="au-sets" id="audBAw"></div>
             <p class="aud-read" id="audBAr" aria-live="polite"></p>
-            <div class="aud-legend" aria-hidden="true"><span><i style="background:var(--pass)"></i>Contrast pass</span><span><i style="background:var(--fail)"></i>Contrast fail</span><span><i class="q" style="border-color:var(--pass)"></i>Target ≥ 44 pt</span><span><i class="q" style="border-color:var(--warn)"></i>24–44 pt, or by spacing</span><span><i class="q" style="border-color:var(--fail)"></i>Under 24 pt</span></div>
+            <div class="aud-legend" aria-hidden="true"><span><i style="background:var(--pass)"></i>Contrast pass</span><span><i style="background:var(--fail)"></i>Contrast fail</span><span><i class="q" style="border-color:var(--pass)"></i>Target ≥ 44&nbsp;pt</span><span><i class="q" style="border-color:var(--warn)"></i>24–&#8288;44&nbsp;pt, or by spacing</span><span><i class="q" style="border-color:var(--fail)"></i>Under 24&nbsp;pt</span></div>
           </div>
         </div>
       </div>
@@ -1335,7 +1343,7 @@ main{overflow-x:clip}
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="tag">Reflection</div>
-      <h2 class="h2" id="rfTitle">Human-centred design, <span class="soft">better access to the data.</span></h2>
+      <h2 class="h2" id="rfTitle">Human-&#8288;centred design, <span class="soft">better access to the data.</span></h2>
       <div class="lede"><p>For now, how far this can go is limited. Security, iOS’s rules for widgets and Live Activities, and each bank’s own policies all restrict which spending data can leave the bank app and where it can appear.</p><p>Even so, the research showed that access to that data can be improved: the reading moves onto the surfaces people already look at, and an added check, Face ID, keeps it private until it is you looking. The roadmap goes two ways from here.</p></div>
     </div>
     <div class="block reveal">
@@ -2150,7 +2158,7 @@ document.querySelectorAll('.mini').forEach(fitMini);
 /* segmented controls: one sliding thumb */
 function seg(root, onPick) {
   const thumb = root.querySelector('.thumb'), bs = [...root.querySelectorAll('button')];
-  const place = b => { thumb.style.width = b.offsetWidth + 'px'; thumb.style.transform = `translateX(${b.offsetLeft}px)`; };
+  const place = b => { thumb.style.width = b.offsetWidth + 'px'; thumb.style.height = b.offsetHeight + 'px'; thumb.style.transform = `translate(${b.offsetLeft}px, ${b.offsetTop - 3}px)`; };
   const pick = (b, quiet) => { bs.forEach(x => x.setAttribute('aria-selected', x === b ? 'true' : 'false')); place(b); if (!quiet) onPick(b); };
   bs.forEach(b => b.addEventListener('click', () => pick(b)));
   root.addEventListener('keydown', e => {

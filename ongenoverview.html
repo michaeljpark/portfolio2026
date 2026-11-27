@@ -267,6 +267,9 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font
 a{color:inherit}
 p{margin:0}
 h1,h2,h3{margin:0;font-weight:400;letter-spacing:-.03em;text-wrap:balance}
+/* line breaks on phones: headings balance their lines so none ends on a lone word, and body text avoids a one-word last line */
+h4{text-wrap:balance}
+p,li,dd,figcaption{text-wrap:pretty}
 .p-btn,.p-chip,.p-ic{font:inherit;color:inherit;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
 :focus-visible{outline:2px solid #F2F2EF;outline-offset:3px}
 :where(button,input,textarea,select):where(:not(.ogn *)){font:inherit}
@@ -1111,6 +1114,15 @@ html[data-theme="light"] .msg.a.err{color:#D42A23}
 html[data-theme="light"] .ask-f textarea:focus-visible{outline-color:#C4C4C0}
 </style>
 <style>
+/* the narrowest phones: the comparison keeps room for its medium names, the build cards stack one per row,
+   and a service layer's name gets more of its row than the meter beside it */
+@media (max-width:420px){
+  .cm-head,.cm-row{grid-template-columns:minmax(0,1fr) repeat(3,46px);column-gap:6px}
+  .cm-head span{font-size:11px;line-height:1.25;text-wrap:balance}
+  .fl-row{grid-template-columns:minmax(0,1fr)}
+  .st-row{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
+}
+
 /* ===== Layout system =====
    One grid for all three pages: the 1180 wrap, two equal columns with one gap, cards filling their column.
    One type scale (h1, h2, lede), one section rhythm, one card radius and padding.
@@ -1673,7 +1685,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
           <dt>Next</dt><dd>Commute Briefing at 18:10, 30 minutes</dd>
         </dl>
       </div>
-      <dl class="cs-facts"><div><dt>Role</dt><dd>Solo: product and experience design, research, AI-assisted prototyping</dd></div><div><dt>Timeline</dt><dd>Sep 2025 to May 2026</dd></div><div><dt>Context</dt><dd>Industrial Design thesis, OCAD University. Critique: Alexander Manu, Bernard Dietz</dd></div><div><dt>Field test</dt><dd>GradEX 111 · 408 sessions</dd></div><div><dt>Recognition</dt><dd>ACIDO 2026 finalist</dd></div></dl>
+      <dl class="cs-facts"><div><dt>Role</dt><dd>Solo: product and experience design, research, AI-&#8288;assisted prototyping</dd></div><div><dt>Timeline</dt><dd>Sep 2025 to May 2026</dd></div><div><dt>Context</dt><dd>Industrial Design thesis, OCAD University. Critique: Alexander Manu, Bernard Dietz</dd></div><div><dt>Field test</dt><dd>GradEX 111 · 408 sessions</dd></div><div><dt>Recognition</dt><dd>ACIDO 2026 finalist</dd></div></dl>
     </div>
   </article>
 
@@ -1916,18 +1928,18 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
       <div class="p-cell c-type">
         <h3>Type · Geist</h3>
         <div class="ty">
-          <div><span class="t1">00:15</span><span class="lb">300 · 64 px · elapsed</span></div>
-          <div><span class="t2">Line 1 is running</span><span class="lb">400 · 25 px · script</span></div>
-          <div><span class="t3">Upcoming Program</span><span class="lb">500 · 13 px · labels</span></div>
-          <div><span class="t4">Calendar</span><span class="lb">400 · 11 px caps · corner tag</span></div>
+          <div><span class="t1">00:15</span><span class="lb">300 · 64&nbsp;px · elapsed</span></div>
+          <div><span class="t2">Line 1 is running</span><span class="lb">400 · 25&nbsp;px · script</span></div>
+          <div><span class="t3">Upcoming Program</span><span class="lb">500 · 13&nbsp;px · labels</span></div>
+          <div><span class="t4">Calendar</span><span class="lb">400 · 11&nbsp;px caps · corner tag</span></div>
         </div>
       </div>
       <div class="p-cell c-shape">
         <h3>Shape</h3>
         <div class="sh">
-          <div><i class="r46"></i><span>46 px · device</span></div>
-          <div><i class="r32"></i><span>32 px · cards</span></div>
-          <div><i class="r14"></i><span>14 px · keys, blocks</span></div>
+          <div><i class="r46"></i><span>46&nbsp;px · device</span></div>
+          <div><i class="r32"></i><span>32&nbsp;px · cards</span></div>
+          <div><i class="r14"></i><span>14&nbsp;px · keys, blocks</span></div>
         </div>
       </div>
     </div>
@@ -1996,7 +2008,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
             <div class="pp-head"><span class="card-label">Pilot 1 · System Usability Scale</span><span class="pp-big">73</span></div>
             <div class="meter"><div class="led" data-v="0.73"></div><em style="left:68%"></em></div>
             <div class="meter-ax"><span>0</span><span class="mk" style="left:68%">68 average</span><span>100</span></div>
-            <dl class="pp-kpi"><div><dt>Avg session</dt><dd>3 min</dd></div><div><dt>Features used</dt><dd>68%</dd></div><div><dt>Touchpoints</dt><dd>4.76 of 7</dd></div></dl>
+            <dl class="pp-kpi"><div><dt>Avg session</dt><dd>3&nbsp;min</dd></div><div><dt>Features used</dt><dd>68%</dd></div><div><dt>Touchpoints</dt><dd>4.76 of 7</dd></div></dl>
           </div>
         </div>
         <figcaption>Concept survey, March 11 to 25, 2026, 22 consenting participants (64% aged 20 to 24, 91% students). Pilot 1 usability test, winter 2026.</figcaption>
@@ -2075,7 +2087,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
           <div class="r-split r-split5" aria-label="Under 10 seconds 32.7%, 10 to 30 seconds 15%, 30 seconds to 1 minute 9.3%, 1 to 10 minutes 19.6%, 10 minutes or more 23.4%">
             <div class="led" style="flex:32.7;--on:var(--m0)"></div><div class="led" style="flex:15;--on:var(--m2)"></div><div class="led" style="flex:9.3;--on:var(--m3)"></div><div class="led" style="flex:19.6;--on:var(--m4)"></div><div class="led" style="flex:23.4;--on:var(--m5)"></div>
           </div>
-          <div class="r-legend r-legend5"><span><i style="background:var(--m0)"></i>Under 10 s · 32.7%</span><span><i style="background:var(--m2)"></i>10–30 s · 15.0%</span><span><i style="background:var(--m3)"></i>30 s–1 min · 9.3%</span><span><i style="background:var(--m4)"></i>1–10 min · 19.6%</span><span><i style="background:var(--m5)"></i>10 min or more · 23.4%</span></div>
+          <div class="r-legend r-legend5"><span><i style="background:var(--m0)"></i>Under 10&nbsp;s · 32.7%</span><span><i style="background:var(--m2)"></i>10–&#8288;30&nbsp;s · 15.0%</span><span><i style="background:var(--m3)"></i>30&nbsp;s–1&nbsp;min · 9.3%</span><span><i style="background:var(--m4)"></i>1–&#8288;10&nbsp;min · 19.6%</span><span><i style="background:var(--m5)"></i>10&nbsp;min or more · 23.4%</span></div>
           <p class="r-note">First four days, 107 users. 47.7% left within 30 seconds, and 23.4% stayed ten minutes or more.</p>
         </div>
         <div class="r-card">
@@ -2090,7 +2102,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
 <div class="r-card r-compare">
         <h3>Guests and registered users, average per user</h3>
         <div class="r-cmp">
-          <div class="r-cmp-row"><span class="l">Time in the app</span><div class="b"><div class="led" style="width:5.03%;--on:var(--m1)"></div><em>1,132 s</em><div class="led" style="width:100%;--on:var(--m5)"></div><em class="w">22,514 s</em></div><b>20×</b></div>
+          <div class="r-cmp-row"><span class="l">Time in the app</span><div class="b"><div class="led" style="width:5.03%;--on:var(--m1)"></div><em>1,132&nbsp;s</em><div class="led" style="width:100%;--on:var(--m5)"></div><em class="w">22,514&nbsp;s</em></div><b>20×</b></div>
           <div class="r-cmp-row"><span class="l">Interactions</span><div class="b"><div class="led" style="width:1.77%;--on:var(--m1)"></div><em>3.1</em><div class="led" style="width:100%;--on:var(--m5)"></div><em class="w">175.6</em></div><b>56×</b></div>
           <div class="r-cmp-row"><span class="l">Stations visited</span><div class="b"><div class="led" style="width:18.3%;--on:var(--m1)"></div><em>0.63</em><div class="led" style="width:100%;--on:var(--m5)"></div><em class="w">3.44</em></div><b>5×</b></div>
         </div>
@@ -2107,7 +2119,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
           <thead><tr><th>KPI</th><th>Target</th><th>Baseline</th><th>What GradEX showed</th><th>Read</th></tr></thead>
           <tbody>
             <tr><td data-label="KPI"><b>Habit formation</b><em>7-day return rate</em></td><td data-label="Target">30%</td><td data-label="Baseline">20%</td><td data-label="What GradEX showed">Not measurable within a short exhibition run. Visitors averaged 2.8 sessions each.</td><td data-label="Read"><span class="r-tag next">Open</span></td></tr>
-            <tr><td data-label="KPI"><b>Listening depth</b><em>background listen per session</em></td><td data-label="Target">15 min</td><td data-label="Baseline">8 min</td><td data-label="What GradEX showed">Median session of 35.6 s. Most visitors sampled shows rather than listening through.</td><td data-label="Read"><span class="r-tag bad">Below</span></td></tr>
+            <tr><td data-label="KPI"><b>Listening depth</b><em>background listen per session</em></td><td data-label="Target">15&nbsp;min</td><td data-label="Baseline">8&nbsp;min</td><td data-label="What GradEX showed">Median session of 35.6&nbsp;s. Most visitors sampled shows rather than listening through.</td><td data-label="Read"><span class="r-tag bad">Below</span></td></tr>
             <tr><td data-label="KPI"><b>Active interaction</b><em>interactions per session</em></td><td data-label="Target">3+</td><td data-label="Baseline">1.5</td><td data-label="What GradEX showed">Not counted per session at GradEX; 34.6% generated a personal podcast. In Pilot 1, users touched 4.76 of 7 touchpoints.</td><td data-label="Read"><span class="r-tag good">Met in Pilot 1</span></td></tr>
           </tbody>
         </table>
@@ -2120,7 +2132,7 @@ html[data-theme="light"] .cs-rail button::after{background:rgba(0,0,0,.08)}
           <div class="r-find">
         <div><h3>Visitors reached the core action</h3><p>About a third of visitors created their own show, at an exhibition where a lot of other work was competing for attention.</p></div>
         <div><h3>The first 30 seconds matter most</h3><p>47.7% of users left within 30 seconds, but 23.4% stayed ten minutes or more. The first show needs to start right away, before any setup.</p></div>
-        <div><h3>Signed-in visitors stayed longer</h3><p>Registered users stayed about 20 times longer and made 56 times as many interactions. Personal context is what keeps people listening, so sign-in should come earlier and take less effort.</p></div>
+        <div><h3>Signed-&#8288;in visitors stayed longer</h3><p>Registered users stayed about 20 times longer and made 56 times as many interactions. Personal context is what keeps people listening, so sign-in should come earlier and take less effort.</p></div>
         <div><h3>Trust needs to be designed</h3><p>The neutral survey scores came from worry about being listened to. Clear consent copy and visible control over sources belong in the product itself.</p></div>
       </div><p class="r-src">Sources · Firebase event logs from GradEX 111, May 2026; the time and guest/registered breakdowns cover the first four days, May 6 to 10, 107 users · Pilot 1 usability study · concept survey, 22 respondents, March 11 to 25, 2026 · KPI targets from the thesis report.</p>
         </div>
