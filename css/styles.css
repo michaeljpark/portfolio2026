@@ -182,6 +182,23 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .cta svg{width:11px;height:11px;transition:transform .25s var(--ease)}
 .cta:hover svg{transform:translate(2px,-2px)}
 
+/* ---------- gutter steps: a chevron in each side margin, the whole margin its target ----------
+   The row is clipped to the content column, so the margins stay empty for them. They
+   rest dim and come up to full ink while the pointer is in their margin; a step that
+   has nowhere to go fades out. Open, they move between projects like the ones below. */
+.strip{clip-path:inset(0 var(--m))}
+.gut{
+  position:absolute;top:0;z-index:6;width:var(--m);height:var(--h);
+  display:grid;place-items:center;color:var(--ink);opacity:.3;
+  transition:opacity .25s,color .35s;
+}
+.gut.prev{left:0}
+.gut.next{right:0}
+.gut svg{width:9px;height:16px;overflow:visible}
+@media (hover:hover) and (pointer:fine){.gut:hover{opacity:1}}
+.gut:focus-visible{opacity:1;outline-offset:-4px}
+.gut:disabled{opacity:0;cursor:default}
+
 /* ---------- strip nav: centred under the row, steps either side of one dot per project ---------- */
 .w-nav{display:flex;align-items:center;justify-content:center;gap:4px;padding:18px var(--m) 0}
 .w-nav > button{width:32px;height:32px;display:grid;place-items:center;color:var(--ink);transition:opacity .3s}
@@ -430,7 +447,8 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .kpi dd{font-size:24px}
   .kpi dt{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;line-height:1.35}
   #pTldr{-webkit-line-clamp:4}
-  .w-nav{display:none}
+  .w-nav,.gut{display:none}
+  .strip{clip-path:none}
 
   .block .body{grid-column:1 / -1}
   .list li{grid-template-columns:1fr auto;row-gap:2px}

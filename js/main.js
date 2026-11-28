@@ -56,9 +56,10 @@ function setOffset(x, animate = true) {
   if (!animate) { track.offsetHeight; track.style.transition = ''; }
   updateChev();
 }
-/* Steps and dots under the strip. The long dot is the open project. With the
-   panel closed it is the card last aimed at (a clicked dot, or the project
-   just closed) while that card is fully in view, else the first card in full
+/* Steps and dots under the strip, and a step in each side margin. The long dot
+   is the open project. With the panel closed it is the card last aimed at (a
+   clicked dot, or the project just closed) while that card is fully in view
+   (the row is clipped to the content column), else the first card in full
    view. Clicking a dot works like the chevrons: open, it switches project;
    closed, it moves the strip to that card. */
 let aim = -1;
@@ -75,12 +76,17 @@ function goTo(j) {
   aim = j;
   setOffset(Math.min(maxOffset(), Math.max(0, works[j].offsetLeft - padPx())));
 }
+const stepBtns = [['prev', -1], ['next', 1], ['gPrev', -1], ['gNext', 1]].map(([id, d]) => {
+  const b = $(id);
+  b.addEventListener('click', () => step(d));
+  return [b, d];
+});
 function updateChev() {
   const open = cur > -1;
-  $('prev').disabled = !open && offset <= 1;
-  $('next').disabled = !open && offset >= maxOffset() - 1;
-  const inView = j => { const l = works[j].offsetLeft - offset; return l >= -1 && l + works[j].offsetWidth <= strip.clientWidth + 1; };
-  const first = Math.min(PROJECTS.length - 1, Math.max(0, Math.ceil((offset - padPx() - 1) / (cw + gapPx()))));
+  stepBtns.forEach(([b, d]) => { b.disabled = !open && (d < 0 ? offset <= 1 : offset >= maxOffset() - 1); });
+  const pad = padPx();
+  const inView = j => { const l = works[j].offsetLeft - offset; return l >= pad - 1 && l + works[j].offsetWidth <= strip.clientWidth - pad + 1; };
+  const first = Math.min(PROJECTS.length - 1, Math.max(0, Math.ceil((offset - 1) / (cw + gapPx()))));
   const at = open ? cur : aim > -1 && inView(aim) ? aim : first;
   dots.forEach((d, j) => {
     d.classList.toggle('on', j === at);
@@ -265,8 +271,6 @@ function step(dir) {
 $('mPrev').addEventListener('click', () => step(-1));
 $('mNext').addEventListener('click', () => step(1));
 $('pClose').addEventListener('click', close);
-$('prev').addEventListener('click', () => step(-1));
-$('next').addEventListener('click', () => step(1));
 document.addEventListener('keydown', e => {
   if (cur < 0) return;
   if (e.key === 'Escape') close();
