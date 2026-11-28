@@ -7,9 +7,6 @@
   --hover:#ECECE9;
   --chip:#E7E7E3;
   --live:#1E9E5A;
-  --glass:rgba(255,255,255,.72);
-  --glass-hi:rgba(255,255,255,.92);
-  --glass-line:rgba(0,0,0,.06);
 
   --m:clamp(16px,3.2vw,48px);
   --gap:12px;
@@ -27,9 +24,6 @@
   --hover:#1E1E1D;
   --chip:#2A2A28;
   --live:#3BC47A;
-  --glass:rgba(20,20,20,.62);
-  --glass-hi:rgba(20,20,20,.85);
-  --glass-line:rgba(255,255,255,.1);
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -187,30 +181,6 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .cta:hover,.cta:active{background:var(--ink);color:var(--paper)}
 .cta svg{width:11px;height:11px;transition:transform .25s var(--ease)}
 .cta:hover svg{transform:translate(2px,-2px)}
-
-/* ---------- edge steps: a round glass button at each side of the row, in the theme's colours ----------
-   Closed, the next step shows while there is more to the right and the previous
-   one once the row has moved. Open, both sit on the open card's picture, one at
-   each side. With a mouse they rest a little faded and come up when the pointer
-   nears them; on touch they stay up. They hide while the panel opens or closes,
-   so they never slide across the row. */
-.edge{
-  position:absolute;top:calc(var(--h) / 2 - 22px);z-index:4;
-  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
-  color:var(--ink);background:var(--glass);box-shadow:inset 0 0 0 1px var(--glass-line);
-  -webkit-backdrop-filter:blur(14px) saturate(1.5);backdrop-filter:blur(14px) saturate(1.5);
-  transition:opacity .3s,visibility 0s,background-color .25s,color .35s;
-}
-.edge.prev{left:calc(var(--m) + 16px)}
-.edge.next{right:calc(var(--m) + 16px)}
-.stage.is-open .edge.next{right:auto;left:calc(var(--m) + var(--cw) - 60px)}
-.edge svg{width:8px;height:14px}
-@media (hover:hover) and (pointer:fine){
-  .edge{opacity:.7}
-  .edge.near,.edge:hover,.edge:focus-visible{opacity:1}
-  .edge:hover{background:var(--glass-hi)}
-}
-.stage .edge:disabled,.stage.is-moving .edge{opacity:0;visibility:hidden;transition:opacity .2s,visibility 0s .2s}
 
 /* ---------- strip nav: centred under the row, steps either side of one dot per project ---------- */
 .w-nav{display:flex;align-items:center;justify-content:center;gap:4px;padding:18px var(--m) 0}
@@ -460,7 +430,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .kpi dd{font-size:24px}
   .kpi dt{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;line-height:1.35}
   #pTldr{-webkit-line-clamp:4}
-  .w-nav,.edge{display:none}
+  .w-nav{display:none}
 
   .block .body{grid-column:1 / -1}
   .list li{grid-template-columns:1fr auto;row-gap:2px}
