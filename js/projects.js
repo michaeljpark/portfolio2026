@@ -32,7 +32,7 @@ const PROJECTS = [
     video: "assets/video/clink.mp4", poster: "assets/images/clink.webp",
     problem: "A small team's context is scattered across its tools, and information that can't be reached when it's needed is effectively lost.",
     kpi: [{ v: "3", l: "Team members" }, { v: "30+", l: "User feedback\n(from the feedback loop)" }, { v: "20+", l: "Active users, closed beta" }],
-    tldr: "An infinite canvas of typed blocks, comment threads, and document review that keeps a small team's reasoning next to its work.",
+    tldr: "A shared canvas where a small team plans, makes and reviews its work on one board.",
     href: "clink.html"
   },
   {
@@ -41,7 +41,7 @@ const PROJECTS = [
     video: "assets/video/ongen-radio.mp4", poster: "assets/images/ongen-radio.webp",
     problem: "What shapes a person's day is spread across many apps and feeds, and radio, the one medium that works hands-free, still plays the same broadcast to everyone.",
     kpi: [{ v: "147", l: "Field pilot users, 408 sessions" }, { v: "35.6s", l: "Median interaction time" }, { v: "73", l: "SUS score, Pilot 1 (n=17)" }],
-    tldr: "A personalized AI radio that turns a person's calendar, reminders, traffic, and local news into short briefings scheduled through the day, mixed in with their own music.",
+    tldr: "An AI radio that plays short shows about a person's own day between their music.",
     href: "ongenoverview.html"
   },
   {
@@ -50,7 +50,7 @@ const PROJECTS = [
     video: "assets/video/finboard.mp4", poster: "assets/images/finboard.webp",
     problem: "Early-career adults can't read their own spending. Bank apps already collect the data, but keep it behind a login, so it never becomes self-understanding.",
     kpi: [{ v: "8", l: "Screens audited, WCAG 2.2 AA" }, { v: "224", l: "Text layers measured for contrast" }, { v: "105", l: "Below 4.5:1 before the redesign" }],
-    tldr: "An iOS banking app that puts spending on the Home Screen, Lock Screen and Dynamic Island, readable without opening the app, and audited to WCAG 2.2 AA.",
+    tldr: "An iOS banking app that shows spending in widgets, readable without opening the app.",
     href: "finboard.html"
   },
   {
@@ -59,7 +59,7 @@ const PROJECTS = [
     video: "assets/video/tokentrust.mp4", poster: "assets/images/tokentrust.webp",
     problem: "People have no way to see what their data is worth, where it goes, or who profits from it, and no law requires that its value be returned to them.",
     kpi: [{ v: "81%", l: "Saw a pricing problem in AI (n=28)" }, { v: "86%", l: "Idea acceptance, via Google Form" }, { v: "6", l: "Audit axes across 3 AI services" }],
-    tldr: "A governance platform that scores the quality of user-contributed AI data, pays users tokens for it, and lets that value move across platforms.",
+    tldr: "A platform that puts a value on the data people give AI and pays it back in tokens.",
     href: "tokentrust.html"
   },
   {
@@ -68,7 +68,7 @@ const PROJECTS = [
     video: "", poster: "", art: SHERWAY_ART,
     problem: "Sherway Gardens works for shopping but not for visiting. Its car-first layout gives people no reason to come without a purchase in mind.",
     kpi: [{ v: "7", l: "On-site interviews" }, { v: "13", l: "Mentions of cultural welcome" }, { v: "10", l: "Mentions of shopping in person" }],
-    tldr: "Sherway Stamp, a poster-triggered audio story system where visitors collect stamps across the mall, events, and retail, giving them a reason to return.",
+    tldr: "A stamp trail of audio stories that gives people a reason to visit the mall beyond shopping.",
     href: BASE + "cf-sherway.html"
   }
 ];
