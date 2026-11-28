@@ -124,7 +124,6 @@ main{overflow-x:clip}
 .nav-in{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;height:56px;padding:0 var(--pm)}
 .nav-id{justify-self:start;display:flex;align-items:center;gap:14px;min-width:0}
 .home{font-family:"Hanken Grotesk",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;font-size:12.5px;font-weight:600;line-height:1.45;color:var(--ink);text-decoration:none;white-space:nowrap;transition:color .25s}
-.home:hover{color:var(--ink-3)}
 .nav-sep{flex:none;width:1px;height:16px;background:var(--line-2)}
 /* the name, in the body face, lower case */
 .brand{display:flex;align-items:center;color:var(--ink);text-decoration:none;font-size:15px;font-weight:600;line-height:1;letter-spacing:-.03em}
@@ -506,6 +505,22 @@ html[data-theme="dark"] .post .pk.bug{background:rgba(232,80,60,.2);color:#F4ABA
   .fbk-in{padding:11px 12px}
 }
 </style>
+<style>
+/* the name in the bar reads Home on hover, with Lucide's arrow-left beside it.
+   Both labels share one grid cell, so the link keeps one width and nothing next to it
+   moves or wraps; the name leaves before the other label arrives, so the two never
+   show on top of each other. */
+.home{display:inline-grid;align-items:center;justify-items:start}
+.home > span{grid-area:1/1;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;transition:opacity .15s .12s}
+.home .hm-back{opacity:0;transition-delay:0s}
+.home .hm-back svg{width:1em;height:1em;flex:none}
+@media (hover:hover) and (pointer:fine){
+  .home:hover .hm-name{opacity:0;transition-delay:0s}
+  .home:hover .hm-back{opacity:1;transition-delay:.12s}
+}
+.home:focus-visible .hm-name{opacity:0;transition-delay:0s}
+.home:focus-visible .hm-back{opacity:1;transition-delay:.12s}
+</style>
 </head>
 <body>
 
@@ -518,7 +533,7 @@ html[data-theme="dark"] .post .pk.bug{background:rgba(232,80,60,.2);color:#F4ABA
 <header class="nav" id="nav">
   <div class="nav-in">
     <div class="nav-id">
-      <a class="home" href="index.html" aria-label="Michael J. Park, back to the portfolio">Michael J. Park</a>
+      <a class="home" href="index.html" aria-label="Michael J. Park, back to the portfolio"><span class="hm-name">Michael J. Park</span><span class="hm-back" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Home</span></a>
       <span class="nav-sep" aria-hidden="true"></span>
       <a class="brand" href="#top" aria-label="Clink, back to top">clink</a>
     </div>

@@ -2098,12 +2098,28 @@ try{if(matchMedia("(hover:none) and (pointer:coarse)").matches){
   s.textContent="html.touch-ui nav.top,html.touch-ui .phase-toggle{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--bg)!important}";
   document.head.appendChild(s);
 }}catch(e){}</script>
+<style>
+/* the name in the bar reads Home on hover, with Lucide's arrow-left beside it.
+   Both labels share one grid cell, so the link keeps one width and nothing next to it
+   moves or wraps; the name leaves before the other label arrives, so the two never
+   show on top of each other. */
+.nav-mark{display:inline-grid;align-items:center;justify-items:start}
+.nav-mark > span{grid-area:1/1;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;transition:opacity .15s .12s}
+.nav-mark .hm-back{opacity:0;transition-delay:0s}
+.nav-mark .hm-back svg{width:1em;height:1em;flex:none}
+@media (hover:hover) and (pointer:fine){
+  .nav-mark:hover .hm-name{opacity:0;transition-delay:0s}
+  .nav-mark:hover .hm-back{opacity:1;transition-delay:.12s}
+}
+.nav-mark:focus-visible .hm-name{opacity:0;transition-delay:0s}
+.nav-mark:focus-visible .hm-back{opacity:1;transition-delay:.12s}
+</style>
 </head>
 <body>
 
 <nav class="top">
   <div class="nav-inner">
-    <a href="./index.html" class="nav-mark">Michael J. Park</a>
+    <a href="./index.html" class="nav-mark" aria-label="Michael J. Park, back to the portfolio"><span class="hm-name">Michael J. Park</span><span class="hm-back" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Home</span></a>
     <div class="phase-nav">
       <a href="#overview">Overview</a>
       <a href="#problem-definition">Problem Definition</a>
