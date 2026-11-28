@@ -144,14 +144,29 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .panel.is-open .panel-inner > :nth-child(4){transition-delay:.46s}
 .panel-inner.is-swapping > *{opacity:0!important;transform:translateX(-10px)!important;transition-delay:0s!important;transition-duration:.18s!important}
 
-/* the project index lives in the strip nav on desktop; the panel keeps it on mobile */
-.p-top > #pIdx{display:none}
+/* head: title, then the index and the steps to the other projects, then Close */
 .p-top{
-  display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:12px;
+  display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;grid-template-areas:"t i s c";align-items:center;gap:12px;
   padding:clamp(12px,2.2cqi,20px) 0 clamp(12px,2.2cqi,20px) clamp(14px,2.6cqi,24px);
   border-bottom:1px solid var(--rule);
 }
-.p-title{margin:0;font-size:clamp(16px,2.9cqi,24px);font-weight:500;letter-spacing:-.02em;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-title{grid-area:t;margin:0;font-size:clamp(16px,2.9cqi,24px);font-weight:500;letter-spacing:-.02em;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-top > #pIdx{grid-area:i}
+.m-steps{grid-area:s;display:flex;margin:-6px 4px}
+.m-steps button{width:32px;height:32px;display:grid;place-items:center}
+.m-steps svg{width:7px;height:12px;transition:transform .35s var(--ease)}
+@media (hover:hover) and (pointer:fine){
+  #mPrev:hover svg{transform:translateX(-2px)}
+  #mNext:hover svg{transform:translateX(2px)}
+}
+/* a narrow panel drops the index (the dots below still show it) so the title keeps its room */
+@container (max-width:520px){
+  .p-top{grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"t s c"}
+  .p-top > #pIdx{display:none}
+  .m-steps{margin:-6px 0}
+  .p-title{font-size:15px}
+}
+.p-close{grid-area:c}
 .p-close{display:flex;align-items:center;gap:6px}
 .p-close svg{width:10px;height:10px}
 .p-close:hover{text-decoration:underline;text-underline-offset:3px}
@@ -182,14 +197,32 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .cta svg{width:11px;height:11px;transition:transform .25s var(--ease)}
 .cta:hover svg{transform:translate(2px,-2px)}
 
-/* ---------- strip nav: centred under the row, steps either side of one dot per project ---------- */
-.w-nav{display:flex;align-items:center;justify-content:center;gap:4px;padding:18px var(--m) 0}
-.w-nav > button{width:32px;height:32px;display:grid;place-items:center;color:var(--ink);transition:opacity .3s}
-.w-nav svg{width:7px;height:12px;transition:transform .35s var(--ease)}
-.w-nav .prev:hover svg{transform:translateX(-3px)}
-.w-nav .next:hover svg{transform:translateX(3px)}
-.w-nav > button:disabled{opacity:.2;cursor:default}
-.w-nav > button:disabled svg{transform:none}
+/* ---------- strip steps: a round button at each edge of the row, glass like the tags ----------
+   The next step shows while there is more to the right, the previous one once the
+   row has moved. With a mouse they rest a little faded and come up when the
+   pointer nears their side; on touch they stay up. An open panel takes the steps
+   into its head, so these step aside. */
+.edge{
+  position:absolute;top:calc(var(--h) / 2 - 22px);z-index:4;
+  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  color:#000;background:rgba(255,255,255,.72);
+  -webkit-backdrop-filter:blur(14px) saturate(1.5);backdrop-filter:blur(14px) saturate(1.5);
+  transition:opacity .3s,visibility 0s,background-color .25s;
+}
+.edge.prev{left:calc(var(--m) + 16px)}
+.edge.next{right:calc(var(--m) + 16px)}
+.edge svg{width:8px;height:14px;transition:transform .35s var(--ease)}
+@media (hover:hover) and (pointer:fine){
+  .edge{opacity:.7}
+  .edge.near,.edge:hover,.edge:focus-visible{opacity:1}
+  .edge:hover{background:rgba(255,255,255,.9)}
+  .edge.prev:hover svg{transform:translateX(-2px)}
+  .edge.next:hover svg{transform:translateX(2px)}
+}
+.stage .edge:disabled,.stage.is-open .edge{opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s}
+
+/* ---------- dots: centred under the row, one per project ---------- */
+.w-nav{display:flex;align-items:center;justify-content:center;padding:18px var(--m) 0}
 /* each dot is a button with a tall hit area; the visible dot is its ::before */
 .w-dots{display:flex;align-items:center;padding:0 3px}
 .w-dots button{height:32px;padding:0 3px;display:grid;place-items:center}
@@ -197,7 +230,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .w-dots button:hover::before{opacity:.5}
 .w-dots button.on{cursor:default}
 .w-dots button.on::before{width:18px;opacity:1}
-.m-lead,.m-steps{display:none}
+.m-lead{display:none}
 
 /* ---------- info sections ---------- */
 .block{padding:clamp(56px,6.5vw,96px) var(--m) 0}
@@ -419,7 +452,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .p-top{display:flex;align-items:center;gap:4px;padding:4px 0;margin-top:4px}
   .p-top > #pIdx{display:block;flex:1}
   .p-top .p-title{display:none}
-  .m-steps{display:flex}
+  .m-steps{display:flex;margin:0}
   .m-steps button{width:40px;height:36px;display:grid;place-items:center}
   .m-steps svg{width:7px;height:12px;transition:transform .3s var(--ease)}
   .m-steps button:active svg{transform:scale(.85)}
@@ -433,7 +466,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .kpi dd{font-size:24px}
   .kpi dt{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;line-height:1.35}
   #pTldr{-webkit-line-clamp:4}
-  .w-nav{display:none}
+  .w-nav,.edge{display:none}
 
   .block .body{grid-column:1 / -1}
   .list li{grid-template-columns:1fr auto;row-gap:2px}

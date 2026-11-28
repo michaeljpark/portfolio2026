@@ -56,11 +56,12 @@ function setOffset(x, animate = true) {
   if (!animate) { track.offsetHeight; track.style.transition = ''; }
   updateChev();
 }
-/* Steps and dots under the strip. The long dot is the open project. With the
-   panel closed it is the card last aimed at (a clicked dot, or the project
-   just closed) while that card is fully in view, else the first card in full
-   view. Clicking a dot works like the chevrons: open, it switches project;
-   closed, it moves the strip to that card. */
+/* Steps at the edges of the strip and dots under it. The long dot is the open
+   project. With the panel closed it is the card last aimed at (a clicked dot,
+   or the project just closed) while that card is fully in view, else the first
+   card in full view. Clicking a dot works like the chevrons: open, it switches
+   project; closed, it moves the strip to that card. While the panel is open the
+   edge steps step aside and the ones in its head take over. */
 let aim = -1;
 const dots = PROJECTS.map((p, j) => {
   const d = document.createElement('button');
@@ -77,6 +78,7 @@ function goTo(j) {
 }
 function updateChev() {
   const open = cur > -1;
+  stage.classList.toggle('is-open', open);
   $('prev').disabled = !open && offset <= 1;
   $('next').disabled = !open && offset >= maxOffset() - 1;
   const inView = j => { const l = works[j].offsetLeft - offset; return l >= -1 && l + works[j].offsetWidth <= strip.clientWidth + 1; };
@@ -267,6 +269,16 @@ $('mNext').addEventListener('click', () => step(1));
 $('pClose').addEventListener('click', close);
 $('prev').addEventListener('click', () => step(-1));
 $('next').addEventListener('click', () => step(1));
+/* With a mouse, an edge step comes up to full strength when the pointer is over
+   the row's pictures and within a quarter of the row (at least 160px) of its side. */
+stage.addEventListener('pointermove', e => {
+  if (e.pointerType !== 'mouse' || mq.matches) return;
+  const r = strip.getBoundingClientRect(), zone = Math.max(160, r.width / 4);
+  const band = e.clientY >= r.top && e.clientY <= r.top + works[0].firstElementChild.offsetHeight;
+  $('prev').classList.toggle('near', band && e.clientX - r.left < zone);
+  $('next').classList.toggle('near', band && r.right - e.clientX < zone);
+});
+stage.addEventListener('pointerleave', () => { $('prev').classList.remove('near'); $('next').classList.remove('near'); });
 document.addEventListener('keydown', e => {
   if (cur < 0) return;
   if (e.key === 'Escape') close();
