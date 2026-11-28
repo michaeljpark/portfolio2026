@@ -60,8 +60,9 @@ function setOffset(x, animate = true) {
    project. With the panel closed it is the card last aimed at (a clicked dot,
    or the project just closed) while that card is fully in view, else the first
    card in full view. Clicking a dot works like the chevrons: open, it switches
-   project; closed, it moves the strip to that card. While the panel is open the
-   edge steps step aside and the ones in its head take over. */
+   project; closed, it moves the strip to that card. The steps come in pairs, the
+   round ones at the edges of the row and the small ones beside the dots; both
+   work the same way. */
 let aim = -1;
 const dots = PROJECTS.map((p, j) => {
   const d = document.createElement('button');
@@ -76,11 +77,12 @@ function goTo(j) {
   aim = j;
   setOffset(Math.min(maxOffset(), Math.max(0, works[j].offsetLeft - padPx())));
 }
+const steps = [...stage.querySelectorAll('[data-step]')];
+const edges = steps.filter(b => b.classList.contains('edge'));
 function updateChev() {
   const open = cur > -1;
   stage.classList.toggle('is-open', open);
-  $('prev').disabled = !open && offset <= 1;
-  $('next').disabled = !open && offset >= maxOffset() - 1;
+  steps.forEach(b => { b.disabled = !open && (b.dataset.step < 0 ? offset <= 1 : offset >= maxOffset() - 1); });
   const inView = j => { const l = works[j].offsetLeft - offset; return l >= -1 && l + works[j].offsetWidth <= strip.clientWidth + 1; };
   const first = Math.min(PROJECTS.length - 1, Math.max(0, Math.ceil((offset - padPx() - 1) / (cw + gapPx()))));
   const at = open ? cur : aim > -1 && inView(aim) ? aim : first;
@@ -219,6 +221,7 @@ async function openCard(i) {
   if (mq.matches) { await openMobile(i); busy = false; return; }
   const wasOpen = cur > -1;
   const target = works[i].offsetLeft - padPx();
+  if (!wasOpen) stage.classList.add('is-moving');
   cur = i;
   mark();
   updateChev();
@@ -239,12 +242,14 @@ async function openCard(i) {
     inner.classList.remove('is-swapping');
     await wait(120);
   }
+  stage.classList.remove('is-moving');
   busy = false;
 }
 async function close() {
   if (cur < 0 || busy) return;
   busy = true;
   const last = works[cur];
+  stage.classList.add('is-moving');
   panel.classList.remove('is-open');
   panel.setAttribute('aria-hidden', 'true');
   push(-1);
@@ -254,6 +259,7 @@ async function close() {
   mark();
   if (!mq.matches && offset > maxOffset()) setOffset(maxOffset());
   updateChev();
+  stage.classList.remove('is-moving');
   last.focus({ preventScroll: true });
   busy = false;
 }
@@ -267,18 +273,26 @@ function step(dir) {
 $('mPrev').addEventListener('click', () => step(-1));
 $('mNext').addEventListener('click', () => step(1));
 $('pClose').addEventListener('click', close);
-$('prev').addEventListener('click', () => step(-1));
-$('next').addEventListener('click', () => step(1));
+steps.forEach(b => b.addEventListener('click', () => step(+b.dataset.step)));
 /* With a mouse, an edge step comes up to full strength when the pointer is over
-   the row's pictures and within a quarter of the row (at least 160px) of its side. */
+   the row's pictures: closed, within a quarter of the row (at least 160px) of
+   its side; open, anywhere on the open card's picture, where both steps sit. */
 stage.addEventListener('pointermove', e => {
   if (e.pointerType !== 'mouse' || mq.matches) return;
   const r = strip.getBoundingClientRect(), zone = Math.max(160, r.width / 4);
   const band = e.clientY >= r.top && e.clientY <= r.top + works[0].firstElementChild.offsetHeight;
-  $('prev').classList.toggle('near', band && e.clientX - r.left < zone);
-  $('next').classList.toggle('near', band && r.right - e.clientX < zone);
+  let l, rt;
+  if (cur > -1) {
+    const f = works[cur].firstElementChild.getBoundingClientRect();
+    l = rt = band && e.clientX >= f.left && e.clientX <= f.right;
+  } else {
+    l = band && e.clientX - r.left < zone;
+    rt = band && r.right - e.clientX < zone;
+  }
+  edges[0].classList.toggle('near', l);
+  edges[1].classList.toggle('near', rt);
 });
-stage.addEventListener('pointerleave', () => { $('prev').classList.remove('near'); $('next').classList.remove('near'); });
+stage.addEventListener('pointerleave', () => edges.forEach(b => b.classList.remove('near')));
 document.addEventListener('keydown', e => {
   if (cur < 0) return;
   if (e.key === 'Escape') close();
